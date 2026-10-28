@@ -1,0 +1,130 @@
+/* A: page */
+.reader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'text';
+  padding: 3rem 16px 4rem 3rem; /* left padding leaves room for line numbers */
+}
+
+/* C: spread */
+.reader[data-layout='spread'] {
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+  grid-template-areas: 'text margin';
+  column-gap: 4rem;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 3rem;
+}
+
+.reader-text {
+  grid-area: text;
+}
+
+/* Centre title and poem together by the longest line; keep both left-aligned */
+.text-block {
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+  font-family: 'Literata', Georgia, serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Title block: 2 poem lines of space before the poem */
+.title-block {
+  margin-bottom: 2lh;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.poet {
+  margin: 0.25em 0 0;
+  font-family: system-ui, sans-serif;
+  font-size: 0.7em;
+  letter-spacing: 0.02em;
+  opacity: 0.6;
+}
+
+.stanza + .stanza {
+  margin-top: 1.6em;
+}
+
+.line {
+  position: relative;
+  margin-inline-start: calc(var(--indent) * 1em);
+}
+
+/* Hanging indent: a line too long to fit turns over, indented 2em */
+.line-text {
+  display: block;
+  padding-inline-start: 2em;
+  text-indent: -2em;
+}
+
+/* Numbers sit outside the block, so they don't affect its centring */
+.line-number {
+  position: absolute;
+  inset-inline-end: 100%;
+  padding-inline-end: 1em;
+  font-size: 0.7em;
+  line-height: calc(1.6em / 0.7); /* align with the line's first baseline */
+  font-variant-numeric: tabular-nums;
+  opacity: 0.5;
+  user-select: none;
+}
+
+.margin {
+  grid-area: margin;
+  font-family: system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.margin-empty {
+  margin: 0;
+  opacity: 0.5;
+}
+
+/* Page layout: a sheet over the bottom of the screen */
+.bottom-sheet {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  height: 45dvh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -2px 12px rgb(0 0 0 / 0.08);
+  font-family: system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  /* Collapsed: slide down until only the handle shows */
+  transform: translateY(calc(100% - 3rem));
+  transition: transform 200ms ease;
+}
+
+.bottom-sheet[data-open='true'] {
+  transform: translateY(0);
+}
+
+.bottom-sheet-handle {
+  flex: none;
+  height: 3rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.bottom-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 1.5rem;
+}
+

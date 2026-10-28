@@ -1,5 +1,7 @@
+import { Reader } from "./reader/Reader"
+
 function App() {
-  return <h1>Anthos</h1>
+  return <Reader />
 }
 
 export default App
