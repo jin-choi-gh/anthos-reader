@@ -6,11 +6,11 @@ Oct 23, 2026 · @Jin
 
 **Anthos** (codename) is a poetry app built on three pillars: **Discovery** finds poems, **Growth** makes you converse with them, and **Creation** is what that conversation leads to.
 
-| Pillar | What it is | Screens | What it asks of you |
-| --- | --- | --- | --- |
-| Discovery | The poem bank, with a dating-app card loop | Poem Bank, Bookmarks | Choose: ignore, bookmark or seed. Seeds and plots are scarce, so a seed is a commitment |
-| Growth | The pedagogic heart: the garden and its three reading views | Garden; Deep Reader, Long View and Deep Discovery | Return on six separate days, annotate, and respond at length |
-| Creation | Free response to poems grown to Bloom and harvested | Anthologies, long-form composition, multimedia responses, peer review | Make something; submit the best back into Growth |
+| Pillar    | What it is                                                  | Screens                                                               | What it asks of you                                                                     |
+| --------- | ----------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Discovery | The poem bank, with a dating-app card loop                  | Poem Bank, Bookmarks                                                  | Choose: ignore, bookmark or seed. Seeds and plots are scarce, so a seed is a commitment |
+| Growth    | The pedagogic heart: the garden and its three reading views | Garden; Deep Reader, Long View and Deep Discovery                     | Return on six separate days, annotate, and respond at length                            |
+| Creation  | Free response to poems grown to Bloom and harvested         | Anthologies, long-form composition, multimedia responses, peer review | Make something; submit the best back into Growth                                        |
 
 Growth and Creation feed each other. Long-form and multimedia responses are composed in Creation and, once peer reviewed, are planted back into Growth: long responses in the Long View, multimedia and intertextual connections in Deep Discovery.
 
@@ -24,13 +24,13 @@ Discovery feeds Growth through seeds; Growth feeds Creation through harvest; and
 
 Five tabs, as a bottom bar on phones and a sidebar on the web. Each names something a reader does, and together they follow a reading's life: found in Discover, grown in the Garden, shaped in Trails, shared in Voices, kept in You.
 
-| Tab | Icon | What it holds |
-| --- | --- | --- |
-| Discover | Compass | Writing curated by Anthos's editors, met one piece at a time; Bookmarks as a subview |
-| Garden | Sapling | Deep reading along paths laid down for you: four stages of reading, and on the fifth day the text blooms |
-| Trails | Winding path | Ways of reading: voiceover, video, intertextual links, and the trails readers make. The anthology forms and the writing studio live here |
-| Voices | Speech | Readers' published reflections, after review. You hear the voices only for texts you have bloomed |
-| You | Person | Self-reflection. Your Anthology gathers every bloom with your notes, each publishable once |
+| Tab      | Icon         | What it holds                                                                                                                            |
+| -------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Discover | Compass      | Writing curated by Anthos's editors, met one piece at a time; Bookmarks as a subview                                                     |
+| Garden   | Sapling      | Deep reading along paths laid down for you: four stages of reading, and on the fifth day the text blooms                                 |
+| Trails   | Winding path | Ways of reading: voiceover, video, intertextual links, and the trails readers make. The anthology forms and the writing studio live here |
+| Voices   | Speech       | Readers' published reflections, after review. You hear the voices only for texts you have bloomed                                        |
+| You      | Person       | Self-reflection. Your Anthology gathers every bloom with your notes, each publishable once                                               |
 
 This supersedes earlier sections where they differ: Others is no longer a reading mode in the Garden, posting during the stages is replaced by publishing at Bloom, and what earlier sections call Curations, Anthologies or Create now lives in Trails.
 
@@ -51,7 +51,7 @@ On the fifth reading day the text blooms. Bloom is the moment to look back over 
 
 Trails is about shaping how texts are read: a trail is a guided way through one or more texts. It is the least settled part of Anthos, so the first release keeps it small.
 
-- **Editors' trails** are the grand curations (the Sonnets, the *Dao De Jing*, *The Conference of the Birds*, the *Vita Nuova*) and their editions, with voiceover, video and intertextual links. They open as you bloom their texts, by the rules under Curations.
+- **Editors' trails** are the grand curations (the Sonnets, the _Dao De Jing_, _The Conference of the Birds_, the _Vita Nuova_) and their editions, with voiceover, video and intertextual links. They open as you bloom their texts, by the rules under Curations.
 - **Readers' trails** are made from your blooms with the anthology forms (book, Tree of Life, natal chart, constellation) and the writing studio. A published trail goes through the same review as Voices.
 - **First release:** one editors' trail and the Keep form.
 
@@ -61,13 +61,13 @@ The bank shows one poem card at a time from a randomised loop, and every card en
 
 A card shows the title, poet, year and a few tags (form, era, theme). Unlike a profile photo, a poem has to be read before it can be judged, so the card scrolls vertically to show the whole text. Only a deliberate horizontal swipe counts as a decision, which stops accidental choices while scrolling.
 
-| Action | Gesture | Result | Uses a seed |
-| --- | --- | --- | --- |
-| Ignore | Swipe left, or the Later button | Not now: returns to the bank and resurfaces after a cooldown | No |
-| Bookmark | Ribbon button (no swipe, to avoid clashing with scroll) | Saved to Bookmarks, under Discover | No |
-| Seed | Swipe right, or the seed button | Planted in the Garden | Yes |
+| Action   | Gesture                                                 | Result                                                       | Uses a seed |
+| -------- | ------------------------------------------------------- | ------------------------------------------------------------ | ----------- |
+| Ignore   | Swipe left, or the Later button                         | Not now: returns to the bank and resurfaces after a cooldown | No          |
+| Bookmark | Ribbon button (no swipe, to avoid clashing with scroll) | Saved to Bookmarks, under Discover                           | No          |
+| Seed     | Swipe right, or the seed button                         | Planted in the Garden                                        | Yes         |
 
-**Ignoring is deferral, never rejection.** The bank borrows the dating app's rhythm and scarcity, not its verdict. A poem passed over is a shelf walked past, and it will come round again; the real choice in Discovery is the seed, because that commits six days. The interface keeps saying "not now": the button reads *Later*, and a returning poem says so.
+**Ignoring is deferral, never rejection.** The bank borrows the dating app's rhythm and scarcity, not its verdict. A poem passed over is a shelf walked past, and it will come round again; the real choice in Discovery is the seed, because that commits six days. The interface keeps saying "not now": the button reads _Later_, and a returning poem says so.
 
 Loop rules:
 
@@ -106,24 +106,24 @@ The Garden is the matches screen: **30, 40 or 50 plots** depending on your tier,
 
 A poem grows through **six stages, one for each day you read it**. The day you plant it is its first day, so a poem reaches Bloom on the sixth day you spend with it. The days need not be consecutive, and a poem never grows more than one stage in a day.
 
-| Stage | The plant | The reading it opens (see The six stages of reading) |
-| --- | --- | --- |
-| 1. Seed | A seed in the soil | First encounter: form and a way in |
-| 2. Emerging | A shoot breaks the surface | Close reading |
-| 3. Sprouting | Stem and first leaves | Other readers |
-| 4. Budding | A closed bud | Context |
-| 5. Unfurling | Petals opening | The critical conversation |
-| 6. Bloom | Full flower | The poem's afterlife and your own reading; **Harvest** unlocks |
+| Stage        | The plant                  | The reading it opens (see The six stages of reading)           |
+| ------------ | -------------------------- | -------------------------------------------------------------- |
+| 1. Seed      | A seed in the soil         | First encounter: form and a way in                             |
+| 2. Emerging  | A shoot breaks the surface | Close reading                                                  |
+| 3. Sprouting | Stem and first leaves      | Other readers                                                  |
+| 4. Budding   | A closed bud               | Context                                                        |
+| 5. Unfurling | Petals opening             | The critical conversation                                      |
+| 6. Bloom     | Full flower                | The poem's afterlife and your own reading; **Harvest** unlocks |
 
 A day counts as a reading day when you open the poem's Deep Reader and do at least one thing with it: spend time on the newly opened layer, write a note, or follow a discovery link. Simply tapping in and out does not count.
 
 **Wilting.** A poem left unread for 7 days wilts. How hard wilting should bite is still open:
 
-| Option | What happens | For | Against |
-| --- | --- | --- | --- |
+| Option                          | What happens                                                                           | For                                 | Against                                         |
+| ------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------- |
 | Cosmetic wilt (suggested start) | The plant droops and you get a gentle nudge; one reading day revives it, no stage lost | Encourages return without punishing | Weak pressure; neglected poems keep their plots |
-| Wilt, then regress | After a further week wilted, the plant drops one stage | Real stakes, keeps the garden alive | Feels punitive to busy readers |
-| Wilt, then compost | After a long wilt, the poem returns to the bank with notes archived | Frees plots automatically | Readers can lose poems they meant to return to |
+| Wilt, then regress              | After a further week wilted, the plant drops one stage                                 | Real stakes, keeps the garden alive | Feels punitive to busy readers                  |
+| Wilt, then compost              | After a long wilt, the poem returns to the bank with notes archived                    | Frees plots automatically           | Readers can lose poems they meant to return to  |
 
 A wilting poem still holds its plot, so wilting doubles as a prompt to read, harvest or uproot. With 30 to 50 plots, several poems may wilt at once, which is another reason to start with the cosmetic rule. Benefactors can pause the garden while away.
 
@@ -136,13 +136,13 @@ A wilting poem still holds its plot, so wilting doubles as a prompt to read, har
 
 There are two ways to free a plot:
 
-|  | Uproot | Harvest |
-| --- | --- | --- |
-| When | Any stage | Bloom only |
-| What happens to the poem | Returns to the bank | Moves to the Anthology Maker's harvest basket |
-| Your notes | Archived, restorable if you replant | Travel with the poem into the Anthology Maker |
-| Published reading | Stays up until you withdraw it | Stays up |
-| Feel | A break-up | A keepsake |
+|                          | Uproot                              | Harvest                                       |
+| ------------------------ | ----------------------------------- | --------------------------------------------- |
+| When                     | Any stage                           | Bloom only                                    |
+| What happens to the poem | Returns to the bank                 | Moves to the Anthology Maker's harvest basket |
+| Your notes               | Archived, restorable if you replant | Travel with the poem into the Anthology Maker |
+| Published reading        | Stays up until you withdraw it      | Stays up                                      |
+| Feel                     | A break-up                          | A keepsake                                    |
 
 Uprooting asks for confirmation, because it ends the conversation with that poem. Harvesting is celebrated: the flower is cut and pressed, and the plot is left freshly turned for a new seed.
 
@@ -152,14 +152,14 @@ Each growth stage opens one layer of interpretation, moving outward from the wor
 
 The order follows one principle: **your own reading comes before anyone else's.** Nobody else's interpretation appears until you have met the poem on its own terms and written something yourself.
 
-| Stage | Focus | Critical mode adds | Others mode shows | Deep Discovery adds | Prompt to you |
-| --- | --- | --- | --- | --- | --- |
-| 1. Seed | First encounter | Form, metre, rhyme scheme and shape; a glossary of hard words; a short way in | Nothing yet | Nothing yet | "Which line stayed with you?" |
-| 2. Emerging | Close reading | Line-level notes on imagery, sound and syntax | First impressions: short, felt responses | Same form, same poet | "Mark a word that feels charged." |
-| 3. Sprouting | Other readers | The poem's open questions and ambiguities | Interpretations, grouped by what they focus on | Shared images and themes | "Agree or argue with one reading." |
-| 4. Budding | Context | The historical moment, the poet's life, publication history, textual variants | Readings that draw on context | Source texts and allusions | "Does the context change your reading?" |
-| 5. Unfurling | Critical conversation | How critics have read it over time, and where they disagree | Debates; others' long responses open in the Long View | Answer poems and influence | "Which reading do you side with?" |
-| 6. Bloom | Afterlife | Translations, adaptations, the poem in art and music | Creative responses: poems in reply, images | Links beyond poetry; the full web | "Write your reading in a few lines", then publish or harvest |
+| Stage        | Focus                 | Critical mode adds                                                            | Others mode shows                                     | Deep Discovery adds               | Prompt to you                                                |
+| ------------ | --------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
+| 1. Seed      | First encounter       | Form, metre, rhyme scheme and shape; a glossary of hard words; a short way in | Nothing yet                                           | Nothing yet                       | "Which line stayed with you?"                                |
+| 2. Emerging  | Close reading         | Line-level notes on imagery, sound and syntax                                 | First impressions: short, felt responses              | Same form, same poet              | "Mark a word that feels charged."                            |
+| 3. Sprouting | Other readers         | The poem's open questions and ambiguities                                     | Interpretations, grouped by what they focus on        | Shared images and themes          | "Agree or argue with one reading."                           |
+| 4. Budding   | Context               | The historical moment, the poet's life, publication history, textual variants | Readings that draw on context                         | Source texts and allusions        | "Does the context change your reading?"                      |
+| 5. Unfurling | Critical conversation | How critics have read it over time, and where they disagree                   | Debates; others' long responses open in the Long View | Answer poems and influence        | "Which reading do you side with?"                            |
+| 6. Bloom     | Afterlife             | Translations, adaptations, the poem in art and music                          | Creative responses: poems in reply, images            | Links beyond poetry; the full web | "Write your reading in a few lines", then publish or harvest |
 
 ### Reader responses by category
 
@@ -169,14 +169,14 @@ When readers post an annotation, it carries a category: **first impression**, **
 
 Features appear as the plant grows, so the six stages teach the app as well as the poem. On the first day a reader meets a poem and a few notes; the full apparatus of Others, the Long View and peer review arrives only once they have grown into it.
 
-| Stage | You can read | You can do |
-| --- | --- | --- |
-| 1. Seed | The text and Critical notes | Write private Self notes |
-| 2. Emerging | Others' first impressions | Post first impressions |
-| 3. Sprouting | Interpretations | Post interpretations |
-| 4. Budding | Readings that draw on context | Post context readings |
-| 5. Unfurling | Debates; the Long View opens | Join debates. Subscribers: draft and submit long responses, offer Deep Discovery connections, review others' submissions |
-| 6. Bloom | Creative responses | Post creative responses; harvest into Creation |
+| Stage        | You can read                  | You can do                                                                                                               |
+| ------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 1. Seed      | The text and Critical notes   | Write private Self notes                                                                                                 |
+| 2. Emerging  | Others' first impressions     | Post first impressions                                                                                                   |
+| 3. Sprouting | Interpretations               | Post interpretations                                                                                                     |
+| 4. Budding   | Readings that draw on context | Post context readings                                                                                                    |
+| 5. Unfurling | Debates; the Long View opens  | Join debates. Subscribers: draft and submit long responses, offer Deep Discovery connections, review others' submissions |
+| 6. Bloom     | Creative responses            | Post creative responses; harvest into Creation                                                                           |
 
 **Posting is earned by growth, not bought.** You can post an annotation in a category only once your own plant has reached the stage where that category appears: first impressions from Emerging, debates only from Unfurling. This gives a natural rate limit (two reading days before anything can be posted), a quality filter, and a debate in which everyone has spent time with the poem. Money buys the scholarly voice instead: publishing in the Long View, peer review and offerings to Deep Discovery.
 
@@ -184,13 +184,13 @@ Features appear as the plant grows, so the six stages teach the app as well as t
 
 The first release has four stages of reading, **Seed, Sprouting, Budding and Unfurling**, one per reading day, and on the fifth day the text **blooms**. The Deep Reader has two modes, Critical and Self; other readers are heard in Voices after Bloom. The six-stage track above remains the long-term target.
 
-| Stage | Reading day | You can read | You can do | Editorial work |
-| --- | --- | --- | --- | --- |
-| 1. Seed | 1 | The text; form, metre and a glossary of hard words; a short way in | Notice: private Self notes, prompted by "Which line stayed with you?" | About 300 words |
-| 2. Sprouting | 2 | Detailed Critical annotations: imagery, sound and syntax | More Self notes, now in conversation with the critical layer | About 600 words |
-| 3. Budding | 3 | Context; Deep Discovery's intertextual links | Self notes that answer the context | About 300 words plus 4 to 6 links |
-| 4. Unfurling | 4 | The poem's open questions; the Long View opens | Draft a longer response, if you want to | About 200 words |
-| Bloom | 5 | Nothing new: your own notes, gathered | Reflect, choose notes, publish once to Voices; harvest | None |
+| Stage        | Reading day | You can read                                                       | You can do                                                            | Editorial work                    |
+| ------------ | ----------- | ------------------------------------------------------------------ | --------------------------------------------------------------------- | --------------------------------- |
+| 1. Seed      | 1           | The text; form, metre and a glossary of hard words; a short way in | Notice: private Self notes, prompted by "Which line stayed with you?" | About 300 words                   |
+| 2. Sprouting | 2           | Detailed Critical annotations: imagery, sound and syntax           | More Self notes, now in conversation with the critical layer          | About 600 words                   |
+| 3. Budding   | 3           | Context; Deep Discovery's intertextual links                       | Self notes that answer the context                                    | About 300 words plus 4 to 6 links |
+| 4. Unfurling | 4           | The poem's open questions; the Long View opens                     | Draft a longer response, if you want to                               | About 200 words                   |
+| Bloom        | 5           | Nothing new: your own notes, gathered                              | Reflect, choose notes, publish once to Voices; harvest                | None                              |
 
 - **Bloom carries the reader's own act.** It adds no editorial content: the reflection is written by the reader.
 - **Editorial load:** about 1,400 words plus links per poem. A first bank of 150 poems is roughly 210,000 words.
@@ -200,14 +200,14 @@ The first release has four stages of reading, **Seed, Sprouting, Budding and Unf
 
 Every poem needs the same six layers, so editors work from one template, and much of it is shared or comes from elsewhere.
 
-| Stage | Who produces it | Effort per poem | Reuse |
-| --- | --- | --- | --- |
-| Seed | Automatic scansion and rhyme detection, checked by an editor, who also writes the way in and glossary | Low | Glossary entries recur across poems |
-| Emerging | Editor | Medium | None; this is the poem-specific close reading |
-| Sprouting | Readers supply the responses; an editor writes the open questions | Low | None |
-| Budding | Editor or commissioned scholar | Medium | High: context modules are written once per poet or period and shared by all their poems |
-| Unfurling | Commissioned scholar | High | Some: critical schools and debates recur within a poet's work |
-| Bloom | Editor curates; Deep Discovery supplies most links | Low to medium | Translations and adaptations are linked, not written |
+| Stage     | Who produces it                                                                                       | Effort per poem | Reuse                                                                                   |
+| --------- | ----------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------- |
+| Seed      | Automatic scansion and rhyme detection, checked by an editor, who also writes the way in and glossary | Low             | Glossary entries recur across poems                                                     |
+| Emerging  | Editor                                                                                                | Medium          | None; this is the poem-specific close reading                                           |
+| Sprouting | Readers supply the responses; an editor writes the open questions                                     | Low             | None                                                                                    |
+| Budding   | Editor or commissioned scholar                                                                        | Medium          | High: context modules are written once per poet or period and shared by all their poems |
+| Unfurling | Commissioned scholar                                                                                  | High            | Some: critical schools and debates recur within a poet's work                           |
+| Bloom     | Editor curates; Deep Discovery supplies most links                                                    | Low to medium   | Translations and adaptations are linked, not written                                    |
 
 - **Missing layers.** If a stage's editorial layer is not ready for a poem, the stage still opens with whatever reader and discovery content exists, and the poem is marked as partly annotated.
 - **Bank weighting.** At launch, poems with complete six-stage packages appear more often in the bank, so most readers meet finished poems first.
@@ -217,17 +217,17 @@ Every poem needs the same six layers, so editors work from one template, and muc
 
 The Deep Reader is the centre of three views that sit side by side at the same level: the poem with its line-anchored annotations. A **left swipe** opens the Long View; a **right swipe** opens Deep Discovery.
 
-Annotations are the text's *pointing towards*: short, anchored gestures from a word or line outward, to a gloss, a sound, an image, a question. Anything longer than a pointing belongs in the Long View.
+Annotations are the text's _pointing towards_: short, anchored gestures from a word or line outward, to a gloss, a sound, an image, a question. Anything longer than a pointing belongs in the Long View.
 
 Critical and Others content arrives in layers as the plant grows (see The six stages of reading). Self is open from the first day, and the Reader shows which stage the poem is at and what the next reading day will open.
 
 Layout: the poem with line numbers, annotated spans underlined in the active mode's colour, and a segmented switch for **Critical · Self · Others** at the top. Tapping an underline opens the annotation in a bottom sheet. Selecting any text offers "Add note", which always writes to Self.
 
-| Mode | Who writes | What it holds | Who sees it |
-| --- | --- | --- | --- |
-| Critical | Editors and licensed sources | Glosses, allusions, metre and sound, context | Everyone, stage by stage |
-| Self | You | Your own annotations: notes, highlights, questions | Only you, until you post one |
-| Others | Every reader who posts, on any tier | Annotations other readers have posted | Everyone, from Sprouting on |
+| Mode     | Who writes                          | What it holds                                      | Who sees it                  |
+| -------- | ----------------------------------- | -------------------------------------------------- | ---------------------------- |
+| Critical | Editors and licensed sources        | Glosses, allusions, metre and sound, context       | Everyone, stage by stage     |
+| Self     | You                                 | Your own annotations: notes, highlights, questions | Only you, until you post one |
+| Others   | Every reader who posts, on any tier | Annotations other readers have posted              | Everyone, from Sprouting on  |
 
 Every annotation has the same anatomy, whichever mode it belongs to:
 
@@ -245,11 +245,11 @@ The Long View is a left swipe from the Deep Reader, at the same level in the app
 
 It uses the same three modes as the Deep Reader, so the switch feels the same in both places:
 
-| Mode | What it holds | Who can publish | Opens at |
-| --- | --- | --- | --- |
-| Critical | Longer essays commissioned by editors | Editors | Unfurling (the critical conversation) |
-| Self | Your drafts of long responses, private | Anyone can draft | Seed |
-| Others | Readers' long responses that passed peer review | Subscribers, after peer review | Sprouting, after your own first reading |
+| Mode     | What it holds                                   | Who can publish                | Opens at                                |
+| -------- | ----------------------------------------------- | ------------------------------ | --------------------------------------- |
+| Critical | Longer essays commissioned by editors           | Editors                        | Unfurling (the critical conversation)   |
+| Self     | Your drafts of long responses, private          | Anyone can draft               | Seed                                    |
+| Others   | Readers' long responses that passed peer review | Subscribers, after peer review | Sprouting, after your own first reading |
 
 - **Reading:** each response opens as a clean reading page with its author, length and the lines it engages, which link back to the Deep Reader.
 - **Writing:** "Write a long response" opens the composer in Creation, where long-form writing and its peer review happen. A response is planted back here only once it is accepted.
@@ -278,28 +278,28 @@ Who reviews, and how:
 - **Visibility:** reviewers see the work without the author's name, and authors don't see who reviewed (whether to go fully open is an open question).
 - **Editors** can review anything, decide splits, and withdraw published work after a report.
 
-| Action | Readers and Cultivators | Patrons and Benefactors | Editors |
-| --- | --- | --- | --- |
-| Post short annotations to Others (earned by growth) | Yes | Yes | Yes |
-| Draft long responses in Self | Yes | Yes | Yes |
-| Publish long responses to the Long View | No | Yes, after peer review | Yes, as Critical essays |
-| Offer connections to Deep Discovery | No | Yes, after peer review | Yes, directly |
-| Propose multimedia responses for Deep Discovery | No | Yes, after peer review | Yes |
-| Review others' submissions | No | Yes, on poems grown to Unfurling or Bloom | Decide splits; review anything |
+| Action                                              | Readers and Cultivators | Patrons and Benefactors                   | Editors                        |
+| --------------------------------------------------- | ----------------------- | ----------------------------------------- | ------------------------------ |
+| Post short annotations to Others (earned by growth) | Yes                     | Yes                                       | Yes                            |
+| Draft long responses in Self                        | Yes                     | Yes                                       | Yes                            |
+| Publish long responses to the Long View             | No                      | Yes, after peer review                    | Yes, as Critical essays        |
+| Offer connections to Deep Discovery                 | No                      | Yes, after peer review                    | Yes, directly                  |
+| Propose multimedia responses for Deep Discovery     | No                      | Yes, after peer review                    | Yes                            |
+| Review others' submissions                          | No                      | Yes, on poems grown to Unfurling or Bloom | Decide splits; review anything |
 
 ## Deep Discovery
 
 Deep Discovery is a right swipe from the Deep Reader, at the same level in the app. It builds the poem's rhizome: connections outward from the text-poem to other media and to fragments of other poems, with more surfacing as the plant grows.
 
-| Relation | Example | How it is found |
-| --- | --- | --- |
-| Answer poem | Raleigh's "The Nymph's Reply to the Shepherd" answers Marlowe's "The Passionate Shepherd to His Love" | Curated pairs plus title and metadata cues |
-| Allusion or echo | Eliot's "Prufrock" echoes Marvell's "To His Coy Mistress" | Text-reuse matching on phrases, then semantic similarity of lines |
-| Shared form | Other Petrarchan sonnets, other villanelles | Form tags and metre analysis |
-| Shared image or theme | Other poems about a nightingale, a drowned sailor, a harvest | Line embeddings and theme tags |
-| Same poet or circle | Keats beside Shelley and Leigh Hunt | Poet metadata and a relationship graph |
-| Source text | Biblical, classical or mythic sources | Curated source library |
-| Beyond poetry | Brueghel's *Landscape with the Fall of Icarus* beside Icarus poems; song settings of a lyric | Linked open data such as Wikidata, plus curation |
+| Relation              | Example                                                                                               | How it is found                                                   |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Answer poem           | Raleigh's "The Nymph's Reply to the Shepherd" answers Marlowe's "The Passionate Shepherd to His Love" | Curated pairs plus title and metadata cues                        |
+| Allusion or echo      | Eliot's "Prufrock" echoes Marvell's "To His Coy Mistress"                                             | Text-reuse matching on phrases, then semantic similarity of lines |
+| Shared form           | Other Petrarchan sonnets, other villanelles                                                           | Form tags and metre analysis                                      |
+| Shared image or theme | Other poems about a nightingale, a drowned sailor, a harvest                                          | Line embeddings and theme tags                                    |
+| Same poet or circle   | Keats beside Shelley and Leigh Hunt                                                                   | Poet metadata and a relationship graph                            |
+| Source text           | Biblical, classical or mythic sources                                                                 | Curated source library                                            |
+| Beyond poetry         | Brueghel's _Landscape with the Fall of Icarus_ beside Icarus poems; song settings of a lyric          | Linked open data such as Wikidata, plus curation                  |
 
 Each link is a card showing the related work, the relation type, a one-line reason and the matched lines side by side, so the claim can be checked at a glance. From a card you can bookmark or plant the related poem, which feeds discovery back into the main loop.
 
@@ -317,12 +317,12 @@ How links are generated:
 
 Creation is what Growth leads to: free response to poems you have grown to Bloom and harvested. It holds four kinds of making. Two of them return to Growth through peer review, and curations open a second way into Discovery.
 
-| Making | What it is | Where it can go |
-| --- | --- | --- |
-| Anthologies | Harvested poems arranged into a form of your choosing, with your notes and images | Stays yours; shareable by link or, for subscribers, in a public gallery |
-| Curations | An ordered set of poems with a short introduction, made to be grown by others | Published to readers who have grown enough of its poems; see Curations below |
-| Long-form responses | Sustained critical or personal writing about one poem, composed here | Planted in the poem's Long View once peer reviewed |
-| Multimedia responses | Images, recordings, erasures or other made things responding to a poem | Planted in the poem's Deep Discovery if peer review accepts that it adds to it |
+| Making               | What it is                                                                        | Where it can go                                                                |
+| -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Anthologies          | Harvested poems arranged into a form of your choosing, with your notes and images | Stays yours; shareable by link or, for subscribers, in a public gallery        |
+| Curations            | An ordered set of poems with a short introduction, made to be grown by others     | Published to readers who have grown enough of its poems; see Curations below   |
+| Long-form responses  | Sustained critical or personal writing about one poem, composed here              | Planted in the poem's Long View once peer reviewed                             |
+| Multimedia responses | Images, recordings, erasures or other made things responding to a poem            | Planted in the poem's Deep Discovery if peer review accepts that it adds to it |
 
 Creation also holds **peer review**: the queue of submissions you have been asked to review, and the status of your own.
 
@@ -330,42 +330,42 @@ Creation also holds **peer review**: the queue of submissions you have been aske
 
 A curation is an ordered set of poems with an introduction: a collection meant to be read as a whole. Readers still plant from the universal bank, but curations give their garden a shape and a destination. There are two kinds:
 
-- **Grand curations**, made by Anthos's editors from famous collections and sequences: *Shakespeare's Sonnets*, the *Dao De Jing*, *The Conference of the Birds*, the *Vita Nuova*. They are editorial events, released occasionally.
+- **Grand curations**, made by Anthos's editors from famous collections and sequences: _Shakespeare's Sonnets_, the _Dao De Jing_, _The Conference of the Birds_, the _Vita Nuova_. They are editorial events, released occasionally.
 - **Reader curations**, made by anyone in Creation from poems they have harvested. A Keep anthology can be published as a curation with one action.
 
 **A curation is earned, not browsed.** You see a curation in full only once you have grown all or nearly all of its poems. Until then it is teased: shown half-transparent, with the poems you have grown in full colour and the rest ghosted.
 
-| State | When | What you see |
-| --- | --- | --- |
-| Hidden | You have grown none of its poems | Nothing (grand curations are announced, but not listed) |
-| Teased | You have grown at least one | A ghosted cover with a progress ring; grown poems in colour, the rest as ghosted titles |
-| Nearly there | You have grown half or more of the unlock threshold | Listed on the Nearly there shelf in Create |
-| Open | You have grown the threshold (default 80%, at least 3 poems) | The whole curation: introduction, order, sequence notes and its Long View |
-| Complete | Every poem grown | A pressed mark on the cover; the curation can be used as a template in Create |
+| State        | When                                                         | What you see                                                                            |
+| ------------ | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| Hidden       | You have grown none of its poems                             | Nothing (grand curations are announced, but not listed)                                 |
+| Teased       | You have grown at least one                                  | A ghosted cover with a progress ring; grown poems in colour, the rest as ghosted titles |
+| Nearly there | You have grown half or more of the unlock threshold          | Listed on the Nearly there shelf in Create                                              |
+| Open         | You have grown the threshold (default 80%, at least 3 poems) | The whole curation: introduction, order, sequence notes and its Long View               |
+| Complete     | Every poem grown                                             | A pressed mark on the cover; the curation can be used as a template in Create           |
 
 "Grown" means reached Bloom, whether harvested or still in the garden.
 
 **A teased curation is a second door into the bank.** The bank is random, so nobody will meet all of the Sonnets by chance. From a teased curation you can seed its remaining poems directly, using seeds as usual. Discovery stays random by default; curations are the deliberate path.
 
-**Long works need a core.** Grand curations are often too long to unlock by percentage: 154 sonnets, 81 chapters. Editors therefore mark a **core path**, for example twelve sonnets that trace the sequence's arc, and the curation opens when the core is grown; the rest count towards Complete. Some works also need their own units: the *Vita Nuova* is grown poem by poem, with Dante's prose shown between them once the curation opens, and *The Conference of the Birds* is divided into episodes.
+**Long works need a core.** Grand curations are often too long to unlock by percentage: 154 sonnets, 81 chapters. Editors therefore mark a **core path**, for example twelve sonnets that trace the sequence's arc, and the curation opens when the core is grown; the rest count towards Complete. Some works also need their own units: the _Vita Nuova_ is grown poem by poem, with Dante's prose shown between them once the curation opens, and _The Conference of the Birds_ is divided into episodes.
 
 **Inside an open curation** the reader finds what no single poem can give: the editors' introduction, the sequence in its order, Critical notes on the sequence as a whole (the arc of the Sonnets, the stages of the birds' journey), and a curation-level Long View.
 
 **Reader curations match readers.** Because a reader curation is visible only to people who have grown most of its poems, it reaches exactly the readers who share its maker's reading. Opening someone's curation is a kind of match, and it is how readers find each other.
 
-**Rights and translation.** The Sonnets are free everywhere. The others need translations that are out of copyright or commissioned: James Legge's *Dao De Jing* (1891) and Dante Gabriel Rossetti's *The New Life* (1861) are both out of copyright. For Attar, Edward FitzGerald's *Bird-Parliament* is out of copyright but abridged, so a commissioned translation may be worth it as an asset of Anthos's own.
+**Rights and translation.** The Sonnets are free everywhere. The others need translations that are out of copyright or commissioned: James Legge's _Dao De Jing_ (1891) and Dante Gabriel Rossetti's _The New Life_ (1861) are both out of copyright. For Attar, Edward FitzGerald's _Bird-Parliament_ is out of copyright but abridged, so a commissioned translation may be worth it as an asset of Anthos's own.
 
 ### The collection reader
 
 An open curation is read in its own reader, which looks nothing like the Garden's Deep Reader even though both run on the same text backend: the same poems, line ids, translations and annotations. The Garden reader is a **study desk**: one shared design, with the annotation apparatus in front. The collection reader is an **edition**: an aesthetic experience of the whole work, art-directed for that work.
 
-|  | Garden reader | Collection reader |
-| --- | --- | --- |
-| Purpose | Study one poem closely, stage by stage | Experience a whole work as it was meant to be read |
-| Look | The Anthos design system on every poem | Designed per work |
+|             | Garden reader                            | Collection reader                                                              |
+| ----------- | ---------------------------------------- | ------------------------------------------------------------------------------ |
+| Purpose     | Study one poem closely, stage by stage   | Experience a whole work as it was meant to be read                             |
+| Look        | The Anthos design system on every poem   | Designed per work                                                              |
 | Annotations | Front and centre: Critical, Self, Others | Hidden; your own notes appear only as small pressed-flower marks in the margin |
-| Media | Deep Discovery links beside the text | Built in: original language, recordings, music, period images |
-| Pace | Daily, one stage at a time | Page by page through the sequence, at any speed once open |
+| Media       | Deep Discovery links beside the text     | Built in: original language, recordings, music, period images                  |
+| Pace        | Daily, one stage at a time               | Page by page through the sequence, at any speed once open                      |
 
 The first editions, as sketched on the canvas:
 
@@ -391,16 +391,16 @@ How it works:
 4. **Make it yours.** Keep any of your Deep Reader notes beside each poem, write new connecting text, and add images: photos, drawings, scans, collage.
 5. **Finish and share.** View it as an interactive artefact, export it to print or as an image, and share a private link.
 
-| Form | Shape | What a position means | What a connection means |
-| --- | --- | --- | --- |
-| Book | Pages in sequence | A page or spread | Reading order |
-| Tree of Life | Ten sephirot on three pillars, joined by 22 paths | The quality of that sphere, from Keter (crown) at the top to Malkuth (kingdom) at the root | A path: your reading of how one poem leads to another |
-| Natal chart | A wheel of 12 houses | The house's area of life, such as self (1st), partnership (7th) or vocation (10th) | Aspects you draw between poems |
-| Constellation | Stars on a night sky | A star, sized by how much you wrote about it | Lines you draw between stars |
-| Herbarium | Pressed-specimen sheets | A sheet with the poem, its harvest date and your field notes | Families you group poems into |
-| Deck | Cards to shuffle and deal | A card: poem on the front, note or image on the back | Spreads and draws |
-| Map | Places on a real or invented map | A place | Routes |
-| Blank canvas | Free arrangement | Whatever you decide | Whatever you draw |
+| Form          | Shape                                             | What a position means                                                                      | What a connection means                               |
+| ------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| Book          | Pages in sequence                                 | A page or spread                                                                           | Reading order                                         |
+| Tree of Life  | Ten sephirot on three pillars, joined by 22 paths | The quality of that sphere, from Keter (crown) at the top to Malkuth (kingdom) at the root | A path: your reading of how one poem leads to another |
+| Natal chart   | A wheel of 12 houses                              | The house's area of life, such as self (1st), partnership (7th) or vocation (10th)         | Aspects you draw between poems                        |
+| Constellation | Stars on a night sky                              | A star, sized by how much you wrote about it                                               | Lines you draw between stars                          |
+| Herbarium     | Pressed-specimen sheets                           | A sheet with the poem, its harvest date and your field notes                               | Families you group poems into                         |
+| Deck          | Cards to shuffle and deal                         | A card: poem on the front, note or image on the back                                       | Spreads and draws                                     |
+| Map           | Places on a real or invented map                  | A place                                                                                    | Routes                                                |
+| Blank canvas  | Free arrangement                                  | Whatever you decide                                                                        | Whatever you draw                                     |
 
 Rules and details:
 
@@ -420,12 +420,12 @@ Extensions never touch the content model directly: every read and edit passes th
 
 ### Extension types
 
-| Type | What it does | Examples |
-| --- | --- | --- |
-| Form | Owns the stage: its positions, connections, meanings, layout and gestures | Book, Tree of Life, Natal chart, Constellation, Map |
-| Tool | Makes a new artefact from materials, and works inside any form | Erasure, cut-up, collage, re-lineation, side-by-side translation |
-| Material type | Adds a new kind of thing that can be placed | Voice recording, drawing, map pin, found text |
-| Exporter | Turns an anthology into an output | Print PDF, poster image, printable card deck, short video, interactive web page |
+| Type          | What it does                                                              | Examples                                                                        |
+| ------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Form          | Owns the stage: its positions, connections, meanings, layout and gestures | Book, Tree of Life, Natal chart, Constellation, Map                             |
+| Tool          | Makes a new artefact from materials, and works inside any form            | Erasure, cut-up, collage, re-lineation, side-by-side translation                |
+| Material type | Adds a new kind of thing that can be placed                               | Voice recording, drawing, map pin, found text                                   |
+| Exporter      | Turns an anthology into an output                                         | Print PDF, poster image, printable card deck, short video, interactive web page |
 
 ### The extension contract
 
@@ -456,23 +456,23 @@ The host API is deliberately small: read materials, place, move or remove a mate
 
 There are four tiers: **Reader** (free), **Cultivator**, **Patron** and **Benefactor**. The names describe how much someone supports Anthos, not how much they know: standing is earned separately, through the harvest and the reviewer levels. Each paid tier has one clear reason to exist. Cultivator pays for **reading more deeply**, Patron for **a voice**, Benefactor for **support and things you can hold**. Reading itself is never locked, so every tier gets every stage, all three Deep Reader modes and Deep Discovery, and nobody can buy a bloom. Elsewhere in this spec, "subscribers" in the context of publishing, peer review and contributions means Patrons and Benefactors.
 
-| Feature | Reader | Cultivator | Patron | Benefactor |
-| --- | --- | --- | --- | --- |
-| Price, monthly / annual | Free | £3.99 / £29.99 | £6.99 / £54.99 | £12.99 / £99.99 |
-| Garden plots | 30 | 40 | 50 | 60 |
-| Seeds | 3 a day | 6 a day, rolling over up to 12 | 10 a day, rolling over up to 20 | 15 a day, rolling over up to 30 |
-| The whole library, every stage, Deep Reader, Long View and Deep Discovery (reading) | Full | Full | Full | Full |
-| Curations | Open by growth; sample each edition | Every edition | Every edition | Every edition, with early access |
-| Post short annotations to Others (earned by growth) | Yes | Yes | Yes | Yes |
-| Beds, undo last swipe, bank filters | 3 beds | Yes | Yes | Yes |
-| Anthology forms | Book, Tree of Life, Natal chart | Every form | Every form | Every form, plus early access to new forms and tools |
-| Publish long responses to the Long View | No | No | Yes, after peer review | Yes, after peer review |
-| Offer connections and multimedia to Deep Discovery | No | No | Yes, after peer review | Yes, after peer review |
-| Peer review and reputation | No | No | Yes | Yes |
-| Publish reader curations | No | No | Yes | Yes |
-| Anthology sharing | Private link, screen-quality export | Private link, print-quality export | Public gallery, print-quality export | Public gallery, print-quality export |
-| Printed anthology | No | No | No | One a year, printed and posted |
-| Creator tools (later) | No | No | No | Publish your own forms and tools once the creator SDK opens |
+| Feature                                                                             | Reader                              | Cultivator                         | Patron                               | Benefactor                                                  |
+| ----------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------------- | ------------------------------------ | ----------------------------------------------------------- |
+| Price, monthly / annual                                                             | Free                                | £3.99 / £29.99                     | £6.99 / £54.99                       | £12.99 / £99.99                                             |
+| Garden plots                                                                        | 30                                  | 40                                 | 50                                   | 60                                                          |
+| Seeds                                                                               | 3 a day                             | 6 a day, rolling over up to 12     | 10 a day, rolling over up to 20      | 15 a day, rolling over up to 30                             |
+| The whole library, every stage, Deep Reader, Long View and Deep Discovery (reading) | Full                                | Full                               | Full                                 | Full                                                        |
+| Curations                                                                           | Open by growth; sample each edition | Every edition                      | Every edition                        | Every edition, with early access                            |
+| Post short annotations to Others (earned by growth)                                 | Yes                                 | Yes                                | Yes                                  | Yes                                                         |
+| Beds, undo last swipe, bank filters                                                 | 3 beds                              | Yes                                | Yes                                  | Yes                                                         |
+| Anthology forms                                                                     | Book, Tree of Life, Natal chart     | Every form                         | Every form                           | Every form, plus early access to new forms and tools        |
+| Publish long responses to the Long View                                             | No                                  | No                                 | Yes, after peer review               | Yes, after peer review                                      |
+| Offer connections and multimedia to Deep Discovery                                  | No                                  | No                                 | Yes, after peer review               | Yes, after peer review                                      |
+| Peer review and reputation                                                          | No                                  | No                                 | Yes                                  | Yes                                                         |
+| Publish reader curations                                                            | No                                  | No                                 | Yes                                  | Yes                                                         |
+| Anthology sharing                                                                   | Private link, screen-quality export | Private link, print-quality export | Public gallery, print-quality export | Public gallery, print-quality export                        |
+| Printed anthology                                                                   | No                                  | No                                 | No                                   | One a year, printed and posted                              |
+| Creator tools (later)                                                               | No                                  | No                                 | No                                   | Publish your own forms and tools once the creator SDK opens |
 
 Who each tier is for:
 
@@ -493,28 +493,28 @@ Moving between tiers:
 
 Twenty entities cover the whole flow; a poem's state for each user lives in one record, so the bank, bookmarks, garden and harvest basket are views of the same table.
 
-| Entity | Key fields |
-| --- | --- |
-| User | id, display name, tier (reader, cultivator, patron, benefactor), roles (reader, reviewer, editor), reviewer\_level (reviewer, trusted, fellow) |
-| Poem | id, title, poet\_id, year, lines (each with a stable line id), source, rights\_status, rights\_flags (such as no\_transformation), tags |
-| Poet | id, name, birth and death years, circle |
-| UserPoemState | user\_id, poem\_id, state (ignored, bookmarked, planted, uprooted, harvested), changed\_at, cooldown\_until |
-| SeedWallet | user\_id, balance, next\_refill\_at, tier (reader, cultivator, patron, benefactor) |
-| Plant | user\_id, poem\_id, plot (1 to the tier's limit), dormant, planted\_at, growth\_stage (seed, emerging, sprouting, budding, unfurling, bloom), reading\_days, last\_reading\_day, wilting\_since, ended\_by (uproot, harvest) |
-| Annotation | id, poem\_id, author\_id, kind (critical, self), visibility (private, posted), anchor (start and end line id plus character offsets), type\_tag, stage (1 to 6, critical notes), category (posted notes), body, timestamps |
-| LongResponse | id, poem\_id, author\_id, kind (critical essay, reader response), title, abstract, body, engaged\_line\_ids, status (draft, in\_review, revise, published, declined, withdrawn), published\_at |
-| Submission | id, kind (long\_response, connection, multimedia), target\_id, author\_id, round, status, editor\_id |
-| Review | id, submission\_id, reviewer\_id, verdict (accept, revise, decline), comments, due\_at, submitted\_at |
-| Relation | id, poem\_id, artefact\_id, type, reason, matched\_spans, confidence, origin (auto, editor, contributed), contributor\_id, submission\_id, unlock\_stage, feedback counts |
-| Artefact | id, kind (poem, fragment, painting, song setting, letter, multimedia response), title, creator, year, link |
-| Fragment | id, poem\_id, anchor (line ids plus character offsets), created\_by |
-| DerivedArtefact | id, user\_id, tool\_extension\_id, tool\_version, source\_ids (poems or fragments), data (the tool's JSON), label (erasure, cut-up and so on) |
-| Extension | id, type (form, tool, material, exporter), version, manifest, document\_schema, inspector\_schema, tier, status (internal, beta, live) |
-| Anthology | id, user\_id, form\_extension\_id, form\_version, title, document (the form's JSON), visibility (private, link, public), timestamps |
-| Placement | anthology\_id, position\_key, material\_ref (poem, fragment, derived artefact, media), carried\_annotation\_ids, detached\_note |
-| Media | id, user\_id, kind (image, audio, drawing, video), url, alt\_text, rights\_confirmed, moderation\_status |
-| Curation | id, kind (grand, reader), author\_id, title, introduction, core\_item\_ids, unlock\_threshold (default 0.8, at least 3 poems), visibility, released\_at; progress is derived from the reader's plants |
-| CurationItem | curation\_id, position, poem\_id or unit (such as a prose section shown between poems), in\_core |
+| Entity          | Key fields                                                                                                                                                                                                                   |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User            | id, display name, tier (reader, cultivator, patron, benefactor), roles (reader, reviewer, editor), reviewer\_level (reviewer, trusted, fellow)                                                                               |
+| Poem            | id, title, poet\_id, year, lines (each with a stable line id), source, rights\_status, rights\_flags (such as no\_transformation), tags                                                                                      |
+| Poet            | id, name, birth and death years, circle                                                                                                                                                                                      |
+| UserPoemState   | user\_id, poem\_id, state (ignored, bookmarked, planted, uprooted, harvested), changed\_at, cooldown\_until                                                                                                                  |
+| SeedWallet      | user\_id, balance, next\_refill\_at, tier (reader, cultivator, patron, benefactor)                                                                                                                                           |
+| Plant           | user\_id, poem\_id, plot (1 to the tier's limit), dormant, planted\_at, growth\_stage (seed, emerging, sprouting, budding, unfurling, bloom), reading\_days, last\_reading\_day, wilting\_since, ended\_by (uproot, harvest) |
+| Annotation      | id, poem\_id, author\_id, kind (critical, self), visibility (private, posted), anchor (start and end line id plus character offsets), type\_tag, stage (1 to 6, critical notes), category (posted notes), body, timestamps   |
+| LongResponse    | id, poem\_id, author\_id, kind (critical essay, reader response), title, abstract, body, engaged\_line\_ids, status (draft, in\_review, revise, published, declined, withdrawn), published\_at                               |
+| Submission      | id, kind (long\_response, connection, multimedia), target\_id, author\_id, round, status, editor\_id                                                                                                                         |
+| Review          | id, submission\_id, reviewer\_id, verdict (accept, revise, decline), comments, due\_at, submitted\_at                                                                                                                        |
+| Relation        | id, poem\_id, artefact\_id, type, reason, matched\_spans, confidence, origin (auto, editor, contributed), contributor\_id, submission\_id, unlock\_stage, feedback counts                                                    |
+| Artefact        | id, kind (poem, fragment, painting, song setting, letter, multimedia response), title, creator, year, link                                                                                                                   |
+| Fragment        | id, poem\_id, anchor (line ids plus character offsets), created\_by                                                                                                                                                          |
+| DerivedArtefact | id, user\_id, tool\_extension\_id, tool\_version, source\_ids (poems or fragments), data (the tool's JSON), label (erasure, cut-up and so on)                                                                                |
+| Extension       | id, type (form, tool, material, exporter), version, manifest, document\_schema, inspector\_schema, tier, status (internal, beta, live)                                                                                       |
+| Anthology       | id, user\_id, form\_extension\_id, form\_version, title, document (the form's JSON), visibility (private, link, public), timestamps                                                                                          |
+| Placement       | anthology\_id, position\_key, material\_ref (poem, fragment, derived artefact, media), carried\_annotation\_ids, detached\_note                                                                                              |
+| Media           | id, user\_id, kind (image, audio, drawing, video), url, alt\_text, rights\_confirmed, moderation\_status                                                                                                                     |
+| Curation        | id, kind (grand, reader), author\_id, title, introduction, core\_item\_ids, unlock\_threshold (default 0.8, at least 3 poems), visibility, released\_at; progress is derived from the reader's plants                        |
+| CurationItem    | curation\_id, position, poem\_id or unit (such as a prose section shown between poems), in\_core                                                                                                                             |
 
 ## Content and rights
 

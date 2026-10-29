@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react"
 
-export function BottomSheet({ label, children }: { label: string, children: ReactNode}) {
+export function BottomSheet({ label, children }: { label: string; children: ReactNode }) {
   const [open, setOpen] = useState(false)
 
   return (

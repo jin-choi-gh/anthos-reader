@@ -21,7 +21,7 @@ export function textOf(version: LoomVersion, span: LoomSpan): string {
 /** The one schema of a kind in the version, with its name: loom names schemata by kind and qualifier. */
 export function schemaOfKind(
   version: LoomVersion,
-  kind: string
+  kind: string,
 ): { name: string; schema: LoomSchema } {
   const found = Object.entries(version.schemata).filter(([, schema]) => schema.kind === kind)
   if (found.length === 0) {
@@ -64,6 +64,13 @@ function lineAt(version: LoomVersion, index: number) {
   return line
 }
 
-function codePoints(text: string): string[] {
+/** A line's length as loom counts it, in code points. */
+export function lineLength(version: LoomVersion, index: number): number {
+  return codePoints(lineAt(version, index).text).length
+}
+
+/** A text's characters as loom counts them: code points, not UTF-16 units, so that loom's offsets
+ * index this array directly. */
+export function codePoints(text: string): string[] {
   return Array.from(text)
 }

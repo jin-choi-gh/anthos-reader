@@ -4,14 +4,14 @@
   --sheet-height: 45dvh;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: 'text';
+  grid-template-areas: "text";
   padding: 3rem 16px 4rem 3rem; /* left padding leaves room for line numbers */
 }
 
 /* C: spread */
-.reader[data-layout='spread'] {
+.reader[data-layout="spread"] {
   grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
-  grid-template-areas: 'text margin';
+  grid-template-areas: "text margin";
   column-gap: 4rem;
   max-width: 72rem;
   margin-inline: auto;
@@ -19,11 +19,11 @@
 }
 
 /* Page layout: room at the foot, so lines under the sheet can be scrolled clear of it */
-.reader[data-layout='page'] {
+.reader[data-layout="page"] {
   padding-bottom: calc(var(--sheet-handle, 3rem) + 2rem);
 }
 
-.reader[data-layout='page']:has(.bottom-sheet[data-open='true']) {
+.reader[data-layout="page"]:has(.bottom-sheet[data-open="true"]) {
   padding-bottom: calc(var(--sheet-height, 45dvh) + 2rem);
 }
 
@@ -31,12 +31,16 @@
   grid-area: text;
 }
 
+/* html:has(.bottom-sheet[data-open='true']) {
+  scroll-padding-bottom: var(--sheet-height, 45dvh);
+} */
+
 /* Centre title and poem together by the longest line; keep both left-aligned */
 .text-block {
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
-  font-family: 'Literata', Georgia, serif;
+  font-family: "Literata", Georgia, serif;
   font-size: 1.2rem;
   line-height: 1.6;
 }
@@ -89,16 +93,87 @@
   user-select: none;
 }
 
+/* Spread: the margin stays in view, level with the title, and scrolls on its own, never the poem.
+   7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window. */
 .margin {
   grid-area: margin;
   font-family: system-ui, sans-serif;
   font-size: 0.875rem;
   line-height: 1.5;
+  align-self: start;
+  position: sticky;
+  top: 3rem;
+  max-height: calc(100dvh - 7rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .margin-empty {
   margin: 0;
   opacity: 0.5;
+}
+
+:root {
+  --highlight: #fbefc4; /* the selected note, and from step 4 its passages in the poem */
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Each note in its own box; the whole box is what you click */
+.note {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgb(0 0 0 / 0.12);
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.note:hover {
+  border-color: rgb(0 0 0 / 0.3);
+}
+
+.note[data-selected="true"] {
+  background: var(--highlight);
+  border-color: #d9b54a;
+}
+
+/* Keyboard focus is on the lemma's button, but the ring goes round the whole box */
+.note:has(.note-lemma:focus-visible) {
+  outline: 2px solid #3b6fd8;
+  outline-offset: 2px;
+}
+
+/* The lemma: a button that looks like the head of a commentary entry */
+.note-lemma {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.note-lemma:focus-visible {
+  outline: none;
+}
+
+/* Quotes from the poem in italics, without quotation marks; citations ("lines 1–4") upright */
+.note-lemma q {
+  quotes: none;
+  font-style: italic;
+}
+
+.note p {
+  margin: 0.5em 0 0;
 }
 
 /* Page layout: a sheet over the bottom of the screen */
@@ -122,13 +197,13 @@
 
 /* Open: scrolling over the sheet, by wheel or by touch, never scrolls the poem behind it.
    overflow: hidden makes the whole sheet, handle included, a box that keeps its scrolls */
-.bottom-sheet[data-open='true'] {
+.bottom-sheet[data-open="true"] {
   transform: translateY(0);
   overflow: hidden;
   overscroll-behavior: contain;
 }
 
-.bottom-sheet[data-open='true'] .bottom-sheet-body {
+.bottom-sheet[data-open="true"] .bottom-sheet-body {
   overscroll-behavior: contain;
 }
 
@@ -146,4 +221,3 @@
   overflow-y: auto;
   padding: 0 16px 1.5rem;
 }
-

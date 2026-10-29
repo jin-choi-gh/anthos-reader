@@ -1,7 +1,6 @@
-export function Margin() {
-  return (
-    <aside className="margin">
-      <p className="margin-empty">Notes will appear here.</p>
-    </aside>
-  )
+import type { ReactNode } from "react"
+
+/** The spread layout's margin beside the text: a place to put things, which knows nothing of notes. */
+export function Margin({ children }: { children: ReactNode }) {
+  return <aside className="margin">{children}</aside>
 }

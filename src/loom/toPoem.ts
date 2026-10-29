@@ -11,14 +11,13 @@ export function toPoem(version: LoomVersion): Poem {
 
   const stanzas: Stanza[] = ranked(tree.roots(), POEM).flatMap((poem) =>
     ranked(tree.children(poem), STANZA).map((stanza) => ({
-      lines: ranked(tree.children(stanza), LINE).map(
-        (line): Line => ({
-          id: line.id,
-          text: textOf(version, line),
-          number: line.start[0] + 1,
-        })
-      ),
-    }))
+      lines: ranked(tree.children(stanza), LINE).map((line): Line => ({
+        id: line.id,
+        text: textOf(version, line),
+        indexInSubstrate: line.start[0],
+        number: line.start[0] + 1,
+      })),
+    })),
   )
 
   return {

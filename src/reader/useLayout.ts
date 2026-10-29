@@ -11,8 +11,7 @@ export function useLayout(ref: RefObject<HTMLElement | null>): ReaderLayout {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
-    const update = () =>
-      setLayout(el.clientWidth >= SPREAD_MIN_WIDTH ? "spread" : "page")
+    const update = () => setLayout(el.clientWidth >= SPREAD_MIN_WIDTH ? "spread" : "page")
     update()
     const observer = new ResizeObserver(update)
     observer.observe(el)

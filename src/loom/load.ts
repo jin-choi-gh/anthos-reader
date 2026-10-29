@@ -2,7 +2,9 @@ import type { LoomVersion } from "./types"
 
 // Every version file in anthos-reader/text-data/, found by Vite when it builds the app:
 // file path → a function that loads that one file. A REST API would replace this later.
-const files = import.meta.glob<unknown>("../../text-data/*.json", { import: "default" })
+const files = import.meta.glob<unknown>("../../text-data/*.json", {
+  import: "default",
+})
 
 /** The versions in text-data/, by file name: text-data/vendler.json gives "vendler". */
 export function versionFiles(): string[] {
@@ -27,7 +29,7 @@ export function parseVersion(data: unknown, origin: string): LoomVersion {
   }
   if (data.format_version !== 1) {
     throw new Error(
-      `${origin}: format version ${String(data.format_version)}, but this reader reads version 1`
+      `${origin}: format version ${String(data.format_version)}, but this reader reads version 1`,
     )
   }
   return data as unknown as LoomVersion
