@@ -1,15 +1,15 @@
 import type { LoomVersion } from "./types"
 
-// Every version file in anthos-reader/data/, found by Vite when it builds the app:
+// Every version file in anthos-reader/text-data/, found by Vite when it builds the app:
 // file path → a function that loads that one file. A REST API would replace this later.
 const files = import.meta.glob<unknown>("../../text-data/*.json", { import: "default" })
 
-/** The versions in data/, by file name: data/vendler.json gives "vendler". */
+/** The versions in text-data/, by file name: text-data/vendler.json gives "vendler". */
 export function versionFiles(): string[] {
   return Object.keys(files).map(fileName).sort()
 }
 
-/** A version from data/, by file name, checked to be one this reader understands. */
+/** A version from text-data/, by file name, checked to be one this reader understands. */
 export async function loadVersion(file: string): Promise<LoomVersion> {
   const path = `../../text-data/${file}.json`
   const load = files[path]

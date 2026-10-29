@@ -1,33 +1,29 @@
 import type { Line, Poem, Stanza } from "../reader/types"
-import type { LoomVersion } from "./types"
+import { DISPLAY, LINE, POEM, STANZA } from "./display"
+import type { LoomUnit, LoomVersion } from "./types"
+import { SchemaTree, schemaOfKind, textOf } from "./version"
 
-/** The reader's Poem from a loom version: the stanzas and lines of its display schema, and its metadata. */
+/** The reader's Poem from a loom version: the poems, stanzas and lines of its display schema, each
+ * line's text cut from the substrate by its span, and the version's metadata. */
 export function toPoem(version: LoomVersion): Poem {
-  const display = version.schemata["display"]
-  if (display === undefined) {
-    throw new Error(`${version.name}: no display schema`)
-  }
-  const texts = new Map(version.lines.map((line) => [line.id, line.text]))
+  const tree = new SchemaTree(schemaOfKind(version, DISPLAY).schema)
+  const ranked = (units: LoomUnit[], rank: string) => units.filter((unit) => unit.rank === rank)
 
-  const stanzas: Stanza[] = display.units
-    .filter((unit) => unit.rank === "stanza")
-    .map((stanza) => ({
-      lines: display.units
-        .filter((unit) => unit.rank === "line" && unit.parent === stanza.id)
-        .map((unit): Line => ({ id: unit.id, text: textOf(unit.id, texts) })),
+  const stanzas: Stanza[] = ranked(tree.roots(), POEM).flatMap((poem) =>
+    ranked(tree.children(poem), STANZA).map((stanza) => ({
+      lines: ranked(tree.children(stanza), LINE).map(
+        (line): Line => ({
+          id: line.id,
+          text: textOf(version, line),
+          number: line.start[0] + 1,
+        })
+      ),
     }))
+  )
 
   return {
     title: version.metadata.title ?? version.name ?? "Untitled",
-    poet: version.metadata.author ?? "",
+    author: version.metadata.author ?? "",
     stanzas,
   }
-}
-
-function textOf(id: string, texts: Map<string, string>): string {
-  const text = texts.get(id)
-  if (text === undefined) {
-    throw new Error(`line ${id} is in the display schema but not among the lines`)
-  }
-  return text
 }

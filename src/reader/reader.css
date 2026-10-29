@@ -1,5 +1,7 @@
 /* A: page */
 .reader {
+  --sheet-handle: 3rem;
+  --sheet-height: 45dvh;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: 'text';
@@ -14,6 +16,15 @@
   max-width: 72rem;
   margin-inline: auto;
   padding-inline: 3rem;
+}
+
+/* Page layout: room at the foot, so lines under the sheet can be scrolled clear of it */
+.reader[data-layout='page'] {
+  padding-bottom: calc(var(--sheet-handle, 3rem) + 2rem);
+}
+
+.reader[data-layout='page']:has(.bottom-sheet[data-open='true']) {
+  padding-bottom: calc(var(--sheet-height, 45dvh) + 2rem);
 }
 
 .reader-text {
@@ -95,7 +106,7 @@
   position: fixed;
   inset-inline: 0;
   bottom: 0;
-  height: 45dvh;
+  height: var(--sheet-height, 45dvh);
   display: flex;
   flex-direction: column;
   background: white;
@@ -105,17 +116,25 @@
   font-size: 0.875rem;
   line-height: 1.5;
   /* Collapsed: slide down until only the handle shows */
-  transform: translateY(calc(100% - 3rem));
+  transform: translateY(calc(100% - var(--sheet-handle, 3rem)));
   transition: transform 200ms ease;
 }
 
+/* Open: scrolling over the sheet, by wheel or by touch, never scrolls the poem behind it.
+   overflow: hidden makes the whole sheet, handle included, a box that keeps its scrolls */
 .bottom-sheet[data-open='true'] {
   transform: translateY(0);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.bottom-sheet[data-open='true'] .bottom-sheet-body {
+  overscroll-behavior: contain;
 }
 
 .bottom-sheet-handle {
   flex: none;
-  height: 3rem;
+  height: var(--sheet-handle, 3rem);
   border: 0;
   background: none;
   font: inherit;
