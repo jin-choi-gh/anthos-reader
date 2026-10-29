@@ -59,7 +59,11 @@ export function Reader({ file }: { file: string }) {
           ) : (
             <>
               <TitleBlock poem={view.poem} />
-              <PoemBlock poem={view.poem} />
+              <PoemBlock
+                poem={view.poem}
+                rangesOn={view.noteIndex.rangesOn}
+                selectedNote={selectedNote}
+              />
             </>
           )}
         </div>

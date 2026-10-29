@@ -1,7 +1,11 @@
+:root {
+  --sheet-handle: 3rem; /* the closed sheet: only its handle shows */
+  --sheet-height: 45dvh; /* the open sheet */
+  --highlight: #c4f6fb; /* the selected note, and its passages in the poem */
+}
+
 /* A: page */
 .reader {
-  --sheet-handle: 3rem;
-  --sheet-height: 45dvh;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "text";
@@ -31,9 +35,19 @@
   grid-area: text;
 }
 
-/* html:has(.bottom-sheet[data-open='true']) {
-  scroll-padding-bottom: var(--sheet-height, 45dvh);
-} */
+/* Page layout: what scrolls into view stops above the sheet, not behind it */
+html:has(.reader[data-layout="page"]) {
+  scroll-padding-bottom: calc(var(--sheet-handle) + 1rem);
+}
+
+html:has(.bottom-sheet[data-open="true"]) {
+  scroll-padding-bottom: calc(var(--sheet-height) + 1rem);
+}
+
+/* Room above whatever scrolls into view, in both layouts */
+html {
+  scroll-padding-top: 2rem;
+}
 
 /* Centre title and poem together by the longest line; keep both left-aligned */
 .text-block {
@@ -113,10 +127,6 @@
   opacity: 0.5;
 }
 
-:root {
-  --highlight: #fbefc4; /* the selected note, and from step 4 its passages in the poem */
-}
-
 .notes {
   display: flex;
   flex-direction: column;
@@ -174,6 +184,12 @@
 
 .note p {
   margin: 0.5em 0 0;
+}
+
+/* The selected note's words in the poem: the same colour as its box, so the two read together */
+.line-text mark {
+  background: var(--highlight);
+  color: inherit;
 }
 
 /* Page layout: a sheet over the bottom of the screen */
