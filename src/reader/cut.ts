@@ -1,4 +1,4 @@
-import { codePoints } from "../loom/version"
+import { codePoints } from "../loom/textualComplex"
 
 /** A stretch of one line, by offsets in code points as loom counts them: from start, up to end. */
 export interface LineRange {

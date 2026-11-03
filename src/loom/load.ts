@@ -1,29 +1,29 @@
 import type { LoomTextualComplex } from "./types"
 
-// Every version file in anthos-reader/text-data/, found by Vite when it builds the app:
+// Every textual complex file in anthos-reader/text-data/, found by Vite when it builds the app:
 // file path → a function that loads that one file. A REST API would replace this later.
 const files = import.meta.glob<unknown>("../../text-data/*.json", {
   import: "default",
 })
 
-/** The versions in text-data/, by file name: text-data/vendler.json gives "vendler". */
-export function versionFiles(): string[] {
+/** The textual complexes in text-data/, by file name: text-data/vendler.json gives "vendler". */
+export function textualComplexFiles(): string[] {
   return Object.keys(files).map(fileName).sort()
 }
 
-/** A version from text-data/, by file name, checked to be one this reader understands. */
-export async function loadVersion(file: string): Promise<LoomTextualComplex> {
+/** A textual complex from text-data/, by file name, checked to be one this reader understands. */
+export async function loadTextualComplex(file: string): Promise<LoomTextualComplex> {
   const path = `../../text-data/${file}.json`
   const load = files[path]
   if (load === undefined) {
-    const known = versionFiles().join(", ") || "none"
+    const known = textualComplexFiles().join(", ") || "none"
     throw new Error(`text-data/${file}.json: no such file (text-data/ has: ${known})`)
   }
-  return parseVersion(await load(), `text-data/${file}.json`)
+  return parseTextualComplex(await load(), `text-data/${file}.json`)
 }
 
-/** Parsed JSON checked to be a loom version this reader understands. `origin` names it in errors. */
-export function parseVersion(data: unknown, origin: string): LoomTextualComplex {
+/** Parsed JSON checked to be a loom textual complex this reader understands. `origin` names it in errors. */
+export function parseTextualComplex(data: unknown, origin: string): LoomTextualComplex {
   if (!isObject(data) || data.format !== "loom-textual-complex") {
     throw new Error(`${origin}: not a loom textual complex`)
   }

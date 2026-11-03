@@ -5,31 +5,31 @@ import type { LoomSchema, LoomSpan, LoomUnit, LoomTextualComplex } from "./types
 
 /** The text a span covers, as loom's Substrate.text_of gives it: across lines, each line's part,
  * joined by line breaks. Offsets count code points, as Python's do, not UTF-16 units. */
-export function textOf(version: LoomTextualComplex, span: LoomSpan): string {
+export function textOf(textualComplex: LoomTextualComplex, span: LoomSpan): string {
   const [startLine, startOffset] = span.start
   const [endLine, endOffset] = span.end
-  const line = (index: number) => codePoints(lineAt(version, index).text)
+  const line = (index: number) => codePoints(lineAt(textualComplex, index).text)
   if (startLine === endLine) {
     return line(startLine).slice(startOffset, endOffset).join("")
   }
   const first = line(startLine).slice(startOffset).join("")
-  const middle = version.lines.slice(startLine + 1, endLine).map((l) => l.text)
+  const middle = textualComplex.lines.slice(startLine + 1, endLine).map((l) => l.text)
   const last = line(endLine).slice(0, endOffset).join("")
   return [first, ...middle, last].join("\n")
 }
 
-/** The one schema of a kind in the version, with its name: loom names schemata by kind and qualifier. */
+/** The one schema of a kind in the textual complex, with its name: loom names schemata by kind and qualifier. */
 export function schemaOfKind(
-  version: LoomTextualComplex,
+  textualComplex: LoomTextualComplex,
   kind: string,
 ): { name: string; schema: LoomSchema } {
-  const found = Object.entries(version.schemata).filter(([, schema]) => schema.kind === kind)
+  const found = Object.entries(textualComplex.schemata).filter(([, schema]) => schema.kind === kind)
   if (found.length === 0) {
-    throw new Error(`${version.name}: no ${kind} schema`)
+    throw new Error(`${textualComplex.name}: no ${kind} schema`)
   }
   if (found.length > 1) {
     const names = found.map(([name]) => name).join(", ")
-    throw new Error(`${version.name}: several ${kind} schemata: ${names}`)
+    throw new Error(`${textualComplex.name}: several ${kind} schemata: ${names}`)
   }
   const [name, schema] = found[0]
   return { name, schema }
@@ -56,17 +56,17 @@ export class SchemaTree {
   }
 }
 
-function lineAt(version: LoomTextualComplex, index: number) {
-  const line = version.lines[index]
+function lineAt(textualComplex: LoomTextualComplex, index: number) {
+  const line = textualComplex.lines[index]
   if (line === undefined) {
-    throw new Error(`${version.name}: no line at index ${index}`)
+    throw new Error(`${textualComplex.name}: no line at index ${index}`)
   }
   return line
 }
 
 /** A line's length as loom counts it, in code points. */
-export function lineLength(version: LoomTextualComplex, index: number): number {
-  return codePoints(lineAt(version, index).text).length
+export function lineLength(textualComplex: LoomTextualComplex, index: number): number {
+  return codePoints(lineAt(textualComplex, index).text).length
 }
 
 /** A text's characters as loom counts them: code points, not UTF-16 units, so that loom's offsets

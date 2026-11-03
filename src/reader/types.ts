@@ -1,4 +1,4 @@
-// What the reader draws, made from a loom version by loom/toPoem.ts and loom/toNotes.ts.
+// What the reader draws, made from a loom textual complex by loom/toPoem.ts and loom/toNotes.ts.
 
 export interface Line {
   id: string // the display schema's line unit

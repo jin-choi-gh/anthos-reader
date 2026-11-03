@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { loadVersion } from "../loom/load"
+import { loadTextualComplex } from "../loom/load"
 import { toNotes } from "../loom/toNotes"
 import { toPoem } from "../loom/toPoem"
 import type { NoteIndex, Poem } from "./types"
@@ -11,7 +11,8 @@ import { Margin } from "./Margin"
 import { BottomSheet } from "./BottomSheet"
 import "./reader.css"
 
-/** What the reader shows of one loaded version: its poem and its notes, made from it together. */
+/** What the reader shows of one loaded textual complex: its poem and its notes, made from it
+ * together. */
 interface View {
   poem: Poem
   noteIndex: NoteIndex
@@ -26,10 +27,10 @@ export function Reader({ file }: { file: string }) {
 
   useEffect(() => {
     let cancelled = false
-    loadVersion(file)
-      .then((version) => {
+    loadTextualComplex(file)
+      .then((textualComplex) => {
         if (cancelled) return
-        setView({ poem: toPoem(version), noteIndex: toNotes(version) })
+        setView({ poem: toPoem(textualComplex), noteIndex: toNotes(textualComplex) })
         setSelectedNote(null) // ids belong to one file: notes:7 in another file is another note
       })
       .catch((e: unknown) => {
