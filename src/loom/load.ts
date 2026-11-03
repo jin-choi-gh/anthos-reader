@@ -1,4 +1,4 @@
-import type { LoomVersion } from "./types"
+import type { LoomTextualComplex } from "./types"
 
 // Every version file in anthos-reader/text-data/, found by Vite when it builds the app:
 // file path → a function that loads that one file. A REST API would replace this later.
@@ -12,7 +12,7 @@ export function versionFiles(): string[] {
 }
 
 /** A version from text-data/, by file name, checked to be one this reader understands. */
-export async function loadVersion(file: string): Promise<LoomVersion> {
+export async function loadVersion(file: string): Promise<LoomTextualComplex> {
   const path = `../../text-data/${file}.json`
   const load = files[path]
   if (load === undefined) {
@@ -23,16 +23,16 @@ export async function loadVersion(file: string): Promise<LoomVersion> {
 }
 
 /** Parsed JSON checked to be a loom version this reader understands. `origin` names it in errors. */
-export function parseVersion(data: unknown, origin: string): LoomVersion {
-  if (!isObject(data) || data.format !== "loom-version") {
-    throw new Error(`${origin}: not a loom version`)
+export function parseVersion(data: unknown, origin: string): LoomTextualComplex {
+  if (!isObject(data) || data.format !== "loom-textual-complex") {
+    throw new Error(`${origin}: not a loom textual complex`)
   }
   if (data.format_version !== 1) {
     throw new Error(
       `${origin}: format version ${String(data.format_version)}, but this reader reads version 1`,
     )
   }
-  return data as unknown as LoomVersion
+  return data as unknown as LoomTextualComplex
 }
 
 function fileName(path: string): string {

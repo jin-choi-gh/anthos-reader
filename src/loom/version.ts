@@ -1,11 +1,11 @@
-import type { LoomSchema, LoomSpan, LoomUnit, LoomVersion } from "./types"
+import type { LoomSchema, LoomSpan, LoomUnit, LoomTextualComplex } from "./types"
 
 // What loom's models do (loom/src/models), done on the JSON: the substrate's text, and the trees of
 // the schemata. Nothing here knows any particular kind of schema.
 
 /** The text a span covers, as loom's Substrate.text_of gives it: across lines, each line's part,
  * joined by line breaks. Offsets count code points, as Python's do, not UTF-16 units. */
-export function textOf(version: LoomVersion, span: LoomSpan): string {
+export function textOf(version: LoomTextualComplex, span: LoomSpan): string {
   const [startLine, startOffset] = span.start
   const [endLine, endOffset] = span.end
   const line = (index: number) => codePoints(lineAt(version, index).text)
@@ -20,7 +20,7 @@ export function textOf(version: LoomVersion, span: LoomSpan): string {
 
 /** The one schema of a kind in the version, with its name: loom names schemata by kind and qualifier. */
 export function schemaOfKind(
-  version: LoomVersion,
+  version: LoomTextualComplex,
   kind: string,
 ): { name: string; schema: LoomSchema } {
   const found = Object.entries(version.schemata).filter(([, schema]) => schema.kind === kind)
@@ -56,7 +56,7 @@ export class SchemaTree {
   }
 }
 
-function lineAt(version: LoomVersion, index: number) {
+function lineAt(version: LoomTextualComplex, index: number) {
   const line = version.lines[index]
   if (line === undefined) {
     throw new Error(`${version.name}: no line at index ${index}`)
@@ -65,7 +65,7 @@ function lineAt(version: LoomVersion, index: number) {
 }
 
 /** A line's length as loom counts it, in code points. */
-export function lineLength(version: LoomVersion, index: number): number {
+export function lineLength(version: LoomTextualComplex, index: number): number {
   return codePoints(lineAt(version, index).text).length
 }
 

@@ -1,11 +1,11 @@
 import type { Line, Poem, Stanza } from "../reader/types"
 import { DISPLAY, LINE, POEM, STANZA } from "./display"
-import type { LoomUnit, LoomVersion } from "./types"
+import type { LoomUnit, LoomTextualComplex } from "./types"
 import { SchemaTree, schemaOfKind, textOf } from "./version"
 
 /** The reader's Poem from a loom version: the poems, stanzas and lines of its display schema, each
  * line's text cut from the substrate by its span, and the version's metadata. */
-export function toPoem(version: LoomVersion): Poem {
+export function toPoem(version: LoomTextualComplex): Poem {
   const tree = new SchemaTree(schemaOfKind(version, DISPLAY).schema)
   const ranked = (units: LoomUnit[], rank: string) => units.filter((unit) => unit.rank === rank)
 

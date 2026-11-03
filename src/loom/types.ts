@@ -1,4 +1,4 @@
-// The JSON loom writes for one version: loom/src/exports/version_json.py, format_version 1.
+// The JSON loom writes for one textual complex: loom/src/exports/textual_complex_json.py, format_version 1.
 
 /** [index of the line in `lines`, character offset within that line] */
 export type LoomPosition = [line: number, offset: number]
@@ -35,16 +35,16 @@ export interface LoomAnnotation {
   body: string
 }
 
-export interface LoomVersionMetadata {
+export interface LoomMetadata {
   title: string | null
   author: string | null
 }
 
-export interface LoomVersion {
-  format: "loom-version"
+export interface LoomTextualComplex {
+  format: "loom-textual-complex"
   format_version: 1
   name: string | null
-  metadata: LoomVersionMetadata
+  metadata: LoomMetadata
   lines: LoomLine[]
   schemata: Record<string, LoomSchema>
   atoms: LoomAtom[]
