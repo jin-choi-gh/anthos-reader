@@ -1,7 +1,8 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
 :root {
   --sheet-handle: 3rem; /* the closed sheet: only its handle shows */
   --sheet-height: 45dvh; /* the open sheet */
-  --highlight: #c4f6fb; /* the selected note, and its passages in the poem */
 }
 
 /* A: page */
@@ -35,6 +36,32 @@
   grid-area: text;
 }
 
+/* Back to the library, at the top left of the text column. It rises into the reader's top padding,
+   so the poem moves down only a little; the negative inline margin lines the chevron up with the
+   column's edge. */
+.reader-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 44px; /* a finger-sized target */
+  margin: -2rem 0 1rem -0.5rem;
+  padding-inline: 0.5rem;
+  border-radius: var(--radius-note);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.reader-back:hover {
+  color: var(--ink);
+}
+
+.reader-back:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 /* Page layout: what scrolls into view stops above the sheet, not behind it */
 html:has(.reader[data-layout="page"]) {
   scroll-padding-bottom: calc(var(--sheet-handle) + 1rem);
@@ -54,7 +81,7 @@ html {
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
-  font-family: "Literata", Georgia, serif;
+  font-family: var(--font-text);
   font-size: 1.2rem;
   line-height: 1.6;
 }
@@ -73,10 +100,10 @@ html {
 
 .poet {
   margin: 0.25em 0 0;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-ui);
   font-size: 0.7em;
   letter-spacing: 0.02em;
-  opacity: 0.6;
+  color: var(--ink-muted);
 }
 
 .stanza + .stanza {
@@ -103,7 +130,7 @@ html {
   font-size: 0.7em;
   line-height: calc(1.6em / 0.7); /* align with the line's first baseline */
   font-variant-numeric: tabular-nums;
-  opacity: 0.5;
+  color: var(--ink-faint);
   user-select: none;
 }
 
@@ -111,7 +138,7 @@ html {
    7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window. */
 .margin {
   grid-area: margin;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-ui);
   font-size: 0.875rem;
   line-height: 1.5;
   align-self: start;
@@ -124,7 +151,7 @@ html {
 
 .margin-empty {
   margin: 0;
-  opacity: 0.5;
+  color: var(--ink-faint);
 }
 
 .notes {
@@ -136,9 +163,9 @@ html {
 /* Each note in its own box; the whole box is what you click */
 .note {
   padding: 0.75rem 1rem;
-  border: 1px solid rgb(0 0 0 / 0.12);
-  border-radius: 8px;
-  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
   cursor: pointer;
   transition:
     border-color 120ms ease,
@@ -146,17 +173,17 @@ html {
 }
 
 .note:hover {
-  border-color: rgb(0 0 0 / 0.3);
+  border-color: var(--line-hover);
 }
 
 .note[data-selected="true"] {
-  background: var(--highlight);
-  border-color: #d9b54a;
+  background: var(--fill-editor);
+  border-color: var(--edge-selected);
 }
 
 /* Keyboard focus is on the lemma's button, but the ring goes round the whole box */
 .note:has(.note-lemma:focus-visible) {
-  outline: 2px solid #3b6fd8;
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -188,7 +215,7 @@ html {
 
 /* The selected note's words in the poem: the same colour as its box, so the two read together */
 .line-text mark {
-  background: var(--highlight);
+  background: var(--fill-editor);
   color: inherit;
 }
 
@@ -200,10 +227,10 @@ html {
   height: var(--sheet-height, 45dvh);
   display: flex;
   flex-direction: column;
-  background: white;
-  border-radius: 12px 12px 0 0;
-  box-shadow: 0 -2px 12px rgb(0 0 0 / 0.08);
-  font-family: system-ui, sans-serif;
+  background: var(--surface);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--font-ui);
   font-size: 0.875rem;
   line-height: 1.5;
   /* Collapsed: slide down until only the handle shows */

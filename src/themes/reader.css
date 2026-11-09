@@ -1,0 +1,34 @@
+/* The reader theme: every colour, face, radius and shadow the reader draws with, named by its
+   role, never by its hue. Components use only these names, so another theme is another file that
+   sets them. Values are the reader's as they were before themes, so this changes nothing on screen. */
+
+:root {
+  /* Grounds */
+  --page: #ffffff; /* behind everything */
+  --surface: #ffffff; /* note boxes and the sheet */
+
+  /* Text */
+  --ink: #000000; /* the poem and body text */
+  --ink-muted: #666666; /* the poet line: 60% ink */
+  --ink-faint: #808080; /* line numbers, empty states: 50% ink */
+
+  /* Lines */
+  --line: rgb(0 0 0 / 0.12); /* a note box's border */
+  --line-hover: rgb(0 0 0 / 0.3); /* the border of the note under the pointer */
+
+  /* The editor's notes */
+  --fill-editor: #c4f6fb; /* the selected note's box, and its passages in the poem */
+  --edge-selected: #d9b54a; /* the selected note's border */
+
+  /* Interaction */
+  --focus: #3b6fd8; /* the keyboard focus ring */
+
+  /* Faces */
+  --font-text: "Literata", Georgia, serif; /* the poem and its title */
+  --font-ui: system-ui, sans-serif; /* everything you operate */
+
+  /* Shape and depth */
+  --radius-note: 8px;
+  --radius-sheet: 12px;
+  --shadow-sheet: 0 -2px 12px rgb(0 0 0 / 0.08);
+}

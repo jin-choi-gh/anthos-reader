@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react"
 import { loadTextualComplex } from "../loom/load"
 import { toNotes } from "../loom/toNotes"
 import { toPoem } from "../loom/toPoem"
+import { libraryHref } from "../route"
+import { ChevronLeft } from "../ui/icons"
 import type { NoteIndex, Poem } from "./types"
-import { useLayout } from "./useLayout"
+import { usePlatform } from "./usePlatform"
 import { TitleBlock } from "./TitleBlock"
 import { PoemBlock } from "./PoemBlock"
 import { NotesBlock } from "./NotesBlock"
@@ -20,7 +22,7 @@ interface View {
 
 export function Reader({ file }: { file: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const layout = useLayout(ref)
+  const { layout, input } = usePlatform(ref)
   const [view, setView] = useState<View | null>(null)
   const [selectedNote, setSelectedNote] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -41,6 +43,16 @@ export function Reader({ file }: { file: string }) {
     }
   }, [file])
 
+  // The tab names the poem while it is open, and goes back to what it said when the reader closes
+  useEffect(() => {
+    if (view === null) return
+    const previous = document.title
+    document.title = `${view.poem.title} · Anthos`
+    return () => {
+      document.title = previous
+    }
+  }, [view])
+
   // Clicking a note selects it; clicking the selected note again deselects it
   const toggleNote = (id: string) => setSelectedNote((current) => (current === id ? null : id))
 
@@ -50,8 +62,12 @@ export function Reader({ file }: { file: string }) {
   )
 
   return (
-    <div ref={ref} className="reader" data-layout={layout}>
+    <div ref={ref} className="reader" data-layout={layout} data-input={input}>
       <article className="reader-text">
+        <a className="reader-back" href={libraryHref}>
+          <ChevronLeft size={18} />
+          Library
+        </a>
         <div className="text-block">
           {error !== null ? (
             <p className="reader-message">{error}</p>
