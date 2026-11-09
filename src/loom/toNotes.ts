@@ -69,7 +69,7 @@ function kindOf(textualComplex: LoomTextualComplex, target: LoomSpan): TargetKin
 }
 
 /** A note's body as its paragraphs: split at blank lines, each paragraph's wrapped lines joined
- * into one, as the notes grammar reads them (loom/NOTES_GRAMMAR.md, 3.4). */
+ * into one, as the notes grammar reads them. */
 function paragraphsOf(body: string): string[] {
   return body
     .split(/\n\s*\n/)

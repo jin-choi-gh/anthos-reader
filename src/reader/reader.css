@@ -86,6 +86,15 @@ html {
   line-height: 1.6;
 }
 
+/* "Loading…" and load errors: in the interface's face and size, not the poem's, like the library's */
+.reader-message {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
 /* Title block: 2 poem lines of space before the poem */
 .title-block {
   margin-bottom: 2lh;

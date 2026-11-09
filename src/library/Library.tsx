@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
 import { loadTextualComplex, textualComplexFiles } from "../loom/load"
 import { readerHref } from "../route"
+import { useLoaded } from "../useLoaded"
 import "./library.css"
 
 /** One poem in the library: its file in text-data/, and what its metadata says it is. */
@@ -12,22 +12,7 @@ interface Entry {
 
 /** Every textual complex in text-data/, by title and poet, each a link to read it. */
 export function Library() {
-  const [entries, setEntries] = useState<Entry[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    Promise.all(textualComplexFiles().map(entryOf))
-      .then((loaded) => {
-        if (!cancelled) setEntries(loaded)
-      })
-      .catch((e: unknown) => {
-        if (!cancelled) setError(e instanceof Error ? e.message : String(e))
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const { value: entries, error } = useLoaded("library", loadEntries)
 
   return (
     <main className="library">
@@ -52,6 +37,10 @@ export function Library() {
       )}
     </main>
   )
+}
+
+function loadEntries(): Promise<Entry[]> {
+  return Promise.all(textualComplexFiles().map(entryOf))
 }
 
 async function entryOf(file: string): Promise<Entry> {

@@ -14,7 +14,6 @@ export interface Stanza {
 export interface Poem {
   title: string
   author: string
-  year?: number
   stanzas: Stanza[]
 }
 

@@ -4,6 +4,7 @@ import { toNotes } from "../loom/toNotes"
 import { toPoem } from "../loom/toPoem"
 import { libraryHref } from "../route"
 import { ChevronLeft } from "../ui/icons"
+import { useLoaded } from "../useLoaded"
 import type { NoteIndex, Poem } from "./types"
 import { usePlatform } from "./usePlatform"
 import { TitleBlock } from "./TitleBlock"
@@ -14,34 +15,23 @@ import { BottomSheet } from "./BottomSheet"
 import "./reader.css"
 
 /** What the reader shows of one loaded textual complex: its poem and its notes, made from it
- * together. */
+ * together. A reader shows one file for its whole life: App gives it a key of its file, so another
+ * file is another reader, and a note selected in one (notes:7) never carries over to the next. */
 interface View {
   poem: Poem
   noteIndex: NoteIndex
 }
 
+async function loadView(file: string): Promise<View> {
+  const textualComplex = await loadTextualComplex(file)
+  return { poem: toPoem(textualComplex), noteIndex: toNotes(textualComplex) }
+}
+
 export function Reader({ file }: { file: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
-  const [view, setView] = useState<View | null>(null)
+  const { value: view, error } = useLoaded(file, loadView)
   const [selectedNote, setSelectedNote] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    loadTextualComplex(file)
-      .then((textualComplex) => {
-        if (cancelled) return
-        setView({ poem: toPoem(textualComplex), noteIndex: toNotes(textualComplex) })
-        setSelectedNote(null) // ids belong to one file: notes:7 in another file is another note
-      })
-      .catch((e: unknown) => {
-        if (!cancelled) setError(e instanceof Error ? e.message : String(e))
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [file])
 
   // The tab names the poem while it is open, and goes back to what it said when the reader closes
   useEffect(() => {

@@ -1,5 +1,7 @@
-import { useSyncExternalStore, type RefObject } from "react"
-import { useLayout, type ReaderLayout } from "./useLayout"
+import { useLayoutEffect, useState, useSyncExternalStore, type RefObject } from "react"
+
+/** Where things go, from the reader's width: the page alone, or the page with a margin beside it. */
+export type ReaderLayout = "page" | "spread"
 
 /** How the reader is pointed at: by a finger, or by a mouse or trackpad. It decides how things are
  * chosen (word handles, or drag and shift-click), never where they are laid out. */
@@ -14,6 +16,25 @@ export interface Platform {
 
 export function usePlatform(ref: RefObject<HTMLElement | null>): Platform {
   return { layout: useLayout(ref), input: useInput() }
+}
+
+// Width of the reader itself, not the window: on the web the nav sidebar takes some of it
+export const SPREAD_MIN_WIDTH = 900
+
+function useLayout(ref: RefObject<HTMLElement | null>): ReaderLayout {
+  const [layout, setLayout] = useState<ReaderLayout>("page")
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setLayout(el.clientWidth >= SPREAD_MIN_WIDTH ? "spread" : "page")
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref])
+
+  return layout
 }
 
 // The primary pointer is coarse on phones and tablets, fine with a mouse or trackpad, even on a
