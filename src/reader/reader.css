@@ -121,13 +121,12 @@ html {
 
 .line {
   position: relative;
-  margin-inline-start: calc(var(--indent) * 1em);
 }
 
-/* Hanging indent: a line too long to fit turns over, indented 2em */
+/* Hanging indent: the first line starts at the line's indent; a line too long to fit turns over 2em further in */
 .line-text {
   display: block;
-  padding-inline-start: 2em;
+  padding-inline-start: calc(var(--indent, 0) * 1.5em + 2em);
   text-indent: -2em;
 }
 

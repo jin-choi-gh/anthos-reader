@@ -76,6 +76,27 @@ describe("toNotes: ids and paragraphs", () => {
   })
 })
 
+describe("toNotes: tags", () => {
+  const target = { start: [2, 10], end: [2, 15] } as const satisfies LoomSpan
+
+  it("keeps a note's tags, in the editor's order", () => {
+    const complex = makeTextualComplex(stanzas, {
+      annotations: [
+        { targets: [target], tags: ["gloss", "comment"], body: "A note." },
+        { targets: [target], tags: [], body: "An untagged note." },
+      ],
+    })
+    expect(toNotes(complex).notes.map((note) => note.tags)).toEqual([["gloss", "comment"], []])
+  })
+
+  it("gives no tags to a note from a file written before tags", () => {
+    const complex = makeTextualComplex(stanzas, {
+      annotations: [{ targets: [target], body: "A note." }],
+    })
+    expect(toNotes(complex).notes[0].tags).toEqual([])
+  })
+})
+
 describe("toNotes: ranges on lines", () => {
   it("cuts a passage at the line breaks it crosses", () => {
     const { rangesOn } = notesOn([{ start: [0, 22], end: [2, 6] }])

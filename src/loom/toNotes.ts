@@ -19,6 +19,7 @@ export function toNotes(textualComplex: LoomTextualComplex): NoteIndex {
   const notes: Note[] = numbered.map(({ id, annotation }) => ({
     id,
     lemma: lemmaOf(textualComplex, annotation.targets),
+    tags: annotation.tags ?? [],
     paragraphs: paragraphsOf(annotation.body),
   }))
 

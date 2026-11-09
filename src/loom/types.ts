@@ -32,12 +32,14 @@ export interface LoomAtom extends LoomSpan {
 
 export interface LoomAnnotation {
   targets: LoomSpan[]
+  tags?: string[]
   body: string
 }
 
 export interface LoomMetadata {
   title: string | null
   author: string | null
+  notes?: { tags: string[] }
 }
 
 export interface LoomTextualComplex {

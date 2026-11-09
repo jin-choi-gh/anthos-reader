@@ -17,6 +17,7 @@ export function toPoem(textualComplex: LoomTextualComplex): Poem {
         text: textOf(textualComplex, line),
         indexInSubstrate: line.start[0],
         number: line.start[0] + 1,
+        indent: indentOf(textualComplex, line),
       })),
     })),
   )
@@ -26,4 +27,14 @@ export function toPoem(textualComplex: LoomTextualComplex): Poem {
     author: textualComplex.metadata.author ?? "",
     stanzas,
   }
+}
+
+function indentOf(textualComplex: LoomTextualComplex, line: LoomUnit): number {
+  const value = line.value ?? "0"
+  if (!/^\d+$/.test(value)) {
+    throw new Error(
+      `${textualComplex.name}: line ${line.id} has indent ${JSON.stringify(line.value)}, not a whole number`,
+    )
+  }
+  return Number(value)
 }
