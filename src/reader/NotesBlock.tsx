@@ -10,8 +10,8 @@ export function NotesBlock({
   onToggle,
 }: {
   notes: Note[]
-  selectedNote: string | null
-  onToggle: (id: string) => void
+  selectedNote: number | null
+  onToggle: (index: number) => void
 }) {
   if (notes.length === 0) {
     return <p className="margin-empty">No notes on this text.</p>
@@ -19,10 +19,10 @@ export function NotesBlock({
   return (
     <div className="notes">
       {notes.map((note) => {
-        const selected = note.id === selectedNote
+        const selected = note.index === selectedNote
         return (
           <article
-            key={note.id}
+            key={note.index}
             className="note"
             data-selected={selected}
             onClick={(event) => {
@@ -31,7 +31,7 @@ export function NotesBlock({
                 selection !== null &&
                 !selection.isCollapsed &&
                 event.currentTarget.contains(selection.anchorNode)
-              if (!selecting) onToggle(note.id)
+              if (!selecting) onToggle(note.index)
             }}
           >
             <button type="button" className="note-lemma" aria-pressed={selected}>

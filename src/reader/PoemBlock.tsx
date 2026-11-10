@@ -12,11 +12,11 @@ export function PoemBlock({
 }: {
   poem: Poem
   rangesOn: (indexInSubstrate: number) => NoteRange[]
-  selectedNote: string | null
+  selectedNote: number | null
 }) {
   // The selected note's ranges on a line: none on lines it doesn't touch, or when nothing is selected
   const selectedRanges = (line: Line) =>
-    rangesOn(line.indexInSubstrate).filter((range) => range.noteId === selectedNote)
+    rangesOn(line.indexInSubstrate).filter((range) => range.noteIndex === selectedNote)
 
   const poemRef = useRef<HTMLDivElement>(null)
 

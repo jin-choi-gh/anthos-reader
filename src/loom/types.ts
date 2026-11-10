@@ -34,6 +34,7 @@ export interface LoomAnnotation {
   targets: LoomSpan[]
   tags?: string[]
   body: string
+  id?: string | null
 }
 
 export interface LoomMetadata {

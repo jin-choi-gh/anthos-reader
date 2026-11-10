@@ -5,7 +5,7 @@ import { toPoem } from "../loom/toPoem"
 import { libraryHref } from "../route"
 import { ChevronLeft } from "../ui/icons"
 import { useLoaded } from "../useLoaded"
-import type { NoteIndex, Poem } from "./types"
+import type { Notes, Poem } from "./types"
 import { usePlatform } from "./usePlatform"
 import { TitleBlock } from "./TitleBlock"
 import { PoemBlock } from "./PoemBlock"
@@ -16,22 +16,22 @@ import "./reader.css"
 
 /** What the reader shows of one loaded textual complex: its poem and its notes, made from it
  * together. A reader shows one file for its whole life: App gives it a key of its file, so another
- * file is another reader, and a note selected in one (notes:7) never carries over to the next. */
+ * file is another reader, and a note selected in one never carries over to the next. */
 interface View {
   poem: Poem
-  noteIndex: NoteIndex
+  notes: Notes
 }
 
 async function loadView(file: string): Promise<View> {
   const textualComplex = await loadTextualComplex(file)
-  return { poem: toPoem(textualComplex), noteIndex: toNotes(textualComplex) }
+  return { poem: toPoem(textualComplex), notes: toNotes(textualComplex) }
 }
 
 export function Reader({ file }: { file: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
   const { value: view, error } = useLoaded(file, loadView)
-  const [selectedNote, setSelectedNote] = useState<string | null>(null)
+  const [selectedNote, setSelectedNote] = useState<number | null>(null)
 
   // The tab names the poem while it is open, and goes back to what it said when the reader closes
   useEffect(() => {
@@ -44,11 +44,12 @@ export function Reader({ file }: { file: string }) {
   }, [view])
 
   // Clicking a note selects it; clicking the selected note again deselects it
-  const toggleNote = (id: string) => setSelectedNote((current) => (current === id ? null : id))
+  const toggleNote = (index: number) =>
+    setSelectedNote((current) => (current === index ? null : index))
 
   // One list of notes, placed in whichever container the layout shows
   const notesBlock = view && (
-    <NotesBlock notes={view.noteIndex.notes} selectedNote={selectedNote} onToggle={toggleNote} />
+    <NotesBlock notes={view.notes.notes} selectedNote={selectedNote} onToggle={toggleNote} />
   )
 
   return (
@@ -68,7 +69,7 @@ export function Reader({ file }: { file: string }) {
               <TitleBlock poem={view.poem} />
               <PoemBlock
                 poem={view.poem}
-                rangesOn={view.noteIndex.rangesOn}
+                rangesOn={view.notes.rangesOn}
                 selectedNote={selectedNote}
               />
             </>

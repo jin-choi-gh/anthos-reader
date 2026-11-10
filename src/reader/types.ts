@@ -25,7 +25,8 @@ export interface LemmaPart {
 }
 
 export interface Note {
-  id: string
+  index: number
+  loomId: string | null
   lemma: LemmaPart[]
   tags: string[]
   paragraphs: string[]
@@ -36,10 +37,10 @@ export interface Note {
 export interface NoteRange {
   start: number
   end: number
-  noteId: string
+  noteIndex: number
 }
 
-export interface NoteIndex {
+export interface Notes {
   notes: Note[] // every note, in file order
   rangesOn(indexInSubstrate: number): NoteRange[] // the ranges on one line
 }

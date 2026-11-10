@@ -1,4 +1,4 @@
-import type { LemmaPart, Note, NoteIndex, NoteRange } from "../reader/types"
+import type { LemmaPart, Note, NoteRange, Notes } from "../reader/types"
 import type { LoomAnnotation, LoomSpan, LoomTextualComplex } from "./types"
 import { lineLength, textOf } from "./textualComplex"
 
@@ -6,18 +6,16 @@ import { lineLength, textOf } from "./textualComplex"
 type TargetKind = "poem" | "lines" | "passage"
 
 /** The reader's notes from a loom textual complex: every note of every set, in file order, with its
- * id (set and place in it, from 1: notes:7), its lemma and its paragraphs; and what each line's
- * notes cover. Ids last only as long as the loaded file, so they are never to be saved. */
-export function toNotes(textualComplex: LoomTextualComplex): NoteIndex {
-  const numbered = Object.entries(textualComplex.annotations).flatMap(([set, annotations]) =>
-    annotations.map((annotation, i) => ({
-      id: `${set}:${i + 1}`,
-      annotation,
-    })),
-  )
+ * index (its place in that order, from 0), its loom id if it has one, its lemma and its paragraphs;
+ * and what each line's notes cover. Indexes last only as long as the loaded file: never save them. */
+export function toNotes(textualComplex: LoomTextualComplex): Notes {
+  const numbered = Object.values(textualComplex.annotations)
+    .flat()
+    .map((annotation, index) => ({ index, annotation }))
 
-  const notes: Note[] = numbered.map(({ id, annotation }) => ({
-    id,
+  const notes: Note[] = numbered.map(({ index, annotation }) => ({
+    index,
+    loomId: annotation.id ?? null,
     lemma: lemmaOf(textualComplex, annotation.targets),
     tags: annotation.tags ?? [],
     paragraphs: paragraphsOf(annotation.body),
@@ -82,10 +80,10 @@ function paragraphsOf(body: string): string[] {
  * Whole-poem targets are left out, so that selecting such a note marks nothing. */
 function rangesByLine(
   textualComplex: LoomTextualComplex,
-  numbered: { id: string; annotation: LoomAnnotation }[],
+  numbered: { index: number; annotation: LoomAnnotation }[],
 ): NoteRange[][] {
   const ranges: NoteRange[][] = textualComplex.lines.map(() => [])
-  for (const { id, annotation } of numbered) {
+  for (const { index, annotation } of numbered) {
     for (const target of annotation.targets) {
       if (kindOf(textualComplex, target) === "poem") continue
       const [startLine, startOffset] = target.start
@@ -94,7 +92,7 @@ function rangesByLine(
         ranges[line].push({
           start: line === startLine ? startOffset : 0,
           end: line === endLine ? endOffset : lineLength(textualComplex, line),
-          noteId: id,
+          noteIndex: index,
         })
       }
     }

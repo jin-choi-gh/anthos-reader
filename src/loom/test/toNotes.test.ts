@@ -54,13 +54,29 @@ describe("toNotes: lemmas", () => {
   })
 })
 
-describe("toNotes: ids and paragraphs", () => {
-  it("numbers notes within their set, from 1", () => {
-    const { notes } = notesOn(
-      [{ start: [2, 10], end: [2, 15] }],
-      [{ start: [2, 16], end: [2, 20] }],
-    )
-    expect(notes.map((note) => note.id)).toEqual(["notes:1", "notes:2"])
+describe("toNotes: indexes, ids and paragraphs", () => {
+  const target = { start: [2, 10], end: [2, 15] } as const satisfies LoomSpan
+
+  it("numbers notes in file order, from 0, across every set", () => {
+    const complex = makeTextualComplex(stanzas, {
+      annotations: [
+        { targets: [target], body: "A note." },
+        { targets: [target], body: "Another." },
+      ],
+    })
+    complex.annotations["notes-fear"] = [{ targets: [target], body: "In another set." }]
+    expect(toNotes(complex).notes.map((note) => note.index)).toEqual([0, 1, 2])
+  })
+
+  it("keeps a note's loom id, and gives null to a note without one", () => {
+    const complex = makeTextualComplex(stanzas, {
+      annotations: [
+        { id: "angle-worm", targets: [target], body: "Named." },
+        { id: null, targets: [target], body: "Unnamed." },
+        { targets: [target], body: "From a file written before ids." },
+      ],
+    })
+    expect(toNotes(complex).notes.map((note) => note.loomId)).toEqual(["angle-worm", null, null])
   })
 
   it("splits a body at blank lines and joins each paragraph's wrapped lines", () => {
@@ -100,9 +116,9 @@ describe("toNotes: tags", () => {
 describe("toNotes: ranges on lines", () => {
   it("cuts a passage at the line breaks it crosses", () => {
     const { rangesOn } = notesOn([{ start: [0, 22], end: [2, 6] }])
-    expect(rangesOn(0)).toEqual([{ start: 22, end: 28, noteId: "notes:1" }])
-    expect(rangesOn(1)).toEqual([{ start: 0, end: 23, noteId: "notes:1" }])
-    expect(rangesOn(2)).toEqual([{ start: 0, end: 6, noteId: "notes:1" }])
+    expect(rangesOn(0)).toEqual([{ start: 22, end: 28, noteIndex: 0 }])
+    expect(rangesOn(1)).toEqual([{ start: 0, end: 23, noteIndex: 0 }])
+    expect(rangesOn(2)).toEqual([{ start: 0, end: 6, noteIndex: 0 }])
   })
 
   it("marks nothing for a whole-poem note", () => {
