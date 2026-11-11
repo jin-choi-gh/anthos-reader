@@ -221,10 +221,67 @@ html {
   margin: 0.5em 0 0;
 }
 
+/* Practice mode: the note the reader opened from the poem. Not a choice in a list, so no pointer */
+.open-note {
+  cursor: auto;
+}
+
+/* The lemma as a heading, with the X in the top right-hand corner */
+.open-note-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.open-note-head .note-lemma {
+  margin: 0;
+}
+
+/* A finger-sized X, pulled into the box's corner */
+.open-note-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -0.75rem -1rem 0 0;
+  border: 0;
+  border-radius: var(--radius-note);
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.open-note-close:hover {
+  color: var(--ink);
+}
+
+.open-note-close:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
+
 /* The selected note's words in the poem: the same colour as its box, so the two read together */
 .line-text mark {
   background: var(--fill-editor);
   color: inherit;
+}
+
+/* Practice mode: a highlight the reader can tap to open its note */
+.line-text mark[role="button"] {
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.line-text mark[role="button"]:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Its note open: underlined in the selected note's edge colour */
+.line-text mark[role="button"][data-open="true"] {
+  box-shadow: inset 0 -2px var(--edge-selected);
 }
 
 /* Page layout: a sheet over the bottom of the screen */

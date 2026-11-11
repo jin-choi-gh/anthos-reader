@@ -1,14 +1,31 @@
 import type { Position, Ruling } from "../../practice/types"
+import type { Note } from "../types"
+
+/** What the frame is fixed on, as the scene needs it: no positions, no references. */
+export type Subject =
+  | { kind: "consider"; text: string; note: Note | null; prose: string[] }
+  | { kind: "rest"; text: string }
+  | { kind: "final"; text: string }
+  | { kind: "annotate"; text: string; notes: Note[] }
+
+/** The subject of one kind. */
+export type SubjectOf<K extends Subject["kind"]> = Extract<Subject, { kind: K }>
 
 export interface Frame {
   position: Position
   heading: string | null
   back: Ruling | null
   next: Ruling | null
+  subject: Subject
+}
+
+/** What the frame tells the scene: it only ever speaks, when it moves. */
+export interface FrameProtocol {
+  toScene: { kind: "subject"; subject: Subject }
 }
 
 export interface ViewerProtocol {
-  toScene: { kind: "tapNote"; note: number }
+  toScene: { kind: "tapNote"; note: number } | { kind: "closeNote" }
   fromScene: never
 }
 
@@ -17,7 +34,9 @@ export interface PraxisBarProtocol {
   fromScene: never
 }
 
-export type ViewerProjection = { kind: "text"; shown: number[]; open: number | null }
+export type ViewerProjection =
+  | { kind: "marked"; text: string; marked: number[]; open: number | null }
+  | { kind: "listed"; text: string; shown: number[]; open: number | null }
 
 export type PraxisBarProjection = { kind: "prose"; paragraphs: string[] }
 
@@ -27,8 +46,9 @@ export interface Reply<State> {
   toPraxisBar: PraxisBarProtocol["fromScene"][]
 }
 
-export interface Scene<State> {
-  start(): Reply<State>
+/** How the scene behaves while its subject is of one kind. */
+export interface Behaviour<S extends Subject, State> {
+  start(subject: S): Reply<State>
   fromViewer(state: State, message: ViewerProtocol["toScene"]): Reply<State>
   fromPraxisBar(state: State, message: PraxisBarProtocol["toScene"]): Reply<State>
   viewer(state: State): ViewerProjection

@@ -1,85 +1,59 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { loadTextualComplex } from "../loom/load"
 import { toNotes } from "../loom/toNotes"
 import { toPoem } from "../loom/toPoem"
-import { libraryHref } from "../route"
-import { ChevronLeft } from "../ui/icons"
 import { useLoaded } from "../useLoaded"
-import type { Notes, Poem } from "./types"
+import { AnnotateMode } from "./AnnotateMode"
+import { Layout } from "./Layout"
+import type { Material } from "./materials"
 import { usePlatform } from "./usePlatform"
-import { TitleBlock } from "./TitleBlock"
-import { PoemBlock } from "./PoemBlock"
-import { NotesBlock } from "./NotesBlock"
-import { Margin } from "./Margin"
-import { BottomSheet } from "./BottomSheet"
 import "./reader.css"
 
-/** What the reader shows of one loaded textual complex: its poem and its notes, made from it
- * together. A reader shows one file for its whole life: App gives it a key of its file, so another
- * file is another reader, and a note selected in one never carries over to the next. */
-interface View {
-  poem: Poem
-  notes: Notes
-}
-
-async function loadView(file: string): Promise<View> {
+/** One file's material: its poem and its notes, made together from its textual complex. */
+async function loadMaterial(file: string): Promise<Material> {
   const textualComplex = await loadTextualComplex(file)
   return { poem: toPoem(textualComplex), notes: toNotes(textualComplex) }
 }
 
+/** The reader of one file, for its whole life: App gives it a key of its file, so another file is
+ * another reader, and nothing in one carries over to the next. It loads the file's material and
+ * keeps the layout; the mode draws the material, and holds the frame and the scene. */
 export function Reader({ file }: { file: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
-  const { value: view, error } = useLoaded(file, loadView)
-  const [selectedNote, setSelectedNote] = useState<number | null>(null)
+  const { value: material, error } = useLoaded(file, loadMaterial)
 
   // The tab names the poem while it is open, and goes back to what it said when the reader closes
   useEffect(() => {
-    if (view === null) return
+    if (material === null) return
     const previous = document.title
-    document.title = `${view.poem.title} · Anthos`
+    document.title = `${material.poem.title} · Anthos`
     return () => {
       document.title = previous
     }
-  }, [view])
+  }, [material])
 
-  // Clicking a note selects it; clicking the selected note again deselects it
-  const toggleNote = (index: number) =>
-    setSelectedNote((current) => (current === index ? null : index))
-
-  // One list of notes, placed in whichever container the layout shows
-  const notesBlock = view && (
-    <NotesBlock notes={view.notes.notes} selectedNote={selectedNote} onToggle={toggleNote} />
+  // The texts the viewer can draw: for now, only this reader's own file
+  const materials = useCallback(
+    (text: string) => (text === file ? material : null),
+    [file, material],
   )
 
   return (
     <div ref={ref} className="reader" data-layout={layout} data-input={input}>
-      <article className="reader-text">
-        <a className="reader-back" href={libraryHref}>
-          <ChevronLeft size={18} />
-          Library
-        </a>
-        <div className="text-block">
-          {error !== null ? (
-            <p className="reader-message">{error}</p>
-          ) : view === null ? (
-            <p className="reader-message">Loading…</p>
-          ) : (
-            <>
-              <TitleBlock poem={view.poem} />
-              <PoemBlock
-                poem={view.poem}
-                rangesOn={view.notes.rangesOn}
-                selectedNote={selectedNote}
-              />
-            </>
-          )}
-        </div>
-      </article>
-      {layout === "spread" ? (
-        <Margin>{notesBlock}</Margin>
+      {material === null ? (
+        <Layout
+          layout={layout}
+          page={<p className="reader-message">{error ?? "Loading…"}</p>}
+          notes={null}
+        />
       ) : (
-        <BottomSheet label="Notes">{notesBlock}</BottomSheet>
+        <AnnotateMode
+          text={file}
+          notes={material.notes.notes}
+          materials={materials}
+          layout={layout}
+        />
       )}
     </div>
   )

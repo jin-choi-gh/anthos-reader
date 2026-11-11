@@ -1,4 +1,5 @@
-import { Fragment } from "react"
+import { Lemma } from "./Lemma"
+import { endsSelection } from "./selection"
 import type { Note } from "./types"
 
 /** The notes, one block each, in order: the lemma, then the paragraphs. Clicking a block selects its
@@ -26,21 +27,11 @@ export function NotesBlock({
             className="note"
             data-selected={selected}
             onClick={(event) => {
-              const selection = window.getSelection()
-              const selecting =
-                selection !== null &&
-                !selection.isCollapsed &&
-                event.currentTarget.contains(selection.anchorNode)
-              if (!selecting) onToggle(note.index)
+              if (!endsSelection(event)) onToggle(note.index)
             }}
           >
             <button type="button" className="note-lemma" aria-pressed={selected}>
-              {note.lemma.map((part, i) => (
-                <Fragment key={i}>
-                  {i > 0 && " · "}
-                  {part.kind === "quote" ? <q>{part.text}</q> : part.text}
-                </Fragment>
-              ))}
+              <Lemma lemma={note.lemma} />
             </button>
             {note.paragraphs.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
