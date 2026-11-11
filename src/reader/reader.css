@@ -245,6 +245,17 @@ html {
   margin: 0;
 }
 
+/* The heading takes the focus when the note opens: a ring only when the keyboard opened it */
+.open-note-head .note-lemma:focus {
+  outline: none;
+}
+
+.open-note-head .note-lemma:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* A finger-sized X, pulled into the box's corner */
 .open-note-close {
   flex: none;

@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react"
 import { Close } from "../ui/icons"
 import { Lemma } from "./Lemma"
 import type { Materials } from "./materials"
@@ -77,12 +78,39 @@ export function ViewerNotes({ projection, materials, send }: ViewerProps) {
 }
 
 /** The note the reader opened from the poem: its lemma as its heading, an X to close it, and its
- * paragraphs. It is not a choice in a list, so the box itself does nothing. */
+ * paragraphs. It is not a choice in a list, so the box itself does nothing. Opened, it takes the
+ * focus; Escape closes it, as the X does; closed, it gives the focus back to the highlight that
+ * opened it, so a reader on the keyboard keeps their place in the poem. */
 function OpenNote({ note, onClose }: { note: Note; onClose: () => void }) {
+  const box = useRef<HTMLElement>(null)
+  const heading = useRef<HTMLHeadingElement>(null)
+
+  useLayoutEffect(() => {
+    const opener = document.activeElement // the highlight, when it was tapped or pressed
+    heading.current?.focus({ preventScroll: true })
+    const article = box.current
+    return () => {
+      // Only if the focus is still in the note, or lost with it: a reader who has moved on, to
+      // the highlight or to Next, is left where they are
+      const focus = document.activeElement
+      const inNote = focus === null || focus === document.body || !!article?.contains(focus)
+      if (inNote && opener instanceof HTMLElement && opener.isConnected) {
+        opener.focus({ preventScroll: true })
+      }
+    }
+  }, [])
+
   return (
-    <article className="note open-note" data-selected="true">
+    <article
+      ref={box}
+      className="note open-note"
+      data-selected="true"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") onClose()
+      }}
+    >
       <header className="open-note-head">
-        <h2 className="note-lemma">
+        <h2 className="note-lemma" ref={heading} tabIndex={-1}>
           <Lemma lemma={note.lemma} />
         </h2>
         <button type="button" className="open-note-close" aria-label="Close note" onClick={onClose}>
