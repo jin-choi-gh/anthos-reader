@@ -1,4 +1,4 @@
-// The closing step of each stage and the final stage of each practice are added by the runner.
+// The rest at the end of each stage and the final stage of each practice are added by the runner.
 
 export interface Practice {
   id: string
@@ -29,6 +29,11 @@ export type Event =
 
 export interface Position {
   stage: number // stages.length: the final stage
-  step: number // steps.length: the closing step
+  step: number // steps.length: the rest
   opensOn: Day | null
 }
+
+export type Reason =
+  { kind: "noSuchStep" } | { kind: "waiting"; opensOn: Day | null } | { kind: "finished" }
+
+export type Ruling = { allowed: true; to: number } | { allowed: false; reason: Reason }

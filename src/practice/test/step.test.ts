@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { eventsOfMove, nextDay, step } from "../step"
+import { eventsOfMove, nextDay, ruling, step } from "../step"
 import type { Day, Event, Practice, Step } from "../types"
 
 const consider = (note: string): Step => ({ verb: "consider", note, prose: [`Consider ${note}.`] })
 
-/** Two stages of two steps each: closing steps are at step 2. */
+/** Two stages of two steps each: the rests are at step 2. */
 const practice: Practice = {
   id: "test",
   title: "Test",
@@ -28,7 +28,7 @@ describe("step: within a stage", () => {
     expect(step(practice, log, "2026-11-10")).toEqual({ stage: 0, step: 1, opensOn: null })
   })
 
-  it("can be at the closing step", () => {
+  it("can be at the rest", () => {
     expect(step(practice, [visited(0, 2)], "2026-11-10")).toEqual({
       stage: 0,
       step: 2,
@@ -122,6 +122,61 @@ describe("nextDay", () => {
   })
 })
 
+describe("ruling", () => {
+  const open = { stage: 0, step: 0, opensOn: null }
+  const waiting = { stage: 0, step: 2, opensOn: "2026-11-11" }
+
+  it("allows any step of the stage, the rest included, and jumps between them", () => {
+    for (const target of [0, 1, 2]) {
+      expect(ruling(practice, open, target)).toEqual({ allowed: true, to: target })
+      expect(ruling(practice, waiting, target)).toEqual({ allowed: true, to: target })
+    }
+  })
+
+  it("refuses to go beyond the rest: the next stage is not open yet", () => {
+    expect(ruling(practice, waiting, 3)).toEqual({
+      allowed: false,
+      reason: { kind: "waiting", opensOn: "2026-11-11" },
+    })
+  })
+
+  it("refuses to go beyond the rest without a day, when the log left no valid finish", () => {
+    const atRestUnfinished = { stage: 0, step: 2, opensOn: null }
+    expect(ruling(practice, atRestUnfinished, 3)).toEqual({
+      allowed: false,
+      reason: { kind: "waiting", opensOn: null },
+    })
+  })
+
+  it("refuses what is not a step", () => {
+    for (const target of [-1, 1.5, Number.NaN]) {
+      expect(ruling(practice, open, target)).toEqual({
+        allowed: false,
+        reason: { kind: "noSuchStep" },
+      })
+    }
+  })
+
+  it("refuses every move in the final stage", () => {
+    const final = { stage: 2, step: 0, opensOn: null }
+    for (const target of [-1, 0, 1, 3]) {
+      expect(ruling(practice, final, target)).toEqual({
+        allowed: false,
+        reason: { kind: "finished" },
+      })
+    }
+  })
+
+  it("is the law eventsOfMove keeps: it throws, naming the reason, exactly when the ruling refuses", () => {
+    for (const target of [-1, 0, 1, 1.5, 2, 3]) {
+      const decision = ruling(practice, open, target)
+      const move = () => eventsOfMove(practice, open, target, 1_000, "2026-11-10")
+      if (decision.allowed) expect(move).not.toThrow()
+      else expect(move).toThrow(new RegExp(decision.reason.kind))
+    }
+  })
+})
+
 describe("eventsOfMove", () => {
   const at = 1_000
   const open = { stage: 0, step: 0, opensOn: null }
@@ -136,7 +191,7 @@ describe("eventsOfMove", () => {
     expect(eventsOfMove(practice, open, 0, at, "2026-11-10")).toEqual([])
   })
 
-  it("finishes the stage, today, the first time the closing step is reached", () => {
+  it("finishes the stage, today, the first time the rest is reached", () => {
     expect(eventsOfMove(practice, { ...open, step: 1 }, 2, at, "2026-11-10")).toEqual([
       { kind: "visited", stage: 0, step: 2, at },
       { kind: "finished", stage: 0, at, day: "2026-11-10" },
