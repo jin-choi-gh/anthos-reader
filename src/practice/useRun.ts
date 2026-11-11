@@ -6,6 +6,7 @@ import type { Day, Event, Position, Practice } from "./types"
 
 export interface Run {
   position: Position
+  today: Day
   log: Event[]
   moveTo(target: number): void
   restart(): void
@@ -18,6 +19,7 @@ export function useRun(practice: Practice): Run {
 
   return {
     position,
+    today: day,
     log,
     moveTo(target) {
       const current = today()

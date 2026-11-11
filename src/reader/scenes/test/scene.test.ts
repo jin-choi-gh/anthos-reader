@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { Practice, Step } from "../../../practice/types"
 import type { Note } from "../../types"
-import { annotateFrame, frameOf } from "../frame"
+import { annotateFrame, frameOf } from "../../frame/frame"
 import { scene, type SceneState } from "../scene"
 import type { Subject } from "../types"
 

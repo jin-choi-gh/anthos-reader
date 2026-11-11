@@ -1,7 +1,7 @@
-import { useMemo } from "react"
+import { useMemo, type ReactNode } from "react"
 import { Layout } from "./Layout"
 import type { Materials } from "./materials"
-import { annotateFrame } from "./scenes/frame"
+import { annotateFrame } from "./frame/frame"
 import { useScene } from "./scenes/useScene"
 import type { Note } from "./types"
 import type { ReaderLayout } from "./usePlatform"
@@ -14,17 +14,24 @@ export function AnnotateMode({
   notes,
   materials,
   layout,
+  topBar,
 }: {
   text: string
   notes: Note[]
   materials: Materials
   layout: ReaderLayout
+  topBar: ReactNode
 }) {
   const frame = useMemo(() => annotateFrame(text, notes), [text, notes])
   const scene = useScene(frame.subject)
   const viewer = { projection: scene.viewer, materials, send: scene.toScene.viewer }
 
   return (
-    <Layout layout={layout} page={<ViewerPage {...viewer} />} notes={<ViewerNotes {...viewer} />} />
+    <Layout
+      layout={layout}
+      topBar={topBar}
+      page={<ViewerPage {...viewer} />}
+      notes={<ViewerNotes {...viewer} />}
+    />
   )
 }

@@ -7,8 +7,10 @@ function App() {
   const route = useRoute()
   const file = route.screen === "reader" ? route.file : null // null: the library
   useScrollToTopOnChange(file)
-  // A new file is a new reader: nothing selected in one poem carries over to the next
-  return file === null ? <Library /> : <Reader key={file} file={file} />
+  if (route.screen === "library") return <Library />
+  // A new file is a new reader: nothing in one poem carries over to the next. A new mode is not a
+  // new reader: the reader keeps its loaded text, and changes only its mode
+  return <Reader key={route.file} file={route.file} mode={route.mode} />
 }
 
 /** When the screen changes, start the new one at its top, before it paints. Not on the first

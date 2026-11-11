@@ -2,7 +2,8 @@ import { noteFor } from "../../practice/notes"
 import { ruling } from "../../practice/step"
 import type { Position, Practice } from "../../practice/types"
 import type { Note } from "../types"
-import type { Frame, Subject } from "./types"
+import type { Subject } from "../scenes/types"
+import type { Frame } from "./types"
 
 /** The frame on a practice: where it is, the runner's rulings on a step back and a step on, and
  * what it is fixed on, with the step's references resolved against the text's notes. */

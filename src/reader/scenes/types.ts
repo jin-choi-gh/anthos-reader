@@ -1,4 +1,3 @@
-import type { Position, Ruling } from "../../practice/types"
 import type { Note } from "../types"
 
 /** What the frame is fixed on, as the scene needs it: no positions, no references. */
@@ -10,14 +9,6 @@ export type Subject =
 
 /** The subject of one kind. */
 export type SubjectOf<K extends Subject["kind"]> = Extract<Subject, { kind: K }>
-
-export interface Frame {
-  position: Position
-  heading: string | null
-  back: Ruling | null
-  next: Ruling | null
-  subject: Subject
-}
 
 /** What the frame tells the scene: it only ever speaks, when it moves. */
 export interface FrameProtocol {

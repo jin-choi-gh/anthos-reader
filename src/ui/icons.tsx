@@ -44,3 +44,13 @@ export function Close(props: IconProps) {
     </Icon>
   )
 }
+
+/** Annotate: a pen, nib down to the left. */
+export function Pen(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M15 5l4 4L8 20H4v-4L15 5z" />
+      <path d="M13 7l4 4" />
+    </Icon>
+  )
+}
