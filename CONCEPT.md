@@ -6,7 +6,7 @@ Every folder in [`src/`](src/) is one of these things, and the rules about which
 
 Use the words below in code, comments, commits and conversation. When something new does not fit the picture, say so, and decide where it belongs before writing it.
 
-This file is the architecture **as it is, and as it should be, now**, and it is the law: where the code and this file disagree, the code is wrong, until the user changes the law. It holds no history and no plans. When the architecture changes, this file changes with it, in the same change, and says only what is then true.
+This file is the architecture **as it is, and as it should be, now**, and it is the law: where the code and this file disagree, the code is wrong, until the user changes the law. It holds no history and no plans. It legislates the processes behind the screen, not how anything looks: appearance, layout, wording and placement are outside it. When the architecture changes, this file changes with it, in the same change, and says only what is then true.
 
 ## One screening, told once
 
@@ -14,13 +14,13 @@ A reader opens Dickinson's poem. The **projector** threads the editor's **reel**
 
 In the **gate** is a frame whose **direction** is _respond_. The **lexicon** says what that is made of: an **intertitle** and a **notebook page**.
 
-The **frame** lights it up. The intertitle's words, the **footage** of the poem with nothing **highlighted**, and a blank page pinned to the whole poem. The **scene** plays it: the **picture** shows the poem, and the **praxis bar** shows the intertitle and the page.
+The **frame** lights it up: the intertitle, the **footage** with nothing **highlighted**, and an empty notebook page pinned to the whole poem. That is its **subject**, and the **scene** plays it, projecting it to the **picture** and the **praxis bar**.
 
-There is no Next. The projector **holds** on this frame, because the frame asks for writing and the notebook has nothing from here.
+The projector **holds** on this frame, because the frame asks for writing and the notebook has nothing from here. The **law** refuses a step on, as `unanswered`.
 
-The reader writes and presses Respond. The scene makes a **notebook entry**, and it goes into the **notebook** with a note of where in the screening it was written. The projector reads the notebook again and stops holding, and Next appears. The frame is the same, so **the shot continues**: nothing jumps, and the page now shows the response with Edit.
+The reader writes. The praxis bar passes the draft and the submission to the scene, and the scene sends a **notebook entry** out. It goes into the **notebook**, marked with where in the screening it was written. The projector reads the notebook again and stops holding, and the law allows a step on. The frame is the same, so **the shot continues**: the scene keeps its state, and the page takes up what is now written.
 
-Next leads to the **intermission**. The next stage opens tomorrow.
+A step on reaches the **intermission**. The next stage opens the next day.
 
 ## The vocabulary
 
@@ -49,22 +49,22 @@ One word for each idea. Where the code's word works as film language, the code's
 | **hold**                 | the projector does not pass a frame that asks for writing until it has it    | [`Standing.heldAt`](src/runner/types.ts), [`Reason`](src/runner/types.ts) `unanswered`                             |
 | **notebook**             | what the reader writes about a text, one per text                            | [`notebook/`](src/notebook/)                                                                                       |
 | **notebook entry**       | something the scene sends out to be written in the notebook                  | [`reader/scenes/`](src/reader/scenes/): [`Effect`](src/reader/scenes/types.ts)                                     |
-| **screen**               | everything the reader sees for one text                                      | [`reader/`](src/reader/): [`Reader`](src/reader/Reader.tsx)                                                        |
+| **screen**               | everything for one open text                                                 | [`reader/`](src/reader/): [`Reader`](src/reader/Reader.tsx)                                                        |
 | **screening**            | a session with the projector running: practice mode                          | [`reader/PracticeMode.tsx`](src/reader/PracticeMode.tsx)                                                           |
 | **viewing table**        | a session with no projector, the commentary to look through: annotate mode   | [`reader/AnnotateMode.tsx`](src/reader/AnnotateMode.tsx)                                                           |
 | **frame** (in the gate)  | the frame lit up for the screen, with the law's rulings on moving            | [`reader/frame/`](src/reader/frame/): [`Frame`](src/reader/frame/types.ts), [`frameOf`](src/reader/frame/frame.ts) |
-| **gait**                 | how the frame moves: a step back, a step on                                  | [`frameOf`](src/reader/frame/frame.ts)'s Back and Next                                                             |
+| **gait**                 | how the frame moves: a step back, a step on                                  | [`frameOf`](src/reader/frame/frame.ts): its rulings on step − 1 and step + 1                                       |
 | **subject**              | what is in the frame, as the scene needs it: parts, references resolved      | [`reader/scenes/`](src/reader/scenes/): [`Subject`](src/reader/scenes/types.ts)                                    |
 | **scene**                | what plays on the screen; it mediates between the picture and the praxis bar | [`reader/scenes/`](src/reader/scenes/)                                                                             |
 | **cut**                  | a new frame: the scene starts afresh                                         | a new [`Subject.key`](src/reader/scenes/types.ts)                                                                  |
 | **the shot continues**   | the same frame with something around it changed: the scene keeps its state   | the same [`Subject.key`](src/reader/scenes/types.ts)                                                               |
-| **picture**              | the main screen: the footage, its highlights, the commentary                 | [`reader/viewer/`](src/reader/viewer/)                                                                             |
-| **praxis bar**           | the intertitle, the notebook page, and the projector's controls              | [`reader/praxisBar/`](src/reader/praxisBar/)                                                                       |
-| **intertitle**           | the words a frame shows                                                      | the `prose` part                                                                                                   |
-| **highlight**            | the footage lit up where the commentary speaks                               | the `highlight` part; the commentary marked                                                                        |
-| **notebook page**        | where the reader writes                                                      | the `writing` part; [`NotebookPage.tsx`](src/reader/praxisBar/NotebookPage.tsx)                                    |
-| **projector's controls** | Back and Next                                                                | [`reader/frame/controls.ts`](src/reader/frame/controls.ts)                                                         |
-| **pen**                  | the toggle in the top bar between the screening and the viewing table        | [`reader/ModeToggle.tsx`](src/reader/ModeToggle.tsx)                                                               |
+| **picture**              | draws the footage and the commentary                                         | [`reader/viewer/`](src/reader/viewer/)                                                                             |
+| **praxis bar**           | draws the intertitle, the notebook page and the projector's controls         | [`reader/praxisBar/`](src/reader/praxisBar/)                                                                       |
+| **intertitle**           | a frame's words                                                              | the `prose` part                                                                                                   |
+| **highlight**            | the notes of the commentary a frame picks out                                | the `highlight` part; the commentary marked                                                                        |
+| **notebook page**        | what a frame asks the reader to write, and its draft                         | the `writing` part; [`NotebookPage.tsx`](src/reader/praxisBar/NotebookPage.tsx)                                    |
+| **projector's controls** | the rulings on a step back and a step on, made into controls                 | [`reader/frame/controls.ts`](src/reader/frame/controls.ts)                                                         |
+| **pen**                  | switches between the screening and the viewing table, through the URL        | [`reader/ModeToggle.tsx`](src/reader/ModeToggle.tsx)                                                               |
 | **programme**            | what is showing: the list of texts, each a way into its screen               | [`library/`](src/library/)                                                                                         |
 
 **Retired**, so don't use them: _tape_ (say reel, or practice), _print_ and _lab_ (footage; loom develops it), _claw_ (law), _read-out_ (standing), _booth_ (the projector's controls), _projectionist_ (the projector), _iris_ (highlight), _spectator_ (the reader), _staging_ (the scene), _hold_ for the scene (the shot continues; _hold_ is the projector's), _shelf_ and _house clock_ (storage, clock), _camera on a film set_ (this picture).
@@ -98,7 +98,7 @@ One word for each idea. Where the code's word works as film language, the code's
 
 ## The projector: `runner/`
 
-**Like a projector, it runs the reel for one audience and keeps track of where it is, but it never decides what the picture looks like.**
+**Like a projector, it runs the reel for one audience and keeps track of where it is, but it never decides what the screen does with it.**
 
 - Its **log** records what happened: the reader came to a frame (`visited`), a stage reached its intermission (`finished`). Nothing else goes in it.
 - Replaying the log gives the **standing**: the **counter** ([`Position`](src/runner/types.ts)), when the next stage opens, and where the projector **holds**.
@@ -121,15 +121,15 @@ One word for each idea. Where the code's word works as film language, the code's
 
 **Like a screen, it shows what the projector puts in front of it, and lets the reader write. It cannot change the reel, and it moves the projector only through the projector's own controls.**
 
-The [`Reader`](src/reader/Reader.tsx) is the screen for one text. It loads the footage, owns the layout, and holds one of two sessions: a **screening** (practice mode), with the projector running, or the **viewing table** (annotate mode), with no projector, the footage and its whole commentary to look through at will. The **pen** in the top bar switches between them, and switching brings a new frame and a new scene.
+The [`Reader`](src/reader/Reader.tsx) is the screen for one text. It loads the footage, and holds one of two sessions: a **screening** (practice mode), with the projector running, or the **viewing table** (annotate mode), with no projector and the whole commentary open to the reader. The **pen** switches between them, and switching brings a new frame and a new scene.
 
 ### The frame: `reader/frame/`
 
 The **frame** is the frame in the gate, lit up for the screen. It takes what the gate holds, asks the lexicon for its parts, resolves its citations against the commentary, and finds what the reader has already written there. The result is the **subject**. Practice and standing go no further than the frame.
 
-The frame's **gait** is a step back and a step on. It asks the law about each, and the **projector's controls** ([`controls.ts`](src/reader/frame/controls.ts)) are those rulings made into Back and Next. When the projector holds, Next is not there at all.
+The frame's **gait** is a step back and a step on. It asks the law about each, and the **projector's controls** ([`controls.ts`](src/reader/frame/controls.ts)) are those rulings made into controls. A refusal as `unanswered` becomes no control at all (`none`), not a refused one.
 
-At the viewing table there is no projector, so the frame has no rulings and no position. It shows the whole commentary as a list, and asks for nothing.
+At the viewing table there is no projector, so the frame has no rulings and no position. Its subject is the whole commentary (`listed`), and asks for nothing.
 
 ### The scene: `reader/scenes/`
 
@@ -142,16 +142,14 @@ readonly key: string
 ```
 
 - A **cut** is a new frame. The scene starts afresh.
-- When **the shot continues** (same frame, but the notebook has changed), the scene keeps its state: an open note stays open, and the page shows what is now written.
-- The scene has **one behaviour per part**, not one per direction. [`parts/commentary.ts`](src/reader/scenes/parts/commentary.ts) answers the picture: a tap opens a note. [`parts/writing.ts`](src/reader/scenes/parts/writing.ts) answers the praxis bar: it holds the draft, and Respond, Edit and Cancel act on it. The intertitle is only drawn.
+- When **the shot continues** (same frame, but the notebook has changed), the scene keeps its state: the open note and the draft are kept, and the page takes up what is now written.
+- The scene has **one behaviour per part**, not one per direction. [`parts/commentary.ts`](src/reader/scenes/parts/commentary.ts) answers the picture: which note is open. [`parts/writing.ts`](src/reader/scenes/parts/writing.ts) answers the praxis bar: it holds the draft, and acts on its messages (`draft`, `submit`, `edit`, `cancel`). The intertitle has no behaviour.
 - **The scene does no I/O.** What the reader writes leaves as a **notebook entry** ([`Effect`](src/reader/scenes/types.ts)). The session adds where in the screening it was written, and puts it in the notebook.
 - The picture and the praxis bar never talk to each other. Each talks only to the scene.
 
 ### The picture and the praxis bar: `reader/viewer/`, `reader/praxisBar/`
 
-The **picture** shows the footage: its highlights, the commentary (one note opened, or the whole list at the viewing table).
-
-The **praxis bar** shows the intertitle and the notebook page, between the projector's controls. The reader's own writing is edged in gold ([`--edge-reader`](src/themes/reader.css)), apart from the editor's cyan.
+The **picture** and the **praxis bar** draw the scene's projections, and pass the reader's actions to the scene as messages. The praxis bar also draws the projector's controls. How either looks is its own affair, and not legislated here.
 
 ## Behind the screen: `clock/`, `storage/`
 
@@ -159,9 +157,9 @@ The **clock** ([`clock/`](src/clock/)) says what time it is and which day; days 
 
 ## Around the screen: `library/`, `reader/dev/`, `ui/`, the app
 
-- The **programme** ([`library/`](src/library/)) is what is showing: every text in `text-data/`, by title and poet, each a way into its screen.
+- The **programme** ([`library/`](src/library/)) is what is showing: every text in `text-data/`, each a way into its screen.
 - The **dev panel** ([`reader/dev/`](src/reader/dev/)), in development only, works the projector and the clock directly, beside the frame and the scene, never through them: a day forward, the screening restarted, the notebook cleared.
-- [`ui/`](src/ui/) holds the icons every screen shares.
+- [`ui/`](src/ui/) holds what every screen shares to draw with.
 - The app ([`App.tsx`](src/App.tsx), [`route.ts`](src/route.ts)) opens the programme or a screen, from the URL. [`assertNever`](src/assertNever.ts) closes every `switch` over a union, anywhere.
 
 ## The principle: a direction is read twice
@@ -202,8 +200,8 @@ When it fails after a change to the code, the change has moved something in the 
 - **Something the editor writes in a practice?** [`practice/`](src/practice/). A new direction is a case in the lexicon.
 - **Where a reader is, what they may do next, when a stage opens?** [`runner/`](src/runner/).
 - **Something the reader writes, or reads back?** [`notebook/`](src/notebook/).
-- **What happens on screen when the reader taps or types, with no I/O?** [`reader/scenes/`](src/reader/scenes/), as a part.
-- **How something looks?** [`reader/viewer/`](src/reader/viewer/) or [`reader/praxisBar/`](src/reader/praxisBar/).
+- **What the screen does with the reader's actions, with no I/O?** [`reader/scenes/`](src/reader/scenes/), as a part.
+- **Drawing?** [`reader/viewer/`](src/reader/viewer/) or [`reader/praxisBar/`](src/reader/praxisBar/), and how it looks is free.
 - **Wiring hooks, storage and notebook entries together?** The session: [`PracticeMode`](src/reader/PracticeMode.tsx) or [`AnnotateMode`](src/reader/AnnotateMode.tsx).
 
 If the answer is "several of these", the piece probably needs splitting along the picture's lines.

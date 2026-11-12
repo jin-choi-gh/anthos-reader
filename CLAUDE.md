@@ -6,6 +6,8 @@ A reader for poems with practices: an editor writes a practice of directions abo
 
 `CONCEPT.md` is the letter of the law for this codebase's architecture. The code follows it; it never bends to fit the code. Only the user changes it.
 
+The law covers the processes behind the screen: data, state, messages, rulings and the layers. It does not cover how anything looks: appearance, layout, wording, colour and placement on screen are not legislated. Do not add them to `CONCEPT.md`, and a visual change is never a clash.
+
 **When an architectural point clashes with `CONCEPT.md`, stop.** This covers a point you would suggest yourself, one a task seems to need, and one the user asks for without noticing the clash. Examples: a new layer or folder, an import across the layers, a figure renamed or added, a direction read outside the lexicon, state or I/O put somewhere the law does not put it.
 
 1. Do not write the code, and do not edit `CONCEPT.md` to make room for it.
