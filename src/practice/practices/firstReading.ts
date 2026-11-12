@@ -8,8 +8,12 @@ export const firstReading: Practice = {
     {
       name: "The meal",
       steps: [
-        { verb: "consider", note: "@angle-worm", prose: ["…"] },
-        { verb: "consider", note: "@beads", prose: ["…"] },
+        {
+          verb: "consider",
+          note: "@angle-worm",
+          prose: ["Look at how Dickinson evokes the violence of nature"],
+        },
+        { verb: "consider", note: "@beads", prose: [""] },
       ],
     },
     {

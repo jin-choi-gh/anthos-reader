@@ -11,12 +11,14 @@ import type { ReaderLayout } from "./usePlatform"
 export function Layout({
   layout,
   topBar,
+  dev,
   page,
   notes,
   praxisBar,
 }: {
   layout: ReaderLayout
   topBar?: ReactNode // beside the way back: the mode toggle
+  dev?: ReactNode // under the top bar, in development only: the dev panel
   page: ReactNode
   notes: ReactNode
   praxisBar?: ReactNode // practice mode only
@@ -31,6 +33,7 @@ export function Layout({
           </a>
           {topBar}
         </div>
+        {dev}
         <div className="text-block">{page}</div>
       </article>
       <Beside layout={layout} notes={notes} praxisBar={praxisBar} />

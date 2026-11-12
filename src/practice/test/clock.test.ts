@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { advance, dayOf, now, resetClock, today } from "../clock"
+import { advance, clockOffset, dayOf, now, resetClock, today } from "../clock"
 
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * HOUR
@@ -48,6 +48,15 @@ describe("now, today and the dev offset", () => {
   it("is the real time when nothing has moved it", () => {
     expect(now()).toBe(real)
     expect(today()).toBe("2026-11-10")
+    expect(clockOffset()).toBe(0)
+  })
+
+  it("says how far it is ahead, and nothing once reset", () => {
+    advance(DAY)
+    advance(HOUR)
+    expect(clockOffset()).toBe(DAY + HOUR)
+    resetClock()
+    expect(clockOffset()).toBe(0)
   })
 
   it("moves forward by what advance adds, and says so", () => {

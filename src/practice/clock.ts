@@ -30,6 +30,11 @@ export function advance(ms: number) {
   writeOffset(readOffset() + ms)
 }
 
+/** Dev only: how far the clock is ahead of the real time, in ms. Always 0 outside development. */
+export function clockOffset(): number {
+  return import.meta.env.DEV ? readOffset() : 0
+}
+
 /** Dev only: back to the real time. Use it with restarting a practice, or logged events may lie ahead of the clock. */
 export function resetClock() {
   writeOffset(0)

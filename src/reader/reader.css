@@ -516,3 +516,59 @@ html:has(.reader[data-layout="page"] .praxis-dock) {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* Development only: the dev panel, under the top bar. Dashed and monospaced: plainly a tool, not
+   part of the reader */
+.dev-panel {
+  margin: -0.5rem 0 1.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--line-hover);
+  border-radius: var(--radius-note);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.dev-panel summary {
+  cursor: pointer;
+}
+
+.dev-panel dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.dev-panel dt {
+  color: var(--ink-faint);
+}
+
+.dev-panel dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+.dev-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dev-actions button {
+  min-height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dev-panel summary:focus-visible,
+.dev-actions button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

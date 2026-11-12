@@ -10,6 +10,7 @@ import { useScene } from "./scenes/useScene"
 import type { Note } from "./types"
 import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./Viewer"
+import { DevPanel } from "./dev/DevPanel"
 
 /** Practice mode: the run of a practice, the frame on its current step, and the frame's scene, all
  * kept for as long as the mode lasts. The frame's side and the scene's side meet only here, and go
@@ -42,6 +43,7 @@ export function PracticeMode({
     <Layout
       layout={layout}
       topBar={topBar}
+      dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} />}
       page={<ViewerPage {...viewer} />}
       notes={scene.viewer.open === null ? null : <ViewerNotes {...viewer} />}
       praxisBar={<PraxisBar controls={controls} projection={scene.praxisBar} />}
