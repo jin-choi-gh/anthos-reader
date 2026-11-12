@@ -13,11 +13,12 @@ export function useRoute(): Route {
 /** A hash as a route. Anything that is not #/read/<file> or #/read/<file>/annotate, the empty hash included, is the library. */
 export function parseRoute(hash: string): Route {
   const match = /^#\/read\/([^/]+)(\/annotate)?$/.exec(hash)
-  if (!match) return { screen: "library" }
+  const file = match?.[1]
+  if (file === undefined) return { screen: "library" }
   return {
     screen: "reader",
-    file: decodeURIComponent(match[1]),
-    mode: match[2] ? "annotate" : "practice",
+    file: decodeURIComponent(file),
+    mode: match?.[2] ? "annotate" : "practice",
   }
 }
 

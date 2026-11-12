@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { Note } from "../../material/types"
-import { idOf, problemsOf } from "../notes"
+import { partsOf } from "../lexicon"
+import { idOf, problemsOf } from "../references"
 import { firstReading } from "../practices/firstReading"
 import { PRACTICES, practiceFor } from "../practices"
 import type { Practice } from "../types"
@@ -41,7 +42,7 @@ describe("the registered practices", () => {
 /** A note for every well-formed reference a practice makes. */
 function standInNotes(practice: Practice): Note[] {
   const ids = practice.stages.flatMap((stage) =>
-    stage.steps.flatMap((step) => (step.direction === "consider" ? [idOf(step.note)] : [])),
+    stage.steps.flatMap((step) => partsOf(step).highlight.map(idOf)),
   )
   return ids
     .filter((id) => id !== null)

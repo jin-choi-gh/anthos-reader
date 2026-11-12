@@ -20,6 +20,9 @@
   --fill-editor: #c4f6fb; /* the selected note's box, and its passages in the poem */
   --edge-selected: #d9b54a; /* the selected note's border */
 
+  /* The reader's own notes */
+  --edge-reader: #d9b54a; /* the edge of what the reader writes */
+
   /* Interaction */
   --focus: #3b6fd8; /* the keyboard focus ring */
 

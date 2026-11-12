@@ -1,6 +1,6 @@
-import type { Reply } from "./types"
+import type { Effect, Reply } from "./types"
 
-/** A reply that only keeps a state: no messages to anyone. */
-export function reply<State>(state: State): Reply<State> {
-  return { state, toViewer: [], toPraxisBar: [] }
+/** A reply: the next state, and what to write in the notebook, if anything. */
+export function reply<State>(state: State, effects: readonly Effect[] = []): Reply<State> {
+  return { state, effects }
 }

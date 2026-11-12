@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { makeTextualComplex } from "./fixture"
-import { SchemaTree, codePoints, lineLength, schemaOfKind, textOf } from "../textualComplex"
+import { codePoints } from "../../material/codePoints"
+import { SchemaTree, lineLength, schemaOfKind, textOf } from "../textualComplex"
 
 const complex = makeTextualComplex([["A Bird, came down", "the 🐦 Walk -", "He did not know"]])
 
@@ -33,7 +34,7 @@ describe("schemaOfKind", () => {
     expect(() => schemaOfKind(complex, "metre")).toThrow("no metre schema")
     const twice = {
       ...complex,
-      schemata: { a: complex.schemata.display, b: complex.schemata.display },
+      schemata: { a: complex.schemata.display!, b: complex.schemata.display! },
     }
     expect(() => schemaOfKind(twice, "display")).toThrow("several display schemata: a, b")
   })
@@ -41,9 +42,9 @@ describe("schemaOfKind", () => {
 
 describe("SchemaTree", () => {
   it("gives the roots and each unit's children in order", () => {
-    const tree = new SchemaTree(complex.schemata.display)
-    const [poem] = tree.roots()
-    const [stanza] = tree.children(poem)
+    const tree = new SchemaTree(complex.schemata.display!)
+    const poem = tree.roots()[0]!
+    const stanza = tree.children(poem)[0]!
     expect(poem.id).toBe("poem")
     expect(tree.children(stanza).map((unit) => unit.id)).toEqual(["line1", "line2", "line3"])
   })

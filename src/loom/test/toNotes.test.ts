@@ -19,13 +19,13 @@ function notesOn(...targetLists: LoomSpan[][]) {
 describe("toNotes: lemmas", () => {
   it("cites the whole poem", () => {
     const { notes } = notesOn([{ start: [0, 0], end: [2, 30] }])
-    expect(notes[0].lemma).toEqual([{ kind: "citation", text: "the whole poem" }])
+    expect(notes[0]!.lemma).toEqual([{ kind: "citation", text: "the whole poem" }])
   })
 
   it("cites whole lines by number", () => {
     const { notes } = notesOn([{ start: [1, 0], end: [1, 23] }], [{ start: [0, 0], end: [1, 23] }])
-    expect(notes[0].lemma).toEqual([{ kind: "citation", text: "line 2" }])
-    expect(notes[1].lemma).toEqual([{ kind: "citation", text: "lines 1–2" }])
+    expect(notes[0]!.lemma).toEqual([{ kind: "citation", text: "line 2" }])
+    expect(notes[1]!.lemma).toEqual([{ kind: "citation", text: "lines 1–2" }])
   })
 
   it("quotes a passage, with / at line breaks and … for the lines between", () => {
@@ -34,12 +34,12 @@ describe("toNotes: lemmas", () => {
       [{ start: [0, 22], end: [1, 6] }],
       [{ start: [0, 22], end: [2, 6] }],
     )
-    expect(notes.map((note) => note.lemma[0].text)).toEqual([
+    expect(notes.map((note) => note.lemma[0]!.text)).toEqual([
       "Angle Worm",
       "Walk - / He did",
       "Walk - / … / He bit",
     ])
-    expect(notes[0].lemma[0].kind).toBe("quote")
+    expect(notes[0]!.lemma[0]!.kind).toBe("quote")
   })
 
   it("gives a part for each target, in order", () => {
@@ -47,7 +47,7 @@ describe("toNotes: lemmas", () => {
       { start: [2, 10], end: [2, 15] },
       { start: [1, 0], end: [1, 23] },
     ])
-    expect(notes[0].lemma).toEqual([
+    expect(notes[0]!.lemma).toEqual([
       { kind: "quote", text: "Angle" },
       { kind: "citation", text: "line 2" },
     ])
@@ -88,7 +88,7 @@ describe("toNotes: indexes, ids and paragraphs", () => {
         },
       ],
     })
-    expect(toNotes(complex).notes[0].paragraphs).toEqual(["Like a hardened criminal.", "The bird"])
+    expect(toNotes(complex).notes[0]!.paragraphs).toEqual(["Like a hardened criminal.", "The bird"])
   })
 })
 
@@ -109,7 +109,7 @@ describe("toNotes: tags", () => {
     const complex = makeTextualComplex(stanzas, {
       annotations: [{ targets: [target], body: "A note." }],
     })
-    expect(toNotes(complex).notes[0].tags).toEqual([])
+    expect(toNotes(complex).notes[0]!.tags).toEqual([])
   })
 })
 

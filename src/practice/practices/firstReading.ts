@@ -1,6 +1,6 @@
 import type { Practice } from "../types"
 
-export const firstReading: Practice = {
+export const firstReading = {
   id: "first-reading",
   title: "First reading",
   text: "dickinson",
@@ -14,6 +14,10 @@ export const firstReading: Practice = {
           prose: ["Look at how Dickinson evokes the violence of nature"],
         },
         { direction: "consider", note: "@beads", prose: [""] },
+        {
+          direction: "respond",
+          prose: ["How has the bird changed for you, from its meal to its beads?"], // a placeholder
+        },
       ],
     },
     {
@@ -21,4 +25,4 @@ export const firstReading: Practice = {
       steps: [{ direction: "consider", note: "@flight", prose: ["…"] }],
     },
   ],
-}
+} satisfies Practice

@@ -1,96 +1,81 @@
-import { annotate, type AnnotateState } from "./annotate"
-import { final } from "./practice/final"
+import { keepOpen, onViewer, viewerOf } from "./parts/commentary"
+import {
+  keepWriting,
+  onPraxisBar,
+  startWriting,
+  writingOf,
+  type WritingState,
+} from "./parts/writing"
 import { reply } from "./reply"
-import { rest } from "./practice/rest"
 import type {
-  Behaviour,
   FrameProtocol,
   PraxisBarProjection,
   PraxisBarProtocol,
   Reply,
   Subject,
-  SubjectOf,
   ViewerProjection,
   ViewerProtocol,
 } from "./types"
-import { consider, type ConsiderState } from "./practice/directions/consider"
 
-export type SceneState =
-  | { kind: "consider"; subject: SubjectOf<"consider">; state: ConsiderState }
-  | { kind: "rest"; subject: SubjectOf<"rest">; state: SubjectOf<"rest"> }
-  | { kind: "final"; subject: SubjectOf<"final">; state: SubjectOf<"final"> }
-  | { kind: "annotate"; subject: SubjectOf<"annotate">; state: AnnotateState }
+// The scene: the staging of one frame on the screen. It is made of parts, and knows nothing of
+// which direction they came from: the commentary answers the viewer, the notebook page answers the
+// praxis bar, and the intertitle is only drawn.
 
-export interface Scene extends Behaviour<Subject, SceneState> {
-  fromFrame(current: SceneState, message: FrameProtocol["toScene"]): Reply<SceneState>
+export interface SceneState {
+  readonly subject: Subject
+  /** The editor's note the reader has opened, by its index. */
+  readonly open: number | null
+  /** The notebook page, when the subject asks for writing. */
+  readonly writing: WritingState | null
 }
 
-export const scene: Scene = {
-  start,
-  fromFrame: (current, message) => {
-    switch (message.kind) {
-      case "subject":
-        // The very subject it is on already: the frame has not moved, so nothing restarts
-        return message.subject === current.subject ? reply(current) : start(message.subject)
-    }
+export const scene = {
+  /** A cut: the scene staged afresh on a subject. */
+  start(subject: Subject): Reply<SceneState> {
+    const writing = subject.writing === null ? null : startWriting(subject.writing)
+    return reply({ subject, open: null, writing })
   },
-  fromViewer: (current, message) => bound(current).fromViewer(message),
-  fromPraxisBar: (current, message) => bound(current).fromPraxisBar(message),
-  viewer: (current) => bound(current).viewer(),
-  praxisBar: (current) => bound(current).praxisBar(),
-}
 
-function start(subject: Subject): Reply<SceneState> {
-  switch (subject.kind) {
-    case "consider":
-      return lift(consider.start(subject), (state) => ({ kind: "consider", subject, state }))
-    case "rest":
-      return lift(rest.start(subject), (state) => ({ kind: "rest", subject, state }))
-    case "final":
-      return lift(final.start(subject), (state) => ({ kind: "final", subject, state }))
-    case "annotate":
-      return lift(annotate.start(subject), (state) => ({ kind: "annotate", subject, state }))
-  }
-}
+  /** The frame's new subject. The very same subject changes nothing. A new key is a cut. The same
+   * key is a hold: the parts keep their state, brought up to date with what changed around them. */
+  fromFrame(current: SceneState, message: FrameProtocol["toScene"]): Reply<SceneState> {
+    const { subject } = message
+    if (subject === current.subject) return reply(current)
+    if (subject.key !== current.subject.key) return scene.start(subject)
+    const writing =
+      subject.writing === null
+        ? null
+        : current.writing === null
+          ? startWriting(subject.writing)
+          : keepWriting(subject.writing, current.writing)
+    return reply({ subject, open: keepOpen(subject.commentary, current.open), writing })
+  },
 
-/** The scene's behaviour, with its state already in hand. */
-interface Bound {
-  fromViewer(message: ViewerProtocol["toScene"]): Reply<SceneState>
-  fromPraxisBar(message: PraxisBarProtocol["toScene"]): Reply<SceneState>
-  viewer(): ViewerProjection
-  praxisBar(): PraxisBarProjection | null
-}
+  /** The viewer speaks to the commentary. */
+  fromViewer(current: SceneState, message: ViewerProtocol["toScene"]): Reply<SceneState> {
+    const open = onViewer(current.subject.commentary, current.open, message)
+    return reply(open === current.open ? current : { ...current, open })
+  },
 
-function bound(current: SceneState): Bound {
-  switch (current.kind) {
-    case "consider":
-      return bind(consider, current, current.state, (state) => ({ ...current, state }))
-    case "rest":
-      return bind(rest, current, current.state, (state) => ({ ...current, state }))
-    case "final":
-      return bind(final, current, current.state, (state) => ({ ...current, state }))
-    case "annotate":
-      return bind(annotate, current, current.state, (state) => ({ ...current, state }))
-  }
-}
+  /** The praxis bar speaks to the notebook page, which may write in the notebook. */
+  fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
+    const { writing } = current.subject
+    if (writing === null || current.writing === null) return reply(current)
+    const answer = onPraxisBar(writing, current.writing, message)
+    const state = answer.state === current.writing ? current : { ...current, writing: answer.state }
+    return reply(state, answer.effects)
+  },
 
-/** Binds a behaviour to its state. A reply that keeps the behaviour's state keeps the scene's. */
-function bind<S extends Subject, State>(
-  behaviour: Behaviour<S, State>,
-  current: SceneState,
-  state: State,
-  wrap: (state: State) => SceneState,
-): Bound {
-  const keep = (next: State) => (next === state ? current : wrap(next))
-  return {
-    fromViewer: (message) => lift(behaviour.fromViewer(state, message), keep),
-    fromPraxisBar: (message) => lift(behaviour.fromPraxisBar(state, message), keep),
-    viewer: () => behaviour.viewer(state),
-    praxisBar: () => behaviour.praxisBar(state),
-  }
-}
+  viewer(current: SceneState): ViewerProjection {
+    return viewerOf(current.subject.text, current.subject.commentary, current.open)
+  },
 
-/** A behaviour's reply as the scene's: the same messages, the state wrapped. */
-function lift<State>(answer: Reply<State>, wrap: (state: State) => SceneState): Reply<SceneState> {
-  return { ...answer, state: wrap(answer.state) }
+  /** The intertitle and the notebook page; nothing at all when there is neither, as at the rest. */
+  praxisBar(current: SceneState): PraxisBarProjection | null {
+    const { prose, writing } = current.subject
+    const page =
+      writing === null || current.writing === null ? null : writingOf(writing, current.writing)
+    if (prose.length === 0 && page === null) return null
+    return { prose, writing: page }
+  },
 }

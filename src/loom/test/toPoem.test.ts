@@ -5,7 +5,7 @@ import type { LoomTextualComplex } from "../types"
 
 /** Gives one display unit another value, as a file from elsewhere (TEI, say) might carry. */
 function setLineValue(complex: LoomTextualComplex, id: string, value: string | null) {
-  const unit = complex.schemata.display.units.find((u) => u.id === id)
+  const unit = complex.schemata.display!.units.find((u) => u.id === id)
   if (unit === undefined) throw new Error(`no unit ${id}`)
   unit.value = value
 }
@@ -17,7 +17,7 @@ describe("toPoem", () => {
       ["one", "two"],
       ["three"],
     ])
-    expect(poem.stanzas[1].lines[0]).toEqual({
+    expect(poem.stanzas[1]!.lines[0]).toEqual({
       id: "line3",
       text: "three",
       indexInSubstrate: 2,
@@ -28,7 +28,7 @@ describe("toPoem", () => {
 
   it("gives each line its indent level, from the line unit's value", () => {
     const poem = toPoem(makeTextualComplex([["A Bird", "\tcame down", "\t\tthe Walk"]]))
-    expect(poem.stanzas[0].lines.map((line) => [line.text, line.indent])).toEqual([
+    expect(poem.stanzas[0]!.lines.map((line) => [line.text, line.indent])).toEqual([
       ["A Bird", 0],
       ["came down", 1],
       ["the Walk", 2],
@@ -38,7 +38,7 @@ describe("toPoem", () => {
   it("reads a line with no value as unindented", () => {
     const complex = makeTextualComplex([["one"]])
     setLineValue(complex, "line1", null)
-    expect(toPoem(complex).stanzas[0].lines[0].indent).toBe(0)
+    expect(toPoem(complex).stanzas[0]!.lines[0]!.indent).toBe(0)
   })
 
   it("refuses an indent that is not a whole number from 0, naming the line", () => {

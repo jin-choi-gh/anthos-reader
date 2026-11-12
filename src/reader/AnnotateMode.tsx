@@ -23,7 +23,8 @@ export function AnnotateMode({
   topBar: ReactNode
 }) {
   const frame = useMemo(() => annotateFrame(text, notes), [text, notes])
-  const scene = useScene(frame.subject)
+  // Nothing is written at the viewing table yet, so the scene has nothing to send out
+  const scene = useScene(frame.subject, ignore)
   const viewer = { projection: scene.viewer, materials, send: scene.toScene.viewer }
 
   return (
@@ -35,3 +36,5 @@ export function AnnotateMode({
     />
   )
 }
+
+function ignore() {}

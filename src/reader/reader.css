@@ -381,6 +381,70 @@ html {
   margin-top: 0.5em;
 }
 
+/* The notebook page: what the reader writes, in the reader's own colour, apart from the editor's */
+.notebook-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--edge-reader);
+}
+
+.notebook-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.notebook-box {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 5.5rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1rem; /* 16px or more, so a phone does not zoom in on focus */
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.notebook-box:hover {
+  border-color: var(--line-hover);
+}
+
+.notebook-box:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.notebook-written {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.notebook-written p {
+  margin: 0;
+}
+
+.notebook-written p + p {
+  margin-top: 0.5em;
+}
+
+.notebook-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.notebook-submit:not(:disabled) {
+  border-color: var(--edge-reader);
+}
+
 /* Back at the start, Next at the end, and why Next is refused between them. Each has its own
    column, so a missing one moves nothing else */
 .praxis-controls {

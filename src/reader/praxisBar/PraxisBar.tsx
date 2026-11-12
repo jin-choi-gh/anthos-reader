@@ -1,18 +1,22 @@
-import type { Day } from "../../runner/types"
+import type { Day } from "../../clock/clock"
 import type { Control, FrameControls } from "../frame/controls"
-import type { PraxisBarProjection } from "../scenes/types"
+import type { PraxisBarProjection, PraxisBarProtocol } from "../scenes/types"
+import { NotebookPage } from "./NotebookPage"
 import { reasonText } from "./reasonText"
 
 /** The praxis bar, drawn from two sources that never meet: the frame's controls (its heading, and
- * Back and Next below) and the scene's projection (between them). Today is only for putting a
- * refusal into words: "tomorrow" depends on it. */
+ * Back and Next below: the booth) and the scene's projection (between them: the intertitle and the
+ * notebook page), which talks back to the scene only. Today is only for putting a refusal into
+ * words: "tomorrow" depends on it. */
 export function PraxisBar({
   controls,
   projection,
+  send,
   today,
 }: {
   controls: FrameControls
   projection: PraxisBarProjection | null
+  send: (message: PraxisBarProtocol["toScene"]) => void
   today: Day
 }) {
   const { heading, back, next } = controls
@@ -23,7 +27,7 @@ export function PraxisBar({
   return (
     <section className="praxis-bar" aria-label="Practice">
       {heading !== null && <h2 className="praxis-heading">{heading}</h2>}
-      {projection !== null && <Projection projection={projection} />}
+      {projection !== null && <Projection projection={projection} send={send} />}
       {buttons && (
         <nav className="praxis-controls" aria-label="Steps">
           <ControlButton control={back} label="Back" className="praxis-back" />
@@ -35,18 +39,27 @@ export function PraxisBar({
   )
 }
 
-/** The scene's part of the praxis bar. */
-function Projection({ projection }: { projection: PraxisBarProjection }) {
-  switch (projection.kind) {
-    case "prose":
-      return (
+/** The scene's part of the praxis bar: the intertitle, then the notebook page, if the frame has
+ * either. */
+function Projection({
+  projection,
+  send,
+}: {
+  projection: PraxisBarProjection
+  send: (message: PraxisBarProtocol["toScene"]) => void
+}) {
+  return (
+    <>
+      {projection.prose.length > 0 && (
         <div className="praxis-prose">
-          {projection.paragraphs.map((paragraph, i) => (
+          {projection.prose.map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
-      )
-  }
+      )}
+      {projection.writing !== null && <NotebookPage page={projection.writing} send={send} />}
+    </>
+  )
 }
 
 /** One of the frame's buttons: pressed, it moves the frame; refused, it is there but disabled; none,

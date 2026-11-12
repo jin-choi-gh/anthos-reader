@@ -1,44 +1,50 @@
-import { useMemo, useState, useSyncExternalStore } from "react"
-import { now, today } from "./clock"
-import { clearLog, readLog, writeLog } from "./log"
-import { eventOfResponse, eventsOfMove, step } from "./step"
+import { useMemo, useRef, useState, useSyncExternalStore } from "react"
+import { now, today, type Day } from "../clock/clock"
+import type { ReaderNote } from "../notebook/types"
 import type { Practice } from "../practice/types"
-import type { Day, Event, Position } from "./types"
+import { clearLog, readLog, writeLog } from "./log"
+import { eventsOfMove, standingOf } from "./step"
+import type { Event, Standing } from "./types"
 
+/** A screening of a practice, for as long as the component that holds it: where it stands, today,
+ * the projectionist's log, and the two things the booth can do with it. */
 export interface Run {
-  position: Position
+  standing: Standing
   today: Day
-  log: Event[]
+  log: readonly Event[]
   moveTo(target: number): void
-  respond(text: string): void
   restart(): void
 }
 
-export function useRun(practice: Practice): Run {
-  const [log, setLog] = useState(() => readLog(practice))
+/** The projector, running the practice. The spectator's notebook is read, never written: the law
+ * looks in it for the writing a step asks for. */
+export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
+  const [log, setLog] = useState<readonly Event[]>(() => readLog(practice))
+  // The latest log, so that a move made in the same moment as another lands after it
+  const latest = useRef<readonly Event[]>(log)
   const day = useToday()
-  const position = useMemo(() => step(practice, log, day), [practice, log, day])
+  const standing = useMemo(() => standingOf(practice, log, notes, day), [practice, log, notes, day])
+
+  const keep = (next: readonly Event[]) => {
+    latest.current = next
+    writeLog(practice, next)
+    setLog(next)
+  }
 
   return {
-    position,
+    standing,
     today: day,
     log,
     moveTo(target) {
+      // Where it stands this very moment, as the day may have turned since the last drawing
       const current = today()
-      const events = eventsOfMove(practice, step(practice, log, current), target, now(), current)
-      if (events.length === 0) return
-      const next = [...log, ...events]
-      writeLog(practice, next)
-      setLog(next)
-    },
-    respond(text) {
-      const event = eventOfResponse(practice, step(practice, log, today()), text, now())
-      const next = [...log, event]
-      writeLog(practice, next)
-      setLog(next)
+      const here = standingOf(practice, latest.current, notes, current)
+      const events = eventsOfMove(practice, here, target, now(), current)
+      if (events.length > 0) keep([...latest.current, ...events])
     },
     restart() {
       clearLog(practice)
+      latest.current = []
       setLog([])
     },
   }

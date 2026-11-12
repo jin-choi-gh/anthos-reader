@@ -89,7 +89,11 @@ function rangesByLine(
       const [startLine, startOffset] = target.start
       const [endLine, endOffset] = target.end
       for (let line = startLine; line <= endLine; line++) {
-        ranges[line].push({
+        const onLine = ranges[line]
+        if (onLine === undefined) {
+          throw new RangeError(`${textualComplex.name}: a note's target runs past line ${line}`)
+        }
+        onLine.push({
           start: line === startLine ? startOffset : 0,
           end: line === endLine ? endOffset : lineLength(textualComplex, line),
           noteIndex: index,

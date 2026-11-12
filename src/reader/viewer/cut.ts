@@ -1,4 +1,4 @@
-import { codePoints } from "../../loom/textualComplex"
+import { codePoints } from "../../material/codePoints"
 
 /** A stretch of one line, by offsets in code points as loom counts them: from start, up to end. */
 export interface LineRange {
@@ -22,12 +22,15 @@ export function cut<R extends LineRange>(text: string, ranges: R[]): Piece<R>[] 
     edges.add(range.start)
     edges.add(range.end)
   }
-  const cuts = [...edges].sort((a, b) => a - b)
-  return cuts.slice(0, -1).map((start, i) => {
-    const end = cuts[i + 1]
-    return {
+  const [first = 0, ...rest] = [...edges].sort((a, b) => a - b)
+  const pieces: Piece<R>[] = []
+  let start = first // always 0: no range starts before the line does
+  for (const end of rest) {
+    pieces.push({
       text: characters.slice(start, end).join(""),
       ranges: ranges.filter((range) => range.start <= start && end <= range.end),
-    }
-  })
+    })
+    start = end
+  }
+  return pieces
 }

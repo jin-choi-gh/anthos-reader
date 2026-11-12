@@ -1,4 +1,4 @@
-import { problemsOf } from "../practice/notes"
+import { problemsOf } from "../practice/references"
 import type { Practice } from "../practice/types"
 import type { ModeName } from "../route"
 import type { Note } from "../material/types"

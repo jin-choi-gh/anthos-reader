@@ -31,5 +31,7 @@ function controlOf(decision: Ruling | null, moveTo: (step: number) => void): Con
   }
   // In the final stage there is nowhere left to go: no buttons at all
   if (decision.reason.kind === "finished") return { kind: "none" }
+  // A step that asks for writing: Next is not there at all until the reader has written
+  if (decision.reason.kind === "unanswered") return { kind: "none" }
   return { kind: "refused", reason: decision.reason }
 }

@@ -1,6 +1,9 @@
 // The material: a text as made from a loom textual complex by loom/toPoem.ts and loom/toNotes.ts.
 // Practices refer to its notes, and the reader draws it; it knows neither.
 
+/** A text's id: its file in text-data/, "dickinson". Practices, notes and the screen name texts by it. */
+export type TextId = string
+
 export interface Line {
   id: string // the display schema's line unit
   text: string // cut from the substrate by the unit's span
@@ -44,4 +47,11 @@ export interface NoteRange {
 export interface Notes {
   notes: Note[] // every note, in file order
   rangesOn(indexInSubstrate: number): NoteRange[] // the ranges on one line
+}
+
+/** Where on the footage a note is pinned: for now, the whole poem. Observe will add passages, told in
+ * timecodes (a line and a code-point offset at each end). */
+export interface Anchor {
+  readonly kind: "whole"
+  readonly text: TextId
 }

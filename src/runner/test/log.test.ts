@@ -13,7 +13,6 @@ const practice: Practice = {
 const log: Event[] = [
   { kind: "visited", stage: 0, step: 1, at: 1_000 },
   { kind: "finished", stage: 0, at: 2_000, day: "2026-11-10" },
-  { kind: "responded", stage: 1, step: 0, text: "The bird eats raw.", at: 3_000 },
 ]
 
 let stored: Map<string, string>
@@ -77,10 +76,9 @@ describe("a damaged log", () => {
       { kind: "visited", stage: 0, step: 1.5, at: 0 }, // half a step
       { kind: "finished", stage: 0, at: 0, day: "Tuesday" }, // not a date
       { kind: "finished", stage: 0, at: 0 }, // no day
-      { kind: "responded", stage: 0, step: 0, at: 0 }, // no text
-      { kind: "responded", stage: 0, at: 0, text: "A bird." }, // no step
+      { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }, // an older kind, now kept in the notebook
     ]
-    stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1], log[2]]))
+    stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1]]))
     expect(readLog(practice)).toEqual(log)
   })
 })

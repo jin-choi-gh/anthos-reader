@@ -1,4 +1,7 @@
-import type { Day } from "./types"
+// The house clock: what time it is, and which day, for the projector and the spectator alike.
+
+/** A local date, "2026-11-10"; days start at DAY_STARTS_AT. */
+export type Day = string
 
 /** The hour a day starts, local time: something done at 02:00 on Wednesday
  * counts as Tuesday. */
@@ -57,4 +60,11 @@ function writeOffset(ms: number) {
     // storage is off: the clock stays where it is
   }
   window.dispatchEvent(new Event("anthos-clock"))
+}
+
+/** The day after a day: "2026-11-10" → "2026-11-11". Dates, not instants, so no time zone applies. */
+export function nextDay(day: Day): Day {
+  const date = new Date(`${day}T00:00:00Z`)
+  date.setUTCDate(date.getUTCDate() + 1)
+  return date.toISOString().slice(0, 10)
 }

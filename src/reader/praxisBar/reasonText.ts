@@ -1,5 +1,6 @@
-import { nextDay } from "../../runner/step"
-import type { Day, Reason } from "../../runner/types"
+import { assertNever } from "../../assertNever"
+import { nextDay, type Day } from "../../clock/clock"
+import type { Reason } from "../../runner/types"
 
 /** A refusal in words, for the reader, or null when the disabled button says enough by itself. */
 export function reasonText(reason: Reason, today: Day): string | null {
@@ -10,8 +11,11 @@ export function reasonText(reason: Reason, today: Day): string | null {
       if (reason.opensOn === null) return "The next stage isn't open yet."
       if (reason.opensOn === nextDay(today)) return "The next stage opens tomorrow."
       return `The next stage opens on ${dayAndMonth(reason.opensOn)}.`
+    case "unanswered": // Next is not drawn: the writing box says what is asked
     case "finished":
       return null
+    default:
+      return assertNever(reason)
   }
 }
 

@@ -1,3 +1,4 @@
+import { codePoints } from "../material/codePoints"
 import type { LoomSchema, LoomSpan, LoomUnit, LoomTextualComplex } from "./types"
 
 // What loom's models do (loom/src/models), done on the JSON: the substrate's text, and the trees of
@@ -24,14 +25,15 @@ export function schemaOfKind(
   kind: string,
 ): { name: string; schema: LoomSchema } {
   const found = Object.entries(textualComplex.schemata).filter(([, schema]) => schema.kind === kind)
-  if (found.length === 0) {
+  const [first] = found
+  if (first === undefined) {
     throw new Error(`${textualComplex.name}: no ${kind} schema`)
   }
   if (found.length > 1) {
     const names = found.map(([name]) => name).join(", ")
     throw new Error(`${textualComplex.name}: several ${kind} schemata: ${names}`)
   }
-  const [name, schema] = found[0]
+  const [name, schema] = first
   return { name, schema }
 }
 
@@ -67,10 +69,4 @@ function lineAt(textualComplex: LoomTextualComplex, index: number) {
 /** A line's length as loom counts it, in code points. */
 export function lineLength(textualComplex: LoomTextualComplex, index: number): number {
   return codePoints(lineAt(textualComplex, index).text).length
-}
-
-/** A text's characters as loom counts them: code points, not UTF-16 units, so that loom's offsets
- * index this array directly. */
-export function codePoints(text: string): string[] {
-  return Array.from(text)
 }

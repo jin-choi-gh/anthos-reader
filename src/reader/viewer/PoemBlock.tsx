@@ -58,8 +58,9 @@ export function PoemBlock({
               )}
               <span className="line-text">
                 {cut(line.text, markedRanges(line)).map((piece, j) => {
-                  if (piece.ranges.length === 0) return <Fragment key={j}>{piece.text}</Fragment>
-                  const note = piece.ranges[0].noteIndex // where marked notes overlap, the first
+                  const [first] = piece.ranges
+                  if (first === undefined) return <Fragment key={j}>{piece.text}</Fragment>
+                  const note = first.noteIndex // where marked notes overlap, the first
                   const isOpen = piece.ranges.some((range) => range.noteIndex === open)
                   return (
                     <mark

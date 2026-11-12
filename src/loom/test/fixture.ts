@@ -17,8 +17,8 @@ export function makeTextualComplex(
 ): LoomTextualComplex {
   const rows = stanzas.flat()
   const texts = rows.map((row) => row.replace(/^\t+/, ""))
-  const indentOf = (line: number) => String(rows[line].length - texts[line].length)
-  const endOf = (line: number): LoomPosition => [line, Array.from(texts[line]).length]
+  const indentOf = (line: number) => String(rows[line]!.length - texts[line]!.length)
+  const endOf = (line: number): LoomPosition => [line, Array.from(texts[line]!).length]
 
   const units: LoomUnit[] = [
     {

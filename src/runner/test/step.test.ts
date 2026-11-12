@@ -1,7 +1,21 @@
 import { describe, expect, it } from "vitest"
-import { eventOfResponse, eventsOfMove, nextDay, responseOf, ruling, step } from "../step"
+import { eventsOfMove, ruling, standingOf } from "../step"
 import type { Practice, Step } from "../../practice/types"
-import type { Day, Event } from "../types"
+import type { Day } from "../../clock/clock"
+import type { NoteId, ReaderNote } from "../../notebook/types"
+import type { Event, Standing } from "../types"
+
+/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+const standing = (
+  stage: number,
+  step: number,
+  opensOn: string | null = null,
+  heldAt: number | null = null,
+): Standing => ({ position: { stage, step }, opensOn, heldAt })
+
+/** The fold, with nothing in the notebook. */
+const replay = (practice: Practice, log: Event[], today: Day) =>
+  standingOf(practice, log, [], today)
 
 const consider = (note: string): Step => ({
   direction: "consider",
@@ -25,20 +39,16 @@ const finished = (stage: number, day: Day): Event => ({ kind: "finished", stage,
 
 describe("step: within a stage", () => {
   it("starts at the first step of the first stage", () => {
-    expect(step(practice, [], "2026-11-10")).toEqual({ stage: 0, step: 0, opensOn: null })
+    expect(replay(practice, [], "2026-11-10")).toEqual(standing(0, 0))
   })
 
   it("is at the step last visited", () => {
     const log = [visited(0, 1), visited(0, 0), visited(0, 1)]
-    expect(step(practice, log, "2026-11-10")).toEqual({ stage: 0, step: 1, opensOn: null })
+    expect(replay(practice, log, "2026-11-10")).toEqual(standing(0, 1))
   })
 
   it("can be at the rest", () => {
-    expect(step(practice, [visited(0, 2)], "2026-11-10")).toEqual({
-      stage: 0,
-      step: 2,
-      opensOn: null,
-    })
+    expect(replay(practice, [visited(0, 2)], "2026-11-10")).toEqual(standing(0, 2))
   })
 })
 
@@ -46,96 +56,65 @@ describe("step: between stages", () => {
   const finishedFirst = [visited(0, 1), visited(0, 2), finished(0, "2026-11-10")]
 
   it("waits for the next day after a stage is finished", () => {
-    expect(step(practice, finishedFirst, "2026-11-10")).toEqual({
-      stage: 0,
-      step: 2,
-      opensOn: "2026-11-11",
-    })
+    expect(replay(practice, finishedFirst, "2026-11-10")).toEqual(standing(0, 2, "2026-11-11"))
   })
 
   it("opens the next stage, at its first step, on the next day", () => {
-    expect(step(practice, finishedFirst, "2026-11-11")).toEqual({
-      stage: 1,
-      step: 0,
-      opensOn: null,
-    })
-    expect(step(practice, finishedFirst, "2026-12-25")).toEqual({
-      stage: 1,
-      step: 0,
-      opensOn: null,
-    })
+    expect(replay(practice, finishedFirst, "2026-11-11")).toEqual(standing(1, 0))
+    expect(replay(practice, finishedFirst, "2026-12-25")).toEqual(standing(1, 0))
   })
 
   it("lets the reader go back while waiting, without moving the day", () => {
     const log = [...finishedFirst, visited(0, 0), visited(0, 2), finished(0, "2026-11-11")]
-    expect(step(practice, log, "2026-11-10")).toEqual({ stage: 0, step: 2, opensOn: "2026-11-11" })
-    expect(step(practice, [...finishedFirst, visited(0, 0)], "2026-11-10")).toEqual({
-      stage: 0,
-      step: 0,
-      opensOn: "2026-11-11",
-    })
+    expect(replay(practice, log, "2026-11-10")).toEqual(standing(0, 2, "2026-11-11"))
+    expect(replay(practice, [...finishedFirst, visited(0, 0)], "2026-11-10")).toEqual(
+      standing(0, 0, "2026-11-11"),
+    )
   })
 
   it("follows the second stage's visits once it is open", () => {
     const log = [...finishedFirst, visited(1, 1)]
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 1, step: 1, opensOn: null })
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 1))
   })
 
   it("opens the final stage as soon as the last stage is finished", () => {
     const log = [...finishedFirst, visited(1, 2), finished(1, "2026-11-11")]
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 2, step: 0, opensOn: null })
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(2, 0))
   })
 
   it("opens the final stage at once for a practice with no stages", () => {
     const empty = { ...practice, stages: [] }
-    expect(step(empty, [], "2026-11-10")).toEqual({ stage: 0, step: 0, opensOn: null })
+    expect(replay(empty, [], "2026-11-10")).toEqual(standing(0, 0))
   })
 })
 
 describe("step: events that do not count", () => {
   it("ignores a stage finished on a day after today", () => {
     const log = [finished(0, "2026-11-12")]
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 0, step: 0, opensOn: null })
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(0, 0))
   })
 
   it("ignores a stage finished on a day before it opened", () => {
     const log = [finished(0, "2026-11-10"), finished(1, "2026-11-10")]
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 1, step: 0, opensOn: null })
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 0))
   })
 
   it("ignores visits to steps that are not there", () => {
     for (const bad of [-1, 3, 1.5]) {
       const log = [visited(0, 1), visited(0, bad)]
-      expect(step(practice, log, "2026-11-10").step).toBe(1)
+      expect(replay(practice, log, "2026-11-10").position.step).toBe(1)
     }
-  })
-
-  it("is not moved by a response: it neither visits a step nor finishes a stage", () => {
-    const responded: Event = { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }
-    const log = [visited(0, 1), responded]
-    expect(step(practice, log, "2026-11-10")).toEqual({ stage: 0, step: 1, opensOn: null })
   })
 
   it("ignores a stage's events logged before the stage before it was finished", () => {
     const log = [visited(1, 1), finished(1, "2026-11-11"), finished(0, "2026-11-10")]
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 1, step: 0, opensOn: null })
-  })
-})
-
-describe("nextDay", () => {
-  it("gives the next calendar day, across months, years and leap days", () => {
-    expect(nextDay("2026-11-10")).toBe("2026-11-11")
-    expect(nextDay("2026-11-30")).toBe("2026-12-01")
-    expect(nextDay("2026-12-31")).toBe("2027-01-01")
-    expect(nextDay("2028-02-28")).toBe("2028-02-29")
-    expect(nextDay("2028-02-29")).toBe("2028-03-01")
-    expect(nextDay("2027-02-28")).toBe("2027-03-01")
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 0))
   })
 })
 
 describe("ruling", () => {
-  const open = { stage: 0, step: 0, opensOn: null }
-  const waiting = { stage: 0, step: 2, opensOn: "2026-11-11" }
+  const open = standing(0, 0)
+  const waiting = standing(0, 2, "2026-11-11")
 
   it("allows any step of the stage, the rest included, and jumps between them", () => {
     for (const target of [0, 1, 2]) {
@@ -152,7 +131,7 @@ describe("ruling", () => {
   })
 
   it("refuses to go beyond the rest without a day, when the log left no valid finish", () => {
-    const atRestUnfinished = { stage: 0, step: 2, opensOn: null }
+    const atRestUnfinished = standing(0, 2)
     expect(ruling(practice, atRestUnfinished, 3)).toEqual({
       allowed: false,
       reason: { kind: "waiting", opensOn: null },
@@ -169,7 +148,7 @@ describe("ruling", () => {
   })
 
   it("refuses every move in the final stage", () => {
-    const final = { stage: 2, step: 0, opensOn: null }
+    const final = standing(2, 0)
     for (const target of [-1, 0, 1, 3]) {
       expect(ruling(practice, final, target)).toEqual({
         allowed: false,
@@ -190,7 +169,7 @@ describe("ruling", () => {
 
 describe("eventsOfMove", () => {
   const at = 1_000
-  const open = { stage: 0, step: 0, opensOn: null }
+  const open = standing(0, 0)
 
   it("records a visit to another step of the stage", () => {
     expect(eventsOfMove(practice, open, 1, at, "2026-11-10")).toEqual([
@@ -203,14 +182,14 @@ describe("eventsOfMove", () => {
   })
 
   it("finishes the stage, today, the first time the rest is reached", () => {
-    expect(eventsOfMove(practice, { ...open, step: 1 }, 2, at, "2026-11-10")).toEqual([
+    expect(eventsOfMove(practice, standing(0, 1), 2, at, "2026-11-10")).toEqual([
       { kind: "visited", stage: 0, step: 2, at },
       { kind: "finished", stage: 0, at, day: "2026-11-10" },
     ])
   })
 
   it("only records the visit when the stage is already finished", () => {
-    const waiting = { stage: 0, step: 0, opensOn: "2026-11-11" }
+    const waiting = standing(0, 0, "2026-11-11")
     expect(eventsOfMove(practice, waiting, 2, at, "2026-11-10")).toEqual([
       { kind: "visited", stage: 0, step: 2, at },
     ])
@@ -223,75 +202,80 @@ describe("eventsOfMove", () => {
   })
 
   it("records nothing in the final stage", () => {
-    const final = { stage: 2, step: 0, opensOn: null }
+    const final = standing(2, 0)
     expect(eventsOfMove(practice, final, 1, at, "2026-11-10")).toEqual([])
   })
 
   it("agrees with step: a walk through both stages, fed back into the log", () => {
     const log: Event[] = []
     const walk = (target: number, today: Day) => {
-      log.push(...eventsOfMove(practice, step(practice, log, today), target, at, today))
-      return step(practice, log, today)
+      log.push(...eventsOfMove(practice, replay(practice, log, today), target, at, today))
+      return replay(practice, log, today)
     }
 
-    expect(walk(1, "2026-11-10")).toEqual({ stage: 0, step: 1, opensOn: null })
-    expect(walk(2, "2026-11-10")).toEqual({ stage: 0, step: 2, opensOn: "2026-11-11" })
-    expect(walk(0, "2026-11-10")).toEqual({ stage: 0, step: 0, opensOn: "2026-11-11" })
-    expect(walk(2, "2026-11-10")).toEqual({ stage: 0, step: 2, opensOn: "2026-11-11" })
-    expect(step(practice, log, "2026-11-11")).toEqual({ stage: 1, step: 0, opensOn: null })
-    expect(walk(2, "2026-11-11")).toEqual({ stage: 2, step: 0, opensOn: null })
+    expect(walk(1, "2026-11-10")).toEqual(standing(0, 1))
+    expect(walk(2, "2026-11-10")).toEqual(standing(0, 2, "2026-11-11"))
+    expect(walk(0, "2026-11-10")).toEqual(standing(0, 0, "2026-11-11"))
+    expect(walk(2, "2026-11-10")).toEqual(standing(0, 2, "2026-11-11"))
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 0))
+    expect(walk(2, "2026-11-11")).toEqual(standing(2, 0))
     expect(log.filter((event) => event.kind === "finished")).toHaveLength(2)
   })
 })
 
-describe("responses", () => {
-  /** One stage: a consider step, then a respond step. The rest is at step 2. */
+describe("the law: a step that asks for writing holds the reader until they have written", () => {
+  const respond: Step = { direction: "respond", prose: ["What does the bird eat?"] }
+  /** Two stages; the first is consider, respond, consider, respond, with its rest at step 4. */
   const asking: Practice = {
     ...practice,
     stages: [
-      {
-        name: "First",
-        steps: [consider("a"), { direction: "respond", prose: ["What does the bird eat?"] }],
-      },
+      { name: "First", steps: [consider("a"), respond, consider("b"), respond] },
+      { name: "Second", steps: [consider("c")] },
     ],
   }
-  const at = 1_000
-  const onRespond = { stage: 0, step: 1, opensOn: null }
-  const responded = (stage: number, step: number, text: string): Event => ({
-    kind: "responded",
-    stage,
-    step,
-    text,
-    at,
+  /** A note in the notebook, written on a step of the first stage. */
+  const written = (step: number): ReaderNote => ({
+    id: `note-${step}` as NoteId,
+    anchor: { kind: "whole", text: "fixture" },
+    body: "Worms.",
+    from: { practice: asking.id, stage: 0, step },
+    writtenAt: 0,
+    revisedAt: null,
   })
 
-  it("has no response on a step nobody has responded to", () => {
-    expect(responseOf([], onRespond)).toBeNull()
-    expect(responseOf([responded(0, 0, "Elsewhere.")], onRespond)).toBeNull()
-    expect(responseOf([responded(1, 1, "Another stage.")], onRespond)).toBeNull()
+  it("is held at the first step that asks and has nothing written", () => {
+    expect(standingOf(asking, [], [], "2026-11-10").heldAt).toBe(1)
+    expect(standingOf(asking, [], [written(1)], "2026-11-10").heldAt).toBe(3)
+    expect(standingOf(asking, [], [written(1), written(3)], "2026-11-10").heldAt).toBeNull()
   })
 
-  it("is the latest response saved on the step", () => {
-    const log = [responded(0, 1, "A worm."), visited(0, 0), responded(0, 1, "A worm, raw.")]
-    expect(responseOf(log, onRespond)).toBe("A worm, raw.")
+  it("counts only notes from this practice, stage and step", () => {
+    const elsewhere = [
+      { ...written(1), from: { practice: "other", stage: 0, step: 1 } },
+      { ...written(1), from: { practice: asking.id, stage: 1, step: 1 } },
+      { ...written(1), from: null },
+    ]
+    expect(standingOf(asking, [], elsewhere, "2026-11-10").heldAt).toBe(1)
   })
 
-  it("saves a response on a respond step", () => {
-    expect(eventOfResponse(asking, onRespond, "A worm.", at)).toEqual(responded(0, 1, "A worm."))
+  it("never holds a stage that is finished, even if its note is later withdrawn", () => {
+    const log = [visited(0, 4), finished(0, "2026-11-10")]
+    expect(standingOf(asking, log, [], "2026-11-10")).toEqual(standing(0, 4, "2026-11-11"))
   })
 
-  it("refuses a response anywhere else: a consider step, the rest, the final stage", () => {
-    for (const position of [
-      { stage: 0, step: 0, opensOn: null },
-      { stage: 0, step: 2, opensOn: null },
-      { stage: 1, step: 0, opensOn: null },
-    ]) {
-      expect(() => eventOfResponse(asking, position, "A worm.", at)).toThrow(RangeError)
-    }
+  it("refuses to pull past the held step, with its reason; up to it, and back, are allowed", () => {
+    const held = standing(0, 1, null, 1)
+    expect(ruling(asking, held, 2)).toEqual({ allowed: false, reason: { kind: "unanswered" } })
+    expect(ruling(asking, held, 4)).toEqual({ allowed: false, reason: { kind: "unanswered" } })
+    expect(ruling(asking, held, 1)).toEqual({ allowed: true, to: 1 })
+    expect(ruling(asking, held, 0)).toEqual({ allowed: true, to: 0 })
   })
 
-  it("agrees with responseOf: a saved response is read back", () => {
-    const log = [eventOfResponse(asking, onRespond, "A worm.", at)]
-    expect(responseOf(log, onRespond)).toBe("A worm.")
+  it("lets the reader on once the note is written", () => {
+    const log: Event[] = [visited(0, 1)]
+    const before = standingOf(asking, log, [], "2026-11-10")
+    expect(() => eventsOfMove(asking, before, 2, 0, "2026-11-10")).toThrow(/unanswered/)
+    const after = standingOf(asking, log, [written(1)], "2026-11-10")
+    expect(eventsOfMove(asking, after, 2, 0, "2026-11-10")).toEqual([visited(0, 2)])
   })
 })
