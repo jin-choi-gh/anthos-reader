@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest"
 import { eventsOfMove, nextDay, ruling, step } from "../step"
 import type { Day, Event, Practice, Step } from "../types"
 
-const consider = (note: string): Step => ({ verb: "consider", note, prose: [`Consider ${note}.`] })
+const consider = (note: string): Step => ({
+  direction: "consider",
+  note,
+  prose: [`Consider ${note}.`],
+})
 
 /** Two stages of two steps each: the rests are at step 2. */
 const practice: Practice = {

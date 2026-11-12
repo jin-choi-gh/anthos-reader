@@ -15,7 +15,7 @@ export interface Stage {
 export type Step = ConsiderStep
 
 export interface ConsiderStep {
-  verb: "consider"
+  direction: "consider"
   note: string
   prose: string[]
 }

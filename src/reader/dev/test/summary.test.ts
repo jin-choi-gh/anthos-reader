@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { Practice, Step } from "../../../practice/types"
 import { clockText, DAY, eventsText, fullWhere, shortWhere } from "../summary"
 
-const consider = (ref: string): Step => ({ verb: "consider", note: ref, prose: [] })
+const consider = (ref: string): Step => ({ direction: "consider", note: ref, prose: [] })
 
 /** Two stages: two steps, then one. The rests are at step 2 and step 1. */
 const practice: Practice = {

@@ -16,7 +16,7 @@ const notes = [note(0, "angle-worm"), note(1, null), note(2, "beads")]
 
 const stage = (name: string, ...refs: string[]): Stage => ({
   name,
-  steps: refs.map((ref) => ({ verb: "consider", note: ref, prose: [] })),
+  steps: refs.map((ref) => ({ direction: "consider", note: ref, prose: [] })),
 })
 
 const practiceOf = (...stages: Stage[]): Practice => ({

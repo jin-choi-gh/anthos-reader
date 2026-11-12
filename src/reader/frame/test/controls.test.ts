@@ -3,7 +3,7 @@ import type { Position, Practice, Step } from "../../../practice/types"
 import { controlsOf, reasonText } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 
-const consider = (ref: string): Step => ({ verb: "consider", note: ref, prose: [] })
+const consider = (ref: string): Step => ({ direction: "consider", note: ref, prose: [] })
 
 /** Two stages of two steps each: the rests are at step 2. */
 const practice: Practice = {

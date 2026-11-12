@@ -19,7 +19,10 @@ const practiceOn = (...refs: string[]): Practice => ({
   title: "Test",
   text: "dickinson",
   stages: [
-    { name: "The meal", steps: refs.map((ref) => ({ verb: "consider", note: ref, prose: [] })) },
+    {
+      name: "The meal",
+      steps: refs.map((ref) => ({ direction: "consider", note: ref, prose: [] })),
+    },
   ],
 })
 

@@ -13,7 +13,7 @@ import type {
   ViewerProjection,
   ViewerProtocol,
 } from "./types"
-import { consider, type ConsiderState } from "./verbs/consider"
+import { consider, type ConsiderState } from "./directions/consider"
 
 export type SceneState =
   | { kind: "consider"; subject: SubjectOf<"consider">; state: ConsiderState }

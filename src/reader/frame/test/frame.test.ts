@@ -14,7 +14,11 @@ const note = (index: number, loomId: string | null): Note => ({
 
 const notes = [note(0, "a"), note(1, null), note(2, "b")]
 
-const consider = (ref: string): Step => ({ verb: "consider", note: ref, prose: [`On ${ref}.`] })
+const consider = (ref: string): Step => ({
+  direction: "consider",
+  note: ref,
+  prose: [`On ${ref}.`],
+})
 
 /** Two stages of two steps each: the rests are at step 2. "@missing" is in no note. */
 const practice: Practice = {

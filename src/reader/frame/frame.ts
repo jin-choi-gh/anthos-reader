@@ -35,7 +35,7 @@ function subjectOf(practice: Practice, position: Position, notes: Note[]): Subje
   const steps = practice.stages[position.stage].steps
   if (position.step === steps.length) return { kind: "rest", text }
   const step = steps[position.step]
-  switch (step.verb) {
+  switch (step.direction) {
     case "consider":
       return { kind: "consider", text, note: noteFor(step.note, notes), prose: step.prose }
   }
