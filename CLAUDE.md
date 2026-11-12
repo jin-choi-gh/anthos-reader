@@ -2,13 +2,27 @@
 
 A reader for poems with practices: an editor writes a practice of directions about a poem, and the app takes one reader through it, stage by stage and day by day, showing the poem with the editor's notes and keeping what the reader writes. Vite, React 19 and TypeScript; no back end (the reader's data is in the browser's `localStorage`).
 
+## `CONCEPT.md` is the law
+
+`CONCEPT.md` is the letter of the law for this codebase's architecture. The code follows it; it never bends to fit the code. Only the user changes it.
+
+**When an architectural point clashes with `CONCEPT.md`, stop.** This covers a point you would suggest yourself, one a task seems to need, and one the user asks for without noticing the clash. Examples: a new layer or folder, an import across the layers, a figure renamed or added, a direction read outside the lexicon, state or I/O put somewhere the law does not put it.
+
+1. Do not write the code, and do not edit `CONCEPT.md` to make room for it.
+2. Tell the user what clashes: the change, the section of `CONCEPT.md` it goes against (quote it), and the ways out, which are to keep the law and change the plan, or to change the law.
+3. Make no further progress on that work until the user has settled the clash.
+4. If the user changes the law, change `CONCEPT.md` (and `src/test/layers.ts`, if the layers change) first, then the code.
+
+Work that fits the law needs no permission: a new file in the folder the law gives it, a new direction made of existing parts, a fix inside a layer.
+
 ## Read this first: `CONCEPT.md`
 
 The codebase is built as one picture: **a reel** (the practice), **a projector** (the runner), **a screen** (the reader), and **a notebook** (what the reader writes), with the poem as the **footage**. `CONCEPT.md` maps every folder in `src/` to that picture, fixes the vocabulary, and says where new code goes. Read it before changing anything structural.
 
 - Use its vocabulary in code, comments, tests and commits, and avoid the words it retires.
-- Place new code by its "Where does new code go?" section. If a change does not fit the picture, stop and discuss where it belongs before writing it.
-- Keep `CONCEPT.md` true. Every file, folder and name it mentions links to the code, and `src/test/concept.test.ts` follows the links: it fails when a link leads nowhere, a linked name is not declared in its file, a quoted line is not in the source, or a layer has no place in the file. When it fails after a code change, update `CONCEPT.md` in the same change, never the test.
+- Place new code by its "Where does new code go?" section. A change that fits none of its answers is a clash: see above.
+- `CONCEPT.md` holds only the architecture as it is, and as it should be, at this moment: no plans, no history, no changelog, no "will" or "used to". Plans and past decisions do not go in it.
+- Keep `CONCEPT.md` true. Every file, folder and name it mentions links to the code, and `src/test/concept.test.ts` follows the links: it fails when a link leads nowhere, a linked name is not declared in its file, a quoted line is not in the source, or a layer has no place in the file. When it fails after a change that fits the law (a file moved within its layer, a name renamed), bring the links and quotes in `CONCEPT.md` up to date in the same change, never the test. When it fails because the architecture itself changed, that is a clash: stop, as above.
 - Link every file, folder or exported name you add to `CONCEPT.md`: ``[`gateOf`](src/runner/gate.ts)``.
 
 ## The rules that follow from the picture

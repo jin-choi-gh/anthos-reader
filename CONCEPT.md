@@ -6,6 +6,8 @@ Every folder in [`src/`](src/) is one of these things, and the rules about which
 
 Use the words below in code, comments, commits and conversation. When something new does not fit the picture, say so, and decide where it belongs before writing it.
 
+This file is the architecture **as it is, and as it should be, now**, and it is the law: where the code and this file disagree, the code is wrong, until the user changes the law. It holds no history and no plans. When the architecture changes, this file changes with it, in the same change, and says only what is then true.
+
 ## One screening, told once
 
 A reader opens Dickinson's poem. The **projector** threads the editor's **reel**, _First reading_, and replays its **log** to find where this reader left off: the first stage, third frame.
@@ -44,7 +46,7 @@ One word for each idea. Where the code's word works as film language, the code's
 | **standing**             | where the screening stands: counter, when the next stage opens, the hold     | [`runner/`](src/runner/): [`Standing`](src/runner/types.ts)                                                        |
 | **gate**                 | what frame of the reel is in front of the light                              | [`runner/gate.ts`](src/runner/gate.ts): [`gateOf`](src/runner/gate.ts)                                             |
 | **law**                  | whether the reader may move to a frame, and if not, why                      | [`runner/`](src/runner/): [`ruling`](src/runner/step.ts), [`Reason`](src/runner/types.ts)                          |
-| **hold**                 | the projector will not pass a frame that asks for writing until it has it    | [`Standing.heldAt`](src/runner/types.ts), [`Reason`](src/runner/types.ts) `unanswered`                             |
+| **hold**                 | the projector does not pass a frame that asks for writing until it has it    | [`Standing.heldAt`](src/runner/types.ts), [`Reason`](src/runner/types.ts) `unanswered`                             |
 | **notebook**             | what the reader writes about a text, one per text                            | [`notebook/`](src/notebook/)                                                                                       |
 | **notebook entry**       | something the scene sends out to be written in the notebook                  | [`reader/scenes/`](src/reader/scenes/): [`Effect`](src/reader/scenes/types.ts)                                     |
 | **screen**               | everything the reader sees for one text                                      | [`reader/`](src/reader/): [`Reader`](src/reader/Reader.tsx)                                                        |
@@ -65,7 +67,7 @@ One word for each idea. Where the code's word works as film language, the code's
 | **pen**                  | the toggle in the top bar between the screening and the viewing table        | [`reader/ModeToggle.tsx`](src/reader/ModeToggle.tsx)                                                               |
 | **programme**            | what is showing: the list of texts, each a way into its screen               | [`library/`](src/library/)                                                                                         |
 
-**Retired**, so don't use them: _tape_ (say reel, or practice), _print_ and _lab_ (footage; loom develops it), _claw_ (law), _read-out_ (standing), _booth_ (the projector's controls), _projectionist_ (the projector), _iris_ (highlight), _spectator_ (the reader), _staging_ (the scene), _hold_ for the scene (the shot continues; _hold_ is the projector's), _shelf_ and _house clock_ (storage, clock), _camera on a film set_ (this whole picture replaces it).
+**Retired**, so don't use them: _tape_ (say reel, or practice), _print_ and _lab_ (footage; loom develops it), _claw_ (law), _read-out_ (standing), _booth_ (the projector's controls), _projectionist_ (the projector), _iris_ (highlight), _spectator_ (the reader), _staging_ (the scene), _hold_ for the scene (the shot continues; _hold_ is the projector's), _shelf_ and _house clock_ (storage, clock), _camera on a film set_ (this picture).
 
 ## The footage: `material/`
 
@@ -74,7 +76,7 @@ One word for each idea. Where the code's word works as film language, the code's
 - The footage imports nothing. The reel cites it, the notebook pins notes to it, and the screen shows it.
 - Places in it are **timecodes**: a line and an offset counted in code points, the footage's own unit ([`codePoints`](src/material/codePoints.ts)).
 - A text is known by its **[`TextId`](src/material/types.ts)**, the file it was developed from.
-- An **anchor** pins a note to the footage. Today an anchor is the whole poem; passages, told in timecodes, are next.
+- An **anchor** pins a note to the whole poem.
 
 ## The reel: `practice/`
 
@@ -112,7 +114,7 @@ One word for each idea. Where the code's word works as film language, the code's
 
 - There is one notebook per text. Notes written in a screening and notes written at the viewing table sit side by side.
 - Each note is pinned to the footage by an **anchor**, and says where it was written: the practice, stage and frame, or `null` at the viewing table.
-- It is kept as events (`noted`, `revised`, `withdrawn`) and never overwritten, so earlier versions of a note can be shown beside later ones.
+- It is kept as events (`noted`, `revised`, `withdrawn`) and never overwritten, so no earlier version of a note is ever lost.
 - The code falls into a fold ([`notesOf`](src/notebook/notebook.ts)), deciders ([`eventOfNoting`](src/notebook/notebook.ts), [`eventOfRevising`](src/notebook/notebook.ts), [`eventOfWithdrawing`](src/notebook/notebook.ts)) and a query ([`notesFrom`](src/notebook/notebook.ts)). [`NoteId`](src/notebook/types.ts) is a branded type, made in one place only.
 
 ## The screen: `reader/`
@@ -167,8 +169,6 @@ The **clock** ([`clock/`](src/clock/)) says what time it is and which day; days 
 > A direction is interpreted **twice**: once **on the reel**, where the lexicon says which parts it is made of, and once **on the screen**, where each part is drawn. Everything in between carries parts, and never asks which direction it is carrying.
 
 So a new direction made of parts that already exist is **one case in the lexicon**. A new _part_ needs code in two places: the scene, to play it, and the picture or the praxis bar, to draw it. The projector, the frame and the notebook do not change.
-
-_Observe_ will be the first test of this: select a passage in the picture, and write about it in the praxis bar. It needs a passage anchor, told in timecodes; a selection part; and a notebook page that takes many notes. The viewing table will use the same parts, because writing about a passage is what annotate mode is for.
 
 ## Who may know whom
 
