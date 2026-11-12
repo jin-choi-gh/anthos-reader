@@ -1,4 +1,4 @@
-import type { LemmaPart, Note, NoteRange, Notes } from "../reader/types"
+import type { LemmaPart, Note, NoteRange, Notes } from "../material/types"
 import type { LoomAnnotation, LoomSpan, LoomTextualComplex } from "./types"
 import { lineLength, textOf } from "./textualComplex"
 

@@ -1,7 +1,7 @@
 import { annotate, type AnnotateState } from "./annotate"
-import { final } from "./final"
+import { final } from "./practice/final"
 import { reply } from "./reply"
-import { rest } from "./rest"
+import { rest } from "./practice/rest"
 import type {
   Behaviour,
   FrameProtocol,
@@ -13,7 +13,7 @@ import type {
   ViewerProjection,
   ViewerProtocol,
 } from "./types"
-import { consider, type ConsiderState } from "./directions/consider"
+import { consider, type ConsiderState } from "./practice/directions/consider"
 
 export type SceneState =
   | { kind: "consider"; subject: SubjectOf<"consider">; state: ConsiderState }

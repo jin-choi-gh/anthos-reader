@@ -1,6 +1,6 @@
-import { advance, clockOffset, resetClock } from "../../practice/clock"
+import { advance, clockOffset, resetClock } from "../../runner/clock"
 import type { Practice } from "../../practice/types"
-import type { Run } from "../../practice/useRun"
+import type { Run } from "../../runner/useRun"
 import { clockText, DAY, eventsText, fullWhere, shortWhere } from "./summary"
 
 /** Development only: where the run is, and two ways to move it that a reader never has. It acts on

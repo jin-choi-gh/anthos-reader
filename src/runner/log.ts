@@ -1,4 +1,5 @@
-import type { Event, Practice } from "./types"
+import type { Practice } from "../practice/types"
+import type { Event } from "./types"
 
 export function logKey(practice: Practice): string {
   return `anthos.log.${practice.id}.${practice.text}`
@@ -39,5 +40,7 @@ function isEvent(value: unknown): value is Event {
   if (event.kind === "visited") return Number.isInteger(event.step)
   if (event.kind === "finished")
     return typeof event.day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(event.day)
+  if (event.kind === "responded")
+    return Number.isInteger(event.step) && typeof event.text === "string"
   return false
 }

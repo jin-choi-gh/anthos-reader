@@ -1,4 +1,4 @@
-import type { Note } from "../types"
+import type { Note } from "../../material/types"
 
 /** What the frame is fixed on, as the scene needs it: no positions, no references. */
 export type Subject =

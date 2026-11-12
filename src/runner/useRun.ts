@@ -1,14 +1,16 @@
 import { useMemo, useState, useSyncExternalStore } from "react"
 import { now, today } from "./clock"
 import { clearLog, readLog, writeLog } from "./log"
-import { eventsOfMove, step } from "./step"
-import type { Day, Event, Position, Practice } from "./types"
+import { eventOfResponse, eventsOfMove, step } from "./step"
+import type { Practice } from "../practice/types"
+import type { Day, Event, Position } from "./types"
 
 export interface Run {
   position: Position
   today: Day
   log: Event[]
   moveTo(target: number): void
+  respond(text: string): void
   restart(): void
 }
 
@@ -26,6 +28,12 @@ export function useRun(practice: Practice): Run {
       const events = eventsOfMove(practice, step(practice, log, current), target, now(), current)
       if (events.length === 0) return
       const next = [...log, ...events]
+      writeLog(practice, next)
+      setLog(next)
+    },
+    respond(text) {
+      const event = eventOfResponse(practice, step(practice, log, today()), text, now())
+      const next = [...log, event]
       writeLog(practice, next)
       setLog(next)
     },

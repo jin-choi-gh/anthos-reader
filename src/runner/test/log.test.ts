@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { clearLog, logKey, readLog, writeLog } from "../log"
-import type { Event, Practice } from "../types"
+import type { Practice } from "../../practice/types"
+import type { Event } from "../types"
 
 const practice: Practice = {
   id: "first-reading",
@@ -12,6 +13,7 @@ const practice: Practice = {
 const log: Event[] = [
   { kind: "visited", stage: 0, step: 1, at: 1_000 },
   { kind: "finished", stage: 0, at: 2_000, day: "2026-11-10" },
+  { kind: "responded", stage: 1, step: 0, text: "The bird eats raw.", at: 3_000 },
 ]
 
 let stored: Map<string, string>
@@ -75,8 +77,10 @@ describe("a damaged log", () => {
       { kind: "visited", stage: 0, step: 1.5, at: 0 }, // half a step
       { kind: "finished", stage: 0, at: 0, day: "Tuesday" }, // not a date
       { kind: "finished", stage: 0, at: 0 }, // no day
+      { kind: "responded", stage: 0, step: 0, at: 0 }, // no text
+      { kind: "responded", stage: 0, at: 0, text: "A bird." }, // no step
     ]
-    stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1]]))
+    stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1], log[2]]))
     expect(readLog(practice)).toEqual(log)
   })
 })

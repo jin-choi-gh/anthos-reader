@@ -2,7 +2,7 @@ import type { CSSProperties, KeyboardEvent, MouseEvent } from "react"
 import { Fragment, useEffect, useRef } from "react"
 import { cut } from "./cut"
 import { endsSelection } from "./selection"
-import type { Line, NoteRange, Poem } from "./types"
+import type { Line, NoteRange, Poem } from "../../material/types"
 
 /** The poem, stanza by stanza, every fifth line numbered. The marked notes' words are highlighted;
  * with none marked, each line is drawn as it is. The open note's words are brought into view when it

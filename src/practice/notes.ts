@@ -1,4 +1,4 @@
-import type { Note } from "../reader/types"
+import type { Note } from "../material/types"
 import type { Practice } from "./types"
 
 const REFERENCE = /^@([A-Za-z0-9_-]+)$/
@@ -19,6 +19,7 @@ export function problemsOf(practice: Practice, notes: Note[]): string[] {
     const where = `stage ${s + 1} "${stage.name}"`
     if (stage.steps.length === 0) problems.push(`${where}: no steps`)
     stage.steps.forEach((step, i) => {
+      if (step.direction !== "consider") return // only a consider step refers to a note
       const at = `${where}, step ${i + 1}`
       if (idOf(step.note) === null) {
         problems.push(

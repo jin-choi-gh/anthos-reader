@@ -1,6 +1,6 @@
 import { Lemma } from "./Lemma"
 import { endsSelection } from "./selection"
-import type { Note } from "./types"
+import type { Note } from "../../material/types"
 
 /** The notes, one block each, in order: the lemma, then the paragraphs. Clicking a block selects its
  * note, and clicking the selected note again deselects it. A click that ends a text selection inside

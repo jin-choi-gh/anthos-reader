@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../types"
+import type { Note } from "../../../material/types"
 import { scene } from "../scene"
 import type { Subject } from "../types"
 import { sceneReducer } from "../useScene"

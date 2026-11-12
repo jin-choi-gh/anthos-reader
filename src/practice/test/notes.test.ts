@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../reader/types"
+import type { Note } from "../../material/types"
 import { idOf, noteFor, problemsOf } from "../notes"
 import type { Practice, Stage } from "../types"
 
@@ -81,6 +81,14 @@ describe("problemsOf", () => {
     expect(problemsOf(practice, notes)).toEqual([
       'stage 1 "The meal", step 1: @vendler/marriage refers to another text, which is not read yet',
     ])
+  })
+
+  it("looks for no note in a respond step, which refers to none", () => {
+    const practice = practiceOf({
+      name: "The meal",
+      steps: [{ direction: "respond", prose: ["What does the bird eat?"] }],
+    })
+    expect(problemsOf(practice, notes)).toEqual([])
   })
 
   it("names an empty stage, and a practice with no stages", () => {

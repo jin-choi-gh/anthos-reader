@@ -1,5 +1,5 @@
-import { reply } from "./reply"
-import type { Behaviour, SubjectOf } from "./types"
+import { reply } from "../reply"
+import type { Behaviour, SubjectOf } from "../types"
 
 /** The final stage: for now, the poem, and word that the practice is done. */
 export const final: Behaviour<SubjectOf<"final">, SubjectOf<"final">> = {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import type { Practice, Step } from "../../../practice/types"
-import type { Note } from "../../types"
+import type { Note } from "../../../material/types"
 import { annotateFrame, frameOf } from "../frame"
 
 /** A note as toNotes makes one, with only what these tests look at. */
@@ -37,7 +37,6 @@ const finished = { allowed: false, reason: { kind: "finished" } }
 describe("frameOf: where the frame may go", () => {
   it("on a stage's first step: headed by the stage, nothing behind, the next step ahead", () => {
     const frame = frameOf(practice, { stage: 1, step: 0, opensOn: null }, notes)
-    expect(frame.position).toEqual({ stage: 1, step: 0, opensOn: null })
     expect(frame.heading).toBe("Second")
     expect(frame.back).toEqual(noSuchStep)
     expect(frame.next).toEqual({ allowed: true, to: 1 })
@@ -64,11 +63,6 @@ describe("frameOf: where the frame may go", () => {
     expect(frame.heading).toBe("Test")
     expect(frame.back).toEqual(finished)
     expect(frame.next).toEqual(finished)
-  })
-
-  it("keeps the position it was given", () => {
-    const position = { stage: 0, step: 1, opensOn: null }
-    expect(frameOf(practice, position, notes).position).toBe(position)
   })
 })
 

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
-import type { Position, Practice, Step } from "../../../practice/types"
-import { controlsOf, reasonText } from "../controls"
+import type { Practice, Step } from "../../../practice/types"
+import type { Position } from "../../../runner/types"
+import { controlsOf } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 
 const consider = (ref: string): Step => ({ direction: "consider", note: ref, prose: [] })
@@ -16,12 +17,10 @@ const practice: Practice = {
   ],
 }
 
-const today = "2026-11-11"
-
 /** The controls at a position, and the moves their buttons asked for so far. */
 function at(position: Position) {
   const moveTo = vi.fn<(step: number) => void>()
-  return { controls: controlsOf(frameOf(practice, position, []), moveTo, today), moveTo }
+  return { controls: controlsOf(frameOf(practice, position, []), moveTo), moveTo }
 }
 
 /** Presses a control, which must be one that goes. */
@@ -31,10 +30,10 @@ function press(control: ReturnType<typeof at>["controls"]["back"]) {
 }
 
 describe("controlsOf: the frame's buttons", () => {
-  it("on a stage's first step: Back refused, saying nothing; Next goes to the next step", () => {
+  it("on a stage's first step: Back refused, as no such step; Next goes to the next step", () => {
     const { controls, moveTo } = at({ stage: 1, step: 0, opensOn: null })
     expect(controls.heading).toBe("Second")
-    expect(controls.back).toEqual({ kind: "refused", why: null })
+    expect(controls.back).toEqual({ kind: "refused", reason: { kind: "noSuchStep" } })
     press(controls.next)
     expect(moveTo).toHaveBeenCalledExactlyOnceWith(1)
   })
@@ -53,7 +52,10 @@ describe("controlsOf: the frame's buttons", () => {
 
   it("at the rest, waiting: Back goes, and Next is refused with the day the next stage opens", () => {
     const { controls, moveTo } = at({ stage: 0, step: 2, opensOn: "2026-11-12" })
-    expect(controls.next).toEqual({ kind: "refused", why: "The next stage opens tomorrow." })
+    expect(controls.next).toEqual({
+      kind: "refused",
+      reason: { kind: "waiting", opensOn: "2026-11-12" },
+    })
     press(controls.back)
     expect(moveTo).toHaveBeenCalledExactlyOnceWith(1)
   })
@@ -64,38 +66,7 @@ describe("controlsOf: the frame's buttons", () => {
   })
 
   it("in annotate mode, with no runner: no heading and no buttons", () => {
-    const controls = controlsOf(annotateFrame("poem", []), () => {}, today)
+    const controls = controlsOf(annotateFrame("poem", []), () => {})
     expect(controls).toEqual({ heading: null, back: { kind: "none" }, next: { kind: "none" } })
-  })
-})
-
-describe("reasonText", () => {
-  it("says the next stage opens tomorrow, when it opens the day after today", () => {
-    expect(reasonText({ kind: "waiting", opensOn: "2026-11-12" }, today)).toBe(
-      "The next stage opens tomorrow.",
-    )
-    expect(reasonText({ kind: "waiting", opensOn: "2027-01-01" }, "2026-12-31")).toBe(
-      "The next stage opens tomorrow.",
-    )
-  })
-
-  it("names the day when it is further off, across months and years", () => {
-    expect(reasonText({ kind: "waiting", opensOn: "2026-11-14" }, today)).toBe(
-      "The next stage opens on 14 November.",
-    )
-    expect(reasonText({ kind: "waiting", opensOn: "2027-01-01" }, today)).toBe(
-      "The next stage opens on 1 January.",
-    )
-  })
-
-  it("says only that the next stage isn't open, when there is no day", () => {
-    expect(reasonText({ kind: "waiting", opensOn: null }, today)).toBe(
-      "The next stage isn't open yet.",
-    )
-  })
-
-  it("says nothing for a step that isn't there, or a practice that is finished", () => {
-    expect(reasonText({ kind: "noSuchStep" }, today)).toBeNull()
-    expect(reasonText({ kind: "finished" }, today)).toBeNull()
   })
 })

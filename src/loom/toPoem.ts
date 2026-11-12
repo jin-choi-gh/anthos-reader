@@ -1,4 +1,4 @@
-import type { Line, Poem, Stanza } from "../reader/types"
+import type { Line, Poem, Stanza } from "../material/types"
 import { DISPLAY, LINE, POEM, STANZA } from "./display"
 import type { LoomUnit, LoomTextualComplex } from "./types"
 import { SchemaTree, schemaOfKind, textOf } from "./textualComplex"

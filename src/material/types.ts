@@ -1,4 +1,5 @@
-// What the reader draws, made from a loom textual complex by loom/toPoem.ts and loom/toNotes.ts.
+// The material: a text as made from a loom textual complex by loom/toPoem.ts and loom/toNotes.ts.
+// Practices refer to its notes, and the reader draws it; it knows neither.
 
 export interface Line {
   id: string // the display schema's line unit

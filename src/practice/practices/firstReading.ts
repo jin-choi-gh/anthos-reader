@@ -6,7 +6,7 @@ export const firstReading: Practice = {
   text: "dickinson",
   stages: [
     {
-      name: "The meal",
+      name: "Building up the Bird",
       steps: [
         {
           direction: "consider",

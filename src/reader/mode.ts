@@ -1,7 +1,7 @@
 import { problemsOf } from "../practice/notes"
 import type { Practice } from "../practice/types"
 import type { ModeName } from "../route"
-import type { Note } from "./types"
+import type { Note } from "../material/types"
 
 /** How a text is read now. In annotate mode, practice is the one to switch to, or null when the
  * text has none that can run. */

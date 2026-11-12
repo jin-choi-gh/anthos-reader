@@ -1,4 +1,5 @@
-import type { Day, Position, Practice } from "../../practice/types"
+import type { Practice } from "../../practice/types"
+import type { Day, Position } from "../../runner/types"
 
 const HOUR = 60 * 60 * 1000
 export const DAY = 24 * HOUR

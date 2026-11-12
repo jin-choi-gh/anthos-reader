@@ -1,5 +1,5 @@
-import { reply } from "../reply"
-import type { Behaviour, SubjectOf } from "../types"
+import { reply } from "../../reply"
+import type { Behaviour, SubjectOf } from "../../types"
 
 /** A consider step: its subject, and whether the reader has opened its note. */
 export interface ConsiderState {

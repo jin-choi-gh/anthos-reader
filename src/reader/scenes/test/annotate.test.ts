@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../types"
+import type { Note } from "../../../material/types"
 import { annotate } from "../annotate"
 import type { SubjectOf } from "../types"
 

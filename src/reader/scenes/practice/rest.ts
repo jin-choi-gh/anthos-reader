@@ -1,5 +1,5 @@
-import { reply } from "./reply"
-import type { Behaviour, SubjectOf } from "./types"
+import { reply } from "../reply"
+import type { Behaviour, SubjectOf } from "../types"
 
 /** At the rest: the poem, with nothing highlighted. The frame's ruling says when the next stage
  * opens. */

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { eventsOfMove, nextDay, ruling, step } from "../step"
-import type { Day, Event, Practice, Step } from "../types"
+import { eventOfResponse, eventsOfMove, nextDay, responseOf, ruling, step } from "../step"
+import type { Practice, Step } from "../../practice/types"
+import type { Day, Event } from "../types"
 
 const consider = (note: string): Step => ({
   direction: "consider",
@@ -107,6 +108,12 @@ describe("step: events that do not count", () => {
       const log = [visited(0, 1), visited(0, bad)]
       expect(step(practice, log, "2026-11-10").step).toBe(1)
     }
+  })
+
+  it("is not moved by a response: it neither visits a step nor finishes a stage", () => {
+    const responded: Event = { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }
+    const log = [visited(0, 1), responded]
+    expect(step(practice, log, "2026-11-10")).toEqual({ stage: 0, step: 1, opensOn: null })
   })
 
   it("ignores a stage's events logged before the stage before it was finished", () => {
@@ -234,5 +241,57 @@ describe("eventsOfMove", () => {
     expect(step(practice, log, "2026-11-11")).toEqual({ stage: 1, step: 0, opensOn: null })
     expect(walk(2, "2026-11-11")).toEqual({ stage: 2, step: 0, opensOn: null })
     expect(log.filter((event) => event.kind === "finished")).toHaveLength(2)
+  })
+})
+
+describe("responses", () => {
+  /** One stage: a consider step, then a respond step. The rest is at step 2. */
+  const asking: Practice = {
+    ...practice,
+    stages: [
+      {
+        name: "First",
+        steps: [consider("a"), { direction: "respond", prose: ["What does the bird eat?"] }],
+      },
+    ],
+  }
+  const at = 1_000
+  const onRespond = { stage: 0, step: 1, opensOn: null }
+  const responded = (stage: number, step: number, text: string): Event => ({
+    kind: "responded",
+    stage,
+    step,
+    text,
+    at,
+  })
+
+  it("has no response on a step nobody has responded to", () => {
+    expect(responseOf([], onRespond)).toBeNull()
+    expect(responseOf([responded(0, 0, "Elsewhere.")], onRespond)).toBeNull()
+    expect(responseOf([responded(1, 1, "Another stage.")], onRespond)).toBeNull()
+  })
+
+  it("is the latest response saved on the step", () => {
+    const log = [responded(0, 1, "A worm."), visited(0, 0), responded(0, 1, "A worm, raw.")]
+    expect(responseOf(log, onRespond)).toBe("A worm, raw.")
+  })
+
+  it("saves a response on a respond step", () => {
+    expect(eventOfResponse(asking, onRespond, "A worm.", at)).toEqual(responded(0, 1, "A worm."))
+  })
+
+  it("refuses a response anywhere else: a consider step, the rest, the final stage", () => {
+    for (const position of [
+      { stage: 0, step: 0, opensOn: null },
+      { stage: 0, step: 2, opensOn: null },
+      { stage: 1, step: 0, opensOn: null },
+    ]) {
+      expect(() => eventOfResponse(asking, position, "A worm.", at)).toThrow(RangeError)
+    }
+  })
+
+  it("agrees with responseOf: a saved response is read back", () => {
+    const log = [eventOfResponse(asking, onRespond, "A worm.", at)]
+    expect(responseOf(log, onRespond)).toBe("A worm.")
   })
 })

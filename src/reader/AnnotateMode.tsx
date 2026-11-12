@@ -1,11 +1,11 @@
 import { useMemo, type ReactNode } from "react"
 import { Layout } from "./Layout"
-import type { Materials } from "./materials"
+import type { Materials } from "../material/materials"
 import { annotateFrame } from "./frame/frame"
 import { useScene } from "./scenes/useScene"
-import type { Note } from "./types"
+import type { Note } from "../material/types"
 import type { ReaderLayout } from "./usePlatform"
-import { ViewerNotes, ViewerPage } from "./Viewer"
+import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 
 /** Annotate mode: a frame fixed on all the text's notes, and its scene, both kept for as long as the
  * mode lasts. The viewer draws from the scene and talks only to it. */

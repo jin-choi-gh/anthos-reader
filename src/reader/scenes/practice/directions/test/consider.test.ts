@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../../types"
-import type { SubjectOf } from "../../types"
+import type { Note } from "../../../../../material/types"
+import type { SubjectOf } from "../../../types"
 import { consider, type ConsiderState } from "../consider"
 
 const note: Note = { index: 3, loomId: "beads", lemma: [], tags: [], paragraphs: ["A note."] }

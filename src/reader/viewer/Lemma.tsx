@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-import type { LemmaPart } from "./types"
+import type { LemmaPart } from "../../material/types"
 
 /** A note's lemma, the head of its entry: its parts in order, the poem's own words quoted and
  * citations as they are. Whatever holds it decides what it is: a button in a list, a heading alone. */

@@ -1,4 +1,4 @@
-import type { Poem } from "./types"
+import type { Poem } from "../../material/types"
 
 export function TitleBlock({ poem }: { poem: Poem }) {
   return (

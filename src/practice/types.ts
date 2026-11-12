@@ -12,7 +12,7 @@ export interface Stage {
   steps: Step[]
 }
 
-export type Step = ConsiderStep
+export type Step = ConsiderStep | RespondStep
 
 export interface ConsiderStep {
   direction: "consider"
@@ -20,20 +20,7 @@ export interface ConsiderStep {
   prose: string[]
 }
 
-/** A local date, "2026-11-10"; days start at 04:00. */
-export type Day = string
-
-export type Event =
-  | { kind: "visited"; stage: number; step: number; at: number }
-  | { kind: "finished"; stage: number; at: number; day: Day }
-
-export interface Position {
-  stage: number // stages.length: the final stage
-  step: number // steps.length: the rest
-  opensOn: Day | null
+export interface RespondStep {
+  direction: "respond"
+  prose: string[]
 }
-
-export type Reason =
-  { kind: "noSuchStep" } | { kind: "waiting"; opensOn: Day | null } | { kind: "finished" }
-
-export type Ruling = { allowed: true; to: number } | { allowed: false; reason: Reason }

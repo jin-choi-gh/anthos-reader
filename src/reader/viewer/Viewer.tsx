@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef } from "react"
-import { Close } from "../ui/icons"
+import { Close } from "../../ui/icons"
 import { Lemma } from "./Lemma"
-import type { Materials } from "./materials"
+import type { Materials } from "../../material/materials"
 import { NotesBlock } from "./NotesBlock"
 import { PoemBlock } from "./PoemBlock"
-import type { ViewerProjection, ViewerProtocol } from "./scenes/types"
+import type { ViewerProjection, ViewerProtocol } from "../scenes/types"
 import { TitleBlock } from "./TitleBlock"
-import type { Note } from "./types"
+import type { Note } from "../../material/types"
 
 /** What both parts of the viewer draw from: the scene's projection, the texts it may name, and the
  * way back to the scene. */

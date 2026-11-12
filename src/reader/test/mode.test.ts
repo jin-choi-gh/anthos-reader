@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { Practice } from "../../practice/types"
 import { modeOf } from "../mode"
-import type { Note } from "../types"
+import type { Note } from "../../material/types"
 
 /** A note as toNotes makes one, with only what these tests look at. */
 const note = (index: number, loomId: string | null): Note => ({
