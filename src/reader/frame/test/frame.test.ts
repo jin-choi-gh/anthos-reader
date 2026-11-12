@@ -83,7 +83,7 @@ describe("frameOf: where the frame may go", () => {
 })
 
 describe("frameOf: the subject, made of parts, in the practice's text", () => {
-  it("on a consider step: the iris on the note its reference names, and the prose", () => {
+  it("on a consider step: the highlight on the note its reference names, and the prose", () => {
     const { subject } = frameOf(practice, standing(0, 1), notes, [])
     expect(subject).toEqual({
       key: "test/0/1",

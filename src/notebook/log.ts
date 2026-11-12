@@ -2,8 +2,6 @@ import type { TextId } from "../material/types"
 import { clearEvents, isRecord, readEvents, writeEvents } from "../storage/log"
 import type { NotebookEvent, NoteId } from "./types"
 
-// The notebook on the shelf: one log per text, whatever practice or mode its notes were written in.
-
 /** The key a text's notebook is kept under. The "v1" names the events' shape, so that a later shape
  * can be kept under another key, and the old log read and carried over. */
 export function notebookKey(text: TextId): string {

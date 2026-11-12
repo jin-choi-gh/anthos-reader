@@ -14,10 +14,8 @@ import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 import { DevPanel } from "./dev/DevPanel"
 
-/** Practice mode: the run of a practice, the frame on its current step, and the frame's scene, all
- * kept for as long as the mode lasts. The frame's side and the scene's side meet only here, and go
- * out apart: the frame's controls to the praxis bar, the scene's projections to the viewer and the
- * praxis bar. */
+/** Practice mode: the run of a practice, the frame on its current step, the frame's scene, and the
+ * text's notebook, all kept for as long as the mode lasts. */
 export function PracticeMode({
   practice,
   notes,
@@ -40,8 +38,7 @@ export function PracticeMode({
     [practice, run.standing, notes, notebook.notes],
   )
   const controls = controlsOf(frame, run.moveTo)
-  // The pen: what the scene writes goes into the notebook, marked with where in the screening it
-  // was written. Only here are both known
+  // What the scene writes goes into the notebook, with where it was written
   const where = { practice: practice.id, ...run.standing.position }
   const scene = useScene(frame.subject, (effect) => {
     switch (effect.kind) {

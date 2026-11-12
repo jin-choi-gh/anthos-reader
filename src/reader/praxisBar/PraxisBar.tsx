@@ -4,10 +4,8 @@ import type { PraxisBarProjection, PraxisBarProtocol } from "../scenes/types"
 import { NotebookPage } from "./NotebookPage"
 import { reasonText } from "./reasonText"
 
-/** The praxis bar, drawn from two sources that never meet: the frame's controls (its heading, and
- * Back and Next below: the booth) and the scene's projection (between them: the intertitle and the
- * notebook page), which talks back to the scene only. Today is only for putting a refusal into
- * words: "tomorrow" depends on it. */
+/** The praxis bar: the frame's heading, Back and Next, and the scene's projection between them.
+ * `today` is only for putting a refusal into words: "tomorrow" depends on it. */
 export function PraxisBar({
   controls,
   projection,

@@ -1,27 +1,20 @@
 import type { Anchor, Note, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
-// The scene's contracts: what the frame hands it (the subject), what the viewer and the praxis bar
-// tell it (messages), what it tells them to draw (projections), and what it sends out into the
-// notebook (effects). Nothing here knows a practice, a position, or a direction.
-
-/** One frame of the screening, or the viewing table, as the scene needs it: made of parts, with
- * every reference already resolved. */
+/** What the scene plays: parts, with every reference already resolved. */
 export interface Subject {
   /** The frame number. A new key is a cut: the scene starts afresh. The same key with a fresh subject
-   * is the image holding while something around it changes, such as the notebook. */
+   * is the shot continuing while something around it changes, such as the notebook. */
   readonly key: string
   readonly text: TextId
-  /** The intertitle. */
   readonly prose: readonly string[]
-  /** The editor's notes on the footage. */
   readonly commentary: Commentary
-  /** The notebook page, when the reader is asked to write. */
+  /** What the reader is asked to write, or null. */
   readonly writing: WritingSubject | null
 }
 
-/** The editor's notes, as the frame shows them: picked out in the poem by an iris, one opened by a
- * tap ("marked"), or all listed beside it, as at the viewing table ("listed"). */
+/** The editor's notes: highlighted in the poem, one opened by a tap ("marked"), or all listed beside
+ * it ("listed"). */
 export interface Commentary {
   readonly notes: readonly Note[]
   readonly shown: "marked" | "listed"
@@ -51,8 +44,8 @@ export interface PraxisBarProtocol {
     | { kind: "cancel" } // Cancel: keep what was written
 }
 
-/** What the scene sends out of the screen: the spectator's pen, writing in the notebook. The mode
- * says where in the screening it was written; the notebook makes the id and the time. */
+/** What the reader has written, sent out to the notebook. The mode adds where it was written; the
+ * notebook makes the id and the time. */
 export type Effect =
   { kind: "note"; anchor: Anchor; body: string } | { kind: "revise"; id: NoteId; body: string }
 

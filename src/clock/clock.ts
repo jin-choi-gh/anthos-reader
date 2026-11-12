@@ -1,5 +1,3 @@
-// The house clock: what time it is, and which day, for the projector and the spectator alike.
-
 /** A local date, "2026-11-10"; days start at DAY_STARTS_AT. */
 export type Day = string
 

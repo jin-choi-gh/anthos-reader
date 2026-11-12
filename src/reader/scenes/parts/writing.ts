@@ -1,10 +1,7 @@
 import type { ReaderNote } from "../../../notebook/types"
 import type { Effect, PraxisBarProtocol, WritingProjection, WritingSubject } from "../types"
 
-// The writing part: a page of the spectator's notebook. One note is asked for, which the reader
-// writes, and may then edit and write again. Its state is whether the page is open for writing, and
-// what is on it so far.
-
+/** Whether the page is open for writing, and what is on it so far. */
 export interface WritingState {
   readonly editing: boolean
   readonly draft: string

@@ -2,9 +2,6 @@ import type { Note } from "../material/types"
 import { partsOf } from "./lexicon"
 import type { Practice } from "./types"
 
-// The reel's citations of the print: a reference such as "@angle-worm" names one of the editor's
-// notes by its loom id. Here they are read, resolved, and checked before a practice is screened.
-
 const REFERENCE = /^@([A-Za-z0-9_-]+)$/
 
 /** The loom id a reference names, or null when it is not a reference to a note in this text. */

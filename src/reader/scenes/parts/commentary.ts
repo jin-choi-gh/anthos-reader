@@ -1,10 +1,6 @@
 import type { TextId } from "../../../material/types"
 import type { Commentary, ViewerProjection, ViewerProtocol } from "../types"
 
-// The commentary part: the editor's notes on the footage. Its state is the one note the reader has
-// opened, by its index, or null. The iris and the viewing table differ only in how they are drawn,
-// and in that the list has no X to close a note with.
-
 /** What the reader does to the commentary: a tap opens a note, or closes it if it is open; the X
  * closes it. A tap on a note the commentary does not show changes nothing. */
 export function onViewer(

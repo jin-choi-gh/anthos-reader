@@ -40,7 +40,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe("the notebook on the shelf", () => {
+describe("the notebook in storage", () => {
   it("keeps one notebook per text, under a key that names the events' shape", () => {
     expect(notebookKey("dickinson")).toBe("anthos.v1.notebook.dickinson")
   })

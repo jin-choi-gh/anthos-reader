@@ -2,8 +2,6 @@ import type { Practice } from "../practice/types"
 import { clearEvents, isRecord, readEvents, writeEvents } from "../storage/log"
 import type { Event } from "./types"
 
-// The projectionist's log: what happened in one screening of a practice on a text.
-
 /** The key a run is kept under: one per practice and text. */
 export function logKey(practice: Practice): string {
   return `anthos.log.${practice.id}.${practice.text}`

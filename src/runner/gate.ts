@@ -1,9 +1,8 @@
 import type { Practice, Stage } from "../practice/types"
 import type { Gate, Position } from "./types"
 
-/** What is in the gate at a position: the practice's step there, or the rest, or the final stage.
- * The one place that reads the reel at a position: a position the practice does not have is a
- * mistake in the projector, never in the reel, so it throws. */
+/** What is at a position: the practice's step there, or the rest, or the final stage. A position
+ * the practice does not have is a mistake in the runner, never in the practice, so it throws. */
 export function gateOf(practice: Practice, position: Position): Gate {
   if (position.stage === practice.stages.length) return { kind: "final" }
   const stage = stageAt(practice, position.stage)

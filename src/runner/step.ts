@@ -6,7 +6,7 @@ import type { Practice } from "../practice/types"
 import { restOf } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
 
-/** Where the screening stands, from the projectionist's log, the spectator's notebook and the day:
+/** Where the screening stands, from the projector's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
  * finished, and which step holds the reader until they have written. */
 export function standingOf(
@@ -62,8 +62,7 @@ function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[])
   return index === -1 ? null : index
 }
 
-/** The claw: whether the projector will pull the reader to a step of the stage they are in, or
- * refuses, and why. It knows nothing of how the screen moves: a step back, a step on, or a jump. */
+/** Whether the reader may move to a step of the stage they are in, or why not. */
 export function ruling(practice: Practice, standing: Standing, target: number): Ruling {
   const { position, opensOn, heldAt } = standing
   if (position.stage === practice.stages.length) {
@@ -82,8 +81,8 @@ export function ruling(practice: Practice, standing: Standing, target: number): 
   return { allowed: true, to: target }
 }
 
-/** What the projectionist logs when the reader moves to a step: the visit, and the stage finished
- * the first time its rest is reached. A move the claw refuses is a mistake on the screen: it throws. */
+/** What the projector logs when the reader moves to a step: the visit, and the stage finished
+ * the first time its rest is reached. A move the law refuses is a mistake on the screen: it throws. */
 export function eventsOfMove(
   practice: Practice,
   standing: Standing,

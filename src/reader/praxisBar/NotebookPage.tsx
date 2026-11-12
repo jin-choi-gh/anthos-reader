@@ -1,7 +1,7 @@
 import { useId } from "react"
 import type { PraxisBarProtocol, WritingProjection } from "../scenes/types"
 
-/** A page of the spectator's notebook, in the praxis bar. Being written: a box, Respond (when there
+/** A page of the reader's notebook, in the praxis bar. Being written: a box, Respond (when there
  * is something new to send) and Cancel (when there is a note to go back to). Written: the note, and
  * Edit. Every keystroke goes to the scene, which holds the draft; nothing is kept until Respond. */
 export function NotebookPage({

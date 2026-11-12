@@ -10,10 +10,8 @@ import type { Standing } from "../../runner/types"
 import type { Subject } from "../scenes/types"
 import type { Frame } from "./types"
 
-/** The frame on a practice where the screening stands: its heading, the runner's rulings on a step
- * back and a step on, and its subject: the parts of what the gate holds, with every reference
- * resolved, against the text's notes and the reader's notebook. A step back and a step on are the
- * frame's gait, which the runner never sees. The practice and the standing go no further than here. */
+/** The frame where the screening stands: its heading, the rulings on a step back and a step on, and
+ * its subject, with every reference resolved against the text's notes and the reader's notebook. */
 export function frameOf(
   practice: Practice,
   standing: Standing,
@@ -45,8 +43,8 @@ export function frameOf(
   }
 }
 
-/** The frame at the viewing table (annotate mode): no practice and no runner, so no heading and no
- * rulings. It never moves, and lists all the editor's notes. */
+/** The frame in annotate mode: no practice and no runner, so no heading and no rulings. It never
+ * moves, and lists all the editor's notes. */
 export function annotateFrame(text: TextId, notes: readonly Note[]): Frame {
   const subject: Subject = {
     key: "annotate",
@@ -58,7 +56,7 @@ export function annotateFrame(text: TextId, notes: readonly Note[]): Frame {
   return { heading: null, back: null, next: null, subject }
 }
 
-/** The editor's notes a frame's iris picks out: each reference resolved, and any that name no note
+/** The editor's notes a frame highlights: each reference resolved, and any that name no note
  * in the text left out. */
 function resolved(parts: Parts, notes: readonly Note[]): Note[] {
   return parts.highlight.flatMap((ref) => noteFor(ref, notes) ?? [])

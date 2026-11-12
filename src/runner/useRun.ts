@@ -7,7 +7,7 @@ import { eventsOfMove, standingOf } from "./step"
 import type { Event, Standing } from "./types"
 
 /** A screening of a practice, for as long as the component that holds it: where it stands, today,
- * the projectionist's log, and the two things the booth can do with it. */
+ * the log, and the projector's two controls. */
 export interface Run {
   standing: Standing
   today: Day
@@ -16,8 +16,8 @@ export interface Run {
   restart(): void
 }
 
-/** The projector, running the practice. The spectator's notebook is read, never written: the law
- * looks in it for the writing a step asks for. */
+/** The run of a practice. `notes` are read, never written: a step that asks for writing holds the
+ * reader until it has a note. */
 export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
   const [log, setLog] = useState<readonly Event[]>(() => readLog(practice))
   // The latest log, so that a move made in the same moment as another lands after it

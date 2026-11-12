@@ -7,8 +7,8 @@ import type { Note } from "../material/types"
 import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 
-/** Annotate mode: a frame fixed on all the text's notes, and its scene, both kept for as long as the
- * mode lasts. The viewer draws from the scene and talks only to it. */
+/** Annotate mode: a frame on all the text's notes, and its scene, both kept for as long as the mode
+ * lasts. */
 export function AnnotateMode({
   text,
   notes,

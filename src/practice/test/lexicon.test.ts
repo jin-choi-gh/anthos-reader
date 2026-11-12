@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { FINAL, partsOf, REST } from "../lexicon"
 
 describe("partsOf: a direction as the parts the screen draws", () => {
-  it("consider: its prose, and the iris on the note it names; nothing to write", () => {
+  it("consider: its prose, and the highlight on the note it names; nothing to write", () => {
     expect(partsOf({ direction: "consider", note: "@beads", prose: ["Look."] })).toEqual({
       prose: ["Look."],
       highlight: ["@beads"],

@@ -1,7 +1,3 @@
-// The spectator's notebook: what the reader writes about a text, kept as events, one notebook per
-// text. It outlives any screening: notes written in a practice and at the viewing table (annotate
-// mode) are all kept here, each saying where it was written.
-
 import type { Anchor } from "../material/types"
 import type { PracticeId } from "../practice/types"
 

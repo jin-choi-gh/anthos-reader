@@ -22,8 +22,7 @@ async function loadMaterial(file: string): Promise<Material> {
 
 /** The reader of one file, for its whole life: App gives it a key of its file, so another file is
  * another reader, and nothing in one carries over to the next. It loads the file's material, keeps
- * the layout, and picks the mode from the one asked for; the mode draws the material, and holds the
- * frame and the scene. Another mode is another frame and another scene. */
+ * the layout, and picks the mode from the one asked for. */
 export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) {
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
