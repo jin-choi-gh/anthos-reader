@@ -19,7 +19,7 @@ Work that fits the law needs no permission: a new file in the folder the law giv
 
 ## Read this first: `CONCEPT.md`
 
-The codebase is built as one picture: **a reel** (the practice), **a projector** (the runner), **a screen** (the reader), and **a notebook** (what the reader writes), with the poem as the **footage**. `CONCEPT.md` maps every folder in `src/` to that picture, fixes the vocabulary, and says where new code goes. Read it before changing anything structural.
+The codebase is built in eight layers: **Literary Material** (`material/`), **Practice Reel** (`practice/`), **Practice Runner** (`runner/`), **User Notebook** (`notebook/`), **Frame**, **Scene**, **Viewer** and **Praxis Bar** (under `reader/`). `CONCEPT.md` tells how a poem moves through them (Synopsis), what each does (Layers), what every term means and where it is in the code (Glossary), and where new code goes. Read it before changing anything structural.
 
 - Use its vocabulary in code, comments, tests and commits, and avoid the words it retires.
 - Place new code by its "Where does new code go?" section. A change that fits none of its answers is a clash: see above.
@@ -27,14 +27,14 @@ The codebase is built as one picture: **a reel** (the practice), **a projector**
 - Keep `CONCEPT.md` true. Every file, folder and name it mentions links to the code, and `src/test/concept.test.ts` follows the links: it fails when a link leads nowhere, a linked name is not declared in its file, a quoted line is not in the source, or a layer has no place in the file. When it fails after a change that fits the law (a file moved within its layer, a name renamed), bring the links and quotes in `CONCEPT.md` up to date in the same change, never the test. When it fails because the architecture itself changed, that is a clash: stop, as above.
 - Link every file, folder or exported name you add to `CONCEPT.md`: ``[`gateOf`](src/runner/gate.ts)``.
 
-## The rules that follow from the picture
+## The rules that follow from the layers
 
-- **A direction is read in two places only**: the lexicon (`src/practice/lexicon.ts`), which turns it into parts, and the screen, which draws the parts. Nothing in between switches on `step.direction`.
-- **The layers are enforced** by `src/test/architecture.test.ts`, from the table in `src/test/layers.ts`. A new folder of source must be given a layer there. Change the table only when the picture changes, and `CONCEPT.md` with it.
+- **A direction is read in two places only**: the lexicon (`src/practice/lexicon.ts`), which turns it into parts, and the Viewer and the Praxis Bar, which draw the parts. Nothing in between switches on `step.direction`.
+- **The layers are enforced** by `src/test/architecture.test.ts`, from the table in `src/test/layers.ts`. A new folder of source must be given a layer there. Change the table only when the layers change, and `CONCEPT.md` with it.
 - **Pure core, thin shell.** Folds, deciders, the law, the lexicon, the frame and the scene are plain functions, tested without React. Ids and times are made in the hooks and passed in. The scene does no I/O: it returns notebook entries (`Effect`s), and the session writes them.
-- **Only the gate reads the reel at a position** (`src/runner/gate.ts`).
+- **Only the gate reads the practice at a position** (`src/runner/gate.ts`).
 - Every `switch` over a union ends with `default: return assertNever(x)` (`src/assertNever.ts`).
-- Reel, log and notebook types are `readonly`. Practices are written with `satisfies Practice`.
+- Practice, log and notebook types are `readonly`. Practices are written with `satisfies Practice`.
 - Anything read from storage or JSON passes a type guard first (`src/storage/log.ts`).
 
 ## Commands
@@ -53,6 +53,6 @@ Before calling a change done, run the tests, the type-check, the lint and the fo
 ## Conventions
 
 - Tests live in a `test/` folder beside the code they test (`src/runner/test/step.test.ts`). Test names read as sentences about behaviour.
-- Comments are full sentences stating a contract: what a function takes and gives, its edge cases, and why a subtle choice was made. They do not restate `CONCEPT.md`: no file headers explaining the picture or which layer may know what.
+- Comments are full sentences stating a contract: what a function takes and gives, its edge cases, and why a subtle choice was made. They do not restate `CONCEPT.md`: no file headers explaining the layers or which layer may know what.
 - Texts are in `text-data/`, as loom textual complexes. They are not in git.
 - Notes about plans and past decisions are kept outside the repo, in `../anthos-reader-notes/`.
