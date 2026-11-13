@@ -6,8 +6,8 @@ import { clearLog, readLog, writeLog } from "./log"
 import { eventsOfMove, standingOf } from "./step"
 import type { Event, Standing } from "./types"
 
-/** A screening of a practice, for as long as the component that holds it: where it stands, today,
- * the log, and the projector's two controls. */
+/** A run of a practice, for as long as the component that holds it: where it stands, today,
+ * the log, and the two things that can be done with it. */
 export interface Run {
   standing: Standing
   today: Day

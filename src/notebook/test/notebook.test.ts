@@ -77,7 +77,7 @@ describe("notesFrom: the notes written on one frame", () => {
     noted(a, "Here."),
     noted(b, "Elsewhere.", { ...here, step: 1 }),
     noted("c" as NoteId, "Another practice.", { ...here, practice: "slow-reading" }),
-    noted("d" as NoteId, "At the viewing table.", null),
+    noted("d" as NoteId, "In annotate mode.", null),
   ])
 
   it("finds only the notes from that practice, stage and step", () => {

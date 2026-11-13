@@ -6,7 +6,7 @@ import type { Practice } from "../practice/types"
 import { restOf } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
 
-/** Where the screening stands, from the projector's log, the reader's notebook and the day:
+/** Where the run stands, from the runner's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
  * finished, and which step holds the reader until they have written. */
 export function standingOf(
@@ -81,8 +81,8 @@ export function ruling(practice: Practice, standing: Standing, target: number): 
   return { allowed: true, to: target }
 }
 
-/** What the projector logs when the reader moves to a step: the visit, and the stage finished
- * the first time its rest is reached. A move the law refuses is a mistake on the screen: it throws. */
+/** What the runner logs when the reader moves to a step: the visit, and the stage finished
+ * the first time its rest is reached. A move the law refuses is a mistake in the caller: it throws. */
 export function eventsOfMove(
   practice: Practice,
   standing: Standing,

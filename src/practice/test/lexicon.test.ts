@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { FINAL, partsOf, REST } from "../lexicon"
 
-describe("partsOf: a direction as the parts the screen draws", () => {
+describe("partsOf: a direction as the parts the viewer and the praxis bar draw", () => {
   it("consider: its prose, and the highlight on the note it names; nothing to write", () => {
     expect(partsOf({ direction: "consider", note: "@beads", prose: ["Look."] })).toEqual({
       prose: ["Look."],
@@ -24,7 +24,7 @@ describe("partsOf: a direction as the parts the screen draws", () => {
   })
 })
 
-describe("the cards the projector splices in", () => {
+describe("the rest and the final stage, which the runner adds", () => {
   it("the rest asks nothing and says nothing: the praxis bar's buttons speak for it", () => {
     expect(REST).toEqual({ prose: [], highlight: [], writing: null })
   })

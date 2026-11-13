@@ -5,7 +5,7 @@ import type { Day } from "../../clock/clock"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 import type { Event, Standing } from "../types"
 
-/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a position, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,

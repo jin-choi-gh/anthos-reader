@@ -3,17 +3,17 @@
 // concept.test.ts checks that CONCEPT.md gives every layer a place.
 
 export const LAYERS: Readonly<Record<string, readonly string[]>> = {
-  material: [], // the footage: knows nothing else
-  loom: ["material"], // develops loom's JSON into the footage
-  practice: ["material"], // the reel
+  material: [], // Literary Material: knows nothing else
+  loom: ["material"], // builds Literary Material from loom's JSON
+  practice: ["material"], // Practice Reel
   clock: [], // the time, and which day it is
   storage: [], // where the logs are kept
-  notebook: ["material", "practice", "clock", "storage"], // the reader's notebook
-  runner: ["material", "practice", "clock", "notebook", "storage"], // the projector
-  "reader/frame": ["material", "practice", "runner", "notebook", "reader/scenes"],
-  "reader/scenes": ["material", "notebook"], // the scene: never the reel or the projector
-  "reader/viewer": ["material", "reader/scenes", "ui"], // the main screen
-  // the intertitle, the notebook page and the projector's controls
+  notebook: ["material", "practice", "clock", "storage"], // User Notebook
+  runner: ["material", "practice", "clock", "notebook", "storage"], // Practice Runner
+  "reader/frame": ["material", "practice", "runner", "notebook", "reader/scenes"], // Frame
+  "reader/scenes": ["material", "notebook"], // Scene: never the reel or the runner
+  "reader/viewer": ["material", "reader/scenes", "ui"], // Viewer
+  // Praxis Bar
   "reader/praxisBar": ["clock", "runner", "reader/frame", "reader/scenes", "ui"],
   "reader/dev": ["practice", "clock", "runner", "notebook"],
   reader: [
@@ -30,7 +30,7 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "reader/dev",
     "app",
     "ui",
-  ], // the screen for one text: puts it all together
+  ], // the Reader for one text: puts it all together
   library: ["loom", "app"],
   ui: [],
   app: ["library", "reader"], // App, main, the route

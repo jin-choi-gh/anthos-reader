@@ -5,7 +5,7 @@ import type { PracticeId } from "../practice/types"
  * so a string from anywhere else cannot pass for it. */
 export type NoteId = string & { readonly __brand: "NoteId" }
 
-/** Where in a screening a note was written: the practice, and the stage and step it was on. */
+/** Where in a run a note was written: the practice, and the stage and step it was on. */
 export interface Provenance {
   readonly practice: PracticeId
   readonly stage: number
@@ -19,7 +19,7 @@ export type NotebookEvent =
       readonly at: number
       readonly anchor: Anchor
       readonly body: string
-      readonly from: Provenance | null // null: written at the viewing table
+      readonly from: Provenance | null // null: written in annotate mode
     }
   | { readonly kind: "revised"; readonly id: NoteId; readonly at: number; readonly body: string }
   | { readonly kind: "withdrawn"; readonly id: NoteId; readonly at: number }

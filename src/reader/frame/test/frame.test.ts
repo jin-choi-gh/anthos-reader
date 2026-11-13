@@ -5,7 +5,7 @@ import type { Practice, Step } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../frame"
 
-/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a position, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
@@ -126,7 +126,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
     expect(subject.writing?.written).toEqual([here])
   })
 
-  it("at the rest, whether waiting or not: the intermission card, which says and asks nothing", () => {
+  it("at the rest, whether waiting or not: nothing said and nothing asked", () => {
     for (const opensOn of [null, "2026-11-12"]) {
       const { subject } = frameOf(practice, standing(0, 2, opensOn), notes, [])
       expect(subject).toEqual({
@@ -139,7 +139,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
     }
   })
 
-  it("in the final stage: the end card", () => {
+  it("in the final stage: word that the practice is done", () => {
     const { subject } = frameOf(practice, standing(2, 0), notes, [])
     expect(subject.prose).toEqual(["You have finished!"])
     expect(subject.writing).toBeNull()
@@ -158,7 +158,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
   })
 })
 
-describe("annotateFrame: the viewing table", () => {
+describe("annotateFrame: annotate mode", () => {
   it("has no heading and never moves: no rulings at all, rather than refusals", () => {
     const frame = annotateFrame("poem", notes)
     expect(frame.heading).toBeNull()

@@ -5,7 +5,7 @@ import { keepOpen, onViewer, viewerOf } from "../commentary"
 
 const note = (index: number): Note => ({ index, loomId: null, lemma: [], tags: [], paragraphs: [] })
 
-/** The highlight on one note, as on a consider step; and the list of three, as at the viewing table. */
+/** The highlight on one note, as on a consider step; and the list of three, as in annotate mode. */
 const highlight: Commentary = { notes: [note(2)], shown: "marked" }
 const list: Commentary = { notes: [note(0), note(1), note(2)], shown: "listed" }
 const none: Commentary = { notes: [], shown: "marked" }
@@ -54,7 +54,7 @@ describe("the highlight: one note lit up in the poem", () => {
   })
 })
 
-describe("the list: every note beside the poem, at the viewing table", () => {
+describe("the list: every note beside the poem, in annotate mode", () => {
   it("opens a tapped note, in place of the one that was open, and closes it when tapped again", () => {
     expect(onViewer(list, null, tap(0))).toBe(0)
     expect(onViewer(list, 0, tap(1))).toBe(1)

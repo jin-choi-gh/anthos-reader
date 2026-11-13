@@ -10,7 +10,7 @@ import type { Standing } from "../../runner/types"
 import type { Subject } from "../scenes/types"
 import type { Frame } from "./types"
 
-/** The frame where the screening stands: its heading, the rulings on a step back and a step on, and
+/** The frame where the run stands: its heading, the rulings on a step back and a step on, and
  * its subject, with every reference resolved against the text's notes and the reader's notebook. */
 export function frameOf(
   practice: Practice,

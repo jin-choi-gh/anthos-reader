@@ -10,7 +10,7 @@ import type { Subject } from "../types"
 // The scene as the frame drives it: subjects made by frameOf and annotateFrame, so these tests also
 // show that the frame and the scene agree.
 
-/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a position, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
@@ -59,7 +59,7 @@ function started(on: Subject): SceneState {
 }
 
 describe("scene.start: each part staged", () => {
-  it("on a consider step: its note picked out, closed; the prose; no notebook page", () => {
+  it("on a consider step: its note picked out, closed; the prose; no writing", () => {
     const current = started(at(0, 1))
     expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [2], open: null })
     expect(scene.praxisBar(current)).toEqual({ prose: ["On @b."], writing: null })
@@ -87,7 +87,7 @@ describe("scene.start: each part staged", () => {
     })
   })
 
-  it("at the viewing table: every note listed, none open, nothing in the praxis bar", () => {
+  it("in annotate mode: every note listed, none open, nothing in the praxis bar", () => {
     const current = started(annotateFrame("poem", notes).subject)
     expect(scene.viewer(current)).toEqual({
       kind: "listed",
@@ -183,7 +183,7 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.praxisBar(current)?.prose).toEqual(["You have finished!"])
   })
 
-  it("follows a change of mode, to the viewing table and back to the practice", () => {
+  it("follows a change of mode, to annotate mode and back to the practice", () => {
     const step = at(0, 1)
     let current = started(step)
     current = scene.fromFrame(current, subject(annotateFrame("poem", notes).subject)).state

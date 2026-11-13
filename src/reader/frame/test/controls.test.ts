@@ -4,7 +4,7 @@ import { controlsOf } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 import type { Standing } from "../../../runner/types"
 
-/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a position, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
@@ -25,7 +25,7 @@ const practice: Practice = {
   ],
 }
 
-/** The controls where a screening stands, and the moves their buttons asked for so far. */
+/** The controls where a run stands, and the moves their buttons asked for so far. */
 function at(where: Standing) {
   const moveTo = vi.fn<(step: number) => void>()
   return { controls: controlsOf(frameOf(practice, where, [], []), moveTo), moveTo }

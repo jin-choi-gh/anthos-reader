@@ -21,7 +21,7 @@ export interface SceneState {
   readonly subject: Subject
   /** The editor's note the reader has opened, by its index. */
   readonly open: number | null
-  /** The notebook page, when the subject asks for writing. */
+  /** The writing, when the subject asks for it. */
   readonly writing: WritingState | null
 }
 
@@ -32,9 +32,8 @@ export const scene = {
     return reply({ subject, open: null, writing })
   },
 
-  /** The frame's new subject. The very same subject changes nothing. A new key is a cut. The same
-   * key is the shot continuing: the parts keep their state, brought up to date with what changed
-   * around them. */
+  /** The frame's new subject. The very same subject changes nothing. A new key starts the scene
+   * afresh. The same key keeps the parts' state, brought up to date with what changed around them. */
   fromFrame(current: SceneState, message: FrameProtocol["toScene"]): Reply<SceneState> {
     const { subject } = message
     if (subject === current.subject) return reply(current)
@@ -54,7 +53,7 @@ export const scene = {
     return reply(open === current.open ? current : { ...current, open })
   },
 
-  /** The praxis bar speaks to the notebook page, which may write in the notebook. */
+  /** The praxis bar speaks to the writing, which may write in the notebook. */
   fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
     const { writing } = current.subject
     if (writing === null || current.writing === null) return reply(current)
@@ -67,7 +66,7 @@ export const scene = {
     return viewerOf(current.subject.text, current.subject.commentary, current.open)
   },
 
-  /** The intertitle and the notebook page; nothing at all when there is neither, as at the rest. */
+  /** The prose and the writing; nothing at all when there is neither, as at the rest. */
   praxisBar(current: SceneState): PraxisBarProjection | null {
     const { prose, writing } = current.subject
     const page =

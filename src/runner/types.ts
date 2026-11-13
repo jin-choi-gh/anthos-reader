@@ -1,7 +1,7 @@
 import type { Day } from "../clock/clock"
 import type { Stage, Step } from "../practice/types"
 
-/** What the projector logs: the reader came to a step, or reached a stage's rest. */
+/** What the runner logs: the reader came to a step, or reached a stage's rest. */
 export type Event =
   | { readonly kind: "visited"; readonly stage: number; readonly step: number; readonly at: number }
   | { readonly kind: "finished"; readonly stage: number; readonly at: number; readonly day: Day }
@@ -13,7 +13,7 @@ export interface Position {
   readonly step: number
 }
 
-/** Where the screening stands, from replaying the log: where the reader is, when the next stage
+/** Where the run stands, from replaying the log: where the reader is, when the next stage
  * opens once this one is finished, and the step the reader may not pass until they have written. */
 export interface Standing {
   readonly position: Position

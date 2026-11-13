@@ -3,7 +3,7 @@ import type { Practice, Step } from "../../../practice/types"
 import { clockText, DAY, eventsText, fullWhere, notesText, shortWhere } from "../summary"
 import type { Standing } from "../../../runner/types"
 
-/** Where a screening stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a position, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,

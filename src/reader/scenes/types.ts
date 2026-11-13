@@ -3,8 +3,8 @@ import type { NoteId, ReaderNote } from "../../notebook/types"
 
 /** What the scene plays: parts, with every reference already resolved. */
 export interface Subject {
-  /** The frame number. A new key is a cut: the scene starts afresh. The same key with a fresh subject
-   * is the shot continuing while something around it changes, such as the notebook. */
+  /** Which step this is. A new key starts the scene afresh. The same key with a fresh subject keeps
+   * the scene's state while something around it changes, such as the notebook. */
   readonly key: string
   readonly text: TextId
   readonly prose: readonly string[]
@@ -53,14 +53,14 @@ export type ViewerProjection =
   | { kind: "marked"; text: TextId; marked: number[]; open: number | null }
   | { kind: "listed"; text: TextId; shown: number[]; open: number | null }
 
-/** What the praxis bar draws between the frame's heading and its buttons: the intertitle, and the
- * notebook page. */
+/** What the praxis bar draws between the frame's heading and its buttons: the prose, and the
+ * writing. */
 export interface PraxisBarProjection {
   prose: readonly string[]
   writing: WritingProjection | null
 }
 
-/** The notebook page: being written, with what may be done with it; or written, to be edited. */
+/** The writing: being written, with what may be done with it; or written, to be edited. */
 export type WritingProjection =
   | { kind: "writing"; draft: string; canSubmit: boolean; canCancel: boolean }
   | { kind: "written"; body: string }

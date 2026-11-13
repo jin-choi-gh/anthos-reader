@@ -37,7 +37,7 @@ export function PraxisBar({
   )
 }
 
-/** The scene's part of the praxis bar: the intertitle, then the notebook page, if the frame has
+/** The scene's part of the praxis bar: the prose, then the writing, if the frame has
  * either. */
 function Projection({
   projection,
