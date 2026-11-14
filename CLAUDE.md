@@ -29,8 +29,8 @@ The codebase is built in eight layers: **Literary Material** (`material/`), **Pr
 
 ## The rules that follow from the layers
 
-- **A direction is read in two places only**: the lexicon (`src/practice/lexicon.ts`), which turns it into parts, and the Viewer and the Praxis Bar, which draw the parts. Nothing in between switches on `step.direction`.
-- **The layers are enforced** by `src/test/architecture.test.ts`, from the table in `src/test/layers.ts`. A new folder of source must be given a layer there. Change the table only when the layers change, and `CONCEPT.md` with it.
+- **A direction is read in one place only**: the lexicon (`src/practice/lexicon.ts`), which turns it into parts. Everything after it, the Viewer and the Praxis Bar included, works with parts, and nothing switches on `step.direction`.
+- **The table in `src/test/layers.ts` is the law of who may know whom**, and `src/test/architecture.test.ts` enforces it. A new folder of source must be given a layer there. Change the table only when the layers change, and `CONCEPT.md` with it.
 - **Pure core, thin shell.** Folds, deciders, the law, the lexicon, the frame and the scene are plain functions, tested without React. Ids and times are made in the hooks and passed in. The scene does no I/O: it returns notebook entries (`Effect`s), and the session writes them.
 - **Only the gate reads the practice at a position** (`src/runner/gate.ts`).
 - Every `switch` over a union ends with `default: return assertNever(x)` (`src/assertNever.ts`).
