@@ -1,4 +1,12 @@
+import { assertNever } from "../../assertNever"
 import { keepOpen, onViewer, viewerOf } from "./parts/commentary"
+import {
+  notingOf,
+  onChoose,
+  onPraxisBar as onNotingBar,
+  startNoting,
+  type NotingState,
+} from "./parts/noting"
 import {
   keepWriting,
   onPraxisBar,
@@ -9,6 +17,7 @@ import {
 import { reply } from "./reply"
 import type {
   FrameProtocol,
+  NotingMessage,
   PraxisBarProjection,
   PraxisBarProtocol,
   Reply,
@@ -23,13 +32,16 @@ export interface SceneState {
   readonly open: number | null
   /** The writing, when the subject asks for it. */
   readonly writing: WritingState | null
+  /** The new note, when the subject has noting. */
+  readonly noting: NotingState | null
 }
 
 export const scene = {
   /** The scene started afresh on a subject. */
   start(subject: Subject): Reply<SceneState> {
     const writing = subject.writing === null ? null : startWriting(subject.writing)
-    return reply({ subject, open: null, writing })
+    const noting = subject.noting === null ? null : startNoting()
+    return reply({ subject, open: null, writing, noting })
   },
 
   /** The frame's new subject. The very same subject changes nothing. A new key starts the scene
@@ -45,17 +57,29 @@ export const scene = {
         : before === null || current.writing === null
           ? startWriting(subject.writing)
           : keepWriting(before, subject.writing, current.writing)
-    return reply({ subject, open: keepOpen(subject.commentary, current.open), writing })
+    const noting = subject.noting === null ? null : (current.noting ?? startNoting())
+    return reply({ subject, open: keepOpen(subject.commentary, current.open), writing, noting })
   },
 
-  /** The viewer speaks to the commentary. */
+  /** The viewer speaks to the commentary, and a chosen passage to the noting. */
   fromViewer(current: SceneState, message: ViewerProtocol["toScene"]): Reply<SceneState> {
+    if (message.kind === "choose") {
+      const { noting } = current.subject
+      if (noting === null || current.noting === null) return reply(current)
+      const next = onChoose(noting, current.noting, message.span)
+      return reply(next === current.noting ? current : { ...current, noting: next })
+    }
     const open = onViewer(current.subject.commentary, current.open, message)
     return reply(open === current.open ? current : { ...current, open })
   },
 
-  /** The praxis bar speaks to the writing, which may write in the notebook. */
+  /** The praxis bar speaks to the writing, which may write in the notebook, or to the noting. */
   fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
+    if (isNoting(message)) {
+      if (current.noting === null) return reply(current)
+      const next = onNotingBar(current.noting, message)
+      return reply(next === current.noting ? current : { ...current, noting: next })
+    }
     const { writing } = current.subject
     if (writing === null || current.writing === null) return reply(current)
     const answer = onPraxisBar(writing, current.writing, message)
@@ -63,16 +87,41 @@ export const scene = {
     return reply(state, answer.effects)
   },
 
+  /** The commentary's notes, and the noting's choosing and targets: none without noting. */
   viewer(current: SceneState): ViewerProjection {
-    return viewerOf(current.subject.text, current.subject.commentary, current.open)
+    const commentary = viewerOf(current.subject.text, current.subject.commentary, current.open)
+    return {
+      ...commentary,
+      choosing: current.noting?.choosing ?? false,
+      chosen: current.noting?.targets ?? [],
+    }
   },
 
-  /** The prose and the writing; nothing at all when there is neither, as at the rest. */
+  /** The prose, the writing and the noting; nothing at all when there is none, as at the rest. */
   praxisBar(current: SceneState): PraxisBarProjection | null {
-    const { prose, writing } = current.subject
+    const { prose, writing, noting } = current.subject
     const page =
       writing === null || current.writing === null ? null : writingOf(writing, current.writing)
-    if (prose.length === 0 && page === null) return null
-    return { prose, writing: page }
+    const note =
+      noting === null || current.noting === null ? null : notingOf(noting, current.noting)
+    if (prose.length === 0 && page === null && note === null) return null
+    return { prose, writing: page, noting: note }
   },
+}
+
+/** Whether a message from the praxis bar is for the noting, rather than the writing. */
+function isNoting(message: PraxisBarProtocol["toScene"]): message is NotingMessage {
+  switch (message.kind) {
+    case "choosing":
+    case "unchoose":
+    case "noteDraft":
+      return true
+    case "draft":
+    case "submit":
+    case "edit":
+    case "cancel":
+      return false
+    default:
+      return assertNever(message)
+  }
 }

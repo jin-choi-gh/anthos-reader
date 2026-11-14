@@ -116,6 +116,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       prose: ["On @b."],
       commentary: { set: material.notes, notes: [notes[2]], shown: "marked" },
       writing: null,
+      noting: null,
     })
     expect(subject.commentary.notes[0]).toBe(notes[2])
   })
@@ -134,6 +135,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       prose: ["What does the bird eat?"],
       commentary: { set: material.notes, notes: [], shown: "marked" },
       writing: { targets: [whole], tags: [], count: "one", written: [] },
+      noting: null,
     })
   })
 
@@ -162,6 +164,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         prose: [],
         commentary: { set: material.notes, notes: [], shown: "marked" },
         writing: null,
+        noting: null,
       })
     }
   })
@@ -234,5 +237,21 @@ describe("annotateFrame: annotate mode", () => {
       mine("kept", "Kept."),
     ]).subject.commentary
     expect(shown.map((note) => [note.index, note.id])).toEqual([[0, "kept"]])
+  })
+})
+
+describe("noting: a new note on passages the reader chooses", () => {
+  it("is in annotate mode, on the material's poem, and never in practice mode", () => {
+    expect(annotateFrame("poem", material, []).subject.noting).toEqual({
+      substrate: material.substrate,
+    })
+    for (const [stage, step] of [
+      [0, 0],
+      [1, 2],
+      [0, 2],
+      [2, 0],
+    ] as const) {
+      expect(frameOf(practice, standing(stage, step), material, []).subject.noting).toBeNull()
+    }
   })
 })

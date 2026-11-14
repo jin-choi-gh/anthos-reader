@@ -15,6 +15,7 @@ const considering: Subject = {
   prose: ["Look."],
   commentary: { set, notes: [notes[1]!], shown: "marked" },
   writing: null,
+  noting: null,
 }
 const responding: Subject = {
   key: "p/0/1",
@@ -22,6 +23,7 @@ const responding: Subject = {
   prose: ["What does the bird eat?"],
   commentary: { set, notes: [], shown: "marked" },
   writing: { targets: [whole], tags: [], count: "one", written: [] },
+  noting: null,
 }
 const annotating: Subject = {
   key: "annotate",
@@ -29,6 +31,7 @@ const annotating: Subject = {
   prose: [],
   commentary: { set, notes, shown: "listed" },
   writing: null,
+  noting: null,
 }
 
 const fromFrame = (subject: Subject) =>

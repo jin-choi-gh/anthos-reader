@@ -2,20 +2,24 @@ import type { Day } from "../../clock/clock"
 import type { Control, FrameControls } from "../frame/controls"
 import type { PraxisBarProjection, PraxisBarProtocol } from "../scenes/types"
 import { NotebookPage } from "./NotebookPage"
+import { NotingPage } from "./NotingPage"
 import { reasonText } from "./reasonText"
 
 /** The praxis bar: the frame's heading, Back and Next, and the scene's projection between them.
- * `today` is only for putting a refusal into words: "tomorrow" depends on it. */
+ * `today` is only for putting a refusal into words: "tomorrow" depends on it. `label` names the bar
+ * to assistive technology: what the reader is doing in it. */
 export function PraxisBar({
   controls,
   projection,
   send,
   today,
+  label,
 }: {
   controls: FrameControls
   projection: PraxisBarProjection | null
   send: (message: PraxisBarProtocol["toScene"]) => void
   today: Day
+  label: string
 }) {
   const { heading, back, next } = controls
   // Only Next's refusals are worth saying
@@ -23,7 +27,7 @@ export function PraxisBar({
   const buttons = back.kind !== "none" || next.kind !== "none"
 
   return (
-    <section className="praxis-bar" aria-label="Practice">
+    <section className="praxis-bar" aria-label={label}>
       {heading !== null && <h2 className="praxis-heading">{heading}</h2>}
       {projection !== null && <Projection projection={projection} send={send} />}
       {buttons && (
@@ -37,8 +41,8 @@ export function PraxisBar({
   )
 }
 
-/** The scene's part of the praxis bar: the prose, then the writing, if the frame has
- * either. */
+/** The scene's part of the praxis bar: the prose, then the writing or the noting, whichever the
+ * frame has. */
 function Projection({
   projection,
   send,
@@ -56,6 +60,7 @@ function Projection({
         </div>
       )}
       {projection.writing !== null && <NotebookPage page={projection.writing} send={send} />}
+      {projection.noting !== null && <NotingPage page={projection.noting} send={send} />}
     </>
   )
 }

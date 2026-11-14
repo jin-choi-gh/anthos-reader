@@ -1,12 +1,15 @@
-import { useLayoutEffect, useRef } from "react"
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import { Close } from "../../ui/icons"
-import { Lemma } from "./Lemma"
+import { Lemma } from "../../ui/Lemma"
 import type { Materials } from "../../material/materials"
+import { rangesOnLines } from "./choosing"
+import type { LineRange } from "./cut"
 import { NotesBlock } from "./NotesBlock"
 import { PoemBlock } from "./PoemBlock"
 import type { ViewerProjection, ViewerProtocol } from "../scenes/types"
 import { TitleBlock } from "./TitleBlock"
-import type { Note } from "../../material/types"
+import { useChoosing } from "./useChoosing"
+import type { Note, Span } from "../../material/types"
 
 /** What both parts of the viewer draw from: the scene's projection, with the notes it shows; the
  * texts it may name, for their poems; and the way back to the scene. */
@@ -17,40 +20,58 @@ interface ViewerProps {
 }
 
 /** The viewer's page: the projection's text, its title and its poem. Marked, its highlights can be
- * tapped; listed, the open note's words are marked, and the poem is only read. */
+ * tapped; listed, the open note's words are marked, and the poem is only read. Either way the
+ * chosen targets are drawn, and while choosing is on the reader chooses passages of the poem here,
+ * each sent to the scene once chosen. */
 export function ViewerPage({ projection, materials, send }: ViewerProps) {
   const material = materials(projection.text)
+  const substrate = material?.substrate ?? null
+  const area = useRef<HTMLDivElement>(null)
+  const choose = useCallback((span: Span) => send({ kind: "choose", span }), [send])
+  const choice = useChoosing(area, substrate, projection.choosing, choose)
+  const chosenOn = useMemo(
+    () => (substrate === null ? none : rangesOnLines(substrate, projection.chosen)),
+    [substrate, projection.chosen],
+  )
+  const choiceOn = useMemo(
+    () => (substrate === null || choice === null ? none : rangesOnLines(substrate, [choice])),
+    [substrate, choice],
+  )
   if (material === null) return <p className="reader-message">Loading…</p>
   const { poem } = material
   const { rangesOn } = projection.notes
+  const choosing = { chosenOn, choiceOn }
 
-  switch (projection.kind) {
-    case "marked":
-      return (
-        <>
-          <TitleBlock poem={poem} />
+  return (
+    <>
+      <TitleBlock poem={poem} />
+      <div ref={area} className="choosing-area" data-choosing={projection.choosing}>
+        {projection.kind === "marked" ? (
           <PoemBlock
             poem={poem}
             rangesOn={rangesOn}
             marked={projection.marked}
             open={projection.open}
             onTapNote={(note) => send({ kind: "tapNote", note })}
+            {...choosing}
           />
-        </>
-      )
-    case "listed":
-      return (
-        <>
-          <TitleBlock poem={poem} />
+        ) : (
           <PoemBlock
             poem={poem}
             rangesOn={rangesOn}
             marked={projection.open === null ? [] : [projection.open]}
             open={projection.open}
+            {...choosing}
           />
-        </>
-      )
-  }
+        )}
+      </div>
+    </>
+  )
+}
+
+/** No ranges on any line. */
+function none(): LineRange[] {
+  return []
 }
 
 /** The viewer's notes, for the margin or the sheet, from the projection's set. Marked: the note the

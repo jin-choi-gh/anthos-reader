@@ -1,4 +1,4 @@
-import { lineLength, sameSpan, textOf, wholePoem } from "./spans"
+import { lineLength, lineRangesOf, sameSpan, textOf, wholePoem } from "./spans"
 import type { Annotation, LemmaPart, Note, NoteRange, Notes, Span, Substrate } from "./types"
 
 /** What a target covers: the whole poem, whole lines, or a passage starting or ending inside a line. */
@@ -76,17 +76,12 @@ function rangesByLine(substrate: Substrate, annotations: readonly Annotation[]):
   for (const [index, annotation] of annotations.entries()) {
     for (const target of annotation.targets) {
       if (kindOf(substrate, target) === "poem") continue
-      const { start, end } = target
-      for (let line = start.line; line <= end.line; line++) {
+      for (const { line, start, end } of lineRangesOf(substrate, target)) {
         const onLine = ranges[line]
         if (onLine === undefined) {
           throw new RangeError(`a note's target runs past line ${line}`)
         }
-        onLine.push({
-          start: line === start.line ? start.offset : 0,
-          end: line === end.line ? end.offset : lineLength(substrate, line),
-          noteIndex: index,
-        })
+        onLine.push({ start, end, noteIndex: index })
       }
     }
   }

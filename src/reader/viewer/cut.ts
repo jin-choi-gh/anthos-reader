@@ -6,8 +6,10 @@ export interface LineRange {
   end: number
 }
 
-/** A piece of a line that no range starts or ends inside, with the ranges covering it. */
+/** A piece of a line that no range starts or ends inside: where it starts in the line, in code
+ * points, its text, and the ranges covering it. */
 export interface Piece<R extends LineRange> {
+  start: number
   text: string
   ranges: R[]
 }
@@ -27,6 +29,7 @@ export function cut<R extends LineRange>(text: string, ranges: R[]): Piece<R>[] 
   let start = first // always 0: no range starts before the line does
   for (const end of rest) {
     pieces.push({
+      start,
       text: characters.slice(start, end).join(""),
       ranges: ranges.filter((range) => range.start <= start && end <= range.end),
     })

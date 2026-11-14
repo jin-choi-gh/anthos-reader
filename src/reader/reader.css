@@ -636,3 +636,107 @@ html:has(.reader[data-layout="page"] .praxis-dock) {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* Choosing passages: the poem is the reader's to choose from. A double tap is two taps, not a zoom,
+   and a long press brings up no menu of the browser's */
+.choosing-area[data-choosing="true"] {
+  cursor: text;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* The chosen targets, and the passage being chosen, over the poem's text */
+.line-text [data-chosen="true"] {
+  background: var(--fill-chosen);
+}
+
+.line-text [data-choice="true"] {
+  background: var(--selection);
+}
+
+/* The new note in the praxis bar: the toggle, the table of chosen passages, the box */
+.noting-toggle {
+  align-self: flex-start;
+}
+
+.noting-toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--fill-chosen);
+}
+
+.noting-targets {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.noting-target {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.noting-lemma q {
+  quotes: none;
+  font-style: italic;
+}
+
+/* − : a round button in the accent colour */
+.noting-remove {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.noting-remove:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Docked, a long table scrolls inside the bar, so the box stays in reach */
+.praxis-dock .noting-targets {
+  max-height: 20dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Annotate mode on a page: the notes' sheet sits just above the docked praxis bar, and the page
+   leaves room for both */
+.reader:has(.praxis-dock) .bottom-sheet {
+  bottom: var(--praxis-bar-height, 0px);
+  z-index: 1;
+}
+
+/* Folded down to its handle, the rest of the sheet lies behind the docked bar, which takes the taps */
+.reader:has(.bottom-sheet) .praxis-dock {
+  z-index: 2;
+}
+
+.reader[data-layout="page"]:has(.praxis-dock):has(.bottom-sheet) {
+  padding-bottom: calc(var(--praxis-bar-height, 12rem) + var(--sheet-handle, 3rem) + 2rem);
+}
+
+.reader[data-layout="page"]:has(.praxis-dock):has(.bottom-sheet[data-open="true"]) {
+  padding-bottom: calc(var(--praxis-bar-height, 12rem) + var(--sheet-height, 45dvh) + 2rem);
+}
+
+html:has(.reader[data-layout="page"] .praxis-dock):has(.bottom-sheet) {
+  scroll-padding-bottom: calc(var(--praxis-bar-height, 0px) + var(--sheet-handle, 3rem) + 1rem);
+}

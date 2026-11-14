@@ -49,12 +49,14 @@ export function frameOf(
               count: parts.writing.count,
               written: notesFrom(written, { practice: practice.id, ...station }),
             },
+      noting: null,
     },
   }
 }
 
 /** The frame in annotate mode: no practice and no runner, so no heading and no rulings. It never
- * moves, and lists the reader's own notes that can be placed on the poem, in the order written. */
+ * moves, and lists the reader's own notes that can be placed on the poem, in the order written;
+ * and it has noting, for a new note on passages of the poem the reader chooses. */
 export function annotateFrame(
   text: TextId,
   material: Material,
@@ -70,6 +72,7 @@ export function annotateFrame(
     prose: [],
     commentary: { set, notes: set.notes, shown: "listed" },
     writing: null,
+    noting: { substrate: material.substrate },
   }
   return { heading: null, back: null, next: null, subject }
 }

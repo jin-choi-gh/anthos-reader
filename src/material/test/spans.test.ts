@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest"
 import { codePoints } from "../codePoints"
-import { lineLength, sameSpan, spanProblem, textOf, wholePoem } from "../spans"
+import {
+  comparePositions,
+  joinSpan,
+  lineLength,
+  lineRangesOf,
+  sameSpan,
+  spanProblem,
+  textOf,
+  trimmedSpan,
+  wholePoem,
+  wordAt,
+} from "../spans"
 import type { Span, Substrate } from "../types"
 
 const substrate: Substrate = { lines: ["A Bird, came down", "the 🐦 Walk -", "He did not know"] }
@@ -83,5 +94,106 @@ describe("sameSpan", () => {
     expect(sameSpan(span(0, 2, 0, 6), span(0, 2, 0, 6))).toBe(true)
     expect(sameSpan(span(0, 2, 0, 6), span(0, 2, 0, 7))).toBe(false)
     expect(sameSpan(span(0, 2, 0, 6), span(1, 2, 0, 6))).toBe(false)
+  })
+})
+
+const at = (line: number, offset: number) => ({ line, offset })
+
+describe("comparePositions", () => {
+  it("orders positions by line, then by offset", () => {
+    expect(comparePositions(at(0, 5), at(1, 0))).toBeLessThan(0)
+    expect(comparePositions(at(1, 2), at(1, 1))).toBeGreaterThan(0)
+    expect(comparePositions(at(1, 2), at(1, 2))).toBe(0)
+  })
+})
+
+describe("trimmedSpan: a span loom can always write", () => {
+  it("runs from whichever position comes first", () => {
+    expect(trimmedSpan(substrate, at(0, 7), at(0, 2))).toEqual(span(0, 2, 0, 7))
+  })
+
+  it("leaves out the spaces at either end", () => {
+    expect(trimmedSpan(substrate, at(0, 1), at(0, 8))).toEqual(span(0, 2, 0, 7))
+  })
+
+  it("starts on the next line rather than at a line's end, and ends on the line before rather than at its start", () => {
+    expect(trimmedSpan(substrate, at(0, 17), at(1, 4))).toEqual(span(1, 0, 1, 3))
+    expect(trimmedSpan(substrate, at(0, 13), at(1, 0))).toEqual(span(0, 13, 0, 17))
+  })
+
+  it("is null when nothing but spaces and line ends lie between", () => {
+    expect(trimmedSpan(substrate, at(0, 7), at(0, 8))).toBeNull()
+    expect(trimmedSpan(substrate, at(0, 3), at(0, 3))).toBeNull()
+    expect(trimmedSpan(substrate, at(0, 17), at(1, 0))).toBeNull()
+  })
+
+  it("counts in code points, and always keeps loom's rule", () => {
+    expect(trimmedSpan(substrate, at(1, 4), at(1, 5))).toEqual(span(1, 4, 1, 5))
+    for (const [a, b] of [
+      [at(0, 1), at(2, 3)],
+      [at(0, 17), at(2, 0)],
+      [at(1, 3), at(1, 12)],
+    ] as const) {
+      const trimmed = trimmedSpan(substrate, a, b)
+      expect(trimmed).not.toBeNull()
+      expect(spanProblem(substrate, trimmed!)).toBeNull()
+    }
+  })
+})
+
+describe("wordAt", () => {
+  it("is the run of non-space characters at a position, its punctuation with it", () => {
+    expect(wordAt(substrate, at(0, 3))).toEqual(span(0, 2, 0, 7))
+    expect(wordAt(substrate, at(0, 2))).toEqual(span(0, 2, 0, 7))
+  })
+
+  it("takes the word just before when the position is at its end", () => {
+    expect(wordAt(substrate, at(0, 7))).toEqual(span(0, 2, 0, 7))
+    expect(wordAt(substrate, at(2, 15))).toEqual(span(2, 11, 2, 15))
+  })
+
+  it("counts a character outside the basic plane as one", () => {
+    expect(wordAt(substrate, at(1, 4))).toEqual(span(1, 4, 1, 5))
+  })
+
+  it("is null between words", () => {
+    expect(wordAt({ lines: ["a  b"] }, at(0, 2))).toBeNull()
+  })
+})
+
+describe("joinSpan: chosen passages that never overlap", () => {
+  it("keeps spans apart that neither overlap nor touch, in the poem's order", () => {
+    expect(joinSpan([span(1, 0, 1, 3)], span(0, 2, 0, 7))).toEqual([
+      span(0, 2, 0, 7),
+      span(1, 0, 1, 3),
+    ])
+  })
+
+  it("joins a span with one it overlaps, contains, or touches with nothing between", () => {
+    expect(joinSpan([span(0, 2, 0, 7)], span(0, 5, 0, 12))).toEqual([span(0, 2, 0, 12)])
+    expect(joinSpan([span(0, 2, 0, 4)], span(0, 4, 0, 7))).toEqual([span(0, 2, 0, 7)])
+    expect(joinSpan([span(0, 2, 0, 12)], span(0, 3, 0, 5))).toEqual([span(0, 2, 0, 12)])
+  })
+
+  it("joins every span the new one reaches, and keeps the rest", () => {
+    const chosen = [span(0, 2, 0, 7), span(0, 8, 0, 12), span(2, 0, 2, 2)]
+    expect(joinSpan(chosen, span(0, 0, 1, 3))).toEqual([span(0, 0, 1, 3), span(2, 0, 2, 2)])
+  })
+
+  it("counts a line break as something between", () => {
+    expect(joinSpan([span(0, 13, 0, 17)], span(1, 0, 1, 3))).toEqual([
+      span(0, 13, 0, 17),
+      span(1, 0, 1, 3),
+    ])
+  })
+})
+
+describe("lineRangesOf", () => {
+  it("gives a span's stretch on each line it crosses", () => {
+    expect(lineRangesOf(substrate, span(0, 13, 2, 2))).toEqual([
+      { line: 0, start: 13, end: 17 },
+      { line: 1, start: 0, end: 12 },
+      { line: 2, start: 0, end: 2 },
+    ])
   })
 })

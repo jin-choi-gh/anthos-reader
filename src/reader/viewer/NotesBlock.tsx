@@ -1,4 +1,4 @@
-import { Lemma } from "./Lemma"
+import { Lemma } from "../../ui/Lemma"
 import { endsSelection } from "./selection"
 import type { Note } from "../../material/types"
 

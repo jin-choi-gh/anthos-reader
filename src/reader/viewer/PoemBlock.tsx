@@ -1,29 +1,46 @@
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react"
-import { Fragment, useEffect, useRef } from "react"
-import { cut } from "./cut"
+import { useEffect, useRef } from "react"
+import { cut, type LineRange } from "./cut"
 import { endsSelection } from "./selection"
 import type { Line, NoteRange, Poem } from "../../material/types"
+
+/** A range on a line, and what it is: a marked note's, a chosen target's, or the passage being
+ * chosen. */
+type Drawn = LineRange &
+  ({ kind: "note"; noteIndex: number } | { kind: "chosen" } | { kind: "choice" })
 
 /** The poem, stanza by stanza, every fifth line numbered. The marked notes' words are highlighted;
  * with none marked, each line is drawn as it is. The open note's words are brought into view when it
  * opens, and the marked notes' words when they change, if they are out of view. Given onTapNote, a
- * highlight is a control: tapped, or pressed with Enter or Space, it names its note. */
+ * highlight is a control: tapped, or pressed with Enter or Space, it names its note. The chosen
+ * targets and the passage being chosen are drawn over the text, by each line's ranges. Each line
+ * says which line of the substrate it is, and each piece of it where it starts, so that a point on
+ * the screen can be found in the poem. */
 export function PoemBlock({
   poem,
   rangesOn,
   marked,
   open,
   onTapNote,
+  chosenOn,
+  choiceOn,
 }: {
   poem: Poem
   rangesOn: (indexInSubstrate: number) => NoteRange[]
   marked: number[]
   open: number | null
   onTapNote?: (note: number) => void
+  chosenOn: (indexInSubstrate: number) => LineRange[]
+  choiceOn: (indexInSubstrate: number) => LineRange[]
 }) {
-  // The marked notes' ranges on a line: none on lines they don't touch, or when none are marked
-  const markedRanges = (line: Line) =>
-    rangesOn(line.indexInSubstrate).filter((range) => marked.includes(range.noteIndex))
+  // What is drawn on a line: the marked notes' ranges, the chosen targets', the choice's
+  const drawnOn = (line: Line): Drawn[] => [
+    ...rangesOn(line.indexInSubstrate)
+      .filter((range) => marked.includes(range.noteIndex))
+      .map((range) => ({ ...range, kind: "note" as const })),
+    ...chosenOn(line.indexInSubstrate).map((range) => ({ ...range, kind: "chosen" as const })),
+    ...choiceOn(line.indexInSubstrate).map((range) => ({ ...range, kind: "choice" as const })),
+  ]
 
   const poemRef = useRef<HTMLDivElement>(null)
 
@@ -49,6 +66,7 @@ export function PoemBlock({
               key={line.id}
               className="line"
               data-line-id={line.id}
+              data-line={line.indexInSubstrate}
               style={{ "--indent": line.indent } as CSSProperties}
             >
               {line.number % 5 === 0 && (
@@ -57,15 +75,29 @@ export function PoemBlock({
                 </span>
               )}
               <span className="line-text">
-                {cut(line.text, markedRanges(line)).map((piece, j) => {
-                  const [first] = piece.ranges
-                  if (first === undefined) return <Fragment key={j}>{piece.text}</Fragment>
-                  const note = first.noteIndex // where marked notes overlap, the first
-                  const isOpen = piece.ranges.some((range) => range.noteIndex === open)
+                {cut(line.text, drawnOn(line)).map((piece, j) => {
+                  const notes = piece.ranges.flatMap((range) =>
+                    range.kind === "note" ? [range.noteIndex] : [],
+                  )
+                  const drawn = {
+                    "data-start": piece.start,
+                    "data-chosen": piece.ranges.some((range) => range.kind === "chosen"),
+                    "data-choice": piece.ranges.some((range) => range.kind === "choice"),
+                  }
+                  const [note] = notes // where marked notes overlap, the first
+                  if (note === undefined) {
+                    return (
+                      <span key={j} {...drawn}>
+                        {piece.text}
+                      </span>
+                    )
+                  }
+                  const isOpen = notes.includes(open ?? -1)
                   return (
                     <mark
                       key={j}
                       data-open={isOpen}
+                      {...drawn}
                       {...(onTapNote && tappable(note, isOpen, onTapNote))}
                     >
                       {piece.text}

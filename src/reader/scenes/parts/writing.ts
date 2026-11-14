@@ -1,5 +1,5 @@
 import type { ReaderNote } from "../../../notebook/types"
-import type { Effect, PraxisBarProtocol, WritingProjection, WritingSubject } from "../types"
+import type { Effect, WritingMessage, WritingProjection, WritingSubject } from "../types"
 
 /** Whether the page is open for writing, and what is on it so far. */
 export interface WritingState {
@@ -44,7 +44,7 @@ export function keepWriting(
 export function onPraxisBar(
   writing: WritingSubject,
   state: WritingState,
-  message: PraxisBarProtocol["toScene"],
+  message: WritingMessage,
 ): { state: WritingState; effects: readonly Effect[] } {
   const saved = savedOf(writing)
   switch (message.kind) {

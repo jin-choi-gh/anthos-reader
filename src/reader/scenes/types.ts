@@ -1,4 +1,4 @@
-import type { Note, Notes, Span, TextId } from "../../material/types"
+import type { LemmaPart, Note, Notes, Span, Substrate, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
 /** What the scene plays: parts, with every reference already resolved. */
@@ -11,6 +11,8 @@ export interface Subject {
   readonly commentary: Commentary
   /** What the reader is asked to write, or null. */
   readonly writing: WritingSubject | null
+  /** A new note on passages the reader chooses, or null: then no passage can be chosen. */
+  readonly noting: NotingSubject | null
 }
 
 /** The notes a subject shows, from one set (the editor's, or the reader's): highlighted in the poem,
@@ -32,21 +34,39 @@ export interface WritingSubject {
   readonly written: readonly ReaderNote[]
 }
 
+/** A new note on passages the reader chooses from the poem: its lines, from which each passage's
+ * lemma is made. */
+export interface NotingSubject {
+  readonly substrate: Substrate
+}
+
 /** What the frame tells the scene: it only ever speaks when its subject changes. */
 export interface FrameProtocol {
   toScene: { kind: "subject"; subject: Subject }
 }
 
+/** What the viewer tells the commentary. */
+export type CommentaryMessage = { kind: "tapNote"; note: number } | { kind: "closeNote" }
+
 export interface ViewerProtocol {
-  toScene: { kind: "tapNote"; note: number } | { kind: "closeNote" }
+  toScene: CommentaryMessage | { kind: "choose"; span: Span } // a passage the reader chose, while choosing is on: for the noting
 }
 
+/** What the praxis bar tells the writing. */
+export type WritingMessage =
+  | { kind: "draft"; text: string } // the reader typed
+  | { kind: "submit" } // Respond
+  | { kind: "edit" } // Edit: write again over what was written
+  | { kind: "cancel" } // Cancel: keep what was written
+
+/** What the praxis bar tells the noting. */
+export type NotingMessage =
+  | { kind: "choosing"; on: boolean } // the toggle for choosing passages
+  | { kind: "unchoose"; index: number } // −: the chosen target at that place in the table
+  | { kind: "noteDraft"; text: string } // the reader typed
+
 export interface PraxisBarProtocol {
-  toScene:
-    | { kind: "draft"; text: string } // the reader typed
-    | { kind: "submit" } // Respond
-    | { kind: "edit" } // Edit: write again over what was written
-    | { kind: "cancel" } // Cancel: keep what was written
+  toScene: WritingMessage | NotingMessage
 }
 
 /** What the reader has written, sent out to the notebook: a new annotation, or a revision. The mode
@@ -55,15 +75,33 @@ export type Effect =
   | { kind: "note"; targets: readonly Span[]; tags: readonly string[]; body: string }
   | { kind: "revise"; id: NoteId; body: string }
 
-export type ViewerProjection =
+/** The commentary's share of what the viewer draws: the notes it shows, picked out ("marked") or
+ * listed beside the poem ("listed"), and the open one. */
+export type CommentaryProjection =
   | { kind: "marked"; text: TextId; notes: Notes; marked: number[]; open: number | null }
   | { kind: "listed"; text: TextId; notes: Notes; shown: number[]; open: number | null }
 
-/** What the praxis bar draws between the frame's heading and its buttons: the prose, and the
- * writing. */
+/** What the viewer draws: the commentary's share, whether choosing is on, and the chosen targets. */
+export type ViewerProjection = CommentaryProjection & {
+  choosing: boolean
+  chosen: readonly Span[]
+}
+
+/** What the praxis bar draws between the frame's heading and its buttons: the prose, the writing,
+ * and the noting. */
 export interface PraxisBarProjection {
   prose: readonly string[]
   writing: WritingProjection | null
+  noting: NotingProjection | null
+}
+
+/** The noting: whether choosing is on, each chosen target's lemma in the poem's order, the draft,
+ * and whether the note may be added: only once the draft says something. */
+export interface NotingProjection {
+  choosing: boolean
+  chosen: readonly LemmaPart[]
+  draft: string
+  canAdd: boolean
 }
 
 /** The writing: being written, with what may be done with it; or written, to be edited. */

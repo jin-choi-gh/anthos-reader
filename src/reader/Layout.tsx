@@ -6,14 +6,16 @@ import { Margin } from "./Margin"
 import type { ReaderLayout } from "./usePlatform"
 
 /** Where the reader's parts go: the page in the text column, under the top bar (the way back to the
- * library, and whatever else the top bar is given), and beside it the notes and, in practice mode,
- * the praxis bar. Every mode places its parts here, so they are placed alike. */
+ * library, and whatever else the top bar is given), and beside it the notes and the praxis bar.
+ * The notes are either one open note ("open"), or a list to look through ("list"). Every mode places
+ * its parts here, so they are placed alike. */
 export function Layout({
   layout,
   topBar,
   dev,
   page,
   notes,
+  notesAs = "open",
   praxisBar,
 }: {
   layout: ReaderLayout
@@ -21,7 +23,8 @@ export function Layout({
   dev?: ReactNode // under the top bar, in development only: the dev panel
   page: ReactNode
   notes: ReactNode
-  praxisBar?: ReactNode // practice mode only
+  notesAs?: "open" | "list"
+  praxisBar?: ReactNode
 }) {
   return (
     <>
@@ -36,27 +39,25 @@ export function Layout({
         {dev}
         <div className="text-block">{page}</div>
       </article>
-      <Beside layout={layout} notes={notes} praxisBar={praxisBar} />
+      <Beside layout={layout} notes={notes} notesAs={notesAs} praxisBar={praxisBar} />
     </>
   )
 }
 
-/** What goes beside the page. Annotate mode: the notes, in the margin or in the sheet with its
- * handle. Practice mode: the praxis bar and then the open note in the margin; or, on a page, the
- * praxis bar docked at the foot of the screen, with the open note in a sheet over it. */
+/** What goes beside the page. On a spread, the margin: the praxis bar, if any, then the notes. On a
+ * page, the praxis bar, if any, docked at the foot of the screen; an open note in a sheet over it;
+ * a list of notes in the sheet with its handle, just above the docked bar. */
 function Beside({
   layout,
   notes,
+  notesAs,
   praxisBar,
 }: {
   layout: ReaderLayout
   notes: ReactNode
+  notesAs: "open" | "list"
   praxisBar?: ReactNode
 }) {
-  if (praxisBar === undefined) {
-    if (layout === "spread") return <Margin>{notes}</Margin>
-    return <BottomSheet label="Notes">{notes}</BottomSheet>
-  }
   if (layout === "spread") {
     return (
       <Margin>
@@ -65,7 +66,14 @@ function Beside({
       </Margin>
     )
   }
-  return <Dock praxisBar={praxisBar} notes={notes} />
+  if (praxisBar === undefined) return <BottomSheet label="Notes">{notes}</BottomSheet>
+  if (notesAs === "open") return <Dock praxisBar={praxisBar} notes={notes} />
+  return (
+    <>
+      <Dock praxisBar={praxisBar} notes={null} />
+      <BottomSheet label="Notes">{notes}</BottomSheet>
+    </>
+  )
 }
 
 /** The praxis bar docked at the foot of the screen, and the open note, if any, in a sheet that covers

@@ -70,6 +70,7 @@ export function PracticeMode({
           projection={scene.praxisBar}
           send={scene.toScene.praxisBar}
           today={run.today}
+          label="Practice"
         />
       }
     />

@@ -22,6 +22,9 @@
 
   /* The reader's own notes */
   --edge-reader: #d9b54a; /* the edge of what the reader writes */
+  --fill-chosen: #c4f6fb; /* passages chosen for a new note */
+  --accent: #d9b54a; /* buttons that stand out, such as − beside a chosen passage */
+  --on-accent: #000000; /* what is drawn on the accent */
 
   /* Interaction */
   --focus: #3b6fd8; /* the keyboard focus ring */

@@ -1,12 +1,12 @@
 import type { TextId } from "../../../material/types"
-import type { Commentary, ViewerProjection, ViewerProtocol } from "../types"
+import type { Commentary, CommentaryMessage, CommentaryProjection } from "../types"
 
 /** What the reader does to the commentary: a tap opens a note, or closes it if it is open; the X
  * closes it. A tap on a note the commentary does not show changes nothing. */
 export function onViewer(
   commentary: Commentary,
   open: number | null,
-  message: ViewerProtocol["toScene"],
+  message: CommentaryMessage,
 ): number | null {
   switch (message.kind) {
     case "tapNote":
@@ -28,7 +28,7 @@ export function viewerOf(
   text: TextId,
   commentary: Commentary,
   open: number | null,
-): ViewerProjection {
+): CommentaryProjection {
   const notes = commentary.set
   const indexes = commentary.notes.map((note) => note.index)
   return commentary.shown === "marked"

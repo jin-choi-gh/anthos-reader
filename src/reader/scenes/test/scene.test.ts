@@ -96,8 +96,10 @@ describe("scene.start: each part staged", () => {
       notes: material.notes,
       marked: [2],
       open: null,
+      choosing: false,
+      chosen: [],
     })
-    expect(scene.praxisBar(current)).toEqual({ prose: ["On @b."], writing: null })
+    expect(scene.praxisBar(current)).toEqual({ prose: ["On @b."], writing: null, noting: null })
   })
 
   it("on a respond step: the poem with nothing picked out; the prose and a blank page", () => {
@@ -108,10 +110,13 @@ describe("scene.start: each part staged", () => {
       notes: material.notes,
       marked: [],
       open: null,
+      choosing: false,
+      chosen: [],
     })
     expect(scene.praxisBar(current)).toEqual({
       prose: ["What does the bird eat?"],
       writing: { kind: "writing", draft: "", canSubmit: false, canCancel: false },
+      noting: null,
     })
   })
 
@@ -123,6 +128,8 @@ describe("scene.start: each part staged", () => {
       notes: material.notes,
       marked: [],
       open: null,
+      choosing: false,
+      chosen: [],
     })
     expect(scene.praxisBar(current)).toBeNull()
   })
@@ -131,10 +138,11 @@ describe("scene.start: each part staged", () => {
     expect(scene.praxisBar(started(at(1, 0)))).toEqual({
       prose: ["You have finished!"],
       writing: null,
+      noting: null,
     })
   })
 
-  it("in annotate mode: the reader's own notes listed, none open, nothing in the praxis bar", () => {
+  it("in annotate mode: the reader's own notes listed, none open; a new note in the praxis bar", () => {
     const on = annotating([mine("n1", "Worms."), mine("n2", "Beads.")])
     const current = started(on)
     expect(scene.viewer(current)).toEqual({
@@ -143,8 +151,14 @@ describe("scene.start: each part staged", () => {
       notes: on.commentary.set,
       shown: [0, 1],
       open: null,
+      choosing: false,
+      chosen: [],
     })
-    expect(scene.praxisBar(current)).toBeNull()
+    expect(scene.praxisBar(current)).toEqual({
+      prose: [],
+      writing: null,
+      noting: { choosing: false, chosen: [], draft: "", canAdd: false },
+    })
   })
 })
 
@@ -222,6 +236,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       notes: material.notes,
       marked: [0],
       open: null,
+      choosing: false,
+      chosen: [],
     })
     current = scene.fromViewer(current, tap(0)).state
 
@@ -232,6 +248,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       notes: material.notes,
       marked: [2],
       open: null,
+      choosing: false,
+      chosen: [],
     })
 
     current = scene.fromFrame(current, subject(at(0, 2))).state
@@ -258,6 +276,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       notes: material.notes,
       marked: [2],
       open: null,
+      choosing: false,
+      chosen: [],
     })
   })
 })
@@ -276,5 +296,52 @@ describe("annotate mode, as the notebook changes", () => {
     current = scene.fromViewer(current, tap(0)).state
     current = scene.fromFrame(current, subject(annotating([]))).state
     expect(scene.viewer(current)).toMatchObject({ shown: [], open: null })
+  })
+})
+
+describe("noting in annotate mode", () => {
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const choose = (span: typeof bird) => ({ kind: "choose", span }) as const
+  const on = { kind: "choosing", on: true } as const
+
+  it("chooses passages only once choosing is on, and draws them in the viewer", () => {
+    let current = started(annotating([]))
+    expect(scene.fromViewer(current, choose(bird)).state).toBe(current)
+    current = scene.fromPraxisBar(current, on).state
+    current = scene.fromViewer(current, choose(bird)).state
+    expect(scene.viewer(current)).toMatchObject({ choosing: true, chosen: [bird] })
+    expect(scene.praxisBar(current)?.noting?.chosen).toEqual([{ kind: "quote", text: "Bird" }])
+  })
+
+  it("writes nothing in the notebook, whatever the reader does", () => {
+    let current = started(annotating([]))
+    for (const message of [on, { kind: "noteDraft", text: "Worms." }] as const) {
+      const answer = scene.fromPraxisBar(current, message)
+      expect(answer.effects).toEqual([])
+      current = answer.state
+    }
+    expect(scene.fromViewer(current, choose(bird)).effects).toEqual([])
+  })
+
+  it("keeps the toggle, the passages and the draft when the notebook changes", () => {
+    let current = started(annotating([]))
+    current = scene.fromPraxisBar(current, on).state
+    current = scene.fromViewer(current, choose(bird)).state
+    current = scene.fromPraxisBar(current, { kind: "noteDraft", text: "Worms." }).state
+    current = scene.fromFrame(current, subject(annotating([mine("n1", "Beads.")]))).state
+    expect(scene.praxisBar(current)?.noting).toMatchObject({ choosing: true, draft: "Worms." })
+    expect(scene.viewer(current).chosen).toEqual([bird])
+  })
+
+  it("starts afresh after a change of mode, and has no noting in practice mode", () => {
+    let current = started(annotating([]))
+    current = scene.fromPraxisBar(current, on).state
+    current = scene.fromFrame(current, subject(at(0, 1))).state
+    expect(scene.viewer(current)).toMatchObject({ choosing: false, chosen: [] })
+    expect(scene.praxisBar(current)?.noting).toBeNull()
+    expect(scene.fromPraxisBar(current, on).state).toBe(current)
+    expect(scene.fromViewer(current, choose(bird)).state).toBe(current)
+    current = scene.fromFrame(current, subject(annotating([]))).state
+    expect(scene.praxisBar(current)?.noting?.choosing).toBe(false)
   })
 })
