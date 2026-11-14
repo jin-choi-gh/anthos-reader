@@ -151,6 +151,7 @@ describe("scene.start: each part staged", () => {
       notes: on.commentary.set,
       shown: [0, 1],
       open: null,
+      deletable: true,
       choosing: false,
       chosen: [],
     })
@@ -343,5 +344,92 @@ describe("noting in annotate mode", () => {
     expect(scene.fromViewer(current, choose(bird)).state).toBe(current)
     current = scene.fromFrame(current, subject(annotating([]))).state
     expect(scene.praxisBar(current)?.noting?.choosing).toBe(false)
+  })
+})
+
+describe("annotate mode: notes added and deleted", () => {
+  const remove = (id: string) => ({ kind: "deleteNote", id }) as const
+
+  it("sends out the new note on Add note, and its withdrawal on Delete", () => {
+    let current = started(annotating([mine("n1", "Worms.")]))
+    const typed = scene.fromPraxisBar(current, { kind: "noteDraft", text: "Beads." })
+    expect(typed.effects).toEqual([])
+    const added = scene.fromPraxisBar(typed.state, { kind: "addNote" })
+    expect(added.effects).toEqual([{ kind: "note", targets: [whole], tags: [], body: "Beads." }])
+    current = scene.fromViewer(added.state, tap(0)).state
+    const deleted = scene.fromViewer(current, remove("n1"))
+    expect(deleted.effects).toEqual([{ kind: "withdraw", id: "n1" }])
+    expect(scene.viewer(deleted.state).open).toBeNull()
+  })
+
+  it("keeps the same note open when a note before it is withdrawn, as in another tab", () => {
+    let current = started(annotating([mine("a", "A."), mine("b", "B."), mine("c", "C.")]))
+    current = scene.fromViewer(current, tap(1)).state
+    current = scene.fromFrame(
+      current,
+      subject(annotating([mine("b", "B."), mine("c", "C.")])),
+    ).state
+    expect(current.open).toEqual({ index: 0, id: "b" })
+    expect(scene.viewer(current).open).toBe(0)
+  })
+
+  it("keeps the same note open when a new note is added below it", () => {
+    let current = started(annotating([mine("a", "A.")]))
+    current = scene.fromViewer(current, tap(0)).state
+    const open = current.open
+    current = scene.fromFrame(
+      current,
+      subject(annotating([mine("a", "A."), mine("b", "B.")])),
+    ).state
+    expect(current.open).toBe(open)
+  })
+
+  it("closes a deleted note, rather than opening the note that takes its place", () => {
+    let current = started(annotating([mine("a", "A."), mine("b", "B."), mine("c", "C.")]))
+    current = scene.fromViewer(current, tap(1)).state
+    current = scene.fromViewer(current, remove("b")).state
+    current = scene.fromFrame(
+      current,
+      subject(annotating([mine("a", "A."), mine("c", "C.")])),
+    ).state
+    expect(scene.viewer(current).open).toBeNull()
+  })
+})
+
+describe("annotate mode: turning to the new note closes the open one", () => {
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const opened = () => scene.fromViewer(started(annotating([mine("a", "A.")])), tap(0)).state
+
+  it("closes the open note on any message from the praxis bar to the noting", () => {
+    for (const message of [
+      { kind: "choosing", on: true },
+      { kind: "noteDraft", text: "B" },
+      { kind: "unchoose", index: 0 },
+      { kind: "addNote" },
+    ] as const) {
+      const current = opened()
+      expect(scene.viewer(current).open).toBe(0)
+      expect(scene.viewer(scene.fromPraxisBar(current, message).state).open).toBeNull()
+    }
+  })
+
+  it("closes the open note when a passage is chosen in the poem", () => {
+    const choosing = scene.fromPraxisBar(opened(), { kind: "choosing", on: true }).state
+    const current = scene.fromViewer(choosing, tap(0)).state
+    expect(scene.viewer(current).open).toBe(0)
+    const chosen = scene.fromViewer(current, { kind: "choose", span: bird }).state
+    expect(scene.viewer(chosen).open).toBeNull()
+    expect(scene.viewer(chosen).chosen).toEqual([bird])
+  })
+
+  it("keeps the very same scene when nothing changes and nothing is open", () => {
+    const current = started(annotating([]))
+    expect(scene.fromPraxisBar(current, { kind: "choosing", on: false }).state).toBe(current)
+  })
+
+  it("leaves practice mode's open note alone: its praxis bar speaks to the writing", () => {
+    let current = started(at(0, 1))
+    current = scene.fromViewer(current, tap(2)).state
+    expect(scene.fromPraxisBar(current, { kind: "draft", text: "x" }).state).toBe(current)
   })
 })

@@ -1,8 +1,8 @@
 import { assertNever } from "../../../assertNever"
 import { lemmaOf } from "../../../material/notes"
-import { joinSpan, spanProblem } from "../../../material/spans"
+import { joinSpan, spanProblem, wholePoem } from "../../../material/spans"
 import type { LemmaPart, Span } from "../../../material/types"
-import type { NotingMessage, NotingProjection, NotingSubject } from "../types"
+import type { Effect, NotingMessage, NotingProjection, NotingSubject } from "../types"
 
 /** The new note so far: whether choosing is on, the targets chosen, never overlapping and in the
  * poem's order, and the draft. */
@@ -26,16 +26,41 @@ export function onChoose(noting: NotingSubject, state: NotingState, span: Span):
 }
 
 /** What the reader does in the praxis bar: turns choosing on or off, removes a chosen target by its
- * place in the table, or types. What changes nothing gives back the very same state. */
-export function onPraxisBar(state: NotingState, message: NotingMessage): NotingState {
+ * place in the table, types, or adds the note. Adding, while the draft says something, sends out a
+ * new note, on the chosen targets or the whole poem when none is chosen, with the subject's tags
+ * and the draft, trimmed, as its body; then a new note starts, with choosing as it was. What
+ * changes nothing gives back the very same state. */
+export function onPraxisBar(
+  noting: NotingSubject,
+  state: NotingState,
+  message: NotingMessage,
+): { state: NotingState; effects: readonly Effect[] } {
   switch (message.kind) {
     case "choosing":
-      return message.on === state.choosing ? state : { ...state, choosing: message.on }
+      return {
+        state: message.on === state.choosing ? state : { ...state, choosing: message.on },
+        effects: [],
+      }
     case "unchoose":
-      if (state.targets[message.index] === undefined) return state
-      return { ...state, targets: state.targets.filter((_, i) => i !== message.index) }
+      if (state.targets[message.index] === undefined) return { state, effects: [] }
+      return {
+        state: { ...state, targets: state.targets.filter((_, i) => i !== message.index) },
+        effects: [],
+      }
     case "noteDraft":
-      return message.text === state.draft ? state : { ...state, draft: message.text }
+      return {
+        state: message.text === state.draft ? state : { ...state, draft: message.text },
+        effects: [],
+      }
+    case "addNote": {
+      const body = state.draft.trim()
+      if (body === "") return { state, effects: [] }
+      const targets = state.targets.length > 0 ? state.targets : [wholePoem(noting.substrate)]
+      return {
+        state: { ...startNoting(), choosing: state.choosing },
+        effects: [{ kind: "note", targets, tags: noting.tags, body }],
+      }
+    }
     default:
       return assertNever(message)
   }

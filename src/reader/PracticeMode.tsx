@@ -51,6 +51,8 @@ export function PracticeMode({
         })
       case "revise":
         return notebook.revise(effect.id, effect.body)
+      case "withdraw":
+        return notebook.withdraw(effect.id)
       default:
         return assertNever(effect)
     }

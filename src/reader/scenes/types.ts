@@ -23,6 +23,9 @@ export interface Commentary {
   /** The notes shown: always notes of the set. */
   readonly notes: readonly Note[]
   readonly shown: "marked" | "listed"
+  /** The reader's own notes the set shows, in its order, so that one can be withdrawn; null for the
+   * editor's. */
+  readonly written: readonly ReaderNote[] | null
 }
 
 /** What the reader is asked to write: what it is about, its tags, and what they have written here
@@ -38,6 +41,8 @@ export interface WritingSubject {
  * lemma is made. */
 export interface NotingSubject {
   readonly substrate: Substrate
+  /** The tags the note is written with. */
+  readonly tags: readonly string[]
 }
 
 /** What the frame tells the scene: it only ever speaks when its subject changes. */
@@ -46,7 +51,10 @@ export interface FrameProtocol {
 }
 
 /** What the viewer tells the commentary. */
-export type CommentaryMessage = { kind: "tapNote"; note: number } | { kind: "closeNote" }
+export type CommentaryMessage =
+  | { kind: "tapNote"; note: number } // the note at that place in the set
+  | { kind: "closeNote" }
+  | { kind: "deleteNote"; id: string } // the reader's own note with that id
 
 export interface ViewerProtocol {
   toScene: CommentaryMessage | { kind: "choose"; span: Span } // a passage the reader chose, while choosing is on: for the noting
@@ -64,22 +72,32 @@ export type NotingMessage =
   | { kind: "choosing"; on: boolean } // the toggle for choosing passages
   | { kind: "unchoose"; index: number } // −: the chosen target at that place in the table
   | { kind: "noteDraft"; text: string } // the reader typed
+  | { kind: "addNote" } // Add note
 
 export interface PraxisBarProtocol {
   toScene: WritingMessage | NotingMessage
 }
 
-/** What the reader has written, sent out to the notebook: a new annotation, or a revision. The mode
- * adds the fingerprint and where it was written; the notebook makes the id and the time. */
+/** What the reader has written, sent out to the notebook: a new annotation, a revision, or a
+ * withdrawal. For a new note, the mode adds the fingerprint and where it was written; the notebook
+ * makes the id and the time. */
 export type Effect =
   | { kind: "note"; targets: readonly Span[]; tags: readonly string[]; body: string }
   | { kind: "revise"; id: NoteId; body: string }
+  | { kind: "withdraw"; id: NoteId }
 
 /** The commentary's share of what the viewer draws: the notes it shows, picked out ("marked") or
  * listed beside the poem ("listed"), and the open one. */
 export type CommentaryProjection =
   | { kind: "marked"; text: TextId; notes: Notes; marked: number[]; open: number | null }
-  | { kind: "listed"; text: TextId; notes: Notes; shown: number[]; open: number | null }
+  | {
+      kind: "listed"
+      text: TextId
+      notes: Notes
+      shown: number[]
+      open: number | null
+      deletable: boolean // the reader's own notes, which can be deleted
+    }
 
 /** What the viewer draws: the commentary's share, whether choosing is on, and the chosen targets. */
 export type ViewerProjection = CommentaryProjection & {

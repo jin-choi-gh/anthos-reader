@@ -1,5 +1,5 @@
 import { assertNever } from "../../assertNever"
-import { keepOpen, onViewer, viewerOf } from "./parts/commentary"
+import { keepOpen, onViewer, viewerOf, type OpenNote } from "./parts/commentary"
 import {
   notingOf,
   onChoose,
@@ -28,8 +28,8 @@ import type {
 
 export interface SceneState {
   readonly subject: Subject
-  /** The editor's note the reader has opened, by its index. */
-  readonly open: number | null
+  /** The note the reader has opened, if any. */
+  readonly open: OpenNote | null
   /** The writing, when the subject asks for it. */
   readonly writing: WritingState | null
   /** The new note, when the subject has noting. */
@@ -61,24 +61,27 @@ export const scene = {
     return reply({ subject, open: keepOpen(subject.commentary, current.open), writing, noting })
   },
 
-  /** The viewer speaks to the commentary, and a chosen passage to the noting. */
+  /** The viewer speaks to the commentary, which may withdraw a note from the notebook, and a chosen
+   * passage to the noting, which also closes the open note. */
   fromViewer(current: SceneState, message: ViewerProtocol["toScene"]): Reply<SceneState> {
     if (message.kind === "choose") {
       const { noting } = current.subject
       if (noting === null || current.noting === null) return reply(current)
-      const next = onChoose(noting, current.noting, message.span)
-      return reply(next === current.noting ? current : { ...current, noting: next })
+      return reply(withNoting(current, onChoose(noting, current.noting, message.span)))
     }
-    const open = onViewer(current.subject.commentary, current.open, message)
-    return reply(open === current.open ? current : { ...current, open })
+    const answer = onViewer(current.subject.commentary, current.open, message)
+    const state = answer.open === current.open ? current : { ...current, open: answer.open }
+    return reply(state, answer.effects)
   },
 
-  /** The praxis bar speaks to the writing, which may write in the notebook, or to the noting. */
+  /** The praxis bar speaks to the writing or to the noting, either of which may write in the
+   * notebook. Speaking to the noting also closes the open note. */
   fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
     if (isNoting(message)) {
-      if (current.noting === null) return reply(current)
-      const next = onNotingBar(current.noting, message)
-      return reply(next === current.noting ? current : { ...current, noting: next })
+      const { noting } = current.subject
+      if (noting === null || current.noting === null) return reply(current)
+      const answer = onNotingBar(noting, current.noting, message)
+      return reply(withNoting(current, answer.state), answer.effects)
     }
     const { writing } = current.subject
     if (writing === null || current.writing === null) return reply(current)
@@ -109,12 +112,20 @@ export const scene = {
   },
 }
 
+/** The scene once the noting has answered: its new state, and the open note closed, since the reader
+ * has turned to the new note. Nothing changed gives back the very same scene. */
+function withNoting(current: SceneState, noting: NotingState): SceneState {
+  if (noting === current.noting && current.open === null) return current
+  return { ...current, noting, open: null }
+}
+
 /** Whether a message from the praxis bar is for the noting, rather than the writing. */
 function isNoting(message: PraxisBarProtocol["toScene"]): message is NotingMessage {
   switch (message.kind) {
     case "choosing":
     case "unchoose":
     case "noteDraft":
+    case "addNote":
       return true
     case "draft":
     case "submit":

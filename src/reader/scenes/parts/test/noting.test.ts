@@ -11,6 +11,7 @@ const noting: NotingSubject = {
       "He bit an Angle Worm in halves",
     ],
   },
+  tags: [],
 }
 
 const span = (
@@ -24,6 +25,13 @@ const span = (
 })
 
 const choosing: NotingState = { ...startNoting(), choosing: true }
+
+/** The state after a message from the praxis bar that sends nothing out. */
+const bar = (state: NotingState, message: Parameters<typeof onPraxisBar>[2]) => {
+  const answer = onPraxisBar(noting, state, message)
+  expect(answer.effects).toEqual([])
+  return answer.state
+}
 const bird = span(0, 2, 0, 6)
 const he = span(1, 0, 1, 2)
 
@@ -39,10 +47,10 @@ describe("a new note", () => {
   })
 
   it("turns choosing on and off, and keeps the very same state when nothing changes", () => {
-    const on = onPraxisBar(startNoting(), { kind: "choosing", on: true })
+    const on = bar(startNoting(), { kind: "choosing", on: true })
     expect(on.choosing).toBe(true)
-    expect(onPraxisBar(on, { kind: "choosing", on: false }).choosing).toBe(false)
-    expect(onPraxisBar(on, { kind: "choosing", on: true })).toBe(on)
+    expect(bar(on, { kind: "choosing", on: false }).choosing).toBe(false)
+    expect(bar(on, { kind: "choosing", on: true })).toBe(on)
   })
 })
 
@@ -76,19 +84,19 @@ describe("onPraxisBar: removing and writing", () => {
   const two = onChoose(noting, onChoose(noting, choosing, bird), he)
 
   it("removes a chosen target by its place in the table", () => {
-    expect(onPraxisBar(two, { kind: "unchoose", index: 0 }).targets).toEqual([he])
+    expect(bar(two, { kind: "unchoose", index: 0 }).targets).toEqual([he])
   })
 
   it("keeps the very same state for a place the table does not have", () => {
-    expect(onPraxisBar(two, { kind: "unchoose", index: 2 })).toBe(two)
+    expect(bar(two, { kind: "unchoose", index: 2 })).toBe(two)
   })
 
   it("keeps the draft, and lets the note be added only once it says something", () => {
-    const typed = onPraxisBar(two, { kind: "noteDraft", text: "Worms." })
+    const typed = bar(two, { kind: "noteDraft", text: "Worms." })
     expect(notingOf(noting, typed)).toMatchObject({ draft: "Worms.", canAdd: true })
-    const blank = onPraxisBar(two, { kind: "noteDraft", text: "   " })
+    const blank = bar(two, { kind: "noteDraft", text: "   " })
     expect(notingOf(noting, blank).canAdd).toBe(false)
-    expect(onPraxisBar(typed, { kind: "noteDraft", text: "Worms." })).toBe(typed)
+    expect(bar(typed, { kind: "noteDraft", text: "Worms." })).toBe(typed)
   })
 })
 
@@ -104,5 +112,45 @@ describe("notingOf: each chosen target's lemma, as the notes give it", () => {
     ])
     const whole: NotingState = { ...choosing, targets: [span(0, 0, 2, 30)] }
     expect(notingOf(noting, whole).chosen).toEqual([{ kind: "citation", text: "the whole poem" }])
+  })
+})
+
+describe("addNote: the note added", () => {
+  const two = onChoose(noting, onChoose(noting, choosing, he), bird)
+  const typed = { ...two, draft: "  Worms and beads.  " }
+
+  it("sends out a new note on the chosen targets, in the poem's order, with the draft trimmed", () => {
+    expect(onPraxisBar(noting, typed, { kind: "addNote" }).effects).toEqual([
+      { kind: "note", targets: [bird, he], tags: [], body: "Worms and beads." },
+    ])
+  })
+
+  it("is a note on the whole poem when no passage is chosen", () => {
+    const plain = { ...startNoting(), draft: "Worms." }
+    expect(onPraxisBar(noting, plain, { kind: "addNote" }).effects).toEqual([
+      { kind: "note", targets: [span(0, 0, 2, 30)], tags: [], body: "Worms." },
+    ])
+  })
+
+  it("carries the subject's tags", () => {
+    const tagged = { ...noting, tags: ["gloss"] }
+    const [effect] = onPraxisBar(tagged, typed, { kind: "addNote" }).effects
+    expect(effect).toMatchObject({ tags: ["gloss"] })
+  })
+
+  it("then starts a new note, keeping whether choosing is on", () => {
+    expect(onPraxisBar(noting, typed, { kind: "addNote" }).state).toEqual({
+      choosing: true,
+      targets: [],
+      draft: "",
+    })
+    const off = { ...typed, choosing: false }
+    expect(onPraxisBar(noting, off, { kind: "addNote" }).state.choosing).toBe(false)
+  })
+
+  it("adds nothing while the draft says nothing, and keeps the very same state", () => {
+    const blank = { ...two, draft: "   " }
+    expect(onPraxisBar(noting, blank, { kind: "addNote" })).toEqual({ state: blank, effects: [] })
+    expect(onPraxisBar(noting, blank, { kind: "addNote" }).state).toBe(blank)
   })
 })

@@ -75,7 +75,8 @@ function none(): LineRange[] {
 }
 
 /** The viewer's notes, for the margin or the sheet, from the projection's set. Marked: the note the
- * reader opened, if any, with an X. Listed: the shown notes, each one tapped to open or close it. */
+ * reader opened, if any, with an X. Listed: the shown notes, each one tapped to open or close it,
+ * and, when they can be deleted, Delete on the open one. */
 export function ViewerNotes({ projection, send }: ViewerProps) {
   const { notes } = projection.notes
 
@@ -91,6 +92,9 @@ export function ViewerNotes({ projection, send }: ViewerProps) {
           notes={notes.filter((note) => projection.shown.includes(note.index))}
           selectedNote={projection.open}
           onToggle={(note) => send({ kind: "tapNote", note })}
+          {...(projection.deletable
+            ? { onDelete: (id: string) => send({ kind: "deleteNote", id }) }
+            : {})}
         />
       )
   }

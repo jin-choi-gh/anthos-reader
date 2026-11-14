@@ -740,3 +740,31 @@ html:has(.reader[data-layout="page"] .praxis-dock) {
 html:has(.reader[data-layout="page"] .praxis-dock):has(.bottom-sheet) {
   scroll-padding-bottom: calc(var(--praxis-bar-height, 0px) + var(--sheet-handle, 3rem) + 1rem);
 }
+
+/* Delete, at the foot of the selected note, on the right: quiet, like the way back */
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.note-delete {
+  min-height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.note-delete:hover {
+  border-color: var(--line-hover);
+  color: var(--ink);
+}
+
+.note-delete:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

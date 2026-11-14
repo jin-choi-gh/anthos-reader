@@ -13,7 +13,7 @@ const considering: Subject = {
   key: "p/0/0",
   text: "poem",
   prose: ["Look."],
-  commentary: { set, notes: [notes[1]!], shown: "marked" },
+  commentary: { set, notes: [notes[1]!], shown: "marked", written: null },
   writing: null,
   noting: null,
 }
@@ -21,7 +21,7 @@ const responding: Subject = {
   key: "p/0/1",
   text: "poem",
   prose: ["What does the bird eat?"],
-  commentary: { set, notes: [], shown: "marked" },
+  commentary: { set, notes: [], shown: "marked", written: null },
   writing: { targets: [whole], tags: [], count: "one", written: [] },
   noting: null,
 }
@@ -29,7 +29,7 @@ const annotating: Subject = {
   key: "annotate",
   text: "poem",
   prose: [],
-  commentary: { set, notes, shown: "listed" },
+  commentary: { set, notes, shown: "listed", written: null },
   writing: null,
   noting: null,
 }

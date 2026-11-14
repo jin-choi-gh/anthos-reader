@@ -16,6 +16,7 @@ export function Layout({
   page,
   notes,
   notesAs = "open",
+  notesLabel = "Notes",
   praxisBar,
 }: {
   layout: ReaderLayout
@@ -24,6 +25,7 @@ export function Layout({
   page: ReactNode
   notes: ReactNode
   notesAs?: "open" | "list"
+  notesLabel?: string // the handle of the notes' sheet, on a page
   praxisBar?: ReactNode
 }) {
   return (
@@ -39,7 +41,13 @@ export function Layout({
         {dev}
         <div className="text-block">{page}</div>
       </article>
-      <Beside layout={layout} notes={notes} notesAs={notesAs} praxisBar={praxisBar} />
+      <Beside
+        layout={layout}
+        notes={notes}
+        notesAs={notesAs}
+        notesLabel={notesLabel}
+        praxisBar={praxisBar}
+      />
     </>
   )
 }
@@ -51,11 +59,13 @@ function Beside({
   layout,
   notes,
   notesAs,
+  notesLabel,
   praxisBar,
 }: {
   layout: ReaderLayout
   notes: ReactNode
   notesAs: "open" | "list"
+  notesLabel: string
   praxisBar?: ReactNode
 }) {
   if (layout === "spread") {
@@ -66,12 +76,12 @@ function Beside({
       </Margin>
     )
   }
-  if (praxisBar === undefined) return <BottomSheet label="Notes">{notes}</BottomSheet>
+  if (praxisBar === undefined) return <BottomSheet label={notesLabel}>{notes}</BottomSheet>
   if (notesAs === "open") return <Dock praxisBar={praxisBar} notes={notes} />
   return (
     <>
       <Dock praxisBar={praxisBar} notes={null} />
-      <BottomSheet label="Notes">{notes}</BottomSheet>
+      <BottomSheet label={notesLabel}>{notes}</BottomSheet>
     </>
   )
 }

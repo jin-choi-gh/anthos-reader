@@ -4,8 +4,8 @@ import type { NotingProjection, PraxisBarProtocol } from "../scenes/types"
 
 /** A new note, in the praxis bar: the toggle for choosing passages of the poem; the chosen targets,
  * one row each in the poem's order, with a button to remove each; the box for the note; and Add
- * note, which can be pressed once the box says something. Every change goes to the scene, which
- * holds the note so far. */
+ * note, which can be pressed once the box says something, as can Ctrl or Cmd with Enter in the box.
+ * Every change goes to the scene, which holds the note so far and adds it. */
 export function NotingPage({
   page,
   send,
@@ -16,7 +16,13 @@ export function NotingPage({
   const box = useId()
 
   return (
-    <div className="notebook-page noting-page">
+    <form
+      className="notebook-page noting-page"
+      onSubmit={(event) => {
+        event.preventDefault()
+        send({ kind: "addNote" })
+      }}
+    >
       <button
         type="button"
         className="praxis-button noting-toggle"
@@ -53,12 +59,19 @@ export function NotingPage({
         rows={4}
         value={page.draft}
         onChange={(event) => send({ kind: "noteDraft", text: event.target.value })}
+        onKeyDown={(event) => {
+          // Ctrl or Cmd with Enter adds the note, as in a chat; Enter alone starts a new line
+          if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault()
+            send({ kind: "addNote" })
+          }
+        }}
       />
       <div className="notebook-actions">
-        <button type="button" className="praxis-button notebook-submit" disabled={!page.canAdd}>
+        <button type="submit" className="praxis-button notebook-submit" disabled={!page.canAdd}>
           Add note
         </button>
       </div>
-    </div>
+    </form>
   )
 }

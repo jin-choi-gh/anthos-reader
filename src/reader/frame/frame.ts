@@ -39,6 +39,7 @@ export function frameOf(
         set: material.notes,
         notes: resolved(parts, material.notes.notes),
         shown: "marked",
+        written: null,
       },
       writing:
         parts.writing === null
@@ -55,24 +56,23 @@ export function frameOf(
 }
 
 /** The frame in annotate mode: no practice and no runner, so no heading and no rulings. It never
- * moves, and lists the reader's own notes that can be placed on the poem, in the order written;
- * and it has noting, for a new note on passages of the poem the reader chooses. */
+ * moves. It lists the notes the reader wrote in annotate mode, those with no provenance, that can
+ * be placed on the poem, in the order written, and carries them, so that one can be deleted; and it
+ * has noting, with no tags, for a new note on passages of the poem the reader chooses. */
 export function annotateFrame(
   text: TextId,
   material: Material,
   written: readonly ReaderNote[],
 ): Frame {
-  const set = notesFor(
-    material.substrate,
-    written.filter((note) => placeable(note, material)),
-  )
+  const mine = written.filter((note) => note.from === null && placeable(note, material))
+  const set = notesFor(material.substrate, mine)
   const subject: Subject = {
     key: "annotate",
     text,
     prose: [],
-    commentary: { set, notes: set.notes, shown: "listed" },
+    commentary: { set, notes: set.notes, shown: "listed", written: mine },
     writing: null,
-    noting: { substrate: material.substrate },
+    noting: { substrate: material.substrate, tags: [] },
   }
   return { heading: null, back: null, next: null, subject }
 }

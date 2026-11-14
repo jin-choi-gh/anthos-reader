@@ -114,7 +114,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/0/1",
       text: "fixture",
       prose: ["On @b."],
-      commentary: { set: material.notes, notes: [notes[2]], shown: "marked" },
+      commentary: { set: material.notes, notes: [notes[2]], shown: "marked", written: null },
       writing: null,
       noting: null,
     })
@@ -133,7 +133,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/1/2",
       text: "fixture",
       prose: ["What does the bird eat?"],
-      commentary: { set: material.notes, notes: [], shown: "marked" },
+      commentary: { set: material.notes, notes: [], shown: "marked", written: null },
       writing: { targets: [whole], tags: [], count: "one", written: [] },
       noting: null,
     })
@@ -162,7 +162,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         key: "test/0/2",
         text: "fixture",
         prose: [],
-        commentary: { set: material.notes, notes: [], shown: "marked" },
+        commentary: { set: material.notes, notes: [], shown: "marked", written: null },
         writing: null,
         noting: null,
       })
@@ -244,6 +244,7 @@ describe("noting: a new note on passages the reader chooses", () => {
   it("is in annotate mode, on the material's poem, and never in practice mode", () => {
     expect(annotateFrame("poem", material, []).subject.noting).toEqual({
       substrate: material.substrate,
+      tags: [],
     })
     for (const [stage, step] of [
       [0, 0],
@@ -253,5 +254,25 @@ describe("noting: a new note on passages the reader chooses", () => {
     ] as const) {
       expect(frameOf(practice, standing(stage, step), material, []).subject.noting).toBeNull()
     }
+  })
+})
+
+describe("annotateFrame: the notes written in annotate mode, which can be deleted", () => {
+  it("lists only the notes with no provenance, in the order written, and carries them in that order", () => {
+    const first = mine("n1", "First.")
+    const practised = mine("p", "Written in the practice.", {
+      from: { practice: "test", stage: 0, step: 2 },
+    })
+    const second = mine("n2", "Second.")
+    const { commentary } = annotateFrame("poem", material, [first, practised, second]).subject
+    expect(commentary.notes.map((note) => [note.index, note.id])).toEqual([
+      [0, "n1"],
+      [1, "n2"],
+    ])
+    expect(commentary.written).toEqual([first, second])
+  })
+
+  it("carries none of the reader's notes in practice mode, so nothing there can be deleted", () => {
+    expect(frameOf(practice, standing(0, 0), material, []).subject.commentary.written).toBeNull()
   })
 })
