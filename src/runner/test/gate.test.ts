@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import type { Practice } from "../../practice/types"
-import { gateOf } from "../gate"
+import { finalOf, gateOf } from "../gate"
 
 /** Two stages: a consider step and a respond step, then one consider step. The rests are at the
  * end of each stage, and the final stage is stage 2. */
@@ -62,5 +62,12 @@ describe("gateOf", () => {
   it("holds the final stage at once for a practice with no stages", () => {
     const empty = { ...practice, stages: [] }
     expect(gateOf(empty, { stage: 0, step: 0 })).toEqual({ kind: "final" })
+  })
+})
+
+describe("finalOf", () => {
+  it("is one past the last stage, and the first stage for a practice with none", () => {
+    expect(finalOf(practice)).toBe(2)
+    expect(finalOf({ ...practice, stages: [] })).toBe(0)
   })
 })

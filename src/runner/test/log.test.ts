@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { clearLog, logKey, readLog, writeLog } from "../log"
+import { appendLog, clearLog, logKey, readLog } from "../log"
 import type { Practice } from "../../practice/types"
 import type { Event } from "../types"
 
@@ -38,7 +38,7 @@ describe("saving and reading a run", () => {
   })
 
   it("reads back what it saved", () => {
-    expect(writeLog(practice, log)).toBe(true)
+    expect(appendLog(practice, log)).toBe(true)
     expect(readLog(practice)).toEqual(log)
   })
 
@@ -48,12 +48,18 @@ describe("saving and reading a run", () => {
 
   it("keeps the runs of different practices on one text apart", () => {
     const other = { ...practice, id: "slow-reading" }
-    writeLog(practice, log)
+    appendLog(practice, log)
     expect(readLog(other)).toEqual([])
   })
 
+  it("adds to what another tab kept, rather than writing over it", () => {
+    appendLog(practice, [log[0]!]) // as if from another tab
+    appendLog(practice, [log[1]!])
+    expect(readLog(practice)).toEqual(log)
+  })
+
   it("forgets a run", () => {
-    writeLog(practice, log)
+    appendLog(practice, log)
     clearLog(practice)
     expect(readLog(practice)).toEqual([])
     expect(stored.size).toBe(0)
@@ -61,7 +67,7 @@ describe("saving and reading a run", () => {
 
   it("forgets nothing outside development", () => {
     vi.stubEnv("DEV", false)
-    writeLog(practice, log)
+    appendLog(practice, log)
     clearLog(practice)
     expect(readLog(practice)).toEqual(log)
   })
@@ -102,7 +108,7 @@ describe("storage that is off", () => {
 
   it("reads an empty log, says a save failed, and forgets without complaint", () => {
     expect(readLog(practice)).toEqual([])
-    expect(writeLog(practice, log)).toBe(false)
+    expect(appendLog(practice, log)).toBe(false)
     expect(() => clearLog(practice)).not.toThrow()
   })
 })

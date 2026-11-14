@@ -5,7 +5,7 @@ import { lineLength, textOf } from "./textualComplex"
 /** What a target covers: the whole poem, whole lines, or a passage starting or ending inside a line. */
 type TargetKind = "poem" | "lines" | "passage"
 
-/** The reader's notes from a loom textual complex: every note of every set, in file order, with its
+/** The editor's notes from a loom textual complex: every note of every set, in file order, with its
  * index (its place in that order, from 0), its loom id if it has one, its lemma and its paragraphs;
  * and what each line's notes cover. Indexes last only as long as the loaded file: never save them. */
 export function toNotes(textualComplex: LoomTextualComplex): Notes {

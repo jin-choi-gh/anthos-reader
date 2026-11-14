@@ -6,7 +6,7 @@ export type Event =
   | { readonly kind: "visited"; readonly stage: number; readonly step: number; readonly at: number }
   | { readonly kind: "finished"; readonly stage: number; readonly at: number; readonly day: Day }
 
-/** Where the reader is: the counter. stage is stages.length in the final stage; step is
+/** Where the reader is. stage is stages.length in the final stage; step is
  * steps.length at a stage's rest. */
 export interface Position {
   readonly stage: number

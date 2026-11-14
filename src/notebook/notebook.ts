@@ -30,7 +30,7 @@ export function notesOf(events: readonly NotebookEvent[]): ReaderNote[] {
   return [...notes.values()]
 }
 
-/** The notes written on one frame of one practice. */
+/** The notes written on one step of one practice. */
 export function notesFrom(notes: readonly ReaderNote[], where: Provenance): ReaderNote[] {
   return notes.filter(
     ({ from }) =>

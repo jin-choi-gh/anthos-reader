@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { clearNotebook, notebookKey, readNotebook, writeNotebook } from "../log"
+import { appendNotebook, clearNotebook, notebookKey, readNotebook } from "../log"
 import type { NotebookEvent, NoteId } from "../types"
 
 const a = "a" as NoteId
@@ -48,20 +48,26 @@ describe("the notebook in storage", () => {
   })
 
   it("reads back what it kept, and nothing for another text", () => {
-    expect(writeNotebook("dickinson", events)).toBe(true)
+    expect(appendNotebook("dickinson", events)).toBe(true)
     expect(readNotebook("dickinson")).toEqual(events)
     expect(readNotebook("keats")).toEqual([])
   })
 
+  it("adds to what another tab kept, rather than writing over it", () => {
+    appendNotebook("dickinson", [events[0]!]) // as if from another tab
+    appendNotebook("dickinson", [events[2]!])
+    expect(readNotebook("dickinson")).toEqual([events[0], events[2]])
+  })
+
   it("forgets a notebook", () => {
-    writeNotebook("dickinson", events)
+    appendNotebook("dickinson", events)
     clearNotebook("dickinson")
     expect(readNotebook("dickinson")).toEqual([])
   })
 
   it("forgets nothing outside development: the notebook is kept for good", () => {
     vi.stubEnv("DEV", false)
-    writeNotebook("dickinson", events)
+    appendNotebook("dickinson", events)
     clearNotebook("dickinson")
     expect(readNotebook("dickinson")).toEqual(events)
   })

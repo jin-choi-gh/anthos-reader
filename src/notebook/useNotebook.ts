@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
 import type { Anchor, TextId } from "../material/types"
-import { whenForgotten } from "../storage/log"
-import { notebookKey, readNotebook, writeNotebook } from "./log"
+import { whenChanged } from "../storage/log"
+import { appendNotebook, notebookKey, readNotebook } from "./log"
 import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesOf } from "./notebook"
 import type { NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
 
@@ -21,21 +21,23 @@ export function useNotebook(text: TextId): Notebook {
   const latest = useRef(events)
   const notes = useMemo(() => notesOf(events), [events])
 
-  // Forgotten in development (clearNotebook): this copy is emptied too
+  // Changed elsewhere (in another tab, or forgotten in development): read it again
   useEffect(
     () =>
-      whenForgotten(notebookKey(text), () => {
-        latest.current = []
-        setEvents([])
+      whenChanged(notebookKey(text), () => {
+        const next = readNotebook(text)
+        latest.current = next
+        setEvents(next)
       }),
     [text],
   )
 
   return useMemo(() => {
     const append = (event: NotebookEvent) => {
-      const next = [...latest.current, event]
+      // Kept: read back what is stored, other tabs' notes with it. Not kept (storage is off): this
+      // copy holds it for as long as the page is open
+      const next = appendNotebook(text, [event]) ? readNotebook(text) : [...latest.current, event]
       latest.current = next
-      writeNotebook(text, next)
       setEvents(next)
     }
     return {

@@ -13,8 +13,7 @@ export function partsOf(step: Step): Parts {
   }
 }
 
-/** A stage's rest: nothing said, nothing asked. The praxis bar's buttons say when the next stage
- * opens. */
+/** A stage's rest: nothing said, nothing asked. */
 export const REST: Parts = { prose: [], highlight: [], writing: null }
 
 /** The final stage. */

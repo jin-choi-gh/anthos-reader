@@ -15,7 +15,7 @@ export function noteFor(ref: string, notes: readonly Note[]): Note | null {
   return id === null ? null : (notes.find((note) => note.loomId === id) ?? null)
 }
 
-/** Everything that keeps a practice from being screened on a text: a missing stage or step, or a
+/** Everything that keeps a practice from running on a text: a missing stage or step, or a
  * reference that is malformed or names no note in the text. */
 export function problemsOf(practice: Practice, notes: readonly Note[]): string[] {
   const problems: string[] = []

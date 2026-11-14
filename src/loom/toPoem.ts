@@ -3,7 +3,7 @@ import { DISPLAY, LINE, POEM, STANZA } from "./display"
 import type { LoomUnit, LoomTextualComplex } from "./types"
 import { SchemaTree, schemaOfKind, textOf } from "./textualComplex"
 
-/** The reader's Poem from a loom textual complex: the poems, stanzas and lines of its display
+/** The poem from a loom textual complex: the poems, stanzas and lines of its display
  * schema, each line's text cut from the substrate by its span, and the textual complex's
  * metadata. */
 export function toPoem(textualComplex: LoomTextualComplex): Poem {

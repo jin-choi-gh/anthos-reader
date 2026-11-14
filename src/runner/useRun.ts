@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { now, today, type Day } from "../clock/clock"
 import type { ReaderNote } from "../notebook/types"
 import type { Practice } from "../practice/types"
-import { whenForgotten } from "../storage/log"
-import { logKey, readLog, writeLog } from "./log"
+import { whenChanged } from "../storage/log"
+import { appendLog, logKey, readLog } from "./log"
 import { eventsOfMove, standingOf } from "./step"
 import type { Event, Standing } from "./types"
 
@@ -25,19 +25,21 @@ export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
   const day = useToday()
   const standing = useMemo(() => standingOf(practice, log, notes, day), [practice, log, notes, day])
 
-  // Forgotten in development (clearLog): this copy starts again too
+  // Changed elsewhere (in another tab, or forgotten in development): read it again
   useEffect(
     () =>
-      whenForgotten(logKey(practice), () => {
-        latest.current = []
-        setLog([])
+      whenChanged(logKey(practice), () => {
+        const next = readLog(practice)
+        latest.current = next
+        setLog(next)
       }),
     [practice],
   )
 
-  const keep = (next: readonly Event[]) => {
+  const keep = (events: readonly Event[]) => {
+    // Kept: read back what is stored, another tab's moves with it. Not kept: this copy holds them
+    const next = appendLog(practice, events) ? readLog(practice) : [...latest.current, ...events]
     latest.current = next
-    writeLog(practice, next)
     setLog(next)
   }
 
@@ -50,7 +52,7 @@ export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
       const current = today()
       const here = standingOf(practice, latest.current, notes, current)
       const events = eventsOfMove(practice, here, target, now(), current)
-      if (events.length > 0) keep([...latest.current, ...events])
+      if (events.length > 0) keep(events)
     },
   }
 }

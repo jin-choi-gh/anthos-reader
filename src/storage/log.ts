@@ -11,13 +11,26 @@ export function readEvents<E>(key: string, isEvent: (value: unknown) => value is
   }
 }
 
-/** Keeps a log under a key, replacing what was there. False when storage is off or full. */
-export function writeEvents<E>(key: string, events: readonly E[]): boolean {
+/** Adds events to the end of the log under a key. What is there stays as it is, even entries this
+ * reader cannot read, so a log is only ever added to. A stored value that is not a list is damaged:
+ * the events start a new log. False when storage is off or full: nothing is added. */
+export function appendEvents(key: string, events: readonly unknown[]): boolean {
   try {
-    localStorage.setItem(key, JSON.stringify(events))
+    const kept = storedList(localStorage.getItem(key))
+    localStorage.setItem(key, JSON.stringify([...kept, ...events]))
     return true
   } catch {
     return false
+  }
+}
+
+function storedList(saved: string | null): unknown[] {
+  if (saved === null) return []
+  try {
+    const parsed: unknown = JSON.parse(saved)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
   }
 }
 
@@ -35,13 +48,24 @@ export function clearEvents(key: string): void {
   window.dispatchEvent(new CustomEvent<string>(FORGOTTEN, { detail: key }))
 }
 
-/** Calls `onForget` whenever the log under `key` is forgotten. Gives back the way to stop. */
-export function whenForgotten(key: string, onForget: () => void): () => void {
-  const listener = (event: Event) => {
-    if (event instanceof CustomEvent && event.detail === key) onForget()
+/** Calls `onChange` whenever the log under `key` changes other than by this page adding to it:
+ * forgotten here (clearEvents), or added to or forgotten in another tab or window. Gives back the way
+ * to stop. */
+export function whenChanged(key: string, onChange: () => void): () => void {
+  const forgotten = (event: Event) => {
+    if (event instanceof CustomEvent && event.detail === key) onChange()
   }
-  window.addEventListener(FORGOTTEN, listener)
-  return () => window.removeEventListener(FORGOTTEN, listener)
+  // The browser's "storage" event, in every other tab: its key, or null when all storage was cleared
+  const elsewhere = (event: Event) => {
+    const changed = "key" in event ? event.key : undefined
+    if (changed === key || changed === null) onChange()
+  }
+  window.addEventListener(FORGOTTEN, forgotten)
+  window.addEventListener("storage", elsewhere)
+  return () => {
+    window.removeEventListener(FORGOTTEN, forgotten)
+    window.removeEventListener("storage", elsewhere)
+  }
 }
 
 /** Whether a value is a plain object, whose fields a guard may then look at. */

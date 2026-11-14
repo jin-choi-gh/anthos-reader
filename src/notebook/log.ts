@@ -1,5 +1,5 @@
 import type { TextId } from "../material/types"
-import { clearEvents, isRecord, readEvents, writeEvents } from "../storage/log"
+import { appendEvents, clearEvents, isRecord, readEvents } from "../storage/log"
 import type { NotebookEvent, NoteId } from "./types"
 
 /** The key a text's notebook is kept under. The "v1" names the events' shape, so that a later shape
@@ -12,8 +12,9 @@ export function readNotebook(text: TextId): NotebookEvent[] {
   return readEvents(notebookKey(text), isNotebookEvent)
 }
 
-export function writeNotebook(text: TextId, events: readonly NotebookEvent[]): boolean {
-  return writeEvents(notebookKey(text), events)
+/** Adds events to a text's notebook. False when storage is off or full. */
+export function appendNotebook(text: TextId, events: readonly NotebookEvent[]): boolean {
+  return appendEvents(notebookKey(text), events)
 }
 
 /** Development only: forgets a text's notebook, and empties every open copy of it. Outside

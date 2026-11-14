@@ -31,7 +31,7 @@ export interface RespondStep {
 
 /** What a step is made of, whatever its direction. */
 export interface Parts {
-  /** Words for the praxis bar. */
+  /** The step's words. */
   readonly prose: readonly string[]
   /** References to the editor's notes to highlight in the poem: "@angle-worm". */
   readonly highlight: readonly string[]

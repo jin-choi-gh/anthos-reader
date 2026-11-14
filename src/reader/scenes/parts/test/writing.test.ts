@@ -127,4 +127,40 @@ describe("keepWriting: the page, when the notebook changes", () => {
     const sent = { editing: false, draft: "Worms." }
     expect(keepWriting(blank, blank, sent)).toBe(sent)
   })
+
+  it("leaves what the reader has typed alone, whatever arrives", () => {
+    const typing = { editing: true, draft: "Half a thought" }
+    expect(keepWriting(blank, filled, typing)).toBe(typing)
+    const editing = { editing: true, draft: "Worms, and more" }
+    expect(keepWriting(filled, blank, editing)).toBe(editing)
+  })
+
+  it("shows a note that arrives on a blank page, as written in another tab", () => {
+    expect(keepWriting(blank, filled, { editing: true, draft: "" })).toEqual({
+      editing: false,
+      draft: "Worms.",
+    })
+  })
+
+  it("follows a revision made elsewhere while the note is open and untouched", () => {
+    const revised = { ...filled, written: [{ ...saved, body: "Worms, raw." }] }
+    expect(keepWriting(filled, revised, { editing: true, draft: "Worms." })).toEqual({
+      editing: true,
+      draft: "Worms, raw.",
+    })
+  })
+
+  it("leaves a blank page when the note is gone while it is open and untouched", () => {
+    expect(keepWriting(filled, blank, { editing: true, draft: "Worms." })).toEqual({
+      editing: true,
+      draft: "",
+    })
+  })
+
+  it("keeps the very same state for an untouched page when nothing changed", () => {
+    const empty = { editing: true, draft: "" }
+    expect(keepWriting(blank, blank, empty)).toBe(empty)
+    const open = { editing: true, draft: "Worms." }
+    expect(keepWriting(filled, filled, open)).toBe(open)
+  })
 })

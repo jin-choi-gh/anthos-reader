@@ -3,7 +3,7 @@ import { notesFrom } from "../notebook/notebook"
 import type { ReaderNote } from "../notebook/types"
 import { partsOf } from "../practice/lexicon"
 import type { Practice } from "../practice/types"
-import { restOf } from "./gate"
+import { finalOf, gateOf, restOf } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
 
 /** Where the run stands, from the runner's log, the reader's notebook and the day:
@@ -18,8 +18,9 @@ export function standingOf(
   let from = 0
   let opened: Day | null = null
 
-  for (const [stage, { steps }] of practice.stages.entries()) {
-    const rest = steps.length
+  const final = finalOf(practice)
+  for (let stage = 0; stage < final; stage++) {
+    const rest = restOf(practice, stage)
     let step = 0
     let finished: { day: Day; index: number } | null = null
 
@@ -40,7 +41,7 @@ export function standingOf(
     if (finished === null) {
       return { position, opensOn: null, heldAt: heldAt(practice, stage, notes) }
     }
-    if (stage === practice.stages.length - 1) break
+    if (stage === final - 1) break
     const opensOn = nextDay(finished.day)
     // A finished stage never holds the reader again: what is past is past
     if (today < opensOn) return { position, opensOn, heldAt: null }
@@ -48,24 +49,23 @@ export function standingOf(
     opened = opensOn
   }
 
-  return { position: { stage: practice.stages.length, step: 0 }, opensOn: null, heldAt: null }
+  return { position: { stage: final, step: 0 }, opensOn: null, heldAt: null }
 }
 
 /** The first step of a stage that asks for writing and has none in the notebook, or null. */
 function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[]): number | null {
-  const steps = practice.stages[stage]?.steps ?? []
-  const index = steps.findIndex(
-    (step, i) =>
-      partsOf(step).writing !== null &&
-      notesFrom(notes, { practice: practice.id, stage, step: i }).length === 0,
-  )
-  return index === -1 ? null : index
+  for (let step = 0; step < restOf(practice, stage); step++) {
+    const gate = gateOf(practice, { stage, step })
+    if (gate.kind !== "step" || partsOf(gate.step).writing === null) continue
+    if (notesFrom(notes, { practice: practice.id, stage, step }).length === 0) return step
+  }
+  return null
 }
 
 /** Whether the reader may move to a step of the stage they are in, or why not. */
 export function ruling(practice: Practice, standing: Standing, target: number): Ruling {
   const { position, opensOn, heldAt } = standing
-  if (position.stage === practice.stages.length) {
+  if (position.stage === finalOf(practice)) {
     return { allowed: false, reason: { kind: "finished" } }
   }
   const rest = restOf(practice, position.stage)
@@ -91,7 +91,7 @@ export function eventsOfMove(
   today: Day,
 ): Event[] {
   const { position, opensOn } = standing
-  if (position.stage === practice.stages.length || target === position.step) return []
+  if (position.stage === finalOf(practice) || target === position.step) return []
   const decision = ruling(practice, standing, target)
   if (!decision.allowed) {
     throw new RangeError(
