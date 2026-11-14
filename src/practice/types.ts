@@ -39,8 +39,10 @@ export interface Parts {
   readonly writing: Writing | null
 }
 
-/** For now, one note on the whole poem, which the reader may revise. */
+/** For now, one note on the whole poem, with the tags the step gives it, which the reader may
+ * revise. */
 export interface Writing {
-  readonly anchor: "whole"
+  readonly target: "whole"
+  readonly tags: readonly string[]
   readonly count: "one"
 }

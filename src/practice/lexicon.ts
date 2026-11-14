@@ -7,7 +7,11 @@ export function partsOf(step: Step): Parts {
     case "consider": // read the editor's note on a passage
       return { prose: step.prose, highlight: [step.note], writing: null }
     case "respond": // write about the whole poem
-      return { prose: step.prose, highlight: [], writing: { anchor: "whole", count: "one" } }
+      return {
+        prose: step.prose,
+        highlight: [],
+        writing: { target: "whole", tags: [], count: "one" },
+      }
     default:
       return assertNever(step)
   }

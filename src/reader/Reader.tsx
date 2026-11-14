@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import { loadTextualComplex } from "../loom/load"
-import { toNotes } from "../loom/toNotes"
-import { toPoem } from "../loom/toPoem"
+import { toMaterial } from "../loom/toMaterial"
 import { practiceFor } from "../practice/practices"
 import type { ModeName } from "../route"
 import { useLoaded } from "../useLoaded"
@@ -14,10 +13,9 @@ import { PracticeMode } from "./PracticeMode"
 import { usePlatform } from "./usePlatform"
 import "./reader.css"
 
-/** One file's material: its poem and its notes, made together from its textual complex. */
+/** One file's material, made from its textual complex. */
 async function loadMaterial(file: string): Promise<Material> {
-  const textualComplex = await loadTextualComplex(file)
-  return { poem: toPoem(textualComplex), notes: toNotes(textualComplex) }
+  return toMaterial(await loadTextualComplex(file))
 }
 
 /** The reader of one file, for its whole life: App gives it a key of its file, so another file is
@@ -70,7 +68,7 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
     const { mode } = chosen
     // The pen, only when there is a practice to switch to or from
     const topBar = mode.practice !== null && <ModeToggle file={file} mode={mode.name} />
-    const parts = { notes: material.notes.notes, materials, layout, topBar }
+    const parts = { material, materials, layout, topBar }
     content =
       mode.name === "practice" ? (
         <PracticeMode practice={mode.practice} {...parts} />

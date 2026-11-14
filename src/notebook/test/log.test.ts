@@ -1,15 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { appendNotebook, clearNotebook, notebookKey, readNotebook } from "../log"
+import type { Fingerprint } from "../../material/types"
 import type { NotebookEvent, NoteId } from "../types"
 
 const a = "a" as NoteId
+const whole = { start: { line: 0, offset: 0 }, end: { line: 19, offset: 29 } }
+/** What every note here is about, and the lines it was written on. */
+const about = { targets: [whole], tags: [], fingerprint: "f" as Fingerprint }
 
 const events: NotebookEvent[] = [
   {
     kind: "noted",
     id: a,
     at: 1_000,
-    anchor: { kind: "whole", text: "dickinson" },
+    ...about,
     body: "A worm.",
     from: { practice: "first-reading", stage: 0, step: 2 },
   },
@@ -18,7 +22,7 @@ const events: NotebookEvent[] = [
     kind: "noted",
     id: "b" as NoteId,
     at: 3_000,
-    anchor: { kind: "whole", text: "dickinson" },
+    ...about,
     body: "Beads.",
     from: null,
   },
@@ -75,22 +79,60 @@ describe("the notebook in storage", () => {
   it("leaves out entries that are not events, and keeps those that are", () => {
     const strays = [
       null,
-      { kind: "noted", id: "c", at: 0, body: "No anchor.", from: null },
       {
         kind: "noted",
         id: "c",
         at: 0,
-        anchor: { kind: "passage" },
-        body: "A kind not known yet.",
+        ...about,
+        targets: undefined,
+        body: "No targets.",
+        from: null,
+      },
+      { kind: "noted", id: "c", at: 0, ...about, targets: [], body: "About nothing.", from: null },
+      {
+        kind: "noted",
+        id: "c",
+        at: 0,
+        ...about,
+        targets: [{ start: { line: 0 }, end: { line: 1, offset: 3 } }],
+        body: "A position with no offset.",
         from: null,
       },
       {
         kind: "noted",
         id: "c",
         at: 0,
-        anchor: { kind: "whole", text: "d" },
-        body: "x",
-        from: { stage: 0 },
+        ...about,
+        targets: [{ start: { line: -1, offset: 0 }, end: { line: 1, offset: 3 } }],
+        body: "A line before the first.",
+        from: null,
+      },
+      {
+        kind: "noted",
+        id: "c",
+        at: 0,
+        ...about,
+        tags: [1],
+        body: "A tag that is no word.",
+        from: null,
+      },
+      {
+        kind: "noted",
+        id: "c",
+        at: 0,
+        ...about,
+        fingerprint: 7,
+        body: "No fingerprint.",
+        from: null,
+      },
+      { kind: "noted", id: "c", at: 0, ...about, body: "x", from: { stage: 0 } },
+      {
+        kind: "noted",
+        id: "c",
+        at: 0,
+        anchor: { kind: "whole", text: "dickinson" },
+        body: "A note of the older shape, with an anchor.",
+        from: null,
       },
       { kind: "revised", id: "", at: 0, body: "No id." },
       { kind: "revised", id: "a", body: "No time." },

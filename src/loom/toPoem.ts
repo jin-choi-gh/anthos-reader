@@ -1,12 +1,14 @@
+import { textOf } from "../material/spans"
 import type { Line, Poem, Stanza } from "../material/types"
 import { DISPLAY, LINE, POEM, STANZA } from "./display"
 import type { LoomUnit, LoomTextualComplex } from "./types"
-import { SchemaTree, schemaOfKind, textOf } from "./textualComplex"
+import { SchemaTree, schemaOfKind, spanOf, substrateOf } from "./textualComplex"
 
 /** The poem from a loom textual complex: the poems, stanzas and lines of its display
  * schema, each line's text cut from the substrate by its span, and the textual complex's
  * metadata. */
 export function toPoem(textualComplex: LoomTextualComplex): Poem {
+  const substrate = substrateOf(textualComplex)
   const tree = new SchemaTree(schemaOfKind(textualComplex, DISPLAY).schema)
   const ranked = (units: LoomUnit[], rank: string) => units.filter((unit) => unit.rank === rank)
 
@@ -14,7 +16,7 @@ export function toPoem(textualComplex: LoomTextualComplex): Poem {
     ranked(tree.children(poem), STANZA).map((stanza) => ({
       lines: ranked(tree.children(stanza), LINE).map((line): Line => ({
         id: line.id,
-        text: textOf(textualComplex, line),
+        text: textOf(substrate, spanOf(line)),
         indexInSubstrate: line.start[0],
         number: line.start[0] + 1,
         indent: indentOf(textualComplex, line),

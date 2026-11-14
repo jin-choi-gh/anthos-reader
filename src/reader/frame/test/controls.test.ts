@@ -1,8 +1,18 @@
 import { describe, expect, it, vi } from "vitest"
+import type { Material } from "../../../material/materials"
+import type { Fingerprint } from "../../../material/types"
 import type { Practice, Step } from "../../../practice/types"
 import { controlsOf } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 import type { Standing } from "../../../runner/types"
+
+/** The material: two lines of poem, and the editor's notes. */
+const material: Material = {
+  substrate: { lines: ["A Bird, came down the Walk -", "He bit an Angle Worm in halves"] },
+  fingerprint: "f" as Fingerprint,
+  poem: { title: "Fixture", author: "", stanzas: [] },
+  notes: { notes: [], rangesOn: () => [] },
+}
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
@@ -28,7 +38,7 @@ const practice: Practice = {
 /** The controls where a run stands, and the moves their buttons asked for so far. */
 function at(where: Standing) {
   const moveTo = vi.fn<(step: number) => void>()
-  return { controls: controlsOf(frameOf(practice, where, [], []), moveTo), moveTo }
+  return { controls: controlsOf(frameOf(practice, where, material, []), moveTo), moveTo }
 }
 
 /** Presses a control, which must be one that goes. */

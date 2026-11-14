@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../../material/types"
+import type { Material } from "../../../material/materials"
+import type { Fingerprint, Note } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
 import type { Practice, Step } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
@@ -28,6 +29,17 @@ const note = (index: number, loomId: string | null): Note => ({
 
 const notes = [note(0, "a"), note(1, null), note(2, "b")]
 
+/** The material: two lines of poem, and the editor's notes. */
+const material: Material = {
+  substrate: { lines: ["A Bird, came down the Walk -", "He bit an Angle Worm in halves"] },
+  fingerprint: "f" as Fingerprint,
+  poem: { title: "Fixture", author: "", stanzas: [] },
+  notes: { notes: notes, rangesOn: () => [] },
+}
+
+/** The whole of that poem. */
+const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
+
 const consider = (ref: string): Step => ({
   direction: "consider",
   note: ref,
@@ -45,7 +57,7 @@ const practice: Practice = {
 
 /** The subject of a frame of the practice, with what is in the notebook. */
 const at = (stage: number, step: number, written: readonly ReaderNote[] = []) =>
-  frameOf(practice, standing(stage, step), notes, written).subject
+  frameOf(practice, standing(stage, step), material, written).subject
 
 const tap = (index: number) => ({ kind: "tapNote", note: index }) as const
 const close = { kind: "closeNote" } as const
@@ -118,9 +130,7 @@ describe("scene.fromViewer and fromPraxisBar", () => {
     expect(typing.effects).toEqual([])
     current = typing.state
     const sent = scene.fromPraxisBar(current, { kind: "submit" })
-    expect(sent.effects).toEqual([
-      { kind: "note", anchor: { kind: "whole", text: "poem" }, body: "Worms." },
-    ])
+    expect(sent.effects).toEqual([{ kind: "note", targets: [whole], tags: [], body: "Worms." }])
     expect(scene.praxisBar(sent.state)?.writing).toEqual({ kind: "written", body: "Worms." })
   })
 })
@@ -144,7 +154,9 @@ describe("scene.fromFrame: cuts and holds", () => {
   it("holds on the same frame when the notebook changes: the open note and the page carry on", () => {
     const written: ReaderNote = {
       id: "n" as NoteId,
-      anchor: { kind: "whole", text: "poem" },
+      targets: [whole],
+      tags: [],
+      fingerprint: "f" as Fingerprint,
       body: "Worms.",
       from: { practice: "test", stage: 0, step: 2 },
       writtenAt: 0,

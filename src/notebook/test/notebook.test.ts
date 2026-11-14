@@ -1,26 +1,28 @@
 import { describe, expect, it } from "vitest"
-import type { Anchor } from "../../material/types"
+import type { Fingerprint, Span } from "../../material/types"
 import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesFrom, notesOf } from "../notebook"
-import type { NoteId, NotebookEvent, Provenance } from "../types"
+import type { NewNote, NoteId, NotebookEvent, Provenance } from "../types"
 
-const whole: Anchor = { kind: "whole", text: "dickinson" }
+const whole: Span = { start: { line: 0, offset: 0 }, end: { line: 2, offset: 30 } }
 const here: Provenance = { practice: "first-reading", stage: 0, step: 2 }
 const a = "a" as NoteId
 const b = "b" as NoteId
+
+/** A note on the whole poem, as the reader first writes it. */
+const newNote = (body: string, from: Provenance | null = here): NewNote => ({
+  targets: [whole],
+  tags: [],
+  body,
+  fingerprint: "f" as Fingerprint,
+  from,
+})
 
 const noted = (
   id: NoteId,
   body: string,
   from: Provenance | null = here,
   at = 1,
-): NotebookEvent => ({
-  kind: "noted",
-  id,
-  at,
-  anchor: whole,
-  body,
-  from,
-})
+): NotebookEvent => ({ kind: "noted", id, at, ...newNote(body, from) })
 
 describe("notesOf: the notebook as it stands", () => {
   it("is empty with no events", () => {
@@ -29,8 +31,8 @@ describe("notesOf: the notebook as it stands", () => {
 
   it("keeps each note as written, in the order written", () => {
     expect(notesOf([noted(a, "A worm."), noted(b, "Beads.", null, 2)])).toEqual([
-      { id: a, anchor: whole, body: "A worm.", from: here, writtenAt: 1, revisedAt: null },
-      { id: b, anchor: whole, body: "Beads.", from: null, writtenAt: 2, revisedAt: null },
+      { id: a, ...newNote("A worm."), writtenAt: 1, revisedAt: null },
+      { id: b, ...newNote("Beads.", null), writtenAt: 2, revisedAt: null },
     ])
   })
 
@@ -41,14 +43,7 @@ describe("notesOf: the notebook as it stands", () => {
       { kind: "revised", id: a, at: 9, body: "A worm, raw, and cold." },
     ]
     expect(notesOf(events)).toEqual([
-      {
-        id: a,
-        anchor: whole,
-        body: "A worm, raw, and cold.",
-        from: here,
-        writtenAt: 1,
-        revisedAt: 9,
-      },
+      { id: a, ...newNote("A worm, raw, and cold."), writtenAt: 1, revisedAt: 9 },
     ])
   })
 
@@ -72,7 +67,7 @@ describe("notesOf: the notebook as it stands", () => {
   })
 })
 
-describe("notesFrom: the notes written on one frame", () => {
+describe("notesFrom: the notes written on one step", () => {
   const notes = notesOf([
     noted(a, "Here."),
     noted(b, "Elsewhere.", { ...here, step: 1 }),
@@ -89,9 +84,14 @@ describe("the deciders", () => {
   const notes = notesOf([noted(a, "A worm.")])
 
   it("note: a new note, with the id and time it is given, its body trimmed", () => {
-    expect(
-      eventOfNoting({ anchor: whole, body: "  Beads. ", from: here }, { id: b, at: 4 }),
-    ).toEqual(noted(b, "Beads.", here, 4))
+    expect(eventOfNoting(newNote("  Beads. "), { id: b, at: 4 })).toEqual(
+      noted(b, "Beads.", here, 4),
+    )
+  })
+
+  it("note: keeps only the fields of a note", () => {
+    const stray = { ...newNote("Beads."), text: "dickinson" }
+    expect(eventOfNoting(stray, { id: b, at: 4 })).toEqual(noted(b, "Beads.", here, 4))
   })
 
   it("revise: a new body for a note the notebook has", () => {
@@ -107,20 +107,21 @@ describe("the deciders", () => {
     expect(eventOfWithdrawing(notes, a, 7)).toEqual({ kind: "withdrawn", id: a, at: 7 })
   })
 
-  it("refuses an empty note, and a note it does not have", () => {
-    expect(() =>
-      eventOfNoting({ anchor: whole, body: "  ", from: here }, { id: b, at: 4 }),
-    ).toThrow(RangeError)
+  it("refuses an empty note, a note about nothing, and a note it does not have", () => {
+    expect(() => eventOfNoting(newNote("  "), { id: b, at: 4 })).toThrow(RangeError)
+    expect(() => eventOfNoting({ ...newNote("Beads."), targets: [] }, { id: b, at: 4 })).toThrow(
+      "a note must be about something",
+    )
     expect(() => eventOfRevising(notes, a, "", 6)).toThrow(RangeError)
     expect(() => eventOfRevising(notes, b, "Beads.", 6)).toThrow(RangeError)
     expect(() => eventOfWithdrawing(notes, b, 7)).toThrow(RangeError)
   })
 
   it("agrees with notesOf: what the deciders write, the notebook reads back", () => {
-    const events = [eventOfNoting({ anchor: whole, body: "A worm.", from: here }, { id: a, at: 1 })]
+    const events = [eventOfNoting(newNote("A worm."), { id: a, at: 1 })]
     events.push(eventOfRevising(notesOf(events), a, "A worm, raw.", 2))
     expect(notesOf(events)).toEqual([
-      { id: a, anchor: whole, body: "A worm, raw.", from: here, writtenAt: 1, revisedAt: 2 },
+      { id: a, ...newNote("A worm, raw."), writtenAt: 1, revisedAt: 2 },
     ])
   })
 })

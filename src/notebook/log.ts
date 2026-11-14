@@ -2,8 +2,8 @@ import type { TextId } from "../material/types"
 import { appendEvents, clearEvents, isRecord, readEvents } from "../storage/log"
 import type { NotebookEvent, NoteId } from "./types"
 
-/** The key a text's notebook is kept under. The "v1" names the events' shape, so that a later shape
- * can be kept under another key, and the old log read and carried over. */
+/** The key a text's notebook is kept under. Entries of an older shape fail the guard and are left
+ * unread; a shape whose notes must be carried over is kept under a new key. */
 export function notebookKey(text: TextId): string {
   return `anthos.v1.notebook.${text}`
 }
@@ -29,10 +29,13 @@ function isNotebookEvent(value: unknown): value is NotebookEvent {
   switch (value.kind) {
     case "noted":
       return (
+        Array.isArray(value.targets) &&
+        value.targets.length > 0 &&
+        value.targets.every(isSpan) &&
+        Array.isArray(value.tags) &&
+        value.tags.every((tag) => typeof tag === "string") &&
         typeof value.body === "string" &&
-        isRecord(value.anchor) &&
-        value.anchor.kind === "whole" &&
-        typeof value.anchor.text === "string" &&
+        typeof value.fingerprint === "string" &&
         (value.from === null || isProvenance(value.from))
       )
     case "revised":
@@ -46,6 +49,19 @@ function isNotebookEvent(value: unknown): value is NotebookEvent {
 
 function isNoteId(value: unknown): value is NoteId {
   return typeof value === "string" && value !== ""
+}
+
+function isSpan(value: unknown): boolean {
+  return isRecord(value) && isPosition(value.start) && isPosition(value.end)
+}
+
+function isPosition(value: unknown): boolean {
+  return isRecord(value) && isCount(value.line) && isCount(value.offset)
+}
+
+/** A whole number, from 0. */
+function isCount(value: unknown): boolean {
+  return Number.isInteger(value) && (value as number) >= 0
 }
 
 function isProvenance(value: unknown): boolean {

@@ -1,27 +1,21 @@
 import { describe, expect, it } from "vitest"
 import { makeTextualComplex } from "./fixture"
-import { codePoints } from "../../material/codePoints"
-import { SchemaTree, lineLength, schemaOfKind, textOf } from "../textualComplex"
+import { SchemaTree, schemaOfKind, spanOf, substrateOf } from "../textualComplex"
 
 const complex = makeTextualComplex([["A Bird, came down", "the 🐦 Walk -", "He did not know"]])
 
-describe("textOf", () => {
-  it("cuts a span within one line", () => {
-    expect(textOf(complex, { start: [0, 2], end: [0, 6] })).toBe("Bird")
+describe("substrateOf and spanOf", () => {
+  it("gives the substrate as the textual complex's lines, in order", () => {
+    expect(substrateOf(complex)).toEqual({
+      lines: ["A Bird, came down", "the 🐦 Walk -", "He did not know"],
+    })
   })
 
-  it("joins a span's lines with line breaks", () => {
-    expect(textOf(complex, { start: [0, 8], end: [2, 2] })).toBe("came down\nthe 🐦 Walk -\nHe")
-  })
-
-  it("counts offsets in code points", () => {
-    expect(textOf(complex, { start: [1, 4], end: [1, 5] })).toBe("🐦")
-    expect(lineLength(complex, 1)).toBe(12)
-    expect(codePoints("🐦a")).toEqual(["🐦", "a"])
-  })
-
-  it("names a line that is not there", () => {
-    expect(() => textOf(complex, { start: [5, 0], end: [5, 1] })).toThrow("no line at index 5")
+  it("turns loom's [line, offset] pairs into positions", () => {
+    expect(spanOf({ start: [0, 8], end: [2, 2] })).toEqual({
+      start: { line: 0, offset: 8 },
+      end: { line: 2, offset: 2 },
+    })
   })
 })
 

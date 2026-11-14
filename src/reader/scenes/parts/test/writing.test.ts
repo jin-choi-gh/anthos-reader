@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest"
+import type { Fingerprint, Span } from "../../../../material/types"
 import type { NoteId, ReaderNote } from "../../../../notebook/types"
 import type { WritingSubject } from "../../types"
 import { keepWriting, onPraxisBar, startWriting, writingOf } from "../writing"
 
-const anchor = { kind: "whole", text: "poem" } as const
+const targets: readonly Span[] = [{ start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }]
 const saved: ReaderNote = {
   id: "n" as NoteId,
-  anchor,
+  targets,
+  tags: [],
+  fingerprint: "f" as Fingerprint,
   body: "Worms.",
   from: { practice: "test", stage: 0, step: 1 },
   writtenAt: 0,
@@ -14,8 +17,8 @@ const saved: ReaderNote = {
 }
 
 /** A page with nothing written yet, and one with a note written. */
-const blank: WritingSubject = { anchor, count: "one", written: [] }
-const filled: WritingSubject = { anchor, count: "one", written: [saved] }
+const blank: WritingSubject = { targets, tags: [], count: "one", written: [] }
+const filled: WritingSubject = { targets, tags: [], count: "one", written: [saved] }
 
 const draft = (text: string) => ({ kind: "draft", text }) as const
 const submit = { kind: "submit" } as const
@@ -46,7 +49,7 @@ describe("a blank page", () => {
   it("Respond writes a new note on the whole poem, trimmed, and shows it as written", () => {
     const typed = { editing: true, draft: "  Worms. " }
     const { state, effects } = onPraxisBar(blank, typed, submit)
-    expect(effects).toEqual([{ kind: "note", anchor, body: "Worms." }])
+    expect(effects).toEqual([{ kind: "note", targets, tags: [], body: "Worms." }])
     expect(state).toEqual({ editing: false, draft: "Worms." })
     expect(writingOf(blank, state)).toEqual({ kind: "written", body: "Worms." })
   })

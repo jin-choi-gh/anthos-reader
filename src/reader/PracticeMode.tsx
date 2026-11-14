@@ -6,10 +6,9 @@ import { useRun } from "../runner/useRun"
 import { controlsOf } from "./frame/controls"
 import { frameOf } from "./frame/frame"
 import { Layout } from "./Layout"
-import type { Materials } from "../material/materials"
+import type { Material, Materials } from "../material/materials"
 import { PraxisBar } from "./praxisBar/PraxisBar"
 import { useScene } from "./scenes/useScene"
-import type { Note } from "../material/types"
 import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 import { DevPanel } from "./dev/DevPanel"
@@ -18,13 +17,13 @@ import { DevPanel } from "./dev/DevPanel"
  * text's notebook, all kept for as long as the mode lasts. */
 export function PracticeMode({
   practice,
-  notes,
+  material,
   materials,
   layout,
   topBar,
 }: {
   practice: Practice
-  notes: Note[]
+  material: Material
   materials: Materials
   layout: ReaderLayout
   topBar: ReactNode
@@ -34,8 +33,8 @@ export function PracticeMode({
   // A new frame only when the standing changes (a move, a new day, a note written): never on a
   // mere redraw
   const frame = useMemo(
-    () => frameOf(practice, run.standing, notes, notebook.notes),
-    [practice, run.standing, notes, notebook.notes],
+    () => frameOf(practice, run.standing, material, notebook.notes),
+    [practice, run.standing, material, notebook.notes],
   )
   const controls = controlsOf(frame, run.moveTo)
   // What the scene writes goes into the notebook, with where it was written
@@ -43,7 +42,13 @@ export function PracticeMode({
   const scene = useScene(frame.subject, (effect) => {
     switch (effect.kind) {
       case "note":
-        return notebook.note(effect.anchor, effect.body, where)
+        return notebook.note({
+          targets: effect.targets,
+          tags: effect.tags,
+          body: effect.body,
+          fingerprint: material.fingerprint,
+          from: where,
+        })
       case "revise":
         return notebook.revise(effect.id, effect.body)
       default:

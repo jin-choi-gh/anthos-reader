@@ -6,6 +6,7 @@ import { receive } from "../useScene"
 
 const note = (index: number): Note => ({ index, loomId: null, lemma: [], tags: [], paragraphs: [] })
 const notes = [note(0), note(1)]
+const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
 
 const considering: Subject = {
   key: "p/0/0",
@@ -19,7 +20,7 @@ const responding: Subject = {
   text: "poem",
   prose: ["What does the bird eat?"],
   commentary: { notes: [], shown: "marked" },
-  writing: { anchor: { kind: "whole", text: "poem" }, count: "one", written: [] },
+  writing: { targets: [whole], tags: [], count: "one", written: [] },
 }
 const annotating: Subject = {
   key: "annotate",
@@ -69,7 +70,7 @@ describe("receive: envelopes from the praxis bar", () => {
     const writing = receive(scene.start(responding).state, typed("Worms.")).state
     expect(receive(scene.start(responding).state, typed("Worms.")).effects).toEqual([])
     expect(receive(writing, submit).effects).toEqual([
-      { kind: "note", anchor: { kind: "whole", text: "poem" }, body: "Worms." },
+      { kind: "note", targets: [whole], tags: [], body: "Worms." },
     ])
   })
 })

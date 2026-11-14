@@ -1,6 +1,5 @@
 import { assertNever } from "../assertNever"
-import type { Anchor } from "../material/types"
-import type { NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
+import type { NewNote, NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
 
 /** The notebook as it stands: every note not withdrawn, in the order written, each with its latest
  * body. Events about a note the notebook does not have change nothing. */
@@ -9,9 +8,18 @@ export function notesOf(events: readonly NotebookEvent[]): ReaderNote[] {
   for (const event of events) {
     switch (event.kind) {
       case "noted": {
-        const { id, at, anchor, body, from } = event
+        const { id, at, targets, tags, body, fingerprint, from } = event
         if (!notes.has(id))
-          notes.set(id, { id, anchor, body, from, writtenAt: at, revisedAt: null })
+          notes.set(id, {
+            id,
+            targets,
+            tags,
+            body,
+            fingerprint,
+            from,
+            writtenAt: at,
+            revisedAt: null,
+          })
         break
       }
       case "revised": {
@@ -41,12 +49,12 @@ export function notesFrom(notes: readonly ReaderNote[], where: Provenance): Read
   )
 }
 
-/** The event that writes a new note. Its id and time come from outside, so this stays pure. */
-export function eventOfNoting(
-  note: { anchor: Anchor; body: string; from: Provenance | null },
-  stamp: { id: NoteId; at: number },
-): NotebookEvent {
-  return { kind: "noted", ...stamp, anchor: note.anchor, body: bodyOf(note.body), from: note.from }
+/** The event that writes a new note. Its id and time come from outside, so this stays pure. A note
+ * is about something, so it has at least one target. Only the fields of a note are kept. */
+export function eventOfNoting(note: NewNote, stamp: { id: NoteId; at: number }): NotebookEvent {
+  if (note.targets.length === 0) throw new RangeError("a note must be about something")
+  const { targets, tags, body, fingerprint, from } = note
+  return { kind: "noted", ...stamp, targets, tags, body: bodyOf(body), fingerprint, from }
 }
 
 /** The event that gives a note a new body. Only a note the notebook has can be revised. */

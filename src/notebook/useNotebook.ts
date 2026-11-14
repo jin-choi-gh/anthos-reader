@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
-import type { Anchor, TextId } from "../material/types"
+import type { TextId } from "../material/types"
 import { whenChanged } from "../storage/log"
 import { appendNotebook, notebookKey, readNotebook } from "./log"
 import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesOf } from "./notebook"
-import type { NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
+import type { NewNote, NoteId, NotebookEvent, ReaderNote } from "./types"
 
 /** A text's notebook, open for as long as the component that holds it: the notes as they stand, and
  * three ways to write in it. Each writing is one event, kept at once. */
 export interface Notebook {
   notes: readonly ReaderNote[]
-  note(anchor: Anchor, body: string, from: Provenance | null): void
+  note(note: NewNote): void
   revise(id: NoteId, body: string): void
   withdraw(id: NoteId): void
 }
@@ -42,7 +42,7 @@ export function useNotebook(text: TextId): Notebook {
     }
     return {
       notes,
-      note: (anchor, body, from) => append(eventOfNoting({ anchor, body, from }, stampNow())),
+      note: (note) => append(eventOfNoting(note, stampNow())),
       revise: (id, body) => append(eventOfRevising(notesOf(latest.current), id, body, now())),
       withdraw: (id) => append(eventOfWithdrawing(notesOf(latest.current), id, now())),
     }

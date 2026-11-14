@@ -3,7 +3,7 @@ import type { Note } from "../../material/types"
 import { idOf, noteFor, problemsOf } from "../references"
 import type { Practice, Stage } from "../types"
 
-/** A note as toNotes makes one, with only what these tests look at. */
+/** A note as editorsNotes makes one, with only what these tests look at. */
 const note = (index: number, loomId: string | null): Note => ({
   index,
   loomId,

@@ -1,4 +1,4 @@
-import type { Anchor, Note, TextId } from "../../material/types"
+import type { Note, Span, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
 /** What the scene plays: parts, with every reference already resolved. */
@@ -20,9 +20,11 @@ export interface Commentary {
   readonly shown: "marked" | "listed"
 }
 
-/** What the reader is asked to write, and what they have written here already. */
+/** What the reader is asked to write: what it is about, its tags, and what they have written here
+ * already. */
 export interface WritingSubject {
-  readonly anchor: Anchor
+  readonly targets: readonly Span[]
+  readonly tags: readonly string[]
   readonly count: "one"
   readonly written: readonly ReaderNote[]
 }
@@ -44,10 +46,11 @@ export interface PraxisBarProtocol {
     | { kind: "cancel" } // Cancel: keep what was written
 }
 
-/** What the reader has written, sent out to the notebook. The mode adds where it was written; the
- * notebook makes the id and the time. */
+/** What the reader has written, sent out to the notebook: a new annotation, or a revision. The mode
+ * adds the fingerprint and where it was written; the notebook makes the id and the time. */
 export type Effect =
-  { kind: "note"; anchor: Anchor; body: string } | { kind: "revise"; id: NoteId; body: string }
+  | { kind: "note"; targets: readonly Span[]; tags: readonly string[]; body: string }
+  | { kind: "revise"; id: NoteId; body: string }
 
 export type ViewerProjection =
   | { kind: "marked"; text: TextId; marked: number[]; open: number | null }

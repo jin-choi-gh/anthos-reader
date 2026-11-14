@@ -14,7 +14,7 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
     expect(partsOf({ direction: "respond", prose: ["What does the bird eat?"] })).toEqual({
       prose: ["What does the bird eat?"],
       highlight: [],
-      writing: { anchor: "whole", count: "one" },
+      writing: { target: "whole", tags: [], count: "one" },
     })
   })
 

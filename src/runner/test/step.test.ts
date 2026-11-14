@@ -4,6 +4,7 @@ import type { Practice, Step } from "../../practice/types"
 import type { Day } from "../../clock/clock"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 import type { Event, Standing } from "../types"
+import type { Fingerprint } from "../../material/types"
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
@@ -236,7 +237,9 @@ describe("the law: a step that asks for writing holds the reader until they have
   /** A note in the notebook, written on a step of the first stage. */
   const written = (step: number): ReaderNote => ({
     id: `note-${step}` as NoteId,
-    anchor: { kind: "whole", text: "fixture" },
+    targets: [{ start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }],
+    tags: [],
+    fingerprint: "f" as Fingerprint,
     body: "Worms.",
     from: { practice: asking.id, stage: 0, step },
     writtenAt: 0,

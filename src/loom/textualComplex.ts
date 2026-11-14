@@ -1,22 +1,22 @@
-import { codePoints } from "../material/codePoints"
+import type { Span, Substrate } from "../material/types"
 import type { LoomSchema, LoomSpan, LoomUnit, LoomTextualComplex } from "./types"
 
-// What loom's models do (loom/src/models), done on the JSON: the substrate's text, and the trees of
-// the schemata. Nothing here knows any particular kind of schema.
+// What loom's models do (loom/src/models), done on the JSON: the substrate and its spans, and the
+// trees of the schemata. Nothing here knows any particular kind of schema.
 
-/** The text a span covers, as loom's Substrate.text_of gives it: across lines, each line's part,
- * joined by line breaks. Offsets count code points, as Python's do, not UTF-16 units. */
-export function textOf(textualComplex: LoomTextualComplex, span: LoomSpan): string {
+/** The substrate: the textual complex's lines, in order, as loom's Substrate has them. */
+export function substrateOf(textualComplex: LoomTextualComplex): Substrate {
+  return { lines: textualComplex.lines.map((line) => line.text) }
+}
+
+/** A loom span as the material's: each [line, offset] pair as a position. */
+export function spanOf(span: LoomSpan): Span {
   const [startLine, startOffset] = span.start
   const [endLine, endOffset] = span.end
-  const line = (index: number) => codePoints(lineAt(textualComplex, index).text)
-  if (startLine === endLine) {
-    return line(startLine).slice(startOffset, endOffset).join("")
+  return {
+    start: { line: startLine, offset: startOffset },
+    end: { line: endLine, offset: endOffset },
   }
-  const first = line(startLine).slice(startOffset).join("")
-  const middle = textualComplex.lines.slice(startLine + 1, endLine).map((l) => l.text)
-  const last = line(endLine).slice(0, endOffset).join("")
-  return [first, ...middle, last].join("\n")
 }
 
 /** The one schema of a kind in the textual complex, with its name: loom names schemata by kind and qualifier. */
@@ -56,17 +56,4 @@ export class SchemaTree {
   children(unit: LoomUnit): LoomUnit[] {
     return this.byParent.get(unit.id) ?? []
   }
-}
-
-function lineAt(textualComplex: LoomTextualComplex, index: number) {
-  const line = textualComplex.lines[index]
-  if (line === undefined) {
-    throw new Error(`${textualComplex.name}: no line at index ${index}`)
-  }
-  return line
-}
-
-/** A line's length as loom counts it, in code points. */
-export function lineLength(textualComplex: LoomTextualComplex, index: number): number {
-  return codePoints(lineAt(textualComplex, index).text).length
 }

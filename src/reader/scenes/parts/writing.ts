@@ -59,7 +59,7 @@ export function onPraxisBar(
       const body = state.draft.trim()
       const effect: Effect =
         saved === null
-          ? { kind: "note", anchor: writing.anchor, body }
+          ? { kind: "note", targets: writing.targets, tags: writing.tags, body }
           : { kind: "revise", id: saved.id, body }
       return { state: { editing: false, draft: body }, effects: [effect] }
     }
