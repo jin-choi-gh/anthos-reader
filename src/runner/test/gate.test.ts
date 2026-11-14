@@ -23,7 +23,7 @@ const first = practice.stages[0]!
 const second = practice.stages[1]!
 
 describe("gateOf", () => {
-  it("holds the practice's step at a position, of whatever direction, with its stage", () => {
+  it("holds the practice's step at a station, of whatever direction, with its stage", () => {
     expect(gateOf(practice, { stage: 0, step: 0 })).toEqual({
       kind: "step",
       stage: first,

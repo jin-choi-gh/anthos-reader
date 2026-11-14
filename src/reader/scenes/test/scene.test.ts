@@ -10,13 +10,13 @@ import type { Subject } from "../types"
 // The scene as the frame drives it: subjects made by frameOf and annotateFrame, so these tests also
 // show that the frame and the scene agree.
 
-/** Where a run stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
   opensOn: string | null = null,
   heldAt: number | null = null,
-): Standing => ({ position: { stage, step }, opensOn, heldAt })
+): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
 const note = (index: number, loomId: string | null): Note => ({
   index,

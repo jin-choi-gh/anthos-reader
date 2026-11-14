@@ -37,19 +37,19 @@ export function standingOf(
       }
     }
 
-    const position = { stage, step }
+    const station = { stage, step }
     if (finished === null) {
-      return { position, opensOn: null, heldAt: heldAt(practice, stage, notes) }
+      return { station, opensOn: null, heldAt: heldAt(practice, stage, notes) }
     }
     if (stage === final - 1) break
     const opensOn = nextDay(finished.day)
     // A finished stage never holds the reader again: what is past is past
-    if (today < opensOn) return { position, opensOn, heldAt: null }
+    if (today < opensOn) return { station, opensOn, heldAt: null }
     from = finished.index + 1
     opened = opensOn
   }
 
-  return { position: { stage: final, step: 0 }, opensOn: null, heldAt: null }
+  return { station: { stage: final, step: 0 }, opensOn: null, heldAt: null }
 }
 
 /** The first step of a stage that asks for writing and has none in the notebook, or null. */
@@ -64,11 +64,11 @@ function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[])
 
 /** Whether the reader may move to a step of the stage they are in, or why not. */
 export function ruling(practice: Practice, standing: Standing, target: number): Ruling {
-  const { position, opensOn, heldAt } = standing
-  if (position.stage === finalOf(practice)) {
+  const { station, opensOn, heldAt } = standing
+  if (station.stage === finalOf(practice)) {
     return { allowed: false, reason: { kind: "finished" } }
   }
-  const rest = restOf(practice, position.stage)
+  const rest = restOf(practice, station.stage)
   if (!Number.isInteger(target) || target < 0) {
     return { allowed: false, reason: { kind: "noSuchStep" } }
   }
@@ -90,18 +90,18 @@ export function eventsOfMove(
   at: number,
   today: Day,
 ): Event[] {
-  const { position, opensOn } = standing
-  if (position.stage === finalOf(practice) || target === position.step) return []
+  const { station, opensOn } = standing
+  if (station.stage === finalOf(practice) || target === station.step) return []
   const decision = ruling(practice, standing, target)
   if (!decision.allowed) {
     throw new RangeError(
-      `step ${target} is refused in stage ${position.stage}: ${decision.reason.kind}`,
+      `step ${target} is refused in stage ${station.stage}: ${decision.reason.kind}`,
     )
   }
-  const rest = restOf(practice, position.stage)
-  const events: Event[] = [{ kind: "visited", stage: position.stage, step: target, at }]
+  const rest = restOf(practice, station.stage)
+  const events: Event[] = [{ kind: "visited", stage: station.stage, step: target, at }]
   if (target === rest && opensOn === null) {
-    events.push({ kind: "finished", stage: position.stage, at, day: today })
+    events.push({ kind: "finished", stage: station.stage, at, day: today })
   }
   return events
 }

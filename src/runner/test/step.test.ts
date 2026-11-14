@@ -5,13 +5,13 @@ import type { Day } from "../../clock/clock"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 import type { Event, Standing } from "../types"
 
-/** Where a run stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
   opensOn: string | null = null,
   heldAt: number | null = null,
-): Standing => ({ position: { stage, step }, opensOn, heldAt })
+): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
 /** The fold, with nothing in the notebook. */
 const replay = (practice: Practice, log: Event[], today: Day) =>
@@ -102,7 +102,7 @@ describe("step: events that do not count", () => {
   it("ignores visits to steps that are not there", () => {
     for (const bad of [-1, 3, 1.5]) {
       const log = [visited(0, 1), visited(0, bad)]
-      expect(replay(practice, log, "2026-11-10").position.step).toBe(1)
+      expect(replay(practice, log, "2026-11-10").station.step).toBe(1)
     }
   })
 

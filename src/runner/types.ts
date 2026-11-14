@@ -8,7 +8,7 @@ export type Event =
 
 /** Where the reader is. stage is stages.length in the final stage; step is
  * steps.length at a stage's rest. */
-export interface Position {
+export interface Station {
   readonly stage: number
   readonly step: number
 }
@@ -16,12 +16,12 @@ export interface Position {
 /** Where the run stands, from replaying the log: where the reader is, when the next stage
  * opens once this one is finished, and the step the reader may not pass until they have written. */
 export interface Standing {
-  readonly position: Position
+  readonly station: Station
   readonly opensOn: Day | null
   readonly heldAt: number | null
 }
 
-/** What the gate holds at a position: a step of the practice, as the practice writes it; the rest
+/** What the gate holds at a station: a step of the practice, as the practice writes it; the rest
  * at the end of a stage; or the final stage. */
 export type Gate =
   | { readonly kind: "step"; readonly stage: Stage; readonly step: Step }

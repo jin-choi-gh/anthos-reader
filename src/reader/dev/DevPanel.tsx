@@ -21,7 +21,7 @@ export function DevPanel({
   return (
     <details className="dev-panel">
       <summary>
-        Dev · {shortWhere(practice, run.standing.position)} · today {run.today}
+        Dev · {shortWhere(practice, run.standing.station)} · today {run.today}
       </summary>
       <dl>
         <dt>Practice</dt>

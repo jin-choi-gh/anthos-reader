@@ -1,15 +1,15 @@
 import type { Practice, Stage } from "../practice/types"
-import type { Gate, Position } from "./types"
+import type { Gate, Station } from "./types"
 
-/** What is at a position: the practice's step there, or the rest, or the final stage. A position
+/** What is at a station: the practice's step there, or the rest, or the final stage. A station
  * the practice does not have is a mistake in the runner, never in the practice, so it throws. */
-export function gateOf(practice: Practice, position: Position): Gate {
-  if (position.stage === finalOf(practice)) return { kind: "final" }
-  const stage = stageAt(practice, position.stage)
-  if (position.step === stage.steps.length) return { kind: "rest", stage }
-  const step = stage.steps[position.step]
+export function gateOf(practice: Practice, station: Station): Gate {
+  if (station.stage === finalOf(practice)) return { kind: "final" }
+  const stage = stageAt(practice, station.stage)
+  if (station.step === stage.steps.length) return { kind: "rest", stage }
+  const step = stage.steps[station.step]
   if (step === undefined) {
-    throw new RangeError(`${practice.id}: no step ${position.step} in stage ${position.stage}`)
+    throw new RangeError(`${practice.id}: no step ${station.step} in stage ${station.stage}`)
   }
   return { kind: "step", stage, step }
 }

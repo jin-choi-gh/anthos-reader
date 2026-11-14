@@ -5,13 +5,13 @@ import type { Practice, Step } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../frame"
 
-/** Where a run stands: at a position, with when the next stage opens and where it holds. */
+/** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
   stage: number,
   step: number,
   opensOn: string | null = null,
   heldAt: number | null = null,
-): Standing => ({ position: { stage, step }, opensOn, heldAt })
+): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
 /** A note as toNotes makes one, with only what these tests look at. */
 const note = (index: number, loomId: string | null): Note => ({

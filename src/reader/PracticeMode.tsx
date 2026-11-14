@@ -39,7 +39,7 @@ export function PracticeMode({
   )
   const controls = controlsOf(frame, run.moveTo)
   // What the scene writes goes into the notebook, with where it was written
-  const where = { practice: practice.id, ...run.standing.position }
+  const where = { practice: practice.id, ...run.standing.station }
   const scene = useScene(frame.subject, (effect) => {
     switch (effect.kind) {
       case "note":

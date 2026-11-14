@@ -18,16 +18,16 @@ export function frameOf(
   notes: readonly Note[],
   written: readonly ReaderNote[],
 ): Frame {
-  const { position } = standing
-  const gate = gateOf(practice, position)
+  const { station } = standing
+  const gate = gateOf(practice, station)
   const parts = gate.kind === "step" ? partsOf(gate.step) : gate.kind === "rest" ? REST : FINAL
   const { text } = practice
   return {
     heading: gate.kind === "final" ? practice.title : gate.stage.name,
-    back: ruling(practice, standing, position.step - 1),
-    next: ruling(practice, standing, position.step + 1),
+    back: ruling(practice, standing, station.step - 1),
+    next: ruling(practice, standing, station.step + 1),
     subject: {
-      key: `${practice.id}/${position.stage}/${position.step}`,
+      key: `${practice.id}/${station.stage}/${station.step}`,
       text,
       prose: parts.prose,
       commentary: { notes: resolved(parts, notes), shown: "marked" },
@@ -37,7 +37,7 @@ export function frameOf(
           : {
               anchor: { kind: parts.writing.anchor, text },
               count: parts.writing.count,
-              written: notesFrom(written, { practice: practice.id, ...position }),
+              written: notesFrom(written, { practice: practice.id, ...station }),
             },
     },
   }
