@@ -84,7 +84,7 @@ describe("controlsOf: the frame's buttons", () => {
   })
 
   it("in annotate mode, with no runner: no heading and no buttons", () => {
-    const controls = controlsOf(annotateFrame("poem", []), () => {})
+    const controls = controlsOf(annotateFrame("poem", material, []), () => {})
     expect(controls).toEqual({ heading: null, back: { kind: "none" }, next: { kind: "none" } })
   })
 })

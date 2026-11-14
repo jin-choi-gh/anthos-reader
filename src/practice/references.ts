@@ -12,7 +12,7 @@ export function idOf(ref: string): string | null {
 /** The editor's note a reference names, or null when the text has none by that id. */
 export function noteFor(ref: string, notes: readonly Note[]): Note | null {
   const id = idOf(ref)
-  return id === null ? null : (notes.find((note) => note.loomId === id) ?? null)
+  return id === null ? null : (notes.find((note) => note.id === id) ?? null)
 }
 
 /** Everything that keeps a practice from running on a text: a missing stage or step, or a

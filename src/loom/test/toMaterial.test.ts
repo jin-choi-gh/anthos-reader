@@ -71,7 +71,7 @@ describe("toMaterial", () => {
     expect(material.fingerprint).toBe(fingerprintOf({ lines: stanzas[0]! }))
     expect(material.poem.stanzas[0]!.lines.map((line) => line.text)).toEqual(stanzas[0])
     expect(material.notes.notes[0]).toMatchObject({
-      loomId: "angle-worm",
+      id: "angle-worm",
       lemma: [{ kind: "quote", text: "Angle" }],
     })
   })

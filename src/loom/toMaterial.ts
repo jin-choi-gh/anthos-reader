@@ -1,6 +1,6 @@
 import { fingerprintOf } from "../material/fingerprint"
 import type { Material } from "../material/materials"
-import { editorsNotes } from "../material/notes"
+import { notesFor } from "../material/notes"
 import { spanProblem } from "../material/spans"
 import type { Annotation } from "../material/types"
 import { spanOf, substrateOf } from "./textualComplex"
@@ -27,7 +27,7 @@ export function toMaterial(textualComplex: LoomTextualComplex): Material {
     substrate,
     fingerprint: fingerprintOf(substrate),
     poem: toPoem(textualComplex),
-    notes: editorsNotes(substrate, annotations),
+    notes: notesFor(substrate, annotations),
   }
 }
 

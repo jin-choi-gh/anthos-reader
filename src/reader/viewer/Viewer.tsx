@@ -8,8 +8,8 @@ import type { ViewerProjection, ViewerProtocol } from "../scenes/types"
 import { TitleBlock } from "./TitleBlock"
 import type { Note } from "../../material/types"
 
-/** What both parts of the viewer draw from: the scene's projection, the texts it may name, and the
- * way back to the scene. */
+/** What both parts of the viewer draw from: the scene's projection, with the notes it shows; the
+ * texts it may name, for their poems; and the way back to the scene. */
 interface ViewerProps {
   projection: ViewerProjection
   materials: Materials
@@ -21,7 +21,8 @@ interface ViewerProps {
 export function ViewerPage({ projection, materials, send }: ViewerProps) {
   const material = materials(projection.text)
   if (material === null) return <p className="reader-message">Loading…</p>
-  const { poem, notes } = material
+  const { poem } = material
+  const { rangesOn } = projection.notes
 
   switch (projection.kind) {
     case "marked":
@@ -30,7 +31,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
           <TitleBlock poem={poem} />
           <PoemBlock
             poem={poem}
-            rangesOn={notes.rangesOn}
+            rangesOn={rangesOn}
             marked={projection.marked}
             open={projection.open}
             onTapNote={(note) => send({ kind: "tapNote", note })}
@@ -43,7 +44,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
           <TitleBlock poem={poem} />
           <PoemBlock
             poem={poem}
-            rangesOn={notes.rangesOn}
+            rangesOn={rangesOn}
             marked={projection.open === null ? [] : [projection.open]}
             open={projection.open}
           />
@@ -52,13 +53,10 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
   }
 }
 
-/** The viewer's notes, for the margin or the sheet. Marked: the note the reader opened, if any, with
- * an X. Listed: the shown notes, each one tapped to open or close it. Nothing while the text loads:
- * the page says so. */
-export function ViewerNotes({ projection, materials, send }: ViewerProps) {
-  const material = materials(projection.text)
-  if (material === null) return null
-  const { notes } = material.notes
+/** The viewer's notes, for the margin or the sheet, from the projection's set. Marked: the note the
+ * reader opened, if any, with an X. Listed: the shown notes, each one tapped to open or close it. */
+export function ViewerNotes({ projection, send }: ViewerProps) {
+  const { notes } = projection.notes
 
   switch (projection.kind) {
     case "marked": {

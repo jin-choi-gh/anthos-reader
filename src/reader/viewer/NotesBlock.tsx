@@ -15,7 +15,7 @@ export function NotesBlock({
   onToggle: (index: number) => void
 }) {
   if (notes.length === 0) {
-    return <p className="margin-empty">No notes on this text.</p>
+    return <p className="margin-empty">You have no notes on this text yet.</p>
   }
   return (
     <div className="notes">

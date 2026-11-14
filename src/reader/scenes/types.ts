@@ -1,4 +1,4 @@
-import type { Note, Span, TextId } from "../../material/types"
+import type { Note, Notes, Span, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
 /** What the scene plays: parts, with every reference already resolved. */
@@ -13,9 +13,12 @@ export interface Subject {
   readonly writing: WritingSubject | null
 }
 
-/** The editor's notes: highlighted in the poem, one opened by a tap ("marked"), or all listed beside
- * it ("listed"). */
+/** The notes a subject shows, from one set (the editor's, or the reader's): highlighted in the poem,
+ * one opened by a tap ("marked"), or listed beside it ("listed"). */
 export interface Commentary {
+  /** The set the notes come from, with what each line's notes cover. */
+  readonly set: Notes
+  /** The notes shown: always notes of the set. */
   readonly notes: readonly Note[]
   readonly shown: "marked" | "listed"
 }
@@ -53,8 +56,8 @@ export type Effect =
   | { kind: "revise"; id: NoteId; body: string }
 
 export type ViewerProjection =
-  | { kind: "marked"; text: TextId; marked: number[]; open: number | null }
-  | { kind: "listed"; text: TextId; shown: number[]; open: number | null }
+  | { kind: "marked"; text: TextId; notes: Notes; marked: number[]; open: number | null }
+  | { kind: "listed"; text: TextId; notes: Notes; shown: number[]; open: number | null }
 
 /** What the praxis bar draws between the frame's heading and its buttons: the prose, and the
  * writing. */

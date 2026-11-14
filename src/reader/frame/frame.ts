@@ -1,6 +1,7 @@
 import { assertNever } from "../../assertNever"
 import type { Material } from "../../material/materials"
-import { wholePoem } from "../../material/spans"
+import { notesFor } from "../../material/notes"
+import { spanProblem, wholePoem } from "../../material/spans"
 import type { Note, Span, TextId } from "../../material/types"
 import { notesFrom } from "../../notebook/notebook"
 import type { ReaderNote } from "../../notebook/types"
@@ -34,7 +35,11 @@ export function frameOf(
       key: `${practice.id}/${station.stage}/${station.step}`,
       text,
       prose: parts.prose,
-      commentary: { notes: resolved(parts, material.notes.notes), shown: "marked" },
+      commentary: {
+        set: material.notes,
+        notes: resolved(parts, material.notes.notes),
+        shown: "marked",
+      },
       writing:
         parts.writing === null
           ? null
@@ -49,16 +54,33 @@ export function frameOf(
 }
 
 /** The frame in annotate mode: no practice and no runner, so no heading and no rulings. It never
- * moves, and lists all the editor's notes. */
-export function annotateFrame(text: TextId, notes: readonly Note[]): Frame {
+ * moves, and lists the reader's own notes that can be placed on the poem, in the order written. */
+export function annotateFrame(
+  text: TextId,
+  material: Material,
+  written: readonly ReaderNote[],
+): Frame {
+  const set = notesFor(
+    material.substrate,
+    written.filter((note) => placeable(note, material)),
+  )
   const subject: Subject = {
     key: "annotate",
     text,
     prose: [],
-    commentary: { notes, shown: "listed" },
+    commentary: { set, notes: set.notes, shown: "listed" },
     writing: null,
   }
   return { heading: null, back: null, next: null, subject }
+}
+
+/** Whether a reader's note can be placed on the poem: written on these lines, with every target
+ * keeping the rule for spans. */
+function placeable(note: ReaderNote, material: Material): boolean {
+  return (
+    note.fingerprint === material.fingerprint &&
+    note.targets.every((target) => spanProblem(material.substrate, target) === null)
+  )
 }
 
 /** The editor's notes a frame highlights: each reference resolved, and any that name no note

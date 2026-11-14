@@ -1,32 +1,33 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../../material/types"
+import type { Note, Notes } from "../../../material/types"
 import { scene } from "../scene"
 import type { Subject } from "../types"
 import { receive } from "../useScene"
 
-const note = (index: number): Note => ({ index, loomId: null, lemma: [], tags: [], paragraphs: [] })
+const note = (index: number): Note => ({ index, id: null, lemma: [], tags: [], paragraphs: [] })
 const notes = [note(0), note(1)]
+const set: Notes = { notes, rangesOn: () => [] }
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
 
 const considering: Subject = {
   key: "p/0/0",
   text: "poem",
   prose: ["Look."],
-  commentary: { notes: [notes[1]!], shown: "marked" },
+  commentary: { set, notes: [notes[1]!], shown: "marked" },
   writing: null,
 }
 const responding: Subject = {
   key: "p/0/1",
   text: "poem",
   prose: ["What does the bird eat?"],
-  commentary: { notes: [], shown: "marked" },
+  commentary: { set, notes: [], shown: "marked" },
   writing: { targets: [whole], tags: [], count: "one", written: [] },
 }
 const annotating: Subject = {
   key: "annotate",
   text: "poem",
   prose: [],
-  commentary: { notes, shown: "listed" },
+  commentary: { set, notes, shown: "listed" },
   writing: null,
 }
 

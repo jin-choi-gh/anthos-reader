@@ -55,9 +55,11 @@ export interface LemmaPart {
   text: string
 }
 
+/** An annotation, the editor's or the reader's, as it is shown: its place in its set, its id, what
+ * it is about in words (its lemma), its tags, and its body as paragraphs. */
 export interface Note {
   index: number
-  loomId: string | null
+  id: string | null
   lemma: LemmaPart[]
   tags: string[]
   paragraphs: string[]
@@ -72,6 +74,6 @@ export interface NoteRange {
 }
 
 export interface Notes {
-  notes: Note[] // every note, in file order
+  notes: Note[] // every note, in the order given
   rangesOn(indexInSubstrate: number): NoteRange[] // the ranges on one line
 }

@@ -19,9 +19,9 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-const note = (index: number, loomId: string | null): Note => ({
+const note = (index: number, id: string | null): Note => ({
   index,
-  loomId,
+  id,
   lemma: [],
   tags: [],
   paragraphs: [],
@@ -39,6 +39,23 @@ const material: Material = {
 
 /** The whole of that poem. */
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
+
+/** A note of the reader's on the whole poem, written on its lines unless said otherwise. */
+const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderNote => ({
+  id: id as NoteId,
+  targets: [whole],
+  tags: [],
+  body,
+  fingerprint: "f" as Fingerprint,
+  from: null,
+  writtenAt: 0,
+  revisedAt: null,
+  ...more,
+})
+
+/** The subject in annotate mode, with what is in the notebook. */
+const annotating = (written: readonly ReaderNote[]) =>
+  annotateFrame("poem", material, written).subject
 
 const consider = (ref: string): Step => ({
   direction: "consider",
@@ -73,13 +90,25 @@ function started(on: Subject): SceneState {
 describe("scene.start: each part staged", () => {
   it("on a consider step: its note picked out, closed; the prose; no writing", () => {
     const current = started(at(0, 1))
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [2], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [2],
+      open: null,
+    })
     expect(scene.praxisBar(current)).toEqual({ prose: ["On @b."], writing: null })
   })
 
   it("on a respond step: the poem with nothing picked out; the prose and a blank page", () => {
     const current = started(at(0, 2))
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [],
+      open: null,
+    })
     expect(scene.praxisBar(current)).toEqual({
       prose: ["What does the bird eat?"],
       writing: { kind: "writing", draft: "", canSubmit: false, canCancel: false },
@@ -88,7 +117,13 @@ describe("scene.start: each part staged", () => {
 
   it("at the rest: the poem with nothing picked out, and nothing of its own in the praxis bar", () => {
     const current = started(at(0, 3))
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [],
+      open: null,
+    })
     expect(scene.praxisBar(current)).toBeNull()
   })
 
@@ -99,12 +134,14 @@ describe("scene.start: each part staged", () => {
     })
   })
 
-  it("in annotate mode: every note listed, none open, nothing in the praxis bar", () => {
-    const current = started(annotateFrame("poem", notes).subject)
+  it("in annotate mode: the reader's own notes listed, none open, nothing in the praxis bar", () => {
+    const on = annotating([mine("n1", "Worms."), mine("n2", "Beads.")])
+    const current = started(on)
     expect(scene.viewer(current)).toEqual({
       kind: "listed",
       text: "poem",
-      shown: [0, 1, 2],
+      notes: on.commentary.set,
+      shown: [0, 1],
       open: null,
     })
     expect(scene.praxisBar(current)).toBeNull()
@@ -179,11 +216,23 @@ describe("scene.fromFrame: cuts and holds", () => {
 
   it("follows the frame through a practice: two steps, a page, the rest, the final stage", () => {
     let current = started(at(0, 0))
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [0], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [0],
+      open: null,
+    })
     current = scene.fromViewer(current, tap(0)).state
 
     current = scene.fromFrame(current, subject(at(0, 1))).state
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [2], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [2],
+      open: null,
+    })
 
     current = scene.fromFrame(current, subject(at(0, 2))).state
     expect(scene.praxisBar(current)?.writing?.kind).toBe("writing")
@@ -198,11 +247,34 @@ describe("scene.fromFrame: cuts and holds", () => {
   it("follows a change of mode, to annotate mode and back to the practice", () => {
     const step = at(0, 1)
     let current = started(step)
-    current = scene.fromFrame(current, subject(annotateFrame("poem", notes).subject)).state
+    current = scene.fromFrame(current, subject(annotating([mine("n1", "Worms.")]))).state
     expect(scene.viewer(current).kind).toBe("listed")
     current = scene.fromViewer(current, tap(0)).state
 
     current = scene.fromFrame(current, subject(step)).state
-    expect(scene.viewer(current)).toEqual({ kind: "marked", text: "poem", marked: [2], open: null })
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [2],
+      open: null,
+    })
+  })
+})
+
+describe("annotate mode, as the notebook changes", () => {
+  it("keeps the open note open when another note arrives", () => {
+    let current = started(annotating([mine("n1", "Worms.")]))
+    current = scene.fromViewer(current, tap(0)).state
+    const more = annotating([mine("n1", "Worms."), mine("n2", "Beads.")])
+    current = scene.fromFrame(current, subject(more)).state
+    expect(scene.viewer(current)).toMatchObject({ shown: [0, 1], open: 0 })
+  })
+
+  it("closes the open note when the notebook is emptied", () => {
+    let current = started(annotating([mine("n1", "Worms.")]))
+    current = scene.fromViewer(current, tap(0)).state
+    current = scene.fromFrame(current, subject(annotating([]))).state
+    expect(scene.viewer(current)).toMatchObject({ shown: [], open: null })
   })
 })

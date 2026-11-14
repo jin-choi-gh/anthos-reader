@@ -46,5 +46,5 @@ function standInNotes(practice: Practice): Note[] {
   )
   return ids
     .filter((id) => id !== null)
-    .map((loomId, index) => ({ index, loomId, lemma: [], tags: [], paragraphs: [] }))
+    .map((id, index) => ({ index, id, lemma: [], tags: [], paragraphs: [] }))
 }

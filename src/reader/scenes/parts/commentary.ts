@@ -22,14 +22,16 @@ export function keepOpen(commentary: Commentary, open: number | null): number | 
   return commentary.notes.some((note) => note.index === open) ? open : null
 }
 
-/** What the viewer draws: the notes picked out in the poem, or listed beside it, and the open one. */
+/** What the viewer draws: the set the notes come from, the notes picked out in the poem or listed
+ * beside it, and the open one. */
 export function viewerOf(
   text: TextId,
   commentary: Commentary,
   open: number | null,
 ): ViewerProjection {
+  const notes = commentary.set
   const indexes = commentary.notes.map((note) => note.index)
   return commentary.shown === "marked"
-    ? { kind: "marked", text, marked: indexes, open }
-    : { kind: "listed", text, shown: indexes, open }
+    ? { kind: "marked", text, notes, marked: indexes, open }
+    : { kind: "listed", text, notes, shown: indexes, open }
 }

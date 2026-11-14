@@ -14,10 +14,10 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-/** A note as editorsNotes makes one, with only what these tests look at. */
-const note = (index: number, loomId: string | null): Note => ({
+/** A note as notesFor makes one, with only what these tests look at. */
+const note = (index: number, id: string | null): Note => ({
   index,
-  loomId,
+  id,
   lemma: [],
   tags: [],
   paragraphs: [],
@@ -35,6 +35,19 @@ const material: Material = {
 
 /** The whole of that poem. */
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
+
+/** A note of the reader's on the whole poem, written on its lines unless said otherwise. */
+const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderNote => ({
+  id: id as NoteId,
+  targets: [whole],
+  tags: [],
+  body,
+  fingerprint: "f" as Fingerprint,
+  from: null,
+  writtenAt: 0,
+  revisedAt: null,
+  ...more,
+})
 
 const consider = (ref: string): Step => ({
   direction: "consider",
@@ -101,7 +114,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/0/1",
       text: "fixture",
       prose: ["On @b."],
-      commentary: { notes: [notes[2]], shown: "marked" },
+      commentary: { set: material.notes, notes: [notes[2]], shown: "marked" },
       writing: null,
     })
     expect(subject.commentary.notes[0]).toBe(notes[2])
@@ -119,7 +132,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/1/2",
       text: "fixture",
       prose: ["What does the bird eat?"],
-      commentary: { notes: [], shown: "marked" },
+      commentary: { set: material.notes, notes: [], shown: "marked" },
       writing: { targets: [whole], tags: [], count: "one", written: [] },
     })
   })
@@ -147,7 +160,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         key: "test/0/2",
         text: "fixture",
         prose: [],
-        commentary: { notes: [], shown: "marked" },
+        commentary: { set: material.notes, notes: [], shown: "marked" },
         writing: null,
       })
     }
@@ -174,23 +187,52 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
   })
 })
 
+describe("frameOf: the set the editor's notes come from", () => {
+  it("is the material's notes, and the notes picked out are notes of it", () => {
+    const { commentary } = frameOf(practice, standing(0, 1), material, []).subject
+    expect(commentary.set).toBe(material.notes)
+    expect(commentary.notes.every((picked) => commentary.set.notes.includes(picked))).toBe(true)
+  })
+})
+
 describe("annotateFrame: annotate mode", () => {
   it("has no heading and never moves: no rulings at all, rather than refusals", () => {
-    const frame = annotateFrame("poem", notes)
+    const frame = annotateFrame("poem", material, [])
     expect(frame.heading).toBeNull()
     expect(frame.back).toBeNull()
     expect(frame.next).toBeNull()
   })
 
-  it("lists all the text's notes, as given, and asks for nothing", () => {
-    const { subject } = annotateFrame("poem", notes)
-    expect(subject).toEqual({
-      key: "annotate",
-      text: "poem",
-      prose: [],
-      commentary: { notes, shown: "listed" },
-      writing: null,
+  it("lists the reader's own notes, in the order written, shown as the editor's are", () => {
+    const written = [mine("n1", "Worms."), mine("n2", "Beads.\n\nFear.")]
+    const { subject } = annotateFrame("poem", material, written)
+    expect(subject).toMatchObject({ key: "annotate", text: "poem", prose: [], writing: null })
+    const { set, notes: shown } = subject.commentary
+    expect(subject.commentary.shown).toBe("listed")
+    expect(shown).toBe(set.notes)
+    const wholePoem = [{ kind: "citation", text: "the whole poem" }]
+    expect(shown).toEqual([
+      { index: 0, id: "n1", lemma: wholePoem, tags: [], paragraphs: ["Worms."] },
+      { index: 1, id: "n2", lemma: wholePoem, tags: [], paragraphs: ["Beads.", "Fear."] },
+    ])
+  })
+
+  it("shows none of the editor's notes: with nothing written, the list is empty", () => {
+    const { commentary } = annotateFrame("poem", material, []).subject
+    expect(commentary.notes).toEqual([])
+    expect(commentary.set.notes).toEqual([])
+  })
+
+  it("leaves out a note written on other lines, and one whose target is not in the poem", () => {
+    const elsewhere = mine("elsewhere", "Older.", { fingerprint: "g" as Fingerprint })
+    const past = mine("past", "Broken.", {
+      targets: [{ start: { line: 0, offset: 0 }, end: { line: 5, offset: 1 } }],
     })
-    expect(subject.commentary.notes).toBe(notes)
+    const { notes: shown } = annotateFrame("poem", material, [
+      elsewhere,
+      past,
+      mine("kept", "Kept."),
+    ]).subject.commentary
+    expect(shown.map((note) => [note.index, note.id])).toEqual([[0, "kept"]])
   })
 })

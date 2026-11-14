@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { editorsNotes, lemmaOf } from "../notes"
+import { notesFor, lemmaOf } from "../notes"
 import { wholePoem } from "../spans"
 import type { Annotation, Span, Substrate } from "../types"
 
@@ -31,13 +31,13 @@ const annotation = (targets: Span[], more: Partial<Annotation> = {}): Annotation
 
 /** The editor's notes from one annotation per list of targets. */
 function notesOn(...targetLists: Span[][]) {
-  return editorsNotes(
+  return notesFor(
     substrate,
     targetLists.map((targets) => annotation(targets)),
   )
 }
 
-describe("editorsNotes: lemmas", () => {
+describe("notesFor: lemmas", () => {
   it("cites the whole poem", () => {
     const { notes } = notesOn([span(0, 0, 2, 30)])
     expect(notes[0]!.lemma).toEqual([{ kind: "citation", text: "the whole poem" }])
@@ -81,22 +81,37 @@ describe("editorsNotes: lemmas", () => {
   })
 })
 
-describe("editorsNotes: indexes, ids, tags and paragraphs", () => {
+describe("notesFor: indexes, ids, tags and paragraphs", () => {
   const target = span(2, 10, 2, 15)
 
+  it("shows a reader's note as it shows an editor's: its id, and the whole poem as its lemma", () => {
+    const reader = annotation([wholePoem(substrate)], { id: "4f0c2b", body: "Worms." })
+    const { notes, rangesOn } = notesFor(substrate, [reader])
+    expect(notes).toEqual([
+      {
+        index: 0,
+        id: "4f0c2b",
+        lemma: [{ kind: "citation", text: "the whole poem" }],
+        tags: [],
+        paragraphs: ["Worms."],
+      },
+    ])
+    expect([0, 1, 2].map(rangesOn)).toEqual([[], [], []])
+  })
+
   it("numbers notes in the order given, from 0, and keeps each id", () => {
-    const { notes } = editorsNotes(substrate, [
+    const { notes } = notesFor(substrate, [
       annotation([target], { id: "angle-worm" }),
       annotation([target]),
     ])
-    expect(notes.map((note) => [note.index, note.loomId])).toEqual([
+    expect(notes.map((note) => [note.index, note.id])).toEqual([
       [0, "angle-worm"],
       [1, null],
     ])
   })
 
   it("keeps a note's tags, in the editor's order", () => {
-    const { notes } = editorsNotes(substrate, [
+    const { notes } = notesFor(substrate, [
       annotation([target], { tags: ["gloss", "comment"] }),
       annotation([target]),
     ])
@@ -104,14 +119,14 @@ describe("editorsNotes: indexes, ids, tags and paragraphs", () => {
   })
 
   it("splits a body at blank lines and joins each paragraph's wrapped lines", () => {
-    const { notes } = editorsNotes(substrate, [
+    const { notes } = notesFor(substrate, [
       annotation([target], { body: "Like a hardened\ncriminal.\n\n  The bird\n" }),
     ])
     expect(notes[0]!.paragraphs).toEqual(["Like a hardened criminal.", "The bird"])
   })
 })
 
-describe("editorsNotes: ranges on lines", () => {
+describe("notesFor: ranges on lines", () => {
   it("cuts a passage at the line breaks it crosses", () => {
     const { rangesOn } = notesOn([span(0, 22, 2, 6)])
     expect(rangesOn(0)).toEqual([{ start: 22, end: 28, noteIndex: 0 }])

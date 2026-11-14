@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest"
-import type { Note } from "../../../../material/types"
+import type { Note, Notes } from "../../../../material/types"
 import type { Commentary } from "../../types"
 import { keepOpen, onViewer, viewerOf } from "../commentary"
 
-const note = (index: number): Note => ({ index, loomId: null, lemma: [], tags: [], paragraphs: [] })
+const note = (index: number): Note => ({ index, id: null, lemma: [], tags: [], paragraphs: [] })
 
 /** The highlight on one note, as on a consider step; and the list of three, as in annotate mode. */
-const highlight: Commentary = { notes: [note(2)], shown: "marked" }
-const list: Commentary = { notes: [note(0), note(1), note(2)], shown: "listed" }
-const none: Commentary = { notes: [], shown: "marked" }
+/** The set they come from: three notes. */
+const set: Notes = { notes: [note(0), note(1), note(2)], rangesOn: () => [] }
+const highlight: Commentary = { set, notes: [note(2)], shown: "marked" }
+const list: Commentary = { set, notes: [note(0), note(1), note(2)], shown: "listed" }
+const none: Commentary = { set, notes: [], shown: "marked" }
 
 const tap = (index: number) => ({ kind: "tapNote", note: index }) as const
 const close = { kind: "closeNote" } as const
@@ -32,6 +34,7 @@ describe("the highlight: one note lit up in the poem", () => {
     expect(viewerOf("poem", none, null)).toEqual({
       kind: "marked",
       text: "poem",
+      notes: set,
       marked: [],
       open: null,
     })
@@ -42,12 +45,14 @@ describe("the highlight: one note lit up in the poem", () => {
     expect(viewerOf("poem", highlight, null)).toEqual({
       kind: "marked",
       text: "poem",
+      notes: set,
       marked: [2],
       open: null,
     })
     expect(viewerOf("poem", highlight, 2)).toEqual({
       kind: "marked",
       text: "poem",
+      notes: set,
       marked: [2],
       open: 2,
     })
@@ -69,6 +74,7 @@ describe("the list: every note beside the poem, in annotate mode", () => {
     expect(viewerOf("poem", list, 1)).toEqual({
       kind: "listed",
       text: "poem",
+      notes: set,
       shown: [0, 1, 2],
       open: 1,
     })

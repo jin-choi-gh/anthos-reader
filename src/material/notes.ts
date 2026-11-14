@@ -4,13 +4,14 @@ import type { Annotation, LemmaPart, Note, NoteRange, Notes, Span, Substrate } f
 /** What a target covers: the whole poem, whole lines, or a passage starting or ending inside a line. */
 type TargetKind = "poem" | "lines" | "passage"
 
-/** The editor's notes, as they are shown, from their annotations: every annotation, in the order
- * given, with its index (its place in that order, from 0), its id, its lemma and its paragraphs; and
- * what each line's notes cover. Indexes last only as long as the loaded file: never save them. */
-export function editorsNotes(substrate: Substrate, annotations: readonly Annotation[]): Notes {
+/** The notes as they are shown, for any annotations, the editor's or the reader's: every annotation,
+ * in the order given, with its index (its place in that order, from 0), its id, its lemma and its
+ * paragraphs; and what each line's notes cover. Indexes last only as long as the set: never save
+ * them. */
+export function notesFor(substrate: Substrate, annotations: readonly Annotation[]): Notes {
   const notes: Note[] = annotations.map((annotation, index) => ({
     index,
-    loomId: annotation.id,
+    id: annotation.id,
     lemma: lemmaOf(substrate, annotation.targets),
     tags: [...annotation.tags],
     paragraphs: paragraphsOf(annotation.body),
