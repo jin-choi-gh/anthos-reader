@@ -16,7 +16,10 @@ export function writeNotebook(text: TextId, events: readonly NotebookEvent[]): b
   return writeEvents(notebookKey(text), events)
 }
 
+/** Development only: forgets a text's notebook, and empties every open copy of it. Outside
+ * development it does nothing: the notebook is kept for good. */
 export function clearNotebook(text: TextId): void {
+  if (!import.meta.env.DEV) return
   clearEvents(notebookKey(text))
 }
 

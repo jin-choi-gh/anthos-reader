@@ -21,13 +21,27 @@ export function writeEvents<E>(key: string, events: readonly E[]): boolean {
   }
 }
 
-/** Forgets the log under a key. */
+/** The announcement that a log was forgotten. Its detail is the log's key. */
+const FORGOTTEN = "anthos-forgotten"
+
+/** Forgets the log under a key, and announces it, so that whatever has the log open starts afresh.
+ * It announces even when storage is off: nothing was kept, but an open copy must still be emptied. */
 export function clearEvents(key: string): void {
   try {
     localStorage.removeItem(key)
   } catch {
     // storage is off: there is nothing saved to forget
   }
+  window.dispatchEvent(new CustomEvent<string>(FORGOTTEN, { detail: key }))
+}
+
+/** Calls `onForget` whenever the log under `key` is forgotten. Gives back the way to stop. */
+export function whenForgotten(key: string, onForget: () => void): () => void {
+  const listener = (event: Event) => {
+    if (event instanceof CustomEvent && event.detail === key) onForget()
+  }
+  window.addEventListener(FORGOTTEN, listener)
+  return () => window.removeEventListener(FORGOTTEN, listener)
 }
 
 /** Whether a value is a plain object, whose fields a guard may then look at. */

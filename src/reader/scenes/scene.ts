@@ -38,12 +38,13 @@ export const scene = {
     const { subject } = message
     if (subject === current.subject) return reply(current)
     if (subject.key !== current.subject.key) return scene.start(subject)
+    const before = current.subject.writing
     const writing =
       subject.writing === null
         ? null
-        : current.writing === null
+        : before === null || current.writing === null
           ? startWriting(subject.writing)
-          : keepWriting(subject.writing, current.writing)
+          : keepWriting(before, subject.writing, current.writing)
     return reply({ subject, open: keepOpen(subject.commentary, current.open), writing })
   },
 

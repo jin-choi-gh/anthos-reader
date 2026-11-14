@@ -15,7 +15,10 @@ export function writeLog(practice: Practice, log: readonly Event[]): boolean {
   return writeEvents(logKey(practice), log)
 }
 
+/** Development only: forgets a run, and empties every open copy of it. Outside development it does
+ * nothing. */
 export function clearLog(practice: Practice): void {
+  if (!import.meta.env.DEV) return
   clearEvents(logKey(practice))
 }
 

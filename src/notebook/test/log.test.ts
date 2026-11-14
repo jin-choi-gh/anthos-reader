@@ -34,10 +34,12 @@ beforeEach(() => {
     setItem: (key: string, value: string) => void stored.set(key, value),
     removeItem: (key: string) => void stored.delete(key),
   })
+  vi.stubGlobal("window", new EventTarget())
 })
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
 })
 
 describe("the notebook in storage", () => {
@@ -55,6 +57,13 @@ describe("the notebook in storage", () => {
     writeNotebook("dickinson", events)
     clearNotebook("dickinson")
     expect(readNotebook("dickinson")).toEqual([])
+  })
+
+  it("forgets nothing outside development: the notebook is kept for good", () => {
+    vi.stubEnv("DEV", false)
+    writeNotebook("dickinson", events)
+    clearNotebook("dickinson")
+    expect(readNotebook("dickinson")).toEqual(events)
   })
 
   it("leaves out entries that are not events, and keeps those that are", () => {

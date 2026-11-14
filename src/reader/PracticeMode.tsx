@@ -56,7 +56,7 @@ export function PracticeMode({
     <Layout
       layout={layout}
       topBar={topBar}
-      dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} notebook={notebook} />}
+      dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} notes={notebook.notes} />}
       page={<ViewerPage {...viewer} />}
       notes={scene.viewer.open === null ? null : <ViewerNotes {...viewer} />}
       praxisBar={

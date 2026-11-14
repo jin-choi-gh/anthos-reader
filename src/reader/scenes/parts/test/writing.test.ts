@@ -103,16 +103,28 @@ describe("a page with a note written", () => {
 describe("keepWriting: the page, when the notebook changes", () => {
   it("shows the note as it now stands, unless the reader is writing", () => {
     const revised = { ...filled, written: [{ ...saved, body: "Worms, raw." }] }
-    expect(keepWriting(revised, { editing: false, draft: "Worms." })).toEqual({
+    expect(keepWriting(filled, revised, { editing: false, draft: "Worms." })).toEqual({
       editing: false,
       draft: "Worms, raw.",
     })
     const writing = { editing: true, draft: "Half a thought" }
-    expect(keepWriting(revised, writing)).toBe(writing)
+    expect(keepWriting(filled, revised, writing)).toBe(writing)
   })
 
   it("keeps the very same state when nothing changed", () => {
     const shown = { editing: false, draft: "Worms." }
-    expect(keepWriting(filled, shown)).toBe(shown)
+    expect(keepWriting(filled, filled, shown)).toBe(shown)
+  })
+
+  it("leaves a blank page again when the note is gone, forgotten or withdrawn", () => {
+    expect(keepWriting(filled, blank, { editing: false, draft: "Worms." })).toEqual({
+      editing: true,
+      draft: "",
+    })
+  })
+
+  it("keeps what was just sent while the notebook has not yet taken it", () => {
+    const sent = { editing: false, draft: "Worms." }
+    expect(keepWriting(blank, blank, sent)).toBe(sent)
   })
 })

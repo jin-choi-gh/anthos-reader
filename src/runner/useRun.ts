@@ -1,19 +1,19 @@
-import { useMemo, useRef, useState, useSyncExternalStore } from "react"
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react"
 import { now, today, type Day } from "../clock/clock"
 import type { ReaderNote } from "../notebook/types"
 import type { Practice } from "../practice/types"
-import { clearLog, readLog, writeLog } from "./log"
+import { whenForgotten } from "../storage/log"
+import { logKey, readLog, writeLog } from "./log"
 import { eventsOfMove, standingOf } from "./step"
 import type { Event, Standing } from "./types"
 
-/** A run of a practice, for as long as the component that holds it: where it stands, today,
- * the log, and the two things that can be done with it. */
+/** A run of a practice, for as long as the component that holds it: where it stands, today, the
+ * log, and the one thing that can be done with it: a move. */
 export interface Run {
   standing: Standing
   today: Day
   log: readonly Event[]
   moveTo(target: number): void
-  restart(): void
 }
 
 /** The run of a practice. `notes` are read, never written: a step that asks for writing holds the
@@ -24,6 +24,16 @@ export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
   const latest = useRef<readonly Event[]>(log)
   const day = useToday()
   const standing = useMemo(() => standingOf(practice, log, notes, day), [practice, log, notes, day])
+
+  // Forgotten in development (clearLog): this copy starts again too
+  useEffect(
+    () =>
+      whenForgotten(logKey(practice), () => {
+        latest.current = []
+        setLog([])
+      }),
+    [practice],
+  )
 
   const keep = (next: readonly Event[]) => {
     latest.current = next
@@ -41,11 +51,6 @@ export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
       const here = standingOf(practice, latest.current, notes, current)
       const events = eventsOfMove(practice, here, target, now(), current)
       if (events.length > 0) keep([...latest.current, ...events])
-    },
-    restart() {
-      clearLog(practice)
-      latest.current = []
-      setLog([])
     },
   }
 }

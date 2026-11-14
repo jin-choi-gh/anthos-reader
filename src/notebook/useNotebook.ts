@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
 import type { Anchor, TextId } from "../material/types"
-import { clearNotebook, readNotebook, writeNotebook } from "./log"
+import { whenForgotten } from "../storage/log"
+import { notebookKey, readNotebook, writeNotebook } from "./log"
 import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesOf } from "./notebook"
 import type { NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
 
@@ -12,8 +13,6 @@ export interface Notebook {
   note(anchor: Anchor, body: string, from: Provenance | null): void
   revise(id: NoteId, body: string): void
   withdraw(id: NoteId): void
-  /** Development only: forgets the whole notebook, as if nothing had ever been written. */
-  clear(): void
 }
 
 export function useNotebook(text: TextId): Notebook {
@@ -21,6 +20,16 @@ export function useNotebook(text: TextId): Notebook {
   // The latest events, so that two writings in one moment both land, the second after the first
   const latest = useRef(events)
   const notes = useMemo(() => notesOf(events), [events])
+
+  // Forgotten in development (clearNotebook): this copy is emptied too
+  useEffect(
+    () =>
+      whenForgotten(notebookKey(text), () => {
+        latest.current = []
+        setEvents([])
+      }),
+    [text],
+  )
 
   return useMemo(() => {
     const append = (event: NotebookEvent) => {
@@ -34,11 +43,6 @@ export function useNotebook(text: TextId): Notebook {
       note: (anchor, body, from) => append(eventOfNoting({ anchor, body, from }, stampNow())),
       revise: (id, body) => append(eventOfRevising(notesOf(latest.current), id, body, now())),
       withdraw: (id) => append(eventOfWithdrawing(notesOf(latest.current), id, now())),
-      clear: () => {
-        clearNotebook(text)
-        latest.current = []
-        setEvents([])
-      },
     }
   }, [text, notes])
 }

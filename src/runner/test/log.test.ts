@@ -24,10 +24,12 @@ beforeEach(() => {
     setItem: (key: string, value: string) => void stored.set(key, value),
     removeItem: (key: string) => void stored.delete(key),
   })
+  vi.stubGlobal("window", new EventTarget())
 })
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
 })
 
 describe("saving and reading a run", () => {
@@ -55,6 +57,13 @@ describe("saving and reading a run", () => {
     clearLog(practice)
     expect(readLog(practice)).toEqual([])
     expect(stored.size).toBe(0)
+  })
+
+  it("forgets nothing outside development", () => {
+    vi.stubEnv("DEV", false)
+    writeLog(practice, log)
+    clearLog(practice)
+    expect(readLog(practice)).toEqual(log)
   })
 })
 

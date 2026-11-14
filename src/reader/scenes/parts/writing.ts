@@ -18,12 +18,19 @@ export function startWriting(writing: WritingSubject): WritingState {
   return { editing: saved === null, draft: saved?.body ?? "" }
 }
 
-/** The page once the notebook has changed: while it is being written, it is left alone; otherwise
- * it shows what is written now. */
-export function keepWriting(writing: WritingSubject, state: WritingState): WritingState {
+/** The page once the notebook has changed, from what it held `before`. While it is being written, it
+ * is left alone. A note that was there and is gone (forgotten, or withdrawn) leaves a blank page
+ * again. Otherwise it shows what is written now. A page sent but not yet back from the notebook is
+ * left alone: nothing was there before either. */
+export function keepWriting(
+  before: WritingSubject,
+  writing: WritingSubject,
+  state: WritingState,
+): WritingState {
   if (state.editing) return state
-  const body = savedOf(writing)?.body
-  return body === undefined || body === state.draft ? state : { editing: false, draft: body }
+  const saved = savedOf(writing)
+  if (saved === null) return savedOf(before) === null ? state : startWriting(writing)
+  return saved.body === state.draft ? state : { editing: false, draft: saved.body }
 }
 
 /** What the reader does on the page, and what, if anything, goes into the notebook. */
