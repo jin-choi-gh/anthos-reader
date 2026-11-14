@@ -1,0 +1,39 @@
+/* The Preludes theme: the colours of The Preludes (thepreludes.substack.com), on the reader's
+   tokens. Cream paper, brown ink, one grey, and one teal accent. Faces, shapes and depth are the
+   reader theme's. */
+
+:root {
+  /* Grounds */
+  --page: #fff7ed; /* behind everything: the blog's cream */
+  --surface: #fff7ed; /* note boxes and the sheet: the blog's raised panels are the page's cream */
+
+  /* Text */
+  --ink: #2c2824; /* the poem and body text: the blog's brown */
+  --ink-muted: #807a70; /* the poet line: the blog's one grey */
+  --ink-faint: #615e59; /* line numbers, empty states: the same grey */
+
+  /* Lines */
+  --line: #e6ded5; /* a note box's border: the blog's rules */
+  --line-hover: rgb(93 76 55 / 0.3); /* the border of the note under the pointer: 30% ink */
+
+  /* The editor's notes */
+  --fill-editor: #cfe3d9; /* the selected note's box, and its passages: the teal at 20% on cream */
+  --edge-selected: #0d9488; /* the selected note's border: the blog's teal */
+
+  /* The reader's own notes */
+  --edge-reader: #0d9488; /* the edge of what the reader writes: the same teal */
+
+  /* Interaction */
+  --focus: #0b7d72; /* the keyboard focus ring: the teal, darkened */
+  --selection: rgb(13 148 136 / 0.3); /* text the reader selects: the teal at 30% */
+  --selection-ink: var(--ink); /* selected text stays in ink */
+
+  /* Faces */
+  --font-text: "Literata", Georgia, serif; /* the poem and its title */
+  --font-ui: system-ui, sans-serif; /* everything you operate */
+
+  /* Shape and depth */
+  --radius-note: 8px;
+  --radius-sheet: 12px;
+  --shadow-sheet: 0 -2px 12px rgb(93 76 55 / 0.1);
+}

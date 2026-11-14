@@ -25,6 +25,8 @@
 
   /* Interaction */
   --focus: #3b6fd8; /* the keyboard focus ring */
+  --selection: Highlight; /* text the reader selects: the browser's own colour */
+  --selection-ink: HighlightText;
 
   /* Faces */
   --font-text: "Literata", Georgia, serif; /* the poem and its title */

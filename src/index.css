@@ -10,3 +10,9 @@ body {
   color: var(--ink);
   background: var(--page);
 }
+
+/* Text the reader selects, anywhere: the poem, a note, the praxis bar */
+::selection {
+  background: var(--selection);
+  color: var(--selection-ink);
+}
