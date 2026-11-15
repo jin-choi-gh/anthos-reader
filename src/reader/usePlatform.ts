@@ -3,11 +3,12 @@ import { useLayoutEffect, useState, useSyncExternalStore, type RefObject } from 
 /** Where things go, from the reader's width: the page alone, or the page with a margin beside it. */
 export type ReaderLayout = "page" | "spread"
 
-/** How the reader is pointed at: by a finger, or by a mouse or trackpad. It decides how things are
- * chosen (word handles, or drag and shift-click), never where they are laid out. */
+/** How the reader is mostly pointed at, by the primary pointer: a finger, or a mouse or trackpad.
+ * It is marked on the reader (data-input) and decides nothing else: how a passage is chosen goes
+ * by the pointer of each press (CHOOSING, in viewer/choosing.ts), and where things go by the width. */
 export type ReaderInput = "touch" | "mouse"
 
-/** The two things the reader adapts to, and they vary apart: a narrow desktop window is a page
+/** The reader's width and its primary pointer, which vary apart: a narrow desktop window is a page
  * pointed at by a mouse, and a tablet held sideways is a spread pointed at by a finger. */
 export interface Platform {
   layout: ReaderLayout // from the reader's width: page or spread
