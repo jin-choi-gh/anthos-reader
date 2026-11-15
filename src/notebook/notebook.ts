@@ -1,8 +1,9 @@
 import { assertNever } from "../assertNever"
+import type { Span } from "../material/types"
 import type { NewNote, NoteId, NotebookEvent, Provenance, ReaderNote } from "./types"
 
 /** The notebook as it stands: every note not withdrawn, in the order written, each with its latest
- * body. Events about a note the notebook does not have change nothing. */
+ * targets and body. Events about a note the notebook does not have change nothing. */
 export function notesOf(events: readonly NotebookEvent[]): ReaderNote[] {
   const notes = new Map<NoteId, ReaderNote>()
   for (const event of events) {
@@ -25,7 +26,12 @@ export function notesOf(events: readonly NotebookEvent[]): ReaderNote[] {
       case "revised": {
         const note = notes.get(event.id)
         if (note !== undefined)
-          notes.set(event.id, { ...note, body: event.body, revisedAt: event.at })
+          notes.set(event.id, {
+            ...note,
+            targets: event.targets,
+            body: event.body,
+            revisedAt: event.at,
+          })
         break
       }
       case "withdrawn":
@@ -57,15 +63,19 @@ export function eventOfNoting(note: NewNote, stamp: { id: NoteId; at: number }):
   return { kind: "noted", ...stamp, targets, tags, body: bodyOf(body), fingerprint, from }
 }
 
-/** The event that gives a note a new body. Only a note the notebook has can be revised. */
+/** The event that gives a note new targets and a new body. Only a note the notebook has can be
+ * revised, and it is still about something. Its fingerprint stays, so the targets must be positions
+ * in the lines it was written on: the caller's to see to. */
 export function eventOfRevising(
   notes: readonly ReaderNote[],
   id: NoteId,
+  targets: readonly Span[],
   body: string,
   at: number,
 ): NotebookEvent {
   if (!notes.some((note) => note.id === id)) throw new RangeError(`no note ${id} to revise`)
-  return { kind: "revised", id, at, body: bodyOf(body) }
+  if (targets.length === 0) throw new RangeError("a note must be about something")
+  return { kind: "revised", id, at, targets, body: bodyOf(body) }
 }
 
 /** The event that withdraws a note. Only a note the notebook has can be withdrawn. */

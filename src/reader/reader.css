@@ -421,6 +421,17 @@ html {
   outline-offset: 2px;
 }
 
+/* A written note's passages, above its words, as the table of chosen passages quotes them */
+.notebook-lemma {
+  margin: 0;
+  color: var(--ink);
+}
+
+.notebook-lemma q {
+  quotes: none;
+  font-style: italic;
+}
+
 .notebook-written {
   font-family: var(--font-text);
   font-size: 1rem;

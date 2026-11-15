@@ -50,7 +50,7 @@ export function PracticeMode({
           from: where,
         })
       case "revise":
-        return notebook.revise(effect.id, effect.body)
+        return notebook.revise(effect.id, effect.targets, effect.body)
       case "withdraw":
         return notebook.withdraw(effect.id)
       default:

@@ -1,11 +1,11 @@
 import { useId } from "react"
-import { Lemma } from "../../ui/Lemma"
 import type { NotingProjection, PraxisBarProtocol } from "../scenes/types"
+import { ChosenPassages } from "./ChosenPassages"
 
-/** A new note, in the praxis bar: the toggle for choosing passages of the poem; the chosen targets,
- * one row each in the poem's order, with a button to remove each; the box for the note; and Add
- * note, which can be pressed once the box says something, as can Ctrl or Cmd with Enter in the box.
- * Every change goes to the scene, which holds the note so far and adds it. */
+/** A new note, in the praxis bar: its passages (the toggle for choosing them, and the chosen
+ * targets); the box for the note; and Add note, which can be pressed once the box says something,
+ * as can Ctrl or Cmd with Enter in the box. Every change goes to the scene, which holds the note so
+ * far and adds it. */
 export function NotingPage({
   page,
   send,
@@ -23,33 +23,7 @@ export function NotingPage({
         send({ kind: "addNote" })
       }}
     >
-      <button
-        type="button"
-        className="praxis-button noting-toggle"
-        aria-pressed={page.choosing}
-        onClick={() => send({ kind: "choosing", on: !page.choosing })}
-      >
-        Choose passages
-      </button>
-      {page.chosen.length > 0 && (
-        <ol className="noting-targets" aria-label="Chosen passages">
-          {page.chosen.map((lemma, index) => (
-            <li key={index} className="noting-target">
-              <span className="noting-lemma">
-                <Lemma lemma={[lemma]} />
-              </span>
-              <button
-                type="button"
-                className="noting-remove"
-                aria-label={`Remove ${lemma.text}`}
-                onClick={() => send({ kind: "unchoose", index })}
-              >
-                −
-              </button>
-            </li>
-          ))}
-        </ol>
-      )}
+      <ChosenPassages passages={page} send={send} />
       <label htmlFor={box} className="notebook-label">
         Your note
       </label>

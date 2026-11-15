@@ -22,7 +22,7 @@ const responding: Subject = {
   text: "poem",
   prose: ["What does the bird eat?"],
   commentary: { set, notes: [], shown: "marked", written: null },
-  writing: { targets: [whole], tags: [], count: "one", written: [] },
+  writing: { about: { kind: "fixed", targets: [whole] }, tags: [], count: "one", written: [] },
   noting: null,
 }
 const annotating: Subject = {

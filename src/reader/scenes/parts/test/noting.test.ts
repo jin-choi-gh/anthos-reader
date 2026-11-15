@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest"
 import type { Span } from "../../../../material/types"
 import type { NotingSubject } from "../../types"
-import { notingOf, onChoose, onPraxisBar, startNoting, type NotingState } from "../noting"
+import {
+  notingOf,
+  onChoose,
+  onPassages,
+  onPraxisBar,
+  startNoting,
+  type NotingState,
+} from "../noting"
 
 const noting: NotingSubject = {
   substrate: {
@@ -47,10 +54,10 @@ describe("a new note", () => {
   })
 
   it("turns choosing on and off, and keeps the very same state when nothing changes", () => {
-    const on = bar(startNoting(), { kind: "choosing", on: true })
+    const on = onPassages(startNoting(), { kind: "choosing", on: true })
     expect(on.choosing).toBe(true)
-    expect(bar(on, { kind: "choosing", on: false }).choosing).toBe(false)
-    expect(bar(on, { kind: "choosing", on: true })).toBe(on)
+    expect(onPassages(on, { kind: "choosing", on: false }).choosing).toBe(false)
+    expect(onPassages(on, { kind: "choosing", on: true })).toBe(on)
   })
 })
 
@@ -80,15 +87,15 @@ describe("onChoose: a passage chosen in the viewer", () => {
   })
 })
 
-describe("onPraxisBar: removing and writing", () => {
+describe("removing and writing", () => {
   const two = onChoose(noting, onChoose(noting, choosing, bird), he)
 
   it("removes a chosen target by its place in the table", () => {
-    expect(bar(two, { kind: "unchoose", index: 0 }).targets).toEqual([he])
+    expect(onPassages(two, { kind: "unchoose", index: 0 }).targets).toEqual([he])
   })
 
   it("keeps the very same state for a place the table does not have", () => {
-    expect(bar(two, { kind: "unchoose", index: 2 })).toBe(two)
+    expect(onPassages(two, { kind: "unchoose", index: 2 })).toBe(two)
   })
 
   it("keeps the draft, and lets the note be added only once it says something", () => {

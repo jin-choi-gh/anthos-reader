@@ -1,4 +1,4 @@
-import type { Annotation, Fingerprint } from "../material/types"
+import type { Annotation, Fingerprint, Span } from "../material/types"
 import type { PracticeId } from "../practice/types"
 
 /** A note's id: made once, when the note is written, and kept for good. Only the notebook makes one,
@@ -12,7 +12,7 @@ export interface Provenance {
   readonly step: number
 }
 
-/** A note as it stands now: an annotation of the reader's, with its latest body, the fingerprint of
+/** A note as it stands now: an annotation of the reader's, with its latest targets and body, the fingerprint of
  * the lines it was written on (its targets are positions in those lines), where in a run it was
  * written (null: outside a practice), and when. */
 export interface ReaderNote extends Annotation {
@@ -29,5 +29,11 @@ export type NewNote = Omit<ReaderNote, "id" | "writtenAt" | "revisedAt">
 
 export type NotebookEvent =
   | ({ readonly kind: "noted"; readonly id: NoteId; readonly at: number } & NewNote)
-  | { readonly kind: "revised"; readonly id: NoteId; readonly at: number; readonly body: string }
+  | {
+      readonly kind: "revised"
+      readonly id: NoteId
+      readonly at: number
+      readonly targets: readonly Span[]
+      readonly body: string
+    }
   | { readonly kind: "withdrawn"; readonly id: NoteId; readonly at: number }

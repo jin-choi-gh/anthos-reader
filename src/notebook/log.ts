@@ -29,17 +29,15 @@ function isNotebookEvent(value: unknown): value is NotebookEvent {
   switch (value.kind) {
     case "noted":
       return (
-        Array.isArray(value.targets) &&
-        value.targets.length > 0 &&
-        value.targets.every(isSpan) &&
+        isTargets(value.targets) &&
         Array.isArray(value.tags) &&
         value.tags.every((tag) => typeof tag === "string") &&
         typeof value.body === "string" &&
         typeof value.fingerprint === "string" &&
         (value.from === null || isProvenance(value.from))
       )
-    case "revised":
-      return typeof value.body === "string"
+    case "revised": // one written before a revision could change the targets has none: unread
+      return isTargets(value.targets) && typeof value.body === "string"
     case "withdrawn":
       return true
     default:
@@ -49,6 +47,11 @@ function isNotebookEvent(value: unknown): value is NotebookEvent {
 
 function isNoteId(value: unknown): value is NoteId {
   return typeof value === "string" && value !== ""
+}
+
+/** A note's targets: at least one span. */
+function isTargets(value: unknown): boolean {
+  return Array.isArray(value) && value.length > 0 && value.every(isSpan)
 }
 
 function isSpan(value: unknown): boolean {

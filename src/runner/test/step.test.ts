@@ -282,3 +282,62 @@ describe("the law: a step that asks for writing holds the reader until they have
     expect(eventsOfMove(asking, after, 2, 0, "2026-11-10")).toEqual([visited(0, 2)])
   })
 })
+
+describe("the law: an observe step holds the reader as a respond step does", () => {
+  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
+  /** Observe first in the first stage, and twice in a row, last, in the last. */
+  const observing: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [observe, consider("a")] },
+      { name: "Second", steps: [consider("b"), observe, observe] },
+    ],
+  }
+  /** A note written on a step of this practice, unless written somewhere else. */
+  const written = (
+    stage: number,
+    step: number,
+    from: ReaderNote["from"] = { practice: observing.id, stage, step },
+  ): ReaderNote => ({
+    id: `note-${stage}-${step}` as NoteId,
+    targets: [{ start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }],
+    tags: [],
+    fingerprint: "f" as Fingerprint,
+    body: "A bird.",
+    from,
+    writtenAt: 0,
+    revisedAt: null,
+  })
+
+  it("is held at the first step of a stage until its note is written, then let on", () => {
+    expect(standingOf(observing, [], [], "2026-11-10").heldAt).toBe(0)
+    expect(standingOf(observing, [], [written(0, 0)], "2026-11-10").heldAt).toBeNull()
+  })
+
+  it("counts no note from annotate mode or another step", () => {
+    const others = [
+      written(0, 0, null),
+      written(0, 0, { practice: observing.id, stage: 1, step: 1 }),
+    ]
+    expect(standingOf(observing, [], others, "2026-11-10").heldAt).toBe(0)
+  })
+
+  it("holds at two observe steps in a row, each in turn", () => {
+    const log = [visited(0, 2), finished(0, "2026-11-10")]
+    const day = "2026-11-11"
+    expect(standingOf(observing, log, [written(0, 0)], day).heldAt).toBe(1)
+    expect(standingOf(observing, log, [written(0, 0), written(1, 1)], day).heldAt).toBe(2)
+    expect(
+      standingOf(observing, log, [written(0, 0), written(1, 1), written(1, 2)], day).heldAt,
+    ).toBeNull()
+  })
+
+  it("last in the last stage, once written, leads on to the final stage", () => {
+    const notes = [written(0, 0), written(1, 1), written(1, 2)]
+    const log = [visited(0, 2), finished(0, "2026-11-10"), visited(1, 2)]
+    const here = standingOf(observing, log, notes, "2026-11-11")
+    expect(here).toEqual(standing(1, 2))
+    const moves = eventsOfMove(observing, here, 3, 0, "2026-11-11")
+    expect(standingOf(observing, [...log, ...moves], notes, "2026-11-11")).toEqual(standing(2, 0))
+  })
+})

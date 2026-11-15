@@ -4,6 +4,7 @@ import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesFrom, notesOf 
 import type { NewNote, NoteId, NotebookEvent, Provenance } from "../types"
 
 const whole: Span = { start: { line: 0, offset: 0 }, end: { line: 2, offset: 30 } }
+const worm: Span = { start: { line: 1, offset: 13 }, end: { line: 1, offset: 23 } }
 const here: Provenance = { practice: "first-reading", stage: 0, step: 2 }
 const a = "a" as NoteId
 const b = "b" as NoteId
@@ -39,11 +40,21 @@ describe("notesOf: the notebook as it stands", () => {
   it("gives a revised note its latest body, and keeps when it was first written", () => {
     const events: NotebookEvent[] = [
       noted(a, "A worm."),
-      { kind: "revised", id: a, at: 5, body: "A worm, raw." },
-      { kind: "revised", id: a, at: 9, body: "A worm, raw, and cold." },
+      { kind: "revised", id: a, at: 5, targets: [whole], body: "A worm, raw." },
+      { kind: "revised", id: a, at: 9, targets: [whole], body: "A worm, raw, and cold." },
     ]
     expect(notesOf(events)).toEqual([
       { id: a, ...newNote("A worm, raw, and cold."), writtenAt: 1, revisedAt: 9 },
+    ])
+  })
+
+  it("gives a revised note its latest targets, and keeps its fingerprint and provenance", () => {
+    const events: NotebookEvent[] = [
+      noted(a, "A worm."),
+      { kind: "revised", id: a, at: 5, targets: [worm], body: "A worm." },
+    ]
+    expect(notesOf(events)).toEqual([
+      { id: a, ...newNote("A worm."), targets: [worm], writtenAt: 1, revisedAt: 5 },
     ])
   })
 
@@ -58,7 +69,7 @@ describe("notesOf: the notebook as it stands", () => {
 
   it("ignores events about a note it does not have, and a second noting of the same id", () => {
     const events: NotebookEvent[] = [
-      { kind: "revised", id: a, at: 2, body: "Nothing to revise." },
+      { kind: "revised", id: a, at: 2, targets: [whole], body: "Nothing to revise." },
       { kind: "withdrawn", id: b, at: 2 },
       noted(a, "First."),
       noted(a, "Again."),
@@ -94,11 +105,12 @@ describe("the deciders", () => {
     expect(eventOfNoting(stray, { id: b, at: 4 })).toEqual(noted(b, "Beads.", here, 4))
   })
 
-  it("revise: a new body for a note the notebook has", () => {
-    expect(eventOfRevising(notes, a, "A worm, raw.", 6)).toEqual({
+  it("revise: new targets and a new body for a note the notebook has, the body trimmed", () => {
+    expect(eventOfRevising(notes, a, [worm], " A worm, raw. ", 6)).toEqual({
       kind: "revised",
       id: a,
       at: 6,
+      targets: [worm],
       body: "A worm, raw.",
     })
   })
@@ -112,16 +124,19 @@ describe("the deciders", () => {
     expect(() => eventOfNoting({ ...newNote("Beads."), targets: [] }, { id: b, at: 4 })).toThrow(
       "a note must be about something",
     )
-    expect(() => eventOfRevising(notes, a, "", 6)).toThrow(RangeError)
-    expect(() => eventOfRevising(notes, b, "Beads.", 6)).toThrow(RangeError)
+    expect(() => eventOfRevising(notes, a, [whole], "", 6)).toThrow(RangeError)
+    expect(() => eventOfRevising(notes, a, [], "A worm.", 6)).toThrow(
+      "a note must be about something",
+    )
+    expect(() => eventOfRevising(notes, b, [whole], "Beads.", 6)).toThrow(RangeError)
     expect(() => eventOfWithdrawing(notes, b, 7)).toThrow(RangeError)
   })
 
   it("agrees with notesOf: what the deciders write, the notebook reads back", () => {
     const events = [eventOfNoting(newNote("A worm."), { id: a, at: 1 })]
-    events.push(eventOfRevising(notesOf(events), a, "A worm, raw.", 2))
+    events.push(eventOfRevising(notesOf(events), a, [worm], "A worm, raw.", 2))
     expect(notesOf(events)).toEqual([
-      { id: a, ...newNote("A worm, raw."), writtenAt: 1, revisedAt: 2 },
+      { id: a, ...newNote("A worm, raw."), targets: [worm], writtenAt: 1, revisedAt: 2 },
     ])
   })
 })

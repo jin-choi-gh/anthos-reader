@@ -18,6 +18,10 @@ export const firstReading = {
           direction: "respond",
           prose: ["How has the bird changed for you, from its meal to its beads?"], // a placeholder
         },
+        {
+          direction: "observe",
+          prose: ["Think about the formal features of this poem, highlight."],
+        },
       ],
     },
     {

@@ -17,7 +17,7 @@ const events: NotebookEvent[] = [
     body: "A worm.",
     from: { practice: "first-reading", stage: 0, step: 2 },
   },
-  { kind: "revised", id: a, at: 2_000, body: "A worm, raw." },
+  { kind: "revised", id: a, at: 2_000, targets: [whole], body: "A worm, raw." },
   {
     kind: "noted",
     id: "b" as NoteId,
@@ -134,8 +134,10 @@ describe("the notebook in storage", () => {
         body: "A note of the older shape, with an anchor.",
         from: null,
       },
-      { kind: "revised", id: "", at: 0, body: "No id." },
-      { kind: "revised", id: "a", body: "No time." },
+      { kind: "revised", id: "", at: 0, targets: [whole], body: "No id." },
+      { kind: "revised", id: "a", targets: [whole], body: "No time." },
+      { kind: "revised", id: "a", at: 0, body: "Of the older shape, with no targets." },
+      { kind: "revised", id: "a", at: 0, targets: [], body: "About nothing." },
       { kind: "erased", id: "a", at: 0 },
     ]
     stored.set(notebookKey("dickinson"), JSON.stringify([events[0], ...strays, events[1]]))

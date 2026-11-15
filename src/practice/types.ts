@@ -16,7 +16,7 @@ export interface Stage {
 }
 
 /** A step, as the editor writes it: one direction. */
-export type Step = ConsiderStep | RespondStep
+export type Step = ConsiderStep | RespondStep | ObserveStep
 
 export interface ConsiderStep {
   readonly direction: "consider"
@@ -26,6 +26,11 @@ export interface ConsiderStep {
 
 export interface RespondStep {
   readonly direction: "respond"
+  readonly prose: readonly string[]
+}
+
+export interface ObserveStep {
+  readonly direction: "observe"
   readonly prose: readonly string[]
 }
 
@@ -39,10 +44,10 @@ export interface Parts {
   readonly writing: Writing | null
 }
 
-/** For now, one note on the whole poem, with the tags the step gives it, which the reader may
- * revise. */
+/** One note, with the tags the step gives it, which the reader may revise: on the whole poem
+ * ("whole"), or on passages the reader chooses ("chosen"). */
 export interface Writing {
-  readonly target: "whole"
+  readonly target: "whole" | "chosen"
   readonly tags: readonly string[]
   readonly count: "one"
 }

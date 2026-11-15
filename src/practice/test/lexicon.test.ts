@@ -18,6 +18,14 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
     })
   })
 
+  it("observe: its prose, nothing picked out, and one note on passages the reader chooses", () => {
+    expect(partsOf({ direction: "observe", prose: ["Where does the bird change?"] })).toEqual({
+      prose: ["Where does the bird change?"],
+      highlight: [],
+      writing: { target: "chosen", tags: [], count: "one" },
+    })
+  })
+
   it("hands on the reel's own prose, not a copy", () => {
     const prose = ["Look."]
     expect(partsOf({ direction: "consider", note: "@a", prose }).prose).toBe(prose)

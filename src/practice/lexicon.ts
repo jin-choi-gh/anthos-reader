@@ -12,6 +12,12 @@ export function partsOf(step: Step): Parts {
         highlight: [],
         writing: { target: "whole", tags: [], count: "one" },
       }
+    case "observe": // write about passages the reader chooses
+      return {
+        prose: step.prose,
+        highlight: [],
+        writing: { target: "chosen", tags: [], count: "one" },
+      }
     default:
       return assertNever(step)
   }

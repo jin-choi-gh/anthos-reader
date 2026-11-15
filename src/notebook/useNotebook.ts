@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
-import type { TextId } from "../material/types"
+import type { Span, TextId } from "../material/types"
 import { whenChanged } from "../storage/log"
 import { appendNotebook, notebookKey, readNotebook } from "./log"
 import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesOf } from "./notebook"
@@ -11,7 +11,7 @@ import type { NewNote, NoteId, NotebookEvent, ReaderNote } from "./types"
 export interface Notebook {
   notes: readonly ReaderNote[]
   note(note: NewNote): void
-  revise(id: NoteId, body: string): void
+  revise(id: NoteId, targets: readonly Span[], body: string): void
   withdraw(id: NoteId): void
 }
 
@@ -43,7 +43,8 @@ export function useNotebook(text: TextId): Notebook {
     return {
       notes,
       note: (note) => append(eventOfNoting(note, stampNow())),
-      revise: (id, body) => append(eventOfRevising(notesOf(latest.current), id, body, now())),
+      revise: (id, targets, body) =>
+        append(eventOfRevising(notesOf(latest.current), id, targets, body, now())),
       withdraw: (id) => append(eventOfWithdrawing(notesOf(latest.current), id, now())),
     }
   }, [text, notes])

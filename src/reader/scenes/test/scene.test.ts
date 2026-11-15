@@ -115,7 +115,13 @@ describe("scene.start: each part staged", () => {
     })
     expect(scene.praxisBar(current)).toEqual({
       prose: ["What does the bird eat?"],
-      writing: { kind: "writing", draft: "", canSubmit: false, canCancel: false },
+      writing: {
+        kind: "writing",
+        draft: "",
+        canSubmit: false,
+        canCancel: false,
+        passages: null,
+      },
       noting: null,
     })
   })
@@ -183,7 +189,11 @@ describe("scene.fromViewer and fromPraxisBar", () => {
     current = typing.state
     const sent = scene.fromPraxisBar(current, { kind: "submit" })
     expect(sent.effects).toEqual([{ kind: "note", targets: [whole], tags: [], body: "Worms." }])
-    expect(scene.praxisBar(sent.state)?.writing).toEqual({ kind: "written", body: "Worms." })
+    expect(scene.praxisBar(sent.state)?.writing).toEqual({
+      kind: "written",
+      body: "Worms.",
+      lemma: null,
+    })
   })
 })
 
@@ -219,13 +229,18 @@ describe("scene.fromFrame: cuts and holds", () => {
     current = scene.fromPraxisBar(current, { kind: "submit" }).state
     // The notebook now has the note: the frame hands over a fresh subject with the same key
     current = scene.fromFrame(current, subject(at(0, 2, [written]))).state
-    expect(scene.praxisBar(current)?.writing).toEqual({ kind: "written", body: "Worms." })
+    expect(scene.praxisBar(current)?.writing).toEqual({
+      kind: "written",
+      body: "Worms.",
+      lemma: null,
+    })
     current = scene.fromPraxisBar(current, { kind: "edit" }).state
     expect(scene.praxisBar(current)?.writing).toEqual({
       kind: "writing",
       draft: "Worms.",
       canSubmit: false,
       canCancel: true,
+      passages: null,
     })
   })
 
@@ -431,5 +446,85 @@ describe("annotate mode: turning to the new note closes the open one", () => {
     let current = started(at(0, 1))
     current = scene.fromViewer(current, tap(2)).state
     expect(scene.fromPraxisBar(current, { kind: "draft", text: "x" }).state).toBe(current)
+  })
+})
+
+describe("an observe step: the writing chooses the passages, not the noting", () => {
+  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
+  const observing: Practice = { ...practice, stages: [{ name: "Only", steps: [observe] }] }
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const worm = { start: { line: 1, offset: 10 }, end: { line: 1, offset: 20 } }
+  const from = { practice: "test", stage: 0, step: 0 }
+  const here = (written: readonly ReaderNote[] = []) =>
+    frameOf(observing, standing(0, 0), material, written).subject
+
+  it("takes the toggle and each passage chosen, and the viewer draws them while writing", () => {
+    let current = started(here())
+    current = scene.fromPraxisBar(current, { kind: "choosing", on: true }).state
+    current = scene.fromViewer(current, { kind: "choose", span: worm }).state
+    current = scene.fromViewer(current, { kind: "choose", span: bird }).state
+    expect(current.noting).toBeNull()
+    expect(scene.viewer(current)).toMatchObject({ choosing: true, chosen: [bird, worm] })
+    expect(scene.praxisBar(current)?.writing).toMatchObject({
+      kind: "writing",
+      passages: {
+        choosing: true,
+        chosen: [
+          { kind: "quote", text: "Bird" },
+          { kind: "quote", text: "Angle Worm" },
+        ],
+      },
+    })
+    current = scene.fromPraxisBar(current, { kind: "unchoose", index: 1 }).state
+    expect(scene.viewer(current).chosen).toEqual([bird])
+  })
+
+  it("sends out the note on its passages, and once written draws nothing in the poem", () => {
+    let current = started(here())
+    current = scene.fromPraxisBar(current, { kind: "choosing", on: true }).state
+    current = scene.fromViewer(current, { kind: "choose", span: bird }).state
+    current = scene.fromPraxisBar(current, { kind: "draft", text: "Fed." }).state
+    const sent = scene.fromPraxisBar(current, { kind: "submit" })
+    expect(sent.effects).toEqual([{ kind: "note", targets: [bird], tags: [], body: "Fed." }])
+    const back = mine("o", "Fed.", { targets: [bird], from })
+    current = scene.fromFrame(sent.state, subject(here([back]))).state
+    expect(scene.viewer(current)).toMatchObject({ choosing: false, chosen: [] })
+    expect(scene.praxisBar(current)?.writing).toEqual({
+      kind: "written",
+      body: "Fed.",
+      lemma: [{ kind: "quote", text: "Bird" }],
+    })
+  })
+
+  it("Edit brings the passages back to the poem; a passage removed is sent out as a revision", () => {
+    let current = started(here([mine("o", "Fed.", { targets: [bird, worm], from })]))
+    current = scene.fromPraxisBar(current, { kind: "edit" }).state
+    expect(scene.viewer(current)).toMatchObject({ choosing: false, chosen: [bird, worm] })
+    current = scene.fromPraxisBar(current, { kind: "unchoose", index: 0 }).state
+    expect(scene.fromPraxisBar(current, { kind: "submit" }).effects).toEqual([
+      { kind: "revise", id: "o", targets: [worm], body: "Fed." },
+    ])
+  })
+
+  it("finds only a note that can be placed on the poem", () => {
+    const elsewhere = mine("x", "On other lines.", {
+      targets: [bird],
+      from,
+      fingerprint: "g" as Fingerprint,
+    })
+    expect(scene.praxisBar(started(here([elsewhere])))?.writing).toMatchObject({
+      kind: "writing",
+      draft: "",
+    })
+  })
+})
+
+describe("a respond step: no passages to choose", () => {
+  it("ignores the toggle and a passage chosen, and draws none", () => {
+    const current = started(at(0, 2))
+    const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+    expect(scene.fromPraxisBar(current, { kind: "choosing", on: true }).state).toBe(current)
+    expect(scene.fromViewer(current, { kind: "choose", span: bird }).state).toBe(current)
+    expect(scene.viewer(current)).toMatchObject({ choosing: false, chosen: [] })
   })
 })

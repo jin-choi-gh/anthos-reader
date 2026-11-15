@@ -19,7 +19,7 @@ export function NotesBlock({
   onDelete?: (id: string) => void
 }) {
   if (notes.length === 0) {
-    return <p className="margin-empty">You have no notes on this text yet.</p>
+    return <p className="margin-empty">No notes here yet.</p>
   }
   return (
     <div className="notes">

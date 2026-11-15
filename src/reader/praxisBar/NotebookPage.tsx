@@ -1,9 +1,13 @@
 import { useId } from "react"
+import { Lemma } from "../../ui/Lemma"
 import type { PraxisBarProtocol, WritingProjection } from "../scenes/types"
+import { ChosenPassages } from "./ChosenPassages"
 
-/** A page of the reader's notebook, in the praxis bar. Being written: a box, Respond (when there
- * is something new to send) and Cancel (when there is a note to go back to). Written: the note, and
- * Edit. Every keystroke goes to the scene, which holds the draft; nothing is kept until Respond. */
+/** A page of the reader's notebook, in the praxis bar. Being written: the passages, when the reader
+ * chooses what the note is about, a box, Respond (when there is something new to send) and Cancel
+ * (when there is a note to go back to). Written: the note, under its lemma when the reader chose
+ * its passages, and Edit. Every keystroke and choice goes to the scene, which holds the draft;
+ * nothing is kept until Respond. */
 export function NotebookPage({
   page,
   send,
@@ -23,6 +27,7 @@ export function NotebookPage({
             send({ kind: "submit" })
           }}
         >
+          {page.passages !== null && <ChosenPassages passages={page.passages} send={send} />}
           <label htmlFor={box} className="notebook-label">
             Your response
           </label>
@@ -64,6 +69,11 @@ export function NotebookPage({
       return (
         <div className="notebook-page">
           <p className="notebook-label">Your response</p>
+          {page.lemma !== null && (
+            <p className="notebook-lemma">
+              <Lemma lemma={page.lemma} />
+            </p>
+          )}
           <div className="notebook-written">
             {paragraphsOf(page.body).map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
