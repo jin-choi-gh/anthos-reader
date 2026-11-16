@@ -3,6 +3,7 @@ import { assertNever } from "../assertNever"
 import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
 import { useNotebook } from "../notebook/useNotebook"
+import { finalOf } from "../runner/gate"
 import { useRun } from "../runner/useRun"
 import { controlsOf } from "./frame/controls"
 import { frameOf } from "./frame/frame"
@@ -64,6 +65,10 @@ export function PracticeMode({
   const viewer = { projection: scene.viewer, materials, send: scene.toScene.viewer }
   const listed = scene.viewer.kind === "listed"
   const count = scene.viewer.kind === "listed" ? scene.viewer.shown.length : 0
+  // The final stage brings back the reader's responses to the whole practice; a recall step, to
+  // the stage before
+  const label =
+    run.standing.station.stage === finalOf(practice) ? "Your responses" : "Responses to Recall"
 
   return (
     <Layout
@@ -73,7 +78,7 @@ export function PracticeMode({
       page={<ViewerPage {...viewer} />}
       notes={listed || scene.viewer.open !== null ? <ViewerNotes {...viewer} /> : null}
       notesAs={listed ? "list" : "open"}
-      notesLabel={count === 0 ? "Responses to Recall" : `Responses to Recall · ${count}`}
+      notesLabel={count === 0 ? label : `${label} · ${count}`}
       notesOpen={listed}
       praxisBar={
         <PraxisBar

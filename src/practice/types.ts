@@ -66,7 +66,8 @@ export interface Writing {
 }
 
 /** The reader's notes to bring back, as they answered the practice: those written in the stage
- * before. */
+ * before ("previous"), or in every stage before ("all"), which in the final stage is the whole
+ * practice. */
 export interface Recall {
-  readonly from: "previous"
+  readonly from: "previous" | "all"
 }

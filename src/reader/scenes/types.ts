@@ -31,11 +31,13 @@ export interface Commentary {
   readonly recalled: readonly Recalled[] | null
 }
 
-/** A note recalled: the words of the step it answered (its prompt), and whether it is on the whole
- * poem, whose lemma then says nothing worth showing. */
+/** A note recalled: the words of the step it answered (its prompt); whether it is on the whole
+ * poem, whose lemma then says nothing worth showing; and, on the first note of each stage, the
+ * stage's name, as a heading (null on the others). */
 export interface Recalled {
   readonly prompt: readonly string[]
   readonly whole: boolean
+  readonly heading: string | null
 }
 
 /** What the reader is asked to write: what it is about, its tags, and what they have written here

@@ -27,7 +27,7 @@ export const firstReading = {
     {
       name: "The flight",
       steps: [
-        { direction: "recall" , prose: ["recall"]},
+        { direction: "recall", prose: ["recall"] },
         { direction: "consider", note: "@flight", prose: ["…"] },
       ],
     },

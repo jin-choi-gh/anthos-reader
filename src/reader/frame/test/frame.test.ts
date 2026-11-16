@@ -403,8 +403,8 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
     expect(commentary.shown).toBe("listed")
     expect(commentary.notes.map((note) => note.id)).toEqual(["o", "r"])
     expect(commentary.recalled).toEqual([
-      { prompt: ["Where does the bird change?"], whole: false },
-      { prompt: ["What does the bird eat?"], whole: true },
+      { prompt: ["Where does the bird change?"], whole: false, heading: "First" },
+      { prompt: ["What does the bird eat?"], whole: true, heading: null },
     ])
   })
 
@@ -446,5 +446,85 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
     expect(
       frameOf(recalling, standing(0, 2), material, [answered]).subject.writing?.written,
     ).toEqual([answered])
+  })
+})
+
+describe("frameOf: the final stage, bringing back every stage", () => {
+  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
+  /** Three stages, the first two with the same name, each asking for writing. */
+  const finishing: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [consider("@a"), observe, respond] },
+      { name: "First", steps: [respond, consider("@b")] },
+      { name: "Third", steps: [observe] },
+    ],
+  }
+  const version = fingerprintOfPractice(finishing)
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const at = (stage: number, step: number, fingerprint = version) => ({
+    from: { practice: "test", fingerprint, stage, step },
+  })
+  const finalOf = (written: readonly ReaderNote[]) =>
+    frameOf(finishing, standing(3, 0), material, written)
+
+  it("is headed by the practice, says it is done, and asks nothing", () => {
+    const { heading, subject } = finalOf([])
+    expect(heading).toBe("Test")
+    expect(subject.prose).toEqual(["You have finished!"])
+    expect(subject.writing).toBeNull()
+    expect(subject.noting).toBeNull()
+  })
+
+  it("lists every stage's notes, by stage, then step, then the order written, with prompts", () => {
+    const written = [
+      mine("c", "Third stage.", { targets: [bird], ...at(2, 0) }),
+      mine("r", "Worms.", at(0, 2)),
+      mine("o", "A bird.", { targets: [bird], ...at(0, 1) }),
+      mine("s", "Second stage.", at(1, 0)),
+      mine("s2", "Second, again.", at(1, 0)),
+    ]
+    const { commentary } = finalOf(written).subject
+    expect(commentary.shown).toBe("listed")
+    expect(commentary.written).toBeNull()
+    expect(commentary.notes.map((note) => note.id)).toEqual(["o", "r", "s", "s2", "c"])
+    expect(commentary.recalled).toEqual([
+      { prompt: ["Where does the bird change?"], whole: false, heading: "First" },
+      { prompt: ["What does the bird eat?"], whole: true, heading: null },
+      { prompt: ["What does the bird eat?"], whole: true, heading: "First" },
+      { prompt: ["What does the bird eat?"], whole: true, heading: null },
+      { prompt: ["Where does the bird change?"], whole: false, heading: "Third" },
+    ])
+  })
+
+  it("gives no heading to a stage none of whose notes can be found", () => {
+    const written = [
+      mine("g", "On other lines.", { ...at(0, 2), fingerprint: "g" as Fingerprint }),
+      mine("c", "Third stage.", { targets: [bird], ...at(2, 0) }),
+    ]
+    const { commentary } = finalOf(written).subject
+    expect(commentary.notes.map((note) => note.id)).toEqual(["c"])
+    expect(commentary.recalled?.map((recalled) => recalled.heading)).toEqual(["Third"])
+  })
+
+  it("leaves out notes of another version, of annotate mode, and of other lines", () => {
+    const written = [
+      mine("v", "Another version.", at(0, 2, "00000000000000" as typeof version)),
+      mine("m", "In annotate mode."),
+      mine("g", "On other lines.", { ...at(1, 0), fingerprint: "g" as Fingerprint }),
+    ]
+    expect(finalOf(written).subject.commentary).toMatchObject({ notes: [], recalled: [] })
+  })
+
+  it("recalls nothing in a practice that asks for no writing: the editor's notes, none picked out", () => {
+    const silent: Practice = { ...practice, stages: [{ name: "Only", steps: [consider("@a")] }] }
+    const { commentary } = frameOf(silent, standing(1, 0), material, []).subject
+    expect(commentary).toEqual({
+      set: material.notes,
+      notes: [],
+      shown: "marked",
+      written: null,
+      recalled: null,
+    })
   })
 })

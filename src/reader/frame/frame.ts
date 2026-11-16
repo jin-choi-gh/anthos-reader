@@ -6,7 +6,7 @@ import type { Note, TextId } from "../../material/types"
 import { notesFrom, notesOfStage } from "../../notebook/notebook"
 import type { Provenance, ReaderNote } from "../../notebook/types"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
-import { FINAL, partsOf, REST } from "../../practice/lexicon"
+import { finalPartsOf, partsOf, REST } from "../../practice/lexicon"
 import { noteFor } from "../../practice/references"
 import type { Parts, Practice, Recall, Writing } from "../../practice/types"
 import { finalOf, gateOf, restOf } from "../../runner/gate"
@@ -30,7 +30,8 @@ export function frameOf(
 ): Frame {
   const { station } = standing
   const gate = gateOf(practice, station)
-  const parts = gate.kind === "step" ? partsOf(gate.step) : gate.kind === "rest" ? REST : FINAL
+  const parts =
+    gate.kind === "step" ? partsOf(gate.step) : gate.kind === "rest" ? REST : finalPartsOf(practice)
   const { text } = practice
   const where: Provenance = {
     practice: practice.id,
@@ -91,11 +92,12 @@ export function annotateFrame(
   return { heading: null, back: null, next: null, subject }
 }
 
-/** The notes a recall brings back: the reader's notes written in the stage before, on this version
- * of the practice, that can be placed on the poem, and whose station is a step of this version, as
- * it always is unless the notebook was damaged. They come in the order of the steps they answered,
- * then the order written, listed, each with the prose of the step it answered and whether it is on
- * the whole poem; no one may delete them. */
+/** The notes a recall brings back: the reader's notes written in the stage before, or in every
+ * stage before, on this version of the practice, that can be placed on the poem, and whose station
+ * is a step of this version, as it always is unless the notebook was damaged. They come in the order
+ * of the stages and steps they answered, then the order written, listed, each with the prose of the
+ * step it answered and whether it is on the whole poem; the first of each stage carries the
+ * stage's name, as a heading. No one may delete them. */
 function recalledOf(
   recall: Recall,
   practice: Practice,
@@ -103,43 +105,56 @@ function recalledOf(
   material: Material,
   written: readonly ReaderNote[],
 ): Commentary {
-  const stage = stageOf(recall, where.stage)
-  const found = notesOfStage(written, { ...where, stage }).flatMap((note) => {
-    const prompt = promptOf(practice, note)
-    return prompt !== null && placeable(note, material) ? [{ note, prompt }] : []
-  })
-  found.sort((a, b) => a.prompt.step - b.prompt.step)
+  const found = stagesOf(recall, where.stage).flatMap((stage) =>
+    notesOfStage(written, { ...where, stage }).flatMap((note) => {
+      const prompt = promptOf(practice, note)
+      return prompt !== null && placeable(note, material) ? [{ note, prompt }] : []
+    }),
+  )
+  // Stable: notes on the same step keep the order written
+  found.sort((a, b) => a.prompt.stage - b.prompt.stage || a.prompt.step - b.prompt.step)
   const notes = found.map(({ note }) => note)
   const set = notesFor(material.substrate, notes)
   const whole = wholePoem(material.substrate)
-  const recalled: Recalled[] = found.map(({ note, prompt }) => ({
+  const recalled: Recalled[] = found.map(({ note, prompt }, i) => ({
     prompt: prompt.prose,
     whole: note.targets.length === 1 && note.targets.every((target) => sameSpan(target, whole)),
+    heading: found[i - 1]?.prompt.stage === prompt.stage ? null : prompt.stageName,
   }))
   return { set, notes: set.notes, shown: "listed", written: null, recalled }
 }
 
-/** The stage a recall brings notes back from: the stage before this one. */
-function stageOf(recall: Recall, stage: number): number {
+/** The stages a recall brings notes back from: the stage before this one ("previous"), or every
+ * stage before it ("all"), in order; none before the first. */
+function stagesOf(recall: Recall, stage: number): number[] {
   switch (recall.from) {
     case "previous":
-      return stage - 1
+      return stage > 0 ? [stage - 1] : []
+    case "all":
+      return Array.from({ length: Math.max(stage, 0) }, (_, i) => i)
     default:
       return assertNever(recall.from)
   }
 }
 
-/** The step a note answered, by its place in its stage, and that step's prose, through the gate;
- * null when its station is not a step of this version of the practice. */
+/** The step a note answered, by its stage and its place in it, with that step's prose and its
+ * stage's name, through the gate; null when its station is not a step of this version of the
+ * practice. */
 function promptOf(
   practice: Practice,
   note: ReaderNote,
-): { step: number; prose: readonly string[] } | null {
+): { stage: number; step: number; prose: readonly string[]; stageName: string } | null {
   const { from } = note
   if (from === null || from.stage < 0 || from.stage >= finalOf(practice)) return null
   if (from.step < 0 || from.step >= restOf(practice, from.stage)) return null
   const gate = gateOf(practice, { stage: from.stage, step: from.step })
-  return gate.kind === "step" ? { step: from.step, prose: partsOf(gate.step).prose } : null
+  if (gate.kind !== "step") return null
+  return {
+    stage: from.stage,
+    step: from.step,
+    prose: partsOf(gate.step).prose,
+    stageName: gate.stage.name,
+  }
 }
 
 /** Whether a reader's note can be placed on the poem: written on these lines, with every target

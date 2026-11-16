@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { FINAL, partsOf, REST } from "../lexicon"
+import { finalPartsOf, partsOf, REST } from "../lexicon"
+import type { Practice, Step } from "../types"
 
 describe("partsOf: a direction as the parts the viewer and the praxis bar draw", () => {
   it("consider: its prose, and the highlight on the note it names; nothing to write", () => {
@@ -49,8 +50,29 @@ describe("the rest and the final stage, which the runner adds", () => {
     expect(REST).toEqual({ prose: [], highlight: [], writing: null, recall: null })
   })
 
-  it("the final stage says the practice is done", () => {
-    expect(FINAL).toEqual({
+  const practiceOf = (...steps: Step[]): Practice => ({
+    id: "test",
+    title: "Test",
+    text: "dickinson",
+    stages: [
+      { name: "First", steps: [{ direction: "consider", note: "@a", prose: [] }] },
+      { name: "Second", steps },
+    ],
+  })
+
+  it("the final stage says the practice is done, and brings back every stage's writing", () => {
+    const asking = practiceOf({ direction: "observe", prose: ["Where does the bird change?"] })
+    expect(finalPartsOf(asking)).toEqual({
+      prose: ["You have finished!"],
+      highlight: [],
+      writing: null,
+      recall: { from: "all" },
+    })
+  })
+
+  it("the final stage of a practice that asks for no writing brings nothing back", () => {
+    const silent = practiceOf({ direction: "consider", note: "@b", prose: [] })
+    expect(finalPartsOf(silent)).toEqual({
       prose: ["You have finished!"],
       highlight: [],
       writing: null,

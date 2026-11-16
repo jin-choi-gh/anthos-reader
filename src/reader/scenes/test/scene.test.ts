@@ -561,7 +561,7 @@ describe("a recall step: the stage before's notes, listed to read", () => {
       shown: [0],
       open: null,
       deletable: false,
-      recalled: [{ prompt: ["What does the bird eat?"], whole: true }],
+      recalled: [{ prompt: ["What does the bird eat?"], whole: true, heading: "First" }],
       choosing: false,
       chosen: [],
     })
@@ -582,5 +582,29 @@ describe("a recall step: the stage before's notes, listed to read", () => {
       writing: null,
       noting: null,
     })
+  })
+})
+
+describe("the final stage: every response, listed to read", () => {
+  const from = { practice: "test", fingerprint: fingerprintOfPractice(practice), stage: 0, step: 2 }
+  const answered = mine("r", "Worms.", { from })
+  const final = () => frameOf(practice, standing(1, 0), material, [answered]).subject
+
+  it("lists them under their stage's name, none open, with nothing to delete", () => {
+    expect(scene.viewer(started(final()))).toMatchObject({
+      kind: "listed",
+      shown: [0],
+      open: null,
+      deletable: false,
+      recalled: [{ prompt: ["What does the bird eat?"], whole: true, heading: "Only" }],
+    })
+  })
+
+  it("opens a note by a tap, and ignores a delete", () => {
+    const current = scene.fromViewer(started(final()), tap(0)).state
+    expect(scene.viewer(current).open).toBe(0)
+    const deleted = scene.fromViewer(current, { kind: "deleteNote", id: "r" })
+    expect(deleted.effects).toEqual([])
+    expect(deleted.state).toBe(current)
   })
 })

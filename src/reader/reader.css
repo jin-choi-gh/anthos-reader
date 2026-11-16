@@ -228,6 +228,22 @@ html {
   margin: 0.5em 0 0;
 }
 
+/* Recalled notes: the name of the stage they were written in, above its first, like the praxis
+   bar's heading */
+.notes-heading {
+  margin: 0.5rem 0 0;
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.notes-heading:first-child {
+  margin-top: 0;
+}
+
 /* A recalled note's prompt: the editor's words it answered, quieter than the reader's own */
 .note-prompt {
   color: var(--ink-muted);
