@@ -4,6 +4,8 @@ import type { Parts, Practice, Step } from "./types"
 /** The parts a step is made of. */
 export function partsOf(step: Step): Parts {
   switch (step.direction) {
+    case "reflect": // reflect on an editor's prompt on the entire text
+      return { prose: step.prose, highlight: [], writing: null, recall: null }
     case "consider": // read the editor's note on a passage
       return { prose: step.prose, highlight: [step.note], writing: null, recall: null }
     case "respond": // write about the whole poem

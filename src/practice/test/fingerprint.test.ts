@@ -68,3 +68,24 @@ describe("fingerprintOfPractice: the practice's version", () => {
     expect(fingerprintOfPractice(merged)).not.toBe(fingerprintOfPractice(practice))
   })
 })
+
+describe("fingerprintOfPractice: a reflect step", () => {
+  const reflect: Step = { direction: "reflect", prose: ["Read the poem through."] }
+
+  it("is part of the version: adding one, or changing its prose, makes a new one", () => {
+    const base = fingerprintOfPractice(withSteps(reflect, consider, respond))
+    expect(base).not.toBe(fingerprintOfPractice(practice))
+    expect(
+      fingerprintOfPractice(
+        withSteps({ ...reflect, prose: ["Read it twice."] }, consider, respond),
+      ),
+    ).not.toBe(base)
+  })
+
+  it("is told from another direction with the same prose", () => {
+    const recall: Step = { direction: "recall", prose: reflect.prose }
+    expect(fingerprintOfPractice(withSteps(reflect, respond))).not.toBe(
+      fingerprintOfPractice(withSteps(recall, respond)),
+    )
+  })
+})

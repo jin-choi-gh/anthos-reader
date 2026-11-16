@@ -6,8 +6,12 @@ export const firstReading = {
   text: "dickinson",
   stages: [
     {
-      name: "Building up the Bird",
+      name: "The beginnings",
       steps: [
+        {
+          direction: "reflect",
+          prose: ["Read the poem through"]
+        },
         {
           direction: "consider",
           note: "@angle-worm",

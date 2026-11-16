@@ -22,7 +22,12 @@ export interface Stage {
 }
 
 /** A step, as the editor writes it: one direction. */
-export type Step = ConsiderStep | RespondStep | ObserveStep | RecallStep
+export type Step = ReflectStep | ConsiderStep | RespondStep | ObserveStep | RecallStep
+
+export interface ReflectStep {
+  readonly direction: "reflect"
+  readonly prose: readonly string[]
+}
 
 export interface ConsiderStep {
   readonly direction: "consider"

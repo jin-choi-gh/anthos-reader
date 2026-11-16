@@ -404,3 +404,27 @@ describe("the law and versions of a practice", () => {
     expect(ruling(versioned, here, 1)).toEqual({ allowed: true, to: 1 })
   })
 })
+
+describe("the law: a reflect step asks for nothing, so it never holds the reader", () => {
+  const reflect: Step = { direction: "reflect", prose: ["Read the poem through."] }
+  const reflecting: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [reflect, consider("a")] },
+      { name: "Second", steps: [reflect] },
+    ],
+  }
+
+  it("is held nowhere, with nothing in the notebook", () => {
+    expect(standingOf(reflecting, [], [], "2026-11-10").heldAt).toBeNull()
+  })
+
+  it("lets the reader on to the rest, which finishes the stage", () => {
+    const here = standingOf(reflecting, [], [], "2026-11-10")
+    expect(ruling(reflecting, here, 2)).toEqual({ allowed: true, to: 2 })
+    expect(eventsOfMove(reflecting, here, 2, 0, "2026-11-10")).toEqual([
+      visited(0, 2),
+      finished(0, "2026-11-10"),
+    ])
+  })
+})

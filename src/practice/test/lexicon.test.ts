@@ -80,3 +80,29 @@ describe("the rest and the final stage, which the runner adds", () => {
     })
   })
 })
+
+describe("reflect: the editor's prompt, and nothing else", () => {
+  it("gives its prose, picks out nothing, asks for nothing, and brings nothing back", () => {
+    expect(partsOf({ direction: "reflect", prose: ["Read the poem through."] })).toEqual({
+      prose: ["Read the poem through."],
+      highlight: [],
+      writing: null,
+      recall: null,
+    })
+  })
+
+  it("hands on the reel's own prose, not a copy", () => {
+    const prose = ["Read the poem through."]
+    expect(partsOf({ direction: "reflect", prose }).prose).toBe(prose)
+  })
+
+  it("asks for no writing, so a practice of reflect steps alone has a final stage that recalls nothing", () => {
+    const reflecting: Practice = {
+      id: "test",
+      title: "Test",
+      text: "dickinson",
+      stages: [{ name: "Only", steps: [{ direction: "reflect", prose: ["Read it."] }] }],
+    }
+    expect(finalPartsOf(reflecting).recall).toBeNull()
+  })
+})

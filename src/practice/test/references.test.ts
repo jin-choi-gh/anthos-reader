@@ -140,3 +140,22 @@ describe("problemsOf: a recall with nothing it could recall", () => {
     ])
   })
 })
+
+describe("problemsOf: a reflect step", () => {
+  const reflect = { direction: "reflect", prose: ["Read the poem through."] } as const
+
+  it("refers to no note, so it is never a problem, even alone", () => {
+    expect(problemsOf(practiceOf({ name: "First", steps: [reflect] }), notes)).toEqual([])
+  })
+
+  it("asks for nothing to be written, so a recall after a stage of reflect steps is refused", () => {
+    const recall = { direction: "recall", prose: [] } as const
+    const practice = practiceOf(
+      { name: "First", steps: [reflect, reflect] },
+      { name: "Second", steps: [recall] },
+    )
+    expect(problemsOf(practice, notes)).toEqual([
+      'stage 2 "Second", step 1: a recall, but the stage before asks for nothing to be written',
+    ])
+  })
+})

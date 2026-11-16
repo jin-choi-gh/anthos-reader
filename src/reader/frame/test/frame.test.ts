@@ -528,3 +528,33 @@ describe("frameOf: the final stage, bringing back every stage", () => {
     })
   })
 })
+
+describe("frameOf: a reflect step", () => {
+  const reflecting: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [{ direction: "reflect", prose: ["Read the poem through."] }] },
+    ],
+  }
+
+  it("gives its prose, picks out none of the editor's notes, and asks for nothing", () => {
+    expect(frameOf(reflecting, standing(0, 0), material, []).subject).toEqual({
+      key: "test/0/0",
+      text: "fixture",
+      prose: ["Read the poem through."],
+      commentary: {
+        set: material.notes,
+        notes: [],
+        shown: "marked",
+        written: null,
+        recalled: null,
+      },
+      writing: null,
+      noting: null,
+    })
+  })
+
+  it("lets the reader on, with or without anything written", () => {
+    expect(frameOf(reflecting, standing(0, 0), material, []).next).toEqual({ allowed: true, to: 1 })
+  })
+})

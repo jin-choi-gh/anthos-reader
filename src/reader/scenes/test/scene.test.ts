@@ -608,3 +608,41 @@ describe("the final stage: every response, listed to read", () => {
     expect(deleted.state).toBe(current)
   })
 })
+
+describe("a reflect step: the poem, and the editor's prompt", () => {
+  const reflecting: Practice = {
+    ...practice,
+    stages: [
+      { name: "Only", steps: [{ direction: "reflect", prose: ["Read the poem through."] }] },
+    ],
+  }
+  const here = () => frameOf(reflecting, standing(0, 0), material, []).subject
+
+  it("draws the poem with nothing picked out, and only the prompt in the praxis bar", () => {
+    const current = started(here())
+    expect(scene.viewer(current)).toEqual({
+      kind: "marked",
+      text: "poem",
+      notes: material.notes,
+      marked: [],
+      open: null,
+      choosing: false,
+      chosen: [],
+    })
+    expect(scene.praxisBar(current)).toEqual({
+      prose: ["Read the poem through."],
+      writing: null,
+      noting: null,
+    })
+  })
+
+  it("has no passages to choose and nothing to write: every such message changes nothing", () => {
+    const current = started(here())
+    const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+    expect(scene.fromViewer(current, { kind: "choose", span: bird }).state).toBe(current)
+    expect(scene.fromPraxisBar(current, { kind: "choosing", on: true }).state).toBe(current)
+    const typed = scene.fromPraxisBar(current, { kind: "draft", text: "Worms." })
+    expect(typed.state).toBe(current)
+    expect(scene.fromPraxisBar(current, { kind: "submit" }).effects).toEqual([])
+  })
+})
