@@ -1,5 +1,6 @@
 import { useMemo, type ReactNode } from "react"
 import { assertNever } from "../assertNever"
+import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
 import { useNotebook } from "../notebook/useNotebook"
 import { useRun } from "../runner/useRun"
@@ -14,7 +15,9 @@ import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 import { DevPanel } from "./dev/DevPanel"
 
 /** Practice mode: the run of a practice, the frame on its current step, the frame's scene, and the
- * text's notebook, all kept for as long as the mode lasts. */
+ * text's notebook, all kept for as long as the mode lasts, which is as long as the practice's
+ * version: the Reader keys the mode by it. Notes the step lists, as a recall's are, are always
+ * shown, in the sheet open on a page; otherwise only the note the reader opened. */
 export function PracticeMode({
   practice,
   material,
@@ -37,8 +40,9 @@ export function PracticeMode({
     [practice, run.standing, material, notebook.notes],
   )
   const controls = controlsOf(frame, run.moveTo)
-  // What the scene writes goes into the notebook, with where it was written
-  const where = { practice: practice.id, ...run.standing.station }
+  // What the scene writes goes into the notebook, with where it was written, in which version
+  const fingerprint = useMemo(() => fingerprintOfPractice(practice), [practice])
+  const where = { practice: practice.id, fingerprint, ...run.standing.station }
   const scene = useScene(frame.subject, (effect) => {
     switch (effect.kind) {
       case "note":
@@ -58,6 +62,8 @@ export function PracticeMode({
     }
   })
   const viewer = { projection: scene.viewer, materials, send: scene.toScene.viewer }
+  const listed = scene.viewer.kind === "listed"
+  const count = scene.viewer.kind === "listed" ? scene.viewer.shown.length : 0
 
   return (
     <Layout
@@ -65,7 +71,10 @@ export function PracticeMode({
       topBar={topBar}
       dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} notes={notebook.notes} />}
       page={<ViewerPage {...viewer} />}
-      notes={scene.viewer.open === null ? null : <ViewerNotes {...viewer} />}
+      notes={listed || scene.viewer.open !== null ? <ViewerNotes {...viewer} /> : null}
+      notesAs={listed ? "list" : "open"}
+      notesLabel={count === 0 ? "Responses to Recall" : `Responses to Recall · ${count}`}
+      notesOpen={listed}
       praxisBar={
         <PraxisBar
           controls={controls}

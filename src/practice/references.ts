@@ -15,8 +15,9 @@ export function noteFor(ref: string, notes: readonly Note[]): Note | null {
   return id === null ? null : (notes.find((note) => note.id === id) ?? null)
 }
 
-/** Everything that keeps a practice from running on a text: a missing stage or step, or a
- * reference that is malformed or names no note in the text. */
+/** Everything that keeps a practice from running on a text: a missing stage or step; a reference
+ * that is malformed or names no note in the text; or a recall with nothing it could recall, in the
+ * first stage, or after a stage that asks for nothing to be written. */
 export function problemsOf(practice: Practice, notes: readonly Note[]): string[] {
   const problems: string[] = []
   if (practice.stages.length === 0) problems.push("no stages")
@@ -25,7 +26,16 @@ export function problemsOf(practice: Practice, notes: readonly Note[]): string[]
     if (stage.steps.length === 0) problems.push(`${where}: no steps`)
     stage.steps.forEach((step, i) => {
       const at = `${where}, step ${i + 1}`
-      for (const ref of partsOf(step).highlight) {
+      const parts = partsOf(step)
+      if (parts.recall !== null) {
+        const before = practice.stages[s - 1]
+        if (before === undefined) {
+          problems.push(`${at}: a recall in the first stage, with no stage before it`)
+        } else if (before.steps.every((earlier) => partsOf(earlier).writing === null)) {
+          problems.push(`${at}: a recall, but the stage before asks for nothing to be written`)
+        }
+      }
+      for (const ref of parts.highlight) {
         if (idOf(ref) === null) {
           problems.push(
             ref.includes("/")

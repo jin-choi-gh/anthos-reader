@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { appendNotebook, clearNotebook, notebookKey, readNotebook } from "../log"
 import type { Fingerprint } from "../../material/types"
 import type { NotebookEvent, NoteId } from "../types"
+import type { PracticeFingerprint } from "../../practice/types"
 
 const a = "a" as NoteId
 const whole = { start: { line: 0, offset: 0 }, end: { line: 19, offset: 29 } }
@@ -15,7 +16,12 @@ const events: NotebookEvent[] = [
     at: 1_000,
     ...about,
     body: "A worm.",
-    from: { practice: "first-reading", stage: 0, step: 2 },
+    from: {
+      practice: "first-reading",
+      fingerprint: "0123456789abcd" as PracticeFingerprint,
+      stage: 0,
+      step: 2,
+    },
   },
   { kind: "revised", id: a, at: 2_000, targets: [whole], body: "A worm, raw." },
   {
@@ -126,6 +132,14 @@ describe("the notebook in storage", () => {
         from: null,
       },
       { kind: "noted", id: "c", at: 0, ...about, body: "x", from: { stage: 0 } },
+      {
+        kind: "noted",
+        id: "c",
+        at: 0,
+        ...about,
+        body: "Written before practices had versions.",
+        from: { practice: "first-reading", stage: 0, step: 2 },
+      },
       {
         kind: "noted",
         id: "c",

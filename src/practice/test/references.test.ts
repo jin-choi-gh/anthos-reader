@@ -109,3 +109,34 @@ describe("problemsOf", () => {
     ])
   })
 })
+
+describe("problemsOf: a recall with nothing it could recall", () => {
+  const recall = { direction: "recall", prose: ["Yesterday, you wrote:"] } as const
+  const respond = { direction: "respond", prose: ["What does the bird eat?"] } as const
+
+  it("refuses a recall in the first stage, which has no stage before it", () => {
+    const practice = practiceOf({ name: "First", steps: [respond, recall] })
+    expect(problemsOf(practice, notes)).toEqual([
+      'stage 1 "First", step 2: a recall in the first stage, with no stage before it',
+    ])
+  })
+
+  it("refuses a recall whose stage before asks for nothing to be written", () => {
+    const practice = practiceOf(stage("First", "@angle-worm"), { name: "Second", steps: [recall] })
+    expect(problemsOf(practice, notes)).toEqual([
+      'stage 2 "Second", step 1: a recall, but the stage before asks for nothing to be written',
+    ])
+  })
+
+  it("lets a recall run after a stage that asks for writing, wherever in its stage", () => {
+    const observe = { direction: "observe", prose: ["Where does the bird change?"] } as const
+    const practice = practiceOf(
+      { name: "First", steps: [{ direction: "consider", note: "@beads", prose: [] }, observe] },
+      { name: "Second", steps: [stage("x", "@beads").steps[0]!, recall] },
+      { name: "Third", steps: [recall, respond] },
+    )
+    expect(problemsOf(practice, notes)).toEqual([
+      'stage 3 "Third", step 1: a recall, but the stage before asks for nothing to be written',
+    ])
+  })
+})

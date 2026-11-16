@@ -14,8 +14,14 @@ const note = (index: number, id: string | null = null): Note => ({
 
 /** The editor's three notes, without ids: one picked out, as on a consider step, or none. */
 const set: Notes = { notes: [note(0), note(1), note(2)], rangesOn: () => [] }
-const highlight: Commentary = { set, notes: [note(2)], shown: "marked", written: null }
-const none: Commentary = { set, notes: [], shown: "marked", written: null }
+const highlight: Commentary = {
+  set,
+  notes: [note(2)],
+  shown: "marked",
+  written: null,
+  recalled: null,
+}
+const none: Commentary = { set, notes: [], shown: "marked", written: null, recalled: null }
 
 /** One of the reader's own notes, written in annotate mode. */
 const mine = (id: string): ReaderNote => ({
@@ -32,7 +38,13 @@ const mine = (id: string): ReaderNote => ({
 /** The reader's own notes, listed in the order given, as in annotate mode. */
 function listOf(ids: string[]): Commentary {
   const notes = ids.map((id, index) => note(index, id))
-  return { set: { notes, rangesOn: () => [] }, notes, shown: "listed", written: ids.map(mine) }
+  return {
+    set: { notes, rangesOn: () => [] },
+    notes,
+    shown: "listed",
+    written: ids.map(mine),
+    recalled: null,
+  }
 }
 const list = listOf(["a", "b", "c"])
 
@@ -99,6 +111,7 @@ describe("the list: the reader's own notes beside the poem, in annotate mode", (
       shown: [0, 1, 2],
       open: 1,
       deletable: true,
+      recalled: null,
     })
     expect(viewerOf("poem", { ...list, written: null }, null)).toMatchObject({ deletable: false })
   })

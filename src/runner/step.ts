@@ -1,6 +1,7 @@
 import { nextDay, type Day } from "../clock/clock"
 import { notesFrom } from "../notebook/notebook"
 import type { ReaderNote } from "../notebook/types"
+import { fingerprintOfPractice } from "../practice/fingerprint"
 import { partsOf } from "../practice/lexicon"
 import type { Practice } from "../practice/types"
 import { finalOf, gateOf, restOf } from "./gate"
@@ -52,12 +53,16 @@ export function standingOf(
   return { station: { stage: final, step: 0 }, opensOn: null, heldAt: null }
 }
 
-/** The first step of a stage that asks for writing and has none in the notebook, or null. */
+/** The first step of a stage that asks for writing and has none in the notebook, written on this
+ * version of the practice, or null. */
 function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[]): number | null {
+  const fingerprint = fingerprintOfPractice(practice)
   for (let step = 0; step < restOf(practice, stage); step++) {
     const gate = gateOf(practice, { stage, step })
     if (gate.kind !== "step" || partsOf(gate.step).writing === null) continue
-    if (notesFrom(notes, { practice: practice.id, stage, step }).length === 0) return step
+    if (notesFrom(notes, { practice: practice.id, fingerprint, stage, step }).length === 0) {
+      return step
+    }
   }
   return null
 }

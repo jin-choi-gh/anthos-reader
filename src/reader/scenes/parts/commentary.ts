@@ -52,7 +52,8 @@ export function keepOpen(commentary: Commentary, open: OpenNote | null): OpenNot
 }
 
 /** What the viewer draws: the set the notes come from, the notes picked out in the poem or listed
- * beside it, the open one, and, listed, whether they can be deleted. */
+ * beside it, the open one, and, listed, whether they can be deleted and, for notes recalled, what
+ * each answered. */
 export function viewerOf(
   text: TextId,
   commentary: Commentary,
@@ -70,5 +71,6 @@ export function viewerOf(
         shown: indexes,
         open: at,
         deletable: commentary.written !== null,
+        recalled: commentary.recalled,
       }
 }

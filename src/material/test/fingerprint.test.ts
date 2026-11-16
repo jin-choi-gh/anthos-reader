@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { fingerprintOf } from "../fingerprint"
+import { fingerprintOf, hashOf } from "../fingerprint"
 
 const lines = ["A Bird, came down the Walk -", "He did not know I saw -"]
 
@@ -14,5 +14,17 @@ describe("fingerprintOf", () => {
     expect(fingerprintOf({ lines: changed })).not.toBe(fingerprintOf({ lines }))
     expect(fingerprintOf({ lines: [lines.join(" ")] })).not.toBe(fingerprintOf({ lines }))
     expect(fingerprintOf({ lines: [...lines, ""] })).not.toBe(fingerprintOf({ lines }))
+  })
+})
+
+describe("hashOf: the hash behind every fingerprint", () => {
+  it("is the lines' fingerprint, for the lines joined by line breaks", () => {
+    expect(hashOf(lines.join("\n"))).toBe(fingerprintOf({ lines }))
+  })
+
+  it("gives the same text the same hash, and another text another", () => {
+    expect(hashOf("worm")).toBe(hashOf("worm"))
+    expect(hashOf("worm")).not.toBe(hashOf("worms"))
+    expect(hashOf("")).toMatch(/^[0-9a-f]{14}$/)
   })
 })

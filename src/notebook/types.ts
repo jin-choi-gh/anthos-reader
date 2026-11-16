@@ -1,13 +1,15 @@
 import type { Annotation, Fingerprint, Span } from "../material/types"
-import type { PracticeId } from "../practice/types"
+import type { PracticeFingerprint, PracticeId } from "../practice/types"
 
 /** A note's id: made once, when the note is written, and kept for good. Only the notebook makes one,
  * so a string from anywhere else cannot pass for it. */
 export type NoteId = string & { readonly __brand: "NoteId" }
 
-/** Where in a run a note was written: the practice, and the stage and step it was on. */
+/** Where in a run a note was written: the practice, its version (the practice's fingerprint), and
+ * the stage and step it was on, which are places in that version. */
 export interface Provenance {
   readonly practice: PracticeId
+  readonly fingerprint: PracticeFingerprint
   readonly stage: number
   readonly step: number
 }

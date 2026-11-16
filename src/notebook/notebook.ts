@@ -44,14 +44,22 @@ export function notesOf(events: readonly NotebookEvent[]): ReaderNote[] {
   return [...notes.values()]
 }
 
-/** The notes written on one step of one practice. */
+/** The notes written on one step of one version of a practice. */
 export function notesFrom(notes: readonly ReaderNote[], where: Provenance): ReaderNote[] {
+  return notesOfStage(notes, where).filter(({ from }) => from?.step === where.step)
+}
+
+/** The notes written in one stage of one version of a practice, in the order written. */
+export function notesOfStage(
+  notes: readonly ReaderNote[],
+  where: Omit<Provenance, "step">,
+): ReaderNote[] {
   return notes.filter(
     ({ from }) =>
       from !== null &&
       from.practice === where.practice &&
-      from.stage === where.stage &&
-      from.step === where.step,
+      from.fingerprint === where.fingerprint &&
+      from.stage === where.stage,
   )
 }
 

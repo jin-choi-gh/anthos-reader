@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { eventsOfMove, ruling, standingOf } from "../step"
+import { fingerprintOfPractice } from "../../practice/fingerprint"
 import type { Practice, Step } from "../../practice/types"
 import type { Day } from "../../clock/clock"
 import type { NoteId, ReaderNote } from "../../notebook/types"
@@ -241,7 +242,7 @@ describe("the law: a step that asks for writing holds the reader until they have
     tags: [],
     fingerprint: "f" as Fingerprint,
     body: "Worms.",
-    from: { practice: asking.id, stage: 0, step },
+    from: { practice: asking.id, fingerprint: fingerprintOfPractice(asking), stage: 0, step },
     writtenAt: 0,
     revisedAt: null,
   })
@@ -254,8 +255,19 @@ describe("the law: a step that asks for writing holds the reader until they have
 
   it("counts only notes from this practice, stage and step", () => {
     const elsewhere = [
-      { ...written(1), from: { practice: "other", stage: 0, step: 1 } },
-      { ...written(1), from: { practice: asking.id, stage: 1, step: 1 } },
+      {
+        ...written(1),
+        from: { practice: "other", fingerprint: fingerprintOfPractice(asking), stage: 0, step: 1 },
+      },
+      {
+        ...written(1),
+        from: {
+          practice: asking.id,
+          fingerprint: fingerprintOfPractice(asking),
+          stage: 1,
+          step: 1,
+        },
+      },
       { ...written(1), from: null },
     ]
     expect(standingOf(asking, [], elsewhere, "2026-11-10").heldAt).toBe(1)
@@ -297,7 +309,12 @@ describe("the law: an observe step holds the reader as a respond step does", () 
   const written = (
     stage: number,
     step: number,
-    from: ReaderNote["from"] = { practice: observing.id, stage, step },
+    from: ReaderNote["from"] = {
+      practice: observing.id,
+      fingerprint: fingerprintOfPractice(observing),
+      stage,
+      step,
+    },
   ): ReaderNote => ({
     id: `note-${stage}-${step}` as NoteId,
     targets: [{ start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }],
@@ -317,7 +334,12 @@ describe("the law: an observe step holds the reader as a respond step does", () 
   it("counts no note from annotate mode or another step", () => {
     const others = [
       written(0, 0, null),
-      written(0, 0, { practice: observing.id, stage: 1, step: 1 }),
+      written(0, 0, {
+        practice: observing.id,
+        fingerprint: fingerprintOfPractice(observing),
+        stage: 1,
+        step: 1,
+      }),
     ]
     expect(standingOf(observing, [], others, "2026-11-10").heldAt).toBe(0)
   })
@@ -339,5 +361,46 @@ describe("the law: an observe step holds the reader as a respond step does", () 
     expect(here).toEqual(standing(1, 2))
     const moves = eventsOfMove(observing, here, 3, 0, "2026-11-11")
     expect(standingOf(observing, [...log, ...moves], notes, "2026-11-11")).toEqual(standing(2, 0))
+  })
+})
+
+describe("the law and versions of a practice", () => {
+  const respond: Step = { direction: "respond", prose: ["What does the bird eat?"] }
+  const recall: Step = { direction: "recall", prose: ["Yesterday, you wrote:"] }
+  const versioned: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [respond] },
+      { name: "Second", steps: [recall, consider("c")] },
+    ],
+  }
+  const note = (fingerprint: string): ReaderNote => ({
+    id: "n" as NoteId,
+    targets: [{ start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }],
+    tags: [],
+    fingerprint: "f" as Fingerprint,
+    body: "Worms.",
+    from: {
+      practice: versioned.id,
+      fingerprint: fingerprint as ReturnType<typeof fingerprintOfPractice>,
+      stage: 0,
+      step: 0,
+    },
+    writtenAt: 0,
+    revisedAt: null,
+  })
+
+  it("holds the reader at a step whose only note was written on another version", () => {
+    expect(standingOf(versioned, [], [note("00000000000000")], "2026-11-10").heldAt).toBe(0)
+    expect(
+      standingOf(versioned, [], [note(fingerprintOfPractice(versioned))], "2026-11-10").heldAt,
+    ).toBeNull()
+  })
+
+  it("never holds the reader at a recall, which asks for nothing", () => {
+    const log = [visited(0, 1), finished(0, "2026-11-10")]
+    const here = standingOf(versioned, log, [note(fingerprintOfPractice(versioned))], "2026-11-11")
+    expect(here).toEqual(standing(1, 0))
+    expect(ruling(versioned, here, 1)).toEqual({ allowed: true, to: 1 })
   })
 })

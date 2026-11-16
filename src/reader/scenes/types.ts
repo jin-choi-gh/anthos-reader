@@ -23,9 +23,19 @@ export interface Commentary {
   /** The notes shown: always notes of the set. */
   readonly notes: readonly Note[]
   readonly shown: "marked" | "listed"
-  /** The reader's own notes the set shows, in its order, so that one can be withdrawn; null for the
-   * editor's. */
+  /** The reader's own notes the set shows, in its order, so that one can be withdrawn; null when
+   * none may be, as for the editor's notes and for notes recalled. */
   readonly written: readonly ReaderNote[] | null
+  /** For notes recalled, one for each note of the set, in its order: what each answered, and
+   * whether it is on the whole poem; null for other notes. */
+  readonly recalled: readonly Recalled[] | null
+}
+
+/** A note recalled: the words of the step it answered (its prompt), and whether it is on the whole
+ * poem, whose lemma then says nothing worth showing. */
+export interface Recalled {
+  readonly prompt: readonly string[]
+  readonly whole: boolean
 }
 
 /** What the reader is asked to write: what it is about, its tags, and what they have written here
@@ -107,6 +117,7 @@ export type CommentaryProjection =
       shown: number[]
       open: number | null
       deletable: boolean // the reader's own notes, which can be deleted
+      recalled: readonly Recalled[] | null // for notes recalled, by their place in the set
     }
 
 /** What the viewer draws: the commentary's share, whether choosing is on, and the chosen targets. */

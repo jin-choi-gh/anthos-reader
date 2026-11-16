@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { appendLog, clearLog, logKey, readLog } from "../log"
 import type { Practice } from "../../practice/types"
 import type { Event } from "../types"
@@ -33,8 +34,26 @@ afterEach(() => {
 })
 
 describe("saving and reading a run", () => {
-  it("keeps one log per practice and text", () => {
-    expect(logKey(practice)).toBe("anthos.log.first-reading.dickinson")
+  it("keeps one log per practice, text and version", () => {
+    expect(logKey(practice)).toBe(
+      `anthos.log.first-reading.dickinson.${fingerprintOfPractice(practice)}`,
+    )
+  })
+
+  it("starts a new log when a step of the practice changes, and not when only a heading does", () => {
+    const step = { direction: "respond", prose: ["What does the bird eat?"] } as const
+    const one: Practice = { ...practice, stages: [{ name: "First", steps: [step] }] }
+    const renamed: Practice = {
+      ...one,
+      title: "Renamed",
+      stages: [{ name: "Renamed", steps: [step] }],
+    }
+    expect(logKey(renamed)).toBe(logKey(one))
+    const edited: Practice = {
+      ...one,
+      stages: [{ name: "First", steps: [{ ...step, prose: ["What does it eat?"] }] }],
+    }
+    expect(logKey(edited)).not.toBe(logKey(one))
   })
 
   it("reads back what it saved", () => {

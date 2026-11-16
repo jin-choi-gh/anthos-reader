@@ -1,11 +1,24 @@
 import { describe, expect, it } from "vitest"
 import type { Fingerprint, Span } from "../../material/types"
-import { eventOfNoting, eventOfRevising, eventOfWithdrawing, notesFrom, notesOf } from "../notebook"
+import {
+  eventOfNoting,
+  eventOfRevising,
+  eventOfWithdrawing,
+  notesFrom,
+  notesOf,
+  notesOfStage,
+} from "../notebook"
 import type { NewNote, NoteId, NotebookEvent, Provenance } from "../types"
+import type { PracticeFingerprint } from "../../practice/types"
 
 const whole: Span = { start: { line: 0, offset: 0 }, end: { line: 2, offset: 30 } }
 const worm: Span = { start: { line: 1, offset: 13 }, end: { line: 1, offset: 23 } }
-const here: Provenance = { practice: "first-reading", stage: 0, step: 2 }
+const here: Provenance = {
+  practice: "first-reading",
+  fingerprint: "0123456789abcd" as PracticeFingerprint,
+  stage: 0,
+  step: 2,
+}
 const a = "a" as NoteId
 const b = "b" as NoteId
 
@@ -88,6 +101,32 @@ describe("notesFrom: the notes written on one step", () => {
 
   it("finds only the notes from that practice, stage and step", () => {
     expect(notesFrom(notes, here).map((note) => note.body)).toEqual(["Here."])
+  })
+})
+
+describe("notesFrom and notesOfStage: only notes written on this version of the practice", () => {
+  const other = "fedcba98765432" as PracticeFingerprint
+  const notes = notesOf([
+    noted(a, "Step 3."),
+    noted(b, "Step 2.", { ...here, step: 1 }),
+    noted("c" as NoteId, "Another version.", { ...here, fingerprint: other }),
+    noted("d" as NoteId, "Another stage.", { ...here, stage: 1 }),
+    noted("e" as NoteId, "In annotate mode.", null),
+  ])
+
+  it("leaves out a note written on the same step of another version", () => {
+    expect(notesFrom(notes, here).map((note) => note.body)).toEqual(["Step 3."])
+    expect(notesFrom(notes, { ...here, fingerprint: other }).map((note) => note.body)).toEqual([
+      "Another version.",
+    ])
+  })
+
+  it("finds the notes of one stage of one version, in the order written", () => {
+    const { practice, fingerprint, stage } = here
+    expect(notesOfStage(notes, { practice, fingerprint, stage }).map((note) => note.body)).toEqual([
+      "Step 3.",
+      "Step 2.",
+    ])
   })
 })
 

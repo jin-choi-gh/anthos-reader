@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { Material } from "../../../material/materials"
 import type { Fingerprint, Note } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
+import { fingerprintOfPractice } from "../../../practice/fingerprint"
 import type { Practice, Step } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../../frame/frame"
@@ -158,6 +159,7 @@ describe("scene.start: each part staged", () => {
       shown: [0, 1],
       open: null,
       deletable: true,
+      recalled: null,
       choosing: false,
       chosen: [],
     })
@@ -220,7 +222,7 @@ describe("scene.fromFrame: cuts and holds", () => {
       tags: [],
       fingerprint: "f" as Fingerprint,
       body: "Worms.",
-      from: { practice: "test", stage: 0, step: 2 },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(practice), stage: 0, step: 2 },
       writtenAt: 0,
       revisedAt: null,
     }
@@ -454,7 +456,12 @@ describe("an observe step: the writing chooses the passages, not the noting", ()
   const observing: Practice = { ...practice, stages: [{ name: "Only", steps: [observe] }] }
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const worm = { start: { line: 1, offset: 10 }, end: { line: 1, offset: 20 } }
-  const from = { practice: "test", stage: 0, step: 0 }
+  const from = {
+    practice: "test",
+    fingerprint: fingerprintOfPractice(observing),
+    stage: 0,
+    step: 0,
+  }
   const here = (written: readonly ReaderNote[] = []) =>
     frameOf(observing, standing(0, 0), material, written).subject
 
@@ -526,5 +533,54 @@ describe("a respond step: no passages to choose", () => {
     expect(scene.fromPraxisBar(current, { kind: "choosing", on: true }).state).toBe(current)
     expect(scene.fromViewer(current, { kind: "choose", span: bird }).state).toBe(current)
     expect(scene.viewer(current)).toMatchObject({ choosing: false, chosen: [] })
+  })
+})
+
+describe("a recall step: the stage before's notes, listed to read", () => {
+  const recalling: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [consider("@a"), respond] },
+      { name: "Second", steps: [{ direction: "recall", prose: ["Yesterday, you wrote:"] }] },
+    ],
+  }
+  const from = {
+    practice: "test",
+    fingerprint: fingerprintOfPractice(recalling),
+    stage: 0,
+    step: 1,
+  }
+  const answered = mine("r", "Worms.", { from })
+  const here = () => frameOf(recalling, standing(1, 0), material, [answered]).subject
+
+  it("lists them, none open, with the prompt each answered, and nothing to delete", () => {
+    expect(scene.viewer(started(here()))).toEqual({
+      kind: "listed",
+      text: "poem",
+      notes: expect.anything(),
+      shown: [0],
+      open: null,
+      deletable: false,
+      recalled: [{ prompt: ["What does the bird eat?"], whole: true }],
+      choosing: false,
+      chosen: [],
+    })
+  })
+
+  it("opens a note by a tap, and ignores a delete", () => {
+    let current = started(here())
+    current = scene.fromViewer(current, tap(0)).state
+    expect(scene.viewer(current).open).toBe(0)
+    const deleted = scene.fromViewer(current, { kind: "deleteNote", id: "r" })
+    expect(deleted.effects).toEqual([])
+    expect(deleted.state).toBe(current)
+  })
+
+  it("puts nothing of its own in the praxis bar but the prose", () => {
+    expect(scene.praxisBar(started(here()))).toEqual({
+      prose: ["Yesterday, you wrote:"],
+      writing: null,
+      noting: null,
+    })
   })
 })

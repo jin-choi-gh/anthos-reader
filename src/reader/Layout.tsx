@@ -17,6 +17,7 @@ export function Layout({
   notes,
   notesAs = "open",
   notesLabel = "Notes",
+  notesOpen = false,
   praxisBar,
 }: {
   layout: ReaderLayout
@@ -26,6 +27,7 @@ export function Layout({
   notes: ReactNode
   notesAs?: "open" | "list"
   notesLabel?: string // the handle of the notes' sheet, on a page
+  notesOpen?: boolean // whether the notes' sheet, on a page, starts open
   praxisBar?: ReactNode
 }) {
   return (
@@ -46,6 +48,7 @@ export function Layout({
         notes={notes}
         notesAs={notesAs}
         notesLabel={notesLabel}
+        notesOpen={notesOpen}
         praxisBar={praxisBar}
       />
     </>
@@ -60,12 +63,14 @@ function Beside({
   notes,
   notesAs,
   notesLabel,
+  notesOpen,
   praxisBar,
 }: {
   layout: ReaderLayout
   notes: ReactNode
   notesAs: "open" | "list"
   notesLabel: string
+  notesOpen: boolean
   praxisBar?: ReactNode
 }) {
   if (layout === "spread") {
@@ -76,12 +81,20 @@ function Beside({
       </Margin>
     )
   }
-  if (praxisBar === undefined) return <BottomSheet label={notesLabel}>{notes}</BottomSheet>
+  if (praxisBar === undefined) {
+    return (
+      <BottomSheet label={notesLabel} startsOpen={notesOpen}>
+        {notes}
+      </BottomSheet>
+    )
+  }
   if (notesAs === "open") return <Dock praxisBar={praxisBar} notes={notes} />
   return (
     <>
       <Dock praxisBar={praxisBar} notes={null} />
-      <BottomSheet label={notesLabel}>{notes}</BottomSheet>
+      <BottomSheet label={notesLabel} startsOpen={notesOpen}>
+        {notes}
+      </BottomSheet>
     </>
   )
 }

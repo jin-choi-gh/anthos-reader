@@ -26,7 +26,10 @@ export const firstReading = {
     },
     {
       name: "The flight",
-      steps: [{ direction: "consider", note: "@flight", prose: ["…"] }],
+      steps: [
+        { direction: "recall" , prose: ["recall"]},
+        { direction: "consider", note: "@flight", prose: ["…"] },
+      ],
     },
   ],
 } satisfies Practice

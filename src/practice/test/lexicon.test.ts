@@ -7,6 +7,7 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
       prose: ["Look."],
       highlight: ["@beads"],
       writing: null,
+      recall: null,
     })
   })
 
@@ -15,6 +16,7 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
       prose: ["What does the bird eat?"],
       highlight: [],
       writing: { target: "whole", tags: [], count: "one" },
+      recall: null,
     })
   })
 
@@ -23,6 +25,16 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
       prose: ["Where does the bird change?"],
       highlight: [],
       writing: { target: "chosen", tags: [], count: "one" },
+      recall: null,
+    })
+  })
+
+  it("recall: its prose, and the reader's notes from the stage before; nothing to write", () => {
+    expect(partsOf({ direction: "recall", prose: ["Yesterday, you wrote:"] })).toEqual({
+      prose: ["Yesterday, you wrote:"],
+      highlight: [],
+      writing: null,
+      recall: { from: "previous" },
     })
   })
 
@@ -34,10 +46,15 @@ describe("partsOf: a direction as the parts the viewer and the praxis bar draw",
 
 describe("the rest and the final stage, which the runner adds", () => {
   it("the rest asks nothing and says nothing: the praxis bar's buttons speak for it", () => {
-    expect(REST).toEqual({ prose: [], highlight: [], writing: null })
+    expect(REST).toEqual({ prose: [], highlight: [], writing: null, recall: null })
   })
 
   it("the final stage says the practice is done", () => {
-    expect(FINAL).toEqual({ prose: ["You have finished!"], highlight: [], writing: null })
+    expect(FINAL).toEqual({
+      prose: ["You have finished!"],
+      highlight: [],
+      writing: null,
+      recall: null,
+    })
   })
 })

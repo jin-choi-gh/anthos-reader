@@ -71,6 +71,7 @@ function isProvenance(value: unknown): boolean {
   return (
     isRecord(value) &&
     typeof value.practice === "string" &&
+    typeof value.fingerprint === "string" && // older notes, written before versions, have none
     Number.isInteger(value.stage) &&
     Number.isInteger(value.step)
   )

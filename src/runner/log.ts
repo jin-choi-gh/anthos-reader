@@ -1,10 +1,12 @@
+import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
 import { appendEvents, clearEvents, isRecord, readEvents } from "../storage/log"
 import type { Event } from "./types"
 
-/** The key a run is kept under: one per practice and text. */
+/** The key a run is kept under: one per practice, text and version, so that an edited practice
+ * starts a new run. The run of an earlier version stays in storage, never read again. */
 export function logKey(practice: Practice): string {
-  return `anthos.log.${practice.id}.${practice.text}`
+  return `anthos.log.${practice.id}.${practice.text}.${fingerprintOfPractice(practice)}`
 }
 
 export function readLog(practice: Practice): Event[] {

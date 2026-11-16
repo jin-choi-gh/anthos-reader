@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { Fingerprint, Span, Substrate } from "../../../../material/types"
 import type { NoteId, ReaderNote } from "../../../../notebook/types"
+import type { PracticeFingerprint } from "../../../../practice/types"
 import type { WritingSubject } from "../../types"
 import {
   choosingOf,
@@ -20,7 +21,12 @@ const saved: ReaderNote = {
   tags: [],
   fingerprint: "f" as Fingerprint,
   body: "Worms.",
-  from: { practice: "test", stage: 0, step: 1 },
+  from: {
+    practice: "test",
+    fingerprint: "0123456789abcd" as PracticeFingerprint,
+    stage: 0,
+    step: 1,
+  },
   writtenAt: 0,
   revisedAt: null,
 }

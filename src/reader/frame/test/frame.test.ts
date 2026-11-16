@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { Material } from "../../../material/materials"
 import type { Fingerprint, Note } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
+import { fingerprintOfPractice } from "../../../practice/fingerprint"
 import type { Practice, Step } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../frame"
@@ -114,7 +115,13 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/0/1",
       text: "fixture",
       prose: ["On @b."],
-      commentary: { set: material.notes, notes: [notes[2]], shown: "marked", written: null },
+      commentary: {
+        set: material.notes,
+        notes: [notes[2]],
+        shown: "marked",
+        written: null,
+        recalled: null,
+      },
       writing: null,
       noting: null,
     })
@@ -133,7 +140,13 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       key: "test/1/2",
       text: "fixture",
       prose: ["What does the bird eat?"],
-      commentary: { set: material.notes, notes: [], shown: "marked", written: null },
+      commentary: {
+        set: material.notes,
+        notes: [],
+        shown: "marked",
+        written: null,
+        recalled: null,
+      },
       writing: {
         about: { kind: "fixed", targets: [whole] },
         tags: [],
@@ -151,7 +164,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       tags: [],
       fingerprint: "f" as Fingerprint,
       body: "Worms.",
-      from: { practice: "test", stage: 1, step },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(practice), stage: 1, step },
       writtenAt: 0,
       revisedAt: null,
     })
@@ -167,7 +180,13 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         key: "test/0/2",
         text: "fixture",
         prose: [],
-        commentary: { set: material.notes, notes: [], shown: "marked", written: null },
+        commentary: {
+          set: material.notes,
+          notes: [],
+          shown: "marked",
+          written: null,
+          recalled: null,
+        },
         writing: null,
         noting: null,
       })
@@ -266,7 +285,7 @@ describe("annotateFrame: the notes written in annotate mode, which can be delete
   it("lists only the notes with no provenance, in the order written, and carries them in that order", () => {
     const first = mine("n1", "First.")
     const practised = mine("p", "Written in the practice.", {
-      from: { practice: "test", stage: 0, step: 2 },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(practice), stage: 0, step: 2 },
     })
     const second = mine("n2", "Second.")
     const { commentary } = annotateFrame("poem", material, [first, practised, second]).subject
@@ -296,7 +315,7 @@ describe("frameOf: an observe step, wherever the editor puts it", () => {
   const on = (stage: number, step: number, more: Partial<ReaderNote> = {}) =>
     mine(`${stage}/${step}`, "Fed.", {
       targets: [bird],
-      from: { practice: "test", stage, step },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(observing), stage, step },
       ...more,
     })
 
@@ -306,7 +325,13 @@ describe("frameOf: an observe step, wherever the editor puts it", () => {
       key: "test/0/0",
       text: "fixture",
       prose: ["Where does the bird change?"],
-      commentary: { set: material.notes, notes: [], shown: "marked", written: null },
+      commentary: {
+        set: material.notes,
+        notes: [],
+        shown: "marked",
+        written: null,
+        recalled: null,
+      },
       writing: {
         about: { kind: "chosen", substrate: material.substrate },
         tags: [],
@@ -340,11 +365,86 @@ describe("frameOf: an observe step, wherever the editor puts it", () => {
 
   it("leaves a respond step's note found, whatever lines it was written on", () => {
     const old = mine("r", "Worms.", {
-      from: { practice: "test", stage: 1, step: 0 },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(observing), stage: 1, step: 0 },
       fingerprint: "g" as Fingerprint,
     })
     expect(frameOf(observing, standing(1, 0), material, [old]).subject.writing?.written).toEqual([
       old,
     ])
+  })
+})
+
+describe("frameOf: a recall step, bringing back the stage before", () => {
+  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
+  const recalling: Practice = {
+    ...practice,
+    stages: [
+      { name: "First", steps: [consider("@a"), observe, respond] },
+      { name: "Second", steps: [{ direction: "recall", prose: ["Yesterday, you wrote:"] }] },
+    ],
+  }
+  const version = fingerprintOfPractice(recalling)
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const at = (stage: number, step: number, fingerprint = version) => ({
+    from: { practice: "test", fingerprint, stage, step },
+  })
+  // Written in this order: the respond note first, then the observe note
+  const answered = mine("r", "Worms.", at(0, 2))
+  const observed = mine("o", "A bird.", { targets: [bird], ...at(0, 1) })
+  const recallAt = (written: readonly ReaderNote[]) =>
+    frameOf(recalling, standing(1, 0), material, written).subject
+
+  it("lists the stage before's notes, in the order of their steps, each with its prompt", () => {
+    const subject = recallAt([answered, observed])
+    expect(subject.prose).toEqual(["Yesterday, you wrote:"])
+    expect(subject.writing).toBeNull()
+    expect(subject.noting).toBeNull()
+    const { commentary } = subject
+    expect(commentary.shown).toBe("listed")
+    expect(commentary.notes.map((note) => note.id)).toEqual(["o", "r"])
+    expect(commentary.recalled).toEqual([
+      { prompt: ["Where does the bird change?"], whole: false },
+      { prompt: ["What does the bird eat?"], whole: true },
+    ])
+  })
+
+  it("carries no note to delete", () => {
+    expect(recallAt([answered, observed]).commentary.written).toBeNull()
+  })
+
+  it("leaves out notes of another version, another stage, annotate mode, or other lines", () => {
+    const others = [
+      mine("v", "Another version.", at(0, 2, "00000000000000" as typeof version)),
+      mine("s", "This stage.", at(1, 0)),
+      mine("m", "In annotate mode."),
+      mine("g", "On other lines.", { ...at(0, 1), fingerprint: "g" as Fingerprint }),
+      mine("x", "On no step of this version.", at(0, 3)),
+    ]
+    const { commentary } = recallAt([...others, answered])
+    expect(commentary.notes.map((note) => note.id)).toEqual(["r"])
+    expect(commentary.recalled).toHaveLength(1)
+  })
+
+  it("lists nothing when nothing from the stage before can be found", () => {
+    expect(recallAt([]).commentary).toMatchObject({ notes: [], recalled: [] })
+  })
+
+  it("counts the reader's note on a writing step only on this version", () => {
+    const edited: Practice = {
+      ...recalling,
+      stages: [
+        {
+          ...recalling.stages[0]!,
+          steps: [consider("@a"), observe, { ...respond, prose: ["Now?"] }],
+        },
+        recalling.stages[1]!,
+      ],
+    }
+    expect(frameOf(edited, standing(0, 2), material, [answered]).subject.writing?.written).toEqual(
+      [],
+    )
+    expect(
+      frameOf(recalling, standing(0, 2), material, [answered]).subject.writing?.written,
+    ).toEqual([answered])
   })
 })

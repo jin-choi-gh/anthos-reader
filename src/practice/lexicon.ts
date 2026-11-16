@@ -5,26 +5,35 @@ import type { Parts, Step } from "./types"
 export function partsOf(step: Step): Parts {
   switch (step.direction) {
     case "consider": // read the editor's note on a passage
-      return { prose: step.prose, highlight: [step.note], writing: null }
+      return { prose: step.prose, highlight: [step.note], writing: null, recall: null }
     case "respond": // write about the whole poem
       return {
         prose: step.prose,
         highlight: [],
         writing: { target: "whole", tags: [], count: "one" },
+        recall: null,
       }
     case "observe": // write about passages the reader chooses
       return {
         prose: step.prose,
         highlight: [],
         writing: { target: "chosen", tags: [], count: "one" },
+        recall: null,
       }
+    case "recall": // look back at what the reader wrote in the stage before
+      return { prose: step.prose, highlight: [], writing: null, recall: { from: "previous" } }
     default:
       return assertNever(step)
   }
 }
 
 /** A stage's rest: nothing said, nothing asked. */
-export const REST: Parts = { prose: [], highlight: [], writing: null }
+export const REST: Parts = { prose: [], highlight: [], writing: null, recall: null }
 
 /** The final stage. */
-export const FINAL: Parts = { prose: ["You have finished!"], highlight: [], writing: null }
+export const FINAL: Parts = {
+  prose: ["You have finished!"],
+  highlight: [],
+  writing: null,
+  recall: null,
+}

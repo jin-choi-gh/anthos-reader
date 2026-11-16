@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import { loadTextualComplex } from "../loom/load"
 import { toMaterial } from "../loom/toMaterial"
+import { fingerprintOfPractice } from "../practice/fingerprint"
 import { practiceFor } from "../practice/practices"
 import type { ModeName } from "../route"
 import { useLoaded } from "../useLoaded"
@@ -71,7 +72,12 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
     const parts = { material, materials, layout, topBar }
     content =
       mode.name === "practice" ? (
-        <PracticeMode practice={mode.practice} {...parts} />
+        // A new version of the practice is a new run, so a new mode
+        <PracticeMode
+          key={fingerprintOfPractice(mode.practice)}
+          practice={mode.practice}
+          {...parts}
+        />
       ) : (
         <AnnotateMode text={file} {...parts} />
       )

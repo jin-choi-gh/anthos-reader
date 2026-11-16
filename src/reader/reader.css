@@ -228,6 +228,17 @@ html {
   margin: 0.5em 0 0;
 }
 
+/* A recalled note's prompt: the editor's words it answered, quieter than the reader's own */
+.note-prompt {
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+
+.note .note-prompt p {
+  margin: 0 0 0.375em;
+}
+
 /* Practice mode: the note the reader opened from the poem. Not a choice in a list, so no pointer */
 .open-note {
   cursor: auto;
