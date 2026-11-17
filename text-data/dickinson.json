@@ -1,0 +1,5707 @@
+{
+  "format": "loom-textual-complex",
+  "format_version": 1,
+  "name": "poem-359",
+  "metadata": {
+    "title": "Poem 159",
+    "author": "Emily Dickinson",
+    "notes": {
+      "tags": [
+        "comment",
+        "gloss",
+        "fancies"
+      ]
+    }
+  },
+  "lines": [
+    {
+      "id": "l1",
+      "text": "A Bird, came down the Walk -"
+    },
+    {
+      "id": "l2",
+      "text": "He did not know I saw -"
+    },
+    {
+      "id": "l3",
+      "text": "He bit an Angle Worm in halves"
+    },
+    {
+      "id": "l4",
+      "text": "And ate the fellow, raw,"
+    },
+    {
+      "id": "l5",
+      "text": "And then, he drank a Dew"
+    },
+    {
+      "id": "l6",
+      "text": "From a convenient Grass -"
+    },
+    {
+      "id": "l7",
+      "text": "And then hopped sidewise to the Wall"
+    },
+    {
+      "id": "l8",
+      "text": "To let a Beetle pass -"
+    },
+    {
+      "id": "l9",
+      "text": "He glanced with rapid eyes,"
+    },
+    {
+      "id": "l10",
+      "text": "That hurried all abroad -"
+    },
+    {
+      "id": "l11",
+      "text": "They looked like frightened Beads, I thought,"
+    },
+    {
+      "id": "l12",
+      "text": "He stirred his Velvet Head. -"
+    },
+    {
+      "id": "l13",
+      "text": "Like one in danger, Cautious,"
+    },
+    {
+      "id": "l14",
+      "text": "I offered him a Crumb,"
+    },
+    {
+      "id": "l15",
+      "text": "And he unrolled his feathers,"
+    },
+    {
+      "id": "l16",
+      "text": "And rowed him softer Home -"
+    },
+    {
+      "id": "l17",
+      "text": "Than Oars divide the Ocean,"
+    },
+    {
+      "id": "l18",
+      "text": "Too silver for a seam,"
+    },
+    {
+      "id": "l19",
+      "text": "Or Butterflies, off Banks of Noon,"
+    },
+    {
+      "id": "l20",
+      "text": "Leap, plashless as they swim."
+    }
+  ],
+  "schemata": {
+    "display": {
+      "kind": "display",
+      "units": [
+        {
+          "id": "poem",
+          "rank": "poem",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            19,
+            29
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "s1",
+          "rank": "stanza",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            3,
+            24
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l1",
+          "rank": "line",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            28
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l2",
+          "rank": "line",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            23
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l3",
+          "rank": "line",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            30
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l4",
+          "rank": "line",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            24
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "s2",
+          "rank": "stanza",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            7,
+            22
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l5",
+          "rank": "line",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            24
+          ],
+          "value": "0",
+          "parent": "s2"
+        },
+        {
+          "id": "l6",
+          "rank": "line",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            25
+          ],
+          "value": "0",
+          "parent": "s2"
+        },
+        {
+          "id": "l7",
+          "rank": "line",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            36
+          ],
+          "value": "0",
+          "parent": "s2"
+        },
+        {
+          "id": "l8",
+          "rank": "line",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            22
+          ],
+          "value": "0",
+          "parent": "s2"
+        },
+        {
+          "id": "s3",
+          "rank": "stanza",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            11,
+            29
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l9",
+          "rank": "line",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            27
+          ],
+          "value": "0",
+          "parent": "s3"
+        },
+        {
+          "id": "l10",
+          "rank": "line",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            25
+          ],
+          "value": "0",
+          "parent": "s3"
+        },
+        {
+          "id": "l11",
+          "rank": "line",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            45
+          ],
+          "value": "0",
+          "parent": "s3"
+        },
+        {
+          "id": "l12",
+          "rank": "line",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            29
+          ],
+          "value": "0",
+          "parent": "s3"
+        },
+        {
+          "id": "s4",
+          "rank": "stanza",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            15,
+            27
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l13",
+          "rank": "line",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            29
+          ],
+          "value": "0",
+          "parent": "s4"
+        },
+        {
+          "id": "l14",
+          "rank": "line",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            22
+          ],
+          "value": "0",
+          "parent": "s4"
+        },
+        {
+          "id": "l15",
+          "rank": "line",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            29
+          ],
+          "value": "0",
+          "parent": "s4"
+        },
+        {
+          "id": "l16",
+          "rank": "line",
+          "start": [
+            15,
+            0
+          ],
+          "end": [
+            15,
+            27
+          ],
+          "value": "0",
+          "parent": "s4"
+        },
+        {
+          "id": "s5",
+          "rank": "stanza",
+          "start": [
+            16,
+            0
+          ],
+          "end": [
+            19,
+            29
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l17",
+          "rank": "line",
+          "start": [
+            16,
+            0
+          ],
+          "end": [
+            16,
+            27
+          ],
+          "value": "0",
+          "parent": "s5"
+        },
+        {
+          "id": "l18",
+          "rank": "line",
+          "start": [
+            17,
+            0
+          ],
+          "end": [
+            17,
+            22
+          ],
+          "value": "0",
+          "parent": "s5"
+        },
+        {
+          "id": "l19",
+          "rank": "line",
+          "start": [
+            18,
+            0
+          ],
+          "end": [
+            18,
+            34
+          ],
+          "value": "0",
+          "parent": "s5"
+        },
+        {
+          "id": "l20",
+          "rank": "line",
+          "start": [
+            19,
+            0
+          ],
+          "end": [
+            19,
+            29
+          ],
+          "value": "0",
+          "parent": "s5"
+        }
+      ]
+    },
+    "word-tokens": {
+      "kind": "word-tokens",
+      "units": [
+        {
+          "id": "l1",
+          "rank": "line",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            26
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l1.w1",
+          "rank": "word",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            1
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w2",
+          "rank": "word",
+          "start": [
+            0,
+            2
+          ],
+          "end": [
+            0,
+            6
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w3",
+          "rank": "word",
+          "start": [
+            0,
+            8
+          ],
+          "end": [
+            0,
+            12
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w4",
+          "rank": "word",
+          "start": [
+            0,
+            13
+          ],
+          "end": [
+            0,
+            17
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w5",
+          "rank": "word",
+          "start": [
+            0,
+            18
+          ],
+          "end": [
+            0,
+            21
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w6",
+          "rank": "word",
+          "start": [
+            0,
+            22
+          ],
+          "end": [
+            0,
+            26
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l2",
+          "rank": "line",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            21
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l2.w1",
+          "rank": "word",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            2
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w2",
+          "rank": "word",
+          "start": [
+            1,
+            3
+          ],
+          "end": [
+            1,
+            6
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w3",
+          "rank": "word",
+          "start": [
+            1,
+            7
+          ],
+          "end": [
+            1,
+            10
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w4",
+          "rank": "word",
+          "start": [
+            1,
+            11
+          ],
+          "end": [
+            1,
+            15
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w5",
+          "rank": "word",
+          "start": [
+            1,
+            16
+          ],
+          "end": [
+            1,
+            17
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w6",
+          "rank": "word",
+          "start": [
+            1,
+            18
+          ],
+          "end": [
+            1,
+            21
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l3",
+          "rank": "line",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            30
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l3.w1",
+          "rank": "word",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            2
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w2",
+          "rank": "word",
+          "start": [
+            2,
+            3
+          ],
+          "end": [
+            2,
+            6
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w3",
+          "rank": "word",
+          "start": [
+            2,
+            7
+          ],
+          "end": [
+            2,
+            9
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w4",
+          "rank": "word",
+          "start": [
+            2,
+            10
+          ],
+          "end": [
+            2,
+            15
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w5",
+          "rank": "word",
+          "start": [
+            2,
+            16
+          ],
+          "end": [
+            2,
+            20
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w6",
+          "rank": "word",
+          "start": [
+            2,
+            21
+          ],
+          "end": [
+            2,
+            23
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w7",
+          "rank": "word",
+          "start": [
+            2,
+            24
+          ],
+          "end": [
+            2,
+            30
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l4",
+          "rank": "line",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            23
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l4.w1",
+          "rank": "word",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            3
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w2",
+          "rank": "word",
+          "start": [
+            3,
+            4
+          ],
+          "end": [
+            3,
+            7
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w3",
+          "rank": "word",
+          "start": [
+            3,
+            8
+          ],
+          "end": [
+            3,
+            11
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w4",
+          "rank": "word",
+          "start": [
+            3,
+            12
+          ],
+          "end": [
+            3,
+            18
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w5",
+          "rank": "word",
+          "start": [
+            3,
+            20
+          ],
+          "end": [
+            3,
+            23
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l5",
+          "rank": "line",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            24
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l5.w1",
+          "rank": "word",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            3
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w2",
+          "rank": "word",
+          "start": [
+            4,
+            4
+          ],
+          "end": [
+            4,
+            8
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w3",
+          "rank": "word",
+          "start": [
+            4,
+            10
+          ],
+          "end": [
+            4,
+            12
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w4",
+          "rank": "word",
+          "start": [
+            4,
+            13
+          ],
+          "end": [
+            4,
+            18
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w5",
+          "rank": "word",
+          "start": [
+            4,
+            19
+          ],
+          "end": [
+            4,
+            20
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w6",
+          "rank": "word",
+          "start": [
+            4,
+            21
+          ],
+          "end": [
+            4,
+            24
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l6",
+          "rank": "line",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            23
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l6.w1",
+          "rank": "word",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            4
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w2",
+          "rank": "word",
+          "start": [
+            5,
+            5
+          ],
+          "end": [
+            5,
+            6
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w3",
+          "rank": "word",
+          "start": [
+            5,
+            7
+          ],
+          "end": [
+            5,
+            17
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w4",
+          "rank": "word",
+          "start": [
+            5,
+            18
+          ],
+          "end": [
+            5,
+            23
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l7",
+          "rank": "line",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            36
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l7.w1",
+          "rank": "word",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            3
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w2",
+          "rank": "word",
+          "start": [
+            6,
+            4
+          ],
+          "end": [
+            6,
+            8
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w3",
+          "rank": "word",
+          "start": [
+            6,
+            9
+          ],
+          "end": [
+            6,
+            15
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w4",
+          "rank": "word",
+          "start": [
+            6,
+            16
+          ],
+          "end": [
+            6,
+            24
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w5",
+          "rank": "word",
+          "start": [
+            6,
+            25
+          ],
+          "end": [
+            6,
+            27
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w6",
+          "rank": "word",
+          "start": [
+            6,
+            28
+          ],
+          "end": [
+            6,
+            31
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w7",
+          "rank": "word",
+          "start": [
+            6,
+            32
+          ],
+          "end": [
+            6,
+            36
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l8",
+          "rank": "line",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            20
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l8.w1",
+          "rank": "word",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            2
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w2",
+          "rank": "word",
+          "start": [
+            7,
+            3
+          ],
+          "end": [
+            7,
+            6
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w3",
+          "rank": "word",
+          "start": [
+            7,
+            7
+          ],
+          "end": [
+            7,
+            8
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w4",
+          "rank": "word",
+          "start": [
+            7,
+            9
+          ],
+          "end": [
+            7,
+            15
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w5",
+          "rank": "word",
+          "start": [
+            7,
+            16
+          ],
+          "end": [
+            7,
+            20
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l9",
+          "rank": "line",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            26
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l9.w1",
+          "rank": "word",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            2
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w2",
+          "rank": "word",
+          "start": [
+            8,
+            3
+          ],
+          "end": [
+            8,
+            10
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w3",
+          "rank": "word",
+          "start": [
+            8,
+            11
+          ],
+          "end": [
+            8,
+            15
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w4",
+          "rank": "word",
+          "start": [
+            8,
+            16
+          ],
+          "end": [
+            8,
+            21
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w5",
+          "rank": "word",
+          "start": [
+            8,
+            22
+          ],
+          "end": [
+            8,
+            26
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l10",
+          "rank": "line",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            23
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l10.w1",
+          "rank": "word",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            4
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w2",
+          "rank": "word",
+          "start": [
+            9,
+            5
+          ],
+          "end": [
+            9,
+            12
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w3",
+          "rank": "word",
+          "start": [
+            9,
+            13
+          ],
+          "end": [
+            9,
+            16
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w4",
+          "rank": "word",
+          "start": [
+            9,
+            17
+          ],
+          "end": [
+            9,
+            23
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l11",
+          "rank": "line",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            44
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l11.w1",
+          "rank": "word",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            4
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w2",
+          "rank": "word",
+          "start": [
+            10,
+            5
+          ],
+          "end": [
+            10,
+            11
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w3",
+          "rank": "word",
+          "start": [
+            10,
+            12
+          ],
+          "end": [
+            10,
+            16
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w4",
+          "rank": "word",
+          "start": [
+            10,
+            17
+          ],
+          "end": [
+            10,
+            27
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w5",
+          "rank": "word",
+          "start": [
+            10,
+            28
+          ],
+          "end": [
+            10,
+            33
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w6",
+          "rank": "word",
+          "start": [
+            10,
+            35
+          ],
+          "end": [
+            10,
+            36
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w7",
+          "rank": "word",
+          "start": [
+            10,
+            37
+          ],
+          "end": [
+            10,
+            44
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l12",
+          "rank": "line",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            26
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l12.w1",
+          "rank": "word",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            2
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w2",
+          "rank": "word",
+          "start": [
+            11,
+            3
+          ],
+          "end": [
+            11,
+            10
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w3",
+          "rank": "word",
+          "start": [
+            11,
+            11
+          ],
+          "end": [
+            11,
+            14
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w4",
+          "rank": "word",
+          "start": [
+            11,
+            15
+          ],
+          "end": [
+            11,
+            21
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w5",
+          "rank": "word",
+          "start": [
+            11,
+            22
+          ],
+          "end": [
+            11,
+            26
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l13",
+          "rank": "line",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            28
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l13.w1",
+          "rank": "word",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            4
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w2",
+          "rank": "word",
+          "start": [
+            12,
+            5
+          ],
+          "end": [
+            12,
+            8
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w3",
+          "rank": "word",
+          "start": [
+            12,
+            9
+          ],
+          "end": [
+            12,
+            11
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w4",
+          "rank": "word",
+          "start": [
+            12,
+            12
+          ],
+          "end": [
+            12,
+            18
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w5",
+          "rank": "word",
+          "start": [
+            12,
+            20
+          ],
+          "end": [
+            12,
+            28
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l14",
+          "rank": "line",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            21
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l14.w1",
+          "rank": "word",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            1
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w2",
+          "rank": "word",
+          "start": [
+            13,
+            2
+          ],
+          "end": [
+            13,
+            9
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w3",
+          "rank": "word",
+          "start": [
+            13,
+            10
+          ],
+          "end": [
+            13,
+            13
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w4",
+          "rank": "word",
+          "start": [
+            13,
+            14
+          ],
+          "end": [
+            13,
+            15
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w5",
+          "rank": "word",
+          "start": [
+            13,
+            16
+          ],
+          "end": [
+            13,
+            21
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l15",
+          "rank": "line",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            28
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l15.w1",
+          "rank": "word",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            3
+          ],
+          "value": null,
+          "parent": "l15"
+        },
+        {
+          "id": "l15.w2",
+          "rank": "word",
+          "start": [
+            14,
+            4
+          ],
+          "end": [
+            14,
+            6
+          ],
+          "value": null,
+          "parent": "l15"
+        },
+        {
+          "id": "l15.w3",
+          "rank": "word",
+          "start": [
+            14,
+            7
+          ],
+          "end": [
+            14,
+            15
+          ],
+          "value": null,
+          "parent": "l15"
+        },
+        {
+          "id": "l15.w4",
+          "rank": "word",
+          "start": [
+            14,
+            16
+          ],
+          "end": [
+            14,
+            19
+          ],
+          "value": null,
+          "parent": "l15"
+        },
+        {
+          "id": "l15.w5",
+          "rank": "word",
+          "start": [
+            14,
+            20
+          ],
+          "end": [
+            14,
+            28
+          ],
+          "value": null,
+          "parent": "l15"
+        },
+        {
+          "id": "l16",
+          "rank": "line",
+          "start": [
+            15,
+            0
+          ],
+          "end": [
+            15,
+            25
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l16.w1",
+          "rank": "word",
+          "start": [
+            15,
+            0
+          ],
+          "end": [
+            15,
+            3
+          ],
+          "value": null,
+          "parent": "l16"
+        },
+        {
+          "id": "l16.w2",
+          "rank": "word",
+          "start": [
+            15,
+            4
+          ],
+          "end": [
+            15,
+            9
+          ],
+          "value": null,
+          "parent": "l16"
+        },
+        {
+          "id": "l16.w3",
+          "rank": "word",
+          "start": [
+            15,
+            10
+          ],
+          "end": [
+            15,
+            13
+          ],
+          "value": null,
+          "parent": "l16"
+        },
+        {
+          "id": "l16.w4",
+          "rank": "word",
+          "start": [
+            15,
+            14
+          ],
+          "end": [
+            15,
+            20
+          ],
+          "value": null,
+          "parent": "l16"
+        },
+        {
+          "id": "l16.w5",
+          "rank": "word",
+          "start": [
+            15,
+            21
+          ],
+          "end": [
+            15,
+            25
+          ],
+          "value": null,
+          "parent": "l16"
+        },
+        {
+          "id": "l17",
+          "rank": "line",
+          "start": [
+            16,
+            0
+          ],
+          "end": [
+            16,
+            26
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l17.w1",
+          "rank": "word",
+          "start": [
+            16,
+            0
+          ],
+          "end": [
+            16,
+            4
+          ],
+          "value": null,
+          "parent": "l17"
+        },
+        {
+          "id": "l17.w2",
+          "rank": "word",
+          "start": [
+            16,
+            5
+          ],
+          "end": [
+            16,
+            9
+          ],
+          "value": null,
+          "parent": "l17"
+        },
+        {
+          "id": "l17.w3",
+          "rank": "word",
+          "start": [
+            16,
+            10
+          ],
+          "end": [
+            16,
+            16
+          ],
+          "value": null,
+          "parent": "l17"
+        },
+        {
+          "id": "l17.w4",
+          "rank": "word",
+          "start": [
+            16,
+            17
+          ],
+          "end": [
+            16,
+            20
+          ],
+          "value": null,
+          "parent": "l17"
+        },
+        {
+          "id": "l17.w5",
+          "rank": "word",
+          "start": [
+            16,
+            21
+          ],
+          "end": [
+            16,
+            26
+          ],
+          "value": null,
+          "parent": "l17"
+        },
+        {
+          "id": "l18",
+          "rank": "line",
+          "start": [
+            17,
+            0
+          ],
+          "end": [
+            17,
+            21
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l18.w1",
+          "rank": "word",
+          "start": [
+            17,
+            0
+          ],
+          "end": [
+            17,
+            3
+          ],
+          "value": null,
+          "parent": "l18"
+        },
+        {
+          "id": "l18.w2",
+          "rank": "word",
+          "start": [
+            17,
+            4
+          ],
+          "end": [
+            17,
+            10
+          ],
+          "value": null,
+          "parent": "l18"
+        },
+        {
+          "id": "l18.w3",
+          "rank": "word",
+          "start": [
+            17,
+            11
+          ],
+          "end": [
+            17,
+            14
+          ],
+          "value": null,
+          "parent": "l18"
+        },
+        {
+          "id": "l18.w4",
+          "rank": "word",
+          "start": [
+            17,
+            15
+          ],
+          "end": [
+            17,
+            16
+          ],
+          "value": null,
+          "parent": "l18"
+        },
+        {
+          "id": "l18.w5",
+          "rank": "word",
+          "start": [
+            17,
+            17
+          ],
+          "end": [
+            17,
+            21
+          ],
+          "value": null,
+          "parent": "l18"
+        },
+        {
+          "id": "l19",
+          "rank": "line",
+          "start": [
+            18,
+            0
+          ],
+          "end": [
+            18,
+            33
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l19.w1",
+          "rank": "word",
+          "start": [
+            18,
+            0
+          ],
+          "end": [
+            18,
+            2
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l19.w2",
+          "rank": "word",
+          "start": [
+            18,
+            3
+          ],
+          "end": [
+            18,
+            14
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l19.w3",
+          "rank": "word",
+          "start": [
+            18,
+            16
+          ],
+          "end": [
+            18,
+            19
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l19.w4",
+          "rank": "word",
+          "start": [
+            18,
+            20
+          ],
+          "end": [
+            18,
+            25
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l19.w5",
+          "rank": "word",
+          "start": [
+            18,
+            26
+          ],
+          "end": [
+            18,
+            28
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l19.w6",
+          "rank": "word",
+          "start": [
+            18,
+            29
+          ],
+          "end": [
+            18,
+            33
+          ],
+          "value": null,
+          "parent": "l19"
+        },
+        {
+          "id": "l20",
+          "rank": "line",
+          "start": [
+            19,
+            0
+          ],
+          "end": [
+            19,
+            28
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l20.w1",
+          "rank": "word",
+          "start": [
+            19,
+            0
+          ],
+          "end": [
+            19,
+            4
+          ],
+          "value": null,
+          "parent": "l20"
+        },
+        {
+          "id": "l20.w2",
+          "rank": "word",
+          "start": [
+            19,
+            6
+          ],
+          "end": [
+            19,
+            15
+          ],
+          "value": null,
+          "parent": "l20"
+        },
+        {
+          "id": "l20.w3",
+          "rank": "word",
+          "start": [
+            19,
+            16
+          ],
+          "end": [
+            19,
+            18
+          ],
+          "value": null,
+          "parent": "l20"
+        },
+        {
+          "id": "l20.w4",
+          "rank": "word",
+          "start": [
+            19,
+            19
+          ],
+          "end": [
+            19,
+            23
+          ],
+          "value": null,
+          "parent": "l20"
+        },
+        {
+          "id": "l20.w5",
+          "rank": "word",
+          "start": [
+            19,
+            24
+          ],
+          "end": [
+            19,
+            28
+          ],
+          "value": null,
+          "parent": "l20"
+        }
+      ]
+    }
+  },
+  "atoms": [
+    {
+      "start": [
+        0,
+        0
+      ],
+      "end": [
+        0,
+        1
+      ],
+      "text": "A",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w1"
+      }
+    },
+    {
+      "start": [
+        0,
+        1
+      ],
+      "end": [
+        0,
+        2
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1"
+      }
+    },
+    {
+      "start": [
+        0,
+        2
+      ],
+      "end": [
+        0,
+        6
+      ],
+      "text": "Bird",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w2"
+      }
+    },
+    {
+      "start": [
+        0,
+        6
+      ],
+      "end": [
+        0,
+        8
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1"
+      }
+    },
+    {
+      "start": [
+        0,
+        8
+      ],
+      "end": [
+        0,
+        12
+      ],
+      "text": "came",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w3"
+      }
+    },
+    {
+      "start": [
+        0,
+        12
+      ],
+      "end": [
+        0,
+        13
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1"
+      }
+    },
+    {
+      "start": [
+        0,
+        13
+      ],
+      "end": [
+        0,
+        17
+      ],
+      "text": "down",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w4"
+      }
+    },
+    {
+      "start": [
+        0,
+        17
+      ],
+      "end": [
+        0,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1"
+      }
+    },
+    {
+      "start": [
+        0,
+        18
+      ],
+      "end": [
+        0,
+        21
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w5"
+      }
+    },
+    {
+      "start": [
+        0,
+        21
+      ],
+      "end": [
+        0,
+        22
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1"
+      }
+    },
+    {
+      "start": [
+        0,
+        22
+      ],
+      "end": [
+        0,
+        26
+      ],
+      "text": "Walk",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w6"
+      }
+    },
+    {
+      "start": [
+        0,
+        26
+      ],
+      "end": [
+        0,
+        28
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l1"
+      }
+    },
+    {
+      "start": [
+        1,
+        0
+      ],
+      "end": [
+        1,
+        2
+      ],
+      "text": "He",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w1"
+      }
+    },
+    {
+      "start": [
+        1,
+        2
+      ],
+      "end": [
+        1,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2"
+      }
+    },
+    {
+      "start": [
+        1,
+        3
+      ],
+      "end": [
+        1,
+        6
+      ],
+      "text": "did",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w2"
+      }
+    },
+    {
+      "start": [
+        1,
+        6
+      ],
+      "end": [
+        1,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2"
+      }
+    },
+    {
+      "start": [
+        1,
+        7
+      ],
+      "end": [
+        1,
+        10
+      ],
+      "text": "not",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w3"
+      }
+    },
+    {
+      "start": [
+        1,
+        10
+      ],
+      "end": [
+        1,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2"
+      }
+    },
+    {
+      "start": [
+        1,
+        11
+      ],
+      "end": [
+        1,
+        15
+      ],
+      "text": "know",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w4"
+      }
+    },
+    {
+      "start": [
+        1,
+        15
+      ],
+      "end": [
+        1,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2"
+      }
+    },
+    {
+      "start": [
+        1,
+        16
+      ],
+      "end": [
+        1,
+        17
+      ],
+      "text": "I",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w5"
+      }
+    },
+    {
+      "start": [
+        1,
+        17
+      ],
+      "end": [
+        1,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2"
+      }
+    },
+    {
+      "start": [
+        1,
+        18
+      ],
+      "end": [
+        1,
+        21
+      ],
+      "text": "saw",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w6"
+      }
+    },
+    {
+      "start": [
+        1,
+        21
+      ],
+      "end": [
+        1,
+        23
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l2"
+      }
+    },
+    {
+      "start": [
+        2,
+        0
+      ],
+      "end": [
+        2,
+        2
+      ],
+      "text": "He",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w1"
+      }
+    },
+    {
+      "start": [
+        2,
+        2
+      ],
+      "end": [
+        2,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        3
+      ],
+      "end": [
+        2,
+        6
+      ],
+      "text": "bit",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w2"
+      }
+    },
+    {
+      "start": [
+        2,
+        6
+      ],
+      "end": [
+        2,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        7
+      ],
+      "end": [
+        2,
+        9
+      ],
+      "text": "an",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w3"
+      }
+    },
+    {
+      "start": [
+        2,
+        9
+      ],
+      "end": [
+        2,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        10
+      ],
+      "end": [
+        2,
+        15
+      ],
+      "text": "Angle",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w4"
+      }
+    },
+    {
+      "start": [
+        2,
+        15
+      ],
+      "end": [
+        2,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        16
+      ],
+      "end": [
+        2,
+        20
+      ],
+      "text": "Worm",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w5"
+      }
+    },
+    {
+      "start": [
+        2,
+        20
+      ],
+      "end": [
+        2,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        21
+      ],
+      "end": [
+        2,
+        23
+      ],
+      "text": "in",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w6"
+      }
+    },
+    {
+      "start": [
+        2,
+        23
+      ],
+      "end": [
+        2,
+        24
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3"
+      }
+    },
+    {
+      "start": [
+        2,
+        24
+      ],
+      "end": [
+        2,
+        30
+      ],
+      "text": "halves",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w7"
+      }
+    },
+    {
+      "start": [
+        3,
+        0
+      ],
+      "end": [
+        3,
+        3
+      ],
+      "text": "And",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w1"
+      }
+    },
+    {
+      "start": [
+        3,
+        3
+      ],
+      "end": [
+        3,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4"
+      }
+    },
+    {
+      "start": [
+        3,
+        4
+      ],
+      "end": [
+        3,
+        7
+      ],
+      "text": "ate",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w2"
+      }
+    },
+    {
+      "start": [
+        3,
+        7
+      ],
+      "end": [
+        3,
+        8
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4"
+      }
+    },
+    {
+      "start": [
+        3,
+        8
+      ],
+      "end": [
+        3,
+        11
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w3"
+      }
+    },
+    {
+      "start": [
+        3,
+        11
+      ],
+      "end": [
+        3,
+        12
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4"
+      }
+    },
+    {
+      "start": [
+        3,
+        12
+      ],
+      "end": [
+        3,
+        18
+      ],
+      "text": "fellow",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w4"
+      }
+    },
+    {
+      "start": [
+        3,
+        18
+      ],
+      "end": [
+        3,
+        20
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4"
+      }
+    },
+    {
+      "start": [
+        3,
+        20
+      ],
+      "end": [
+        3,
+        23
+      ],
+      "text": "raw",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w5"
+      }
+    },
+    {
+      "start": [
+        3,
+        23
+      ],
+      "end": [
+        3,
+        24
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l4"
+      }
+    },
+    {
+      "start": [
+        4,
+        0
+      ],
+      "end": [
+        4,
+        3
+      ],
+      "text": "And",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w1"
+      }
+    },
+    {
+      "start": [
+        4,
+        3
+      ],
+      "end": [
+        4,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5"
+      }
+    },
+    {
+      "start": [
+        4,
+        4
+      ],
+      "end": [
+        4,
+        8
+      ],
+      "text": "then",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w2"
+      }
+    },
+    {
+      "start": [
+        4,
+        8
+      ],
+      "end": [
+        4,
+        10
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5"
+      }
+    },
+    {
+      "start": [
+        4,
+        10
+      ],
+      "end": [
+        4,
+        12
+      ],
+      "text": "he",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w3"
+      }
+    },
+    {
+      "start": [
+        4,
+        12
+      ],
+      "end": [
+        4,
+        13
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5"
+      }
+    },
+    {
+      "start": [
+        4,
+        13
+      ],
+      "end": [
+        4,
+        18
+      ],
+      "text": "drank",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w4"
+      }
+    },
+    {
+      "start": [
+        4,
+        18
+      ],
+      "end": [
+        4,
+        19
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5"
+      }
+    },
+    {
+      "start": [
+        4,
+        19
+      ],
+      "end": [
+        4,
+        20
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w5"
+      }
+    },
+    {
+      "start": [
+        4,
+        20
+      ],
+      "end": [
+        4,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5"
+      }
+    },
+    {
+      "start": [
+        4,
+        21
+      ],
+      "end": [
+        4,
+        24
+      ],
+      "text": "Dew",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w6"
+      }
+    },
+    {
+      "start": [
+        5,
+        0
+      ],
+      "end": [
+        5,
+        4
+      ],
+      "text": "From",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w1"
+      }
+    },
+    {
+      "start": [
+        5,
+        4
+      ],
+      "end": [
+        5,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6"
+      }
+    },
+    {
+      "start": [
+        5,
+        5
+      ],
+      "end": [
+        5,
+        6
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w2"
+      }
+    },
+    {
+      "start": [
+        5,
+        6
+      ],
+      "end": [
+        5,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6"
+      }
+    },
+    {
+      "start": [
+        5,
+        7
+      ],
+      "end": [
+        5,
+        17
+      ],
+      "text": "convenient",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w3"
+      }
+    },
+    {
+      "start": [
+        5,
+        17
+      ],
+      "end": [
+        5,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6"
+      }
+    },
+    {
+      "start": [
+        5,
+        18
+      ],
+      "end": [
+        5,
+        23
+      ],
+      "text": "Grass",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w4"
+      }
+    },
+    {
+      "start": [
+        5,
+        23
+      ],
+      "end": [
+        5,
+        25
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l6"
+      }
+    },
+    {
+      "start": [
+        6,
+        0
+      ],
+      "end": [
+        6,
+        3
+      ],
+      "text": "And",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w1"
+      }
+    },
+    {
+      "start": [
+        6,
+        3
+      ],
+      "end": [
+        6,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        4
+      ],
+      "end": [
+        6,
+        8
+      ],
+      "text": "then",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w2"
+      }
+    },
+    {
+      "start": [
+        6,
+        8
+      ],
+      "end": [
+        6,
+        9
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        9
+      ],
+      "end": [
+        6,
+        15
+      ],
+      "text": "hopped",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w3"
+      }
+    },
+    {
+      "start": [
+        6,
+        15
+      ],
+      "end": [
+        6,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        16
+      ],
+      "end": [
+        6,
+        24
+      ],
+      "text": "sidewise",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w4"
+      }
+    },
+    {
+      "start": [
+        6,
+        24
+      ],
+      "end": [
+        6,
+        25
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        25
+      ],
+      "end": [
+        6,
+        27
+      ],
+      "text": "to",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w5"
+      }
+    },
+    {
+      "start": [
+        6,
+        27
+      ],
+      "end": [
+        6,
+        28
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        28
+      ],
+      "end": [
+        6,
+        31
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w6"
+      }
+    },
+    {
+      "start": [
+        6,
+        31
+      ],
+      "end": [
+        6,
+        32
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7"
+      }
+    },
+    {
+      "start": [
+        6,
+        32
+      ],
+      "end": [
+        6,
+        36
+      ],
+      "text": "Wall",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w7"
+      }
+    },
+    {
+      "start": [
+        7,
+        0
+      ],
+      "end": [
+        7,
+        2
+      ],
+      "text": "To",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w1"
+      }
+    },
+    {
+      "start": [
+        7,
+        2
+      ],
+      "end": [
+        7,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8"
+      }
+    },
+    {
+      "start": [
+        7,
+        3
+      ],
+      "end": [
+        7,
+        6
+      ],
+      "text": "let",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w2"
+      }
+    },
+    {
+      "start": [
+        7,
+        6
+      ],
+      "end": [
+        7,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8"
+      }
+    },
+    {
+      "start": [
+        7,
+        7
+      ],
+      "end": [
+        7,
+        8
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w3"
+      }
+    },
+    {
+      "start": [
+        7,
+        8
+      ],
+      "end": [
+        7,
+        9
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8"
+      }
+    },
+    {
+      "start": [
+        7,
+        9
+      ],
+      "end": [
+        7,
+        15
+      ],
+      "text": "Beetle",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w4"
+      }
+    },
+    {
+      "start": [
+        7,
+        15
+      ],
+      "end": [
+        7,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8"
+      }
+    },
+    {
+      "start": [
+        7,
+        16
+      ],
+      "end": [
+        7,
+        20
+      ],
+      "text": "pass",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w5"
+      }
+    },
+    {
+      "start": [
+        7,
+        20
+      ],
+      "end": [
+        7,
+        22
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l8"
+      }
+    },
+    {
+      "start": [
+        8,
+        0
+      ],
+      "end": [
+        8,
+        2
+      ],
+      "text": "He",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w1"
+      }
+    },
+    {
+      "start": [
+        8,
+        2
+      ],
+      "end": [
+        8,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9"
+      }
+    },
+    {
+      "start": [
+        8,
+        3
+      ],
+      "end": [
+        8,
+        10
+      ],
+      "text": "glanced",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w2"
+      }
+    },
+    {
+      "start": [
+        8,
+        10
+      ],
+      "end": [
+        8,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9"
+      }
+    },
+    {
+      "start": [
+        8,
+        11
+      ],
+      "end": [
+        8,
+        15
+      ],
+      "text": "with",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w3"
+      }
+    },
+    {
+      "start": [
+        8,
+        15
+      ],
+      "end": [
+        8,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9"
+      }
+    },
+    {
+      "start": [
+        8,
+        16
+      ],
+      "end": [
+        8,
+        21
+      ],
+      "text": "rapid",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w4"
+      }
+    },
+    {
+      "start": [
+        8,
+        21
+      ],
+      "end": [
+        8,
+        22
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9"
+      }
+    },
+    {
+      "start": [
+        8,
+        22
+      ],
+      "end": [
+        8,
+        26
+      ],
+      "text": "eyes",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w5"
+      }
+    },
+    {
+      "start": [
+        8,
+        26
+      ],
+      "end": [
+        8,
+        27
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l9"
+      }
+    },
+    {
+      "start": [
+        9,
+        0
+      ],
+      "end": [
+        9,
+        4
+      ],
+      "text": "That",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w1"
+      }
+    },
+    {
+      "start": [
+        9,
+        4
+      ],
+      "end": [
+        9,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10"
+      }
+    },
+    {
+      "start": [
+        9,
+        5
+      ],
+      "end": [
+        9,
+        12
+      ],
+      "text": "hurried",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w2"
+      }
+    },
+    {
+      "start": [
+        9,
+        12
+      ],
+      "end": [
+        9,
+        13
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10"
+      }
+    },
+    {
+      "start": [
+        9,
+        13
+      ],
+      "end": [
+        9,
+        16
+      ],
+      "text": "all",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w3"
+      }
+    },
+    {
+      "start": [
+        9,
+        16
+      ],
+      "end": [
+        9,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10"
+      }
+    },
+    {
+      "start": [
+        9,
+        17
+      ],
+      "end": [
+        9,
+        23
+      ],
+      "text": "abroad",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w4"
+      }
+    },
+    {
+      "start": [
+        9,
+        23
+      ],
+      "end": [
+        9,
+        25
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l10"
+      }
+    },
+    {
+      "start": [
+        10,
+        0
+      ],
+      "end": [
+        10,
+        4
+      ],
+      "text": "They",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w1"
+      }
+    },
+    {
+      "start": [
+        10,
+        4
+      ],
+      "end": [
+        10,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        5
+      ],
+      "end": [
+        10,
+        11
+      ],
+      "text": "looked",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w2"
+      }
+    },
+    {
+      "start": [
+        10,
+        11
+      ],
+      "end": [
+        10,
+        12
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        12
+      ],
+      "end": [
+        10,
+        16
+      ],
+      "text": "like",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w3"
+      }
+    },
+    {
+      "start": [
+        10,
+        16
+      ],
+      "end": [
+        10,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        17
+      ],
+      "end": [
+        10,
+        27
+      ],
+      "text": "frightened",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w4"
+      }
+    },
+    {
+      "start": [
+        10,
+        27
+      ],
+      "end": [
+        10,
+        28
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        28
+      ],
+      "end": [
+        10,
+        33
+      ],
+      "text": "Beads",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w5"
+      }
+    },
+    {
+      "start": [
+        10,
+        33
+      ],
+      "end": [
+        10,
+        35
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        35
+      ],
+      "end": [
+        10,
+        36
+      ],
+      "text": "I",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w6"
+      }
+    },
+    {
+      "start": [
+        10,
+        36
+      ],
+      "end": [
+        10,
+        37
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11"
+      }
+    },
+    {
+      "start": [
+        10,
+        37
+      ],
+      "end": [
+        10,
+        44
+      ],
+      "text": "thought",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w7"
+      }
+    },
+    {
+      "start": [
+        10,
+        44
+      ],
+      "end": [
+        10,
+        45
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l11"
+      }
+    },
+    {
+      "start": [
+        11,
+        0
+      ],
+      "end": [
+        11,
+        2
+      ],
+      "text": "He",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w1"
+      }
+    },
+    {
+      "start": [
+        11,
+        2
+      ],
+      "end": [
+        11,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12"
+      }
+    },
+    {
+      "start": [
+        11,
+        3
+      ],
+      "end": [
+        11,
+        10
+      ],
+      "text": "stirred",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w2"
+      }
+    },
+    {
+      "start": [
+        11,
+        10
+      ],
+      "end": [
+        11,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12"
+      }
+    },
+    {
+      "start": [
+        11,
+        11
+      ],
+      "end": [
+        11,
+        14
+      ],
+      "text": "his",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w3"
+      }
+    },
+    {
+      "start": [
+        11,
+        14
+      ],
+      "end": [
+        11,
+        15
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12"
+      }
+    },
+    {
+      "start": [
+        11,
+        15
+      ],
+      "end": [
+        11,
+        21
+      ],
+      "text": "Velvet",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w4"
+      }
+    },
+    {
+      "start": [
+        11,
+        21
+      ],
+      "end": [
+        11,
+        22
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12"
+      }
+    },
+    {
+      "start": [
+        11,
+        22
+      ],
+      "end": [
+        11,
+        26
+      ],
+      "text": "Head",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w5"
+      }
+    },
+    {
+      "start": [
+        11,
+        26
+      ],
+      "end": [
+        11,
+        29
+      ],
+      "text": ". -",
+      "innermost": {
+        "display": "l12"
+      }
+    },
+    {
+      "start": [
+        12,
+        0
+      ],
+      "end": [
+        12,
+        4
+      ],
+      "text": "Like",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w1"
+      }
+    },
+    {
+      "start": [
+        12,
+        4
+      ],
+      "end": [
+        12,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13"
+      }
+    },
+    {
+      "start": [
+        12,
+        5
+      ],
+      "end": [
+        12,
+        8
+      ],
+      "text": "one",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w2"
+      }
+    },
+    {
+      "start": [
+        12,
+        8
+      ],
+      "end": [
+        12,
+        9
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13"
+      }
+    },
+    {
+      "start": [
+        12,
+        9
+      ],
+      "end": [
+        12,
+        11
+      ],
+      "text": "in",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w3"
+      }
+    },
+    {
+      "start": [
+        12,
+        11
+      ],
+      "end": [
+        12,
+        12
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13"
+      }
+    },
+    {
+      "start": [
+        12,
+        12
+      ],
+      "end": [
+        12,
+        18
+      ],
+      "text": "danger",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w4"
+      }
+    },
+    {
+      "start": [
+        12,
+        18
+      ],
+      "end": [
+        12,
+        20
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13"
+      }
+    },
+    {
+      "start": [
+        12,
+        20
+      ],
+      "end": [
+        12,
+        28
+      ],
+      "text": "Cautious",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w5"
+      }
+    },
+    {
+      "start": [
+        12,
+        28
+      ],
+      "end": [
+        12,
+        29
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l13"
+      }
+    },
+    {
+      "start": [
+        13,
+        0
+      ],
+      "end": [
+        13,
+        1
+      ],
+      "text": "I",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w1"
+      }
+    },
+    {
+      "start": [
+        13,
+        1
+      ],
+      "end": [
+        13,
+        2
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14"
+      }
+    },
+    {
+      "start": [
+        13,
+        2
+      ],
+      "end": [
+        13,
+        9
+      ],
+      "text": "offered",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w2"
+      }
+    },
+    {
+      "start": [
+        13,
+        9
+      ],
+      "end": [
+        13,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14"
+      }
+    },
+    {
+      "start": [
+        13,
+        10
+      ],
+      "end": [
+        13,
+        13
+      ],
+      "text": "him",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w3"
+      }
+    },
+    {
+      "start": [
+        13,
+        13
+      ],
+      "end": [
+        13,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14"
+      }
+    },
+    {
+      "start": [
+        13,
+        14
+      ],
+      "end": [
+        13,
+        15
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w4"
+      }
+    },
+    {
+      "start": [
+        13,
+        15
+      ],
+      "end": [
+        13,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14"
+      }
+    },
+    {
+      "start": [
+        13,
+        16
+      ],
+      "end": [
+        13,
+        21
+      ],
+      "text": "Crumb",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w5"
+      }
+    },
+    {
+      "start": [
+        13,
+        21
+      ],
+      "end": [
+        13,
+        22
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l14"
+      }
+    },
+    {
+      "start": [
+        14,
+        0
+      ],
+      "end": [
+        14,
+        3
+      ],
+      "text": "And",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15.w1"
+      }
+    },
+    {
+      "start": [
+        14,
+        3
+      ],
+      "end": [
+        14,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15"
+      }
+    },
+    {
+      "start": [
+        14,
+        4
+      ],
+      "end": [
+        14,
+        6
+      ],
+      "text": "he",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15.w2"
+      }
+    },
+    {
+      "start": [
+        14,
+        6
+      ],
+      "end": [
+        14,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15"
+      }
+    },
+    {
+      "start": [
+        14,
+        7
+      ],
+      "end": [
+        14,
+        15
+      ],
+      "text": "unrolled",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15.w3"
+      }
+    },
+    {
+      "start": [
+        14,
+        15
+      ],
+      "end": [
+        14,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15"
+      }
+    },
+    {
+      "start": [
+        14,
+        16
+      ],
+      "end": [
+        14,
+        19
+      ],
+      "text": "his",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15.w4"
+      }
+    },
+    {
+      "start": [
+        14,
+        19
+      ],
+      "end": [
+        14,
+        20
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15"
+      }
+    },
+    {
+      "start": [
+        14,
+        20
+      ],
+      "end": [
+        14,
+        28
+      ],
+      "text": "feathers",
+      "innermost": {
+        "display": "l15",
+        "word-tokens": "l15.w5"
+      }
+    },
+    {
+      "start": [
+        14,
+        28
+      ],
+      "end": [
+        14,
+        29
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l15"
+      }
+    },
+    {
+      "start": [
+        15,
+        0
+      ],
+      "end": [
+        15,
+        3
+      ],
+      "text": "And",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16.w1"
+      }
+    },
+    {
+      "start": [
+        15,
+        3
+      ],
+      "end": [
+        15,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16"
+      }
+    },
+    {
+      "start": [
+        15,
+        4
+      ],
+      "end": [
+        15,
+        9
+      ],
+      "text": "rowed",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16.w2"
+      }
+    },
+    {
+      "start": [
+        15,
+        9
+      ],
+      "end": [
+        15,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16"
+      }
+    },
+    {
+      "start": [
+        15,
+        10
+      ],
+      "end": [
+        15,
+        13
+      ],
+      "text": "him",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16.w3"
+      }
+    },
+    {
+      "start": [
+        15,
+        13
+      ],
+      "end": [
+        15,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16"
+      }
+    },
+    {
+      "start": [
+        15,
+        14
+      ],
+      "end": [
+        15,
+        20
+      ],
+      "text": "softer",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16.w4"
+      }
+    },
+    {
+      "start": [
+        15,
+        20
+      ],
+      "end": [
+        15,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16"
+      }
+    },
+    {
+      "start": [
+        15,
+        21
+      ],
+      "end": [
+        15,
+        25
+      ],
+      "text": "Home",
+      "innermost": {
+        "display": "l16",
+        "word-tokens": "l16.w5"
+      }
+    },
+    {
+      "start": [
+        15,
+        25
+      ],
+      "end": [
+        15,
+        27
+      ],
+      "text": " -",
+      "innermost": {
+        "display": "l16"
+      }
+    },
+    {
+      "start": [
+        16,
+        0
+      ],
+      "end": [
+        16,
+        4
+      ],
+      "text": "Than",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17.w1"
+      }
+    },
+    {
+      "start": [
+        16,
+        4
+      ],
+      "end": [
+        16,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17"
+      }
+    },
+    {
+      "start": [
+        16,
+        5
+      ],
+      "end": [
+        16,
+        9
+      ],
+      "text": "Oars",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17.w2"
+      }
+    },
+    {
+      "start": [
+        16,
+        9
+      ],
+      "end": [
+        16,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17"
+      }
+    },
+    {
+      "start": [
+        16,
+        10
+      ],
+      "end": [
+        16,
+        16
+      ],
+      "text": "divide",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17.w3"
+      }
+    },
+    {
+      "start": [
+        16,
+        16
+      ],
+      "end": [
+        16,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17"
+      }
+    },
+    {
+      "start": [
+        16,
+        17
+      ],
+      "end": [
+        16,
+        20
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17.w4"
+      }
+    },
+    {
+      "start": [
+        16,
+        20
+      ],
+      "end": [
+        16,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17"
+      }
+    },
+    {
+      "start": [
+        16,
+        21
+      ],
+      "end": [
+        16,
+        26
+      ],
+      "text": "Ocean",
+      "innermost": {
+        "display": "l17",
+        "word-tokens": "l17.w5"
+      }
+    },
+    {
+      "start": [
+        16,
+        26
+      ],
+      "end": [
+        16,
+        27
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l17"
+      }
+    },
+    {
+      "start": [
+        17,
+        0
+      ],
+      "end": [
+        17,
+        3
+      ],
+      "text": "Too",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18.w1"
+      }
+    },
+    {
+      "start": [
+        17,
+        3
+      ],
+      "end": [
+        17,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18"
+      }
+    },
+    {
+      "start": [
+        17,
+        4
+      ],
+      "end": [
+        17,
+        10
+      ],
+      "text": "silver",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18.w2"
+      }
+    },
+    {
+      "start": [
+        17,
+        10
+      ],
+      "end": [
+        17,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18"
+      }
+    },
+    {
+      "start": [
+        17,
+        11
+      ],
+      "end": [
+        17,
+        14
+      ],
+      "text": "for",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18.w3"
+      }
+    },
+    {
+      "start": [
+        17,
+        14
+      ],
+      "end": [
+        17,
+        15
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18"
+      }
+    },
+    {
+      "start": [
+        17,
+        15
+      ],
+      "end": [
+        17,
+        16
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18.w4"
+      }
+    },
+    {
+      "start": [
+        17,
+        16
+      ],
+      "end": [
+        17,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18"
+      }
+    },
+    {
+      "start": [
+        17,
+        17
+      ],
+      "end": [
+        17,
+        21
+      ],
+      "text": "seam",
+      "innermost": {
+        "display": "l18",
+        "word-tokens": "l18.w5"
+      }
+    },
+    {
+      "start": [
+        17,
+        21
+      ],
+      "end": [
+        17,
+        22
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l18"
+      }
+    },
+    {
+      "start": [
+        18,
+        0
+      ],
+      "end": [
+        18,
+        2
+      ],
+      "text": "Or",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w1"
+      }
+    },
+    {
+      "start": [
+        18,
+        2
+      ],
+      "end": [
+        18,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19"
+      }
+    },
+    {
+      "start": [
+        18,
+        3
+      ],
+      "end": [
+        18,
+        14
+      ],
+      "text": "Butterflies",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w2"
+      }
+    },
+    {
+      "start": [
+        18,
+        14
+      ],
+      "end": [
+        18,
+        16
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19"
+      }
+    },
+    {
+      "start": [
+        18,
+        16
+      ],
+      "end": [
+        18,
+        19
+      ],
+      "text": "off",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w3"
+      }
+    },
+    {
+      "start": [
+        18,
+        19
+      ],
+      "end": [
+        18,
+        20
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19"
+      }
+    },
+    {
+      "start": [
+        18,
+        20
+      ],
+      "end": [
+        18,
+        25
+      ],
+      "text": "Banks",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w4"
+      }
+    },
+    {
+      "start": [
+        18,
+        25
+      ],
+      "end": [
+        18,
+        26
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19"
+      }
+    },
+    {
+      "start": [
+        18,
+        26
+      ],
+      "end": [
+        18,
+        28
+      ],
+      "text": "of",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w5"
+      }
+    },
+    {
+      "start": [
+        18,
+        28
+      ],
+      "end": [
+        18,
+        29
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19"
+      }
+    },
+    {
+      "start": [
+        18,
+        29
+      ],
+      "end": [
+        18,
+        33
+      ],
+      "text": "Noon",
+      "innermost": {
+        "display": "l19",
+        "word-tokens": "l19.w6"
+      }
+    },
+    {
+      "start": [
+        18,
+        33
+      ],
+      "end": [
+        18,
+        34
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l19"
+      }
+    },
+    {
+      "start": [
+        19,
+        0
+      ],
+      "end": [
+        19,
+        4
+      ],
+      "text": "Leap",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20.w1"
+      }
+    },
+    {
+      "start": [
+        19,
+        4
+      ],
+      "end": [
+        19,
+        6
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20"
+      }
+    },
+    {
+      "start": [
+        19,
+        6
+      ],
+      "end": [
+        19,
+        15
+      ],
+      "text": "plashless",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20.w2"
+      }
+    },
+    {
+      "start": [
+        19,
+        15
+      ],
+      "end": [
+        19,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20"
+      }
+    },
+    {
+      "start": [
+        19,
+        16
+      ],
+      "end": [
+        19,
+        18
+      ],
+      "text": "as",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20.w3"
+      }
+    },
+    {
+      "start": [
+        19,
+        18
+      ],
+      "end": [
+        19,
+        19
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20"
+      }
+    },
+    {
+      "start": [
+        19,
+        19
+      ],
+      "end": [
+        19,
+        23
+      ],
+      "text": "they",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20.w4"
+      }
+    },
+    {
+      "start": [
+        19,
+        23
+      ],
+      "end": [
+        19,
+        24
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20"
+      }
+    },
+    {
+      "start": [
+        19,
+        24
+      ],
+      "end": [
+        19,
+        28
+      ],
+      "text": "swim",
+      "innermost": {
+        "display": "l20",
+        "word-tokens": "l20.w5"
+      }
+    },
+    {
+      "start": [
+        19,
+        28
+      ],
+      "end": [
+        19,
+        29
+      ],
+      "text": ".",
+      "innermost": {
+        "display": "l20"
+      }
+    }
+  ],
+  "annotations": {
+    "notes": [
+      {
+        "id": "bird-violence-1",
+        "targets": [
+          {
+            "start": [
+              1,
+              0
+            ],
+            "end": [
+              2,
+              30
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The bird acts like an roving criminal, moving without being witnessed and attacking the worm without a shred of compunction."
+      },
+      {
+        "id": "bird-violence-2",
+        "targets": [
+          {
+            "start": [
+              3,
+              12
+            ],
+            "end": [
+              3,
+              18
+            ]
+          },
+          {
+            "start": [
+              3,
+              20
+            ],
+            "end": [
+              3,
+              23
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The internal near-rhyme of 'fellow' and 'raw' evokes the strange, almost foreign, brutality of the bird.\nTo the poet both worm and bird alike are fellow creatures to be encountered in nature,\nbut the bird's act of necessity cruelly undercuts any kind of convivial pretensions that the poet may project upon them."
+      },
+      {
+        "id": "bird-convenience-1",
+        "targets": [
+          {
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              5,
+              25
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "Despite the seemingly brutal act committed by the bird in the first stanza,\nthe poet continues to see the bird in the light of human custom.\nHere, the bird drinks a dew from a 'convenient' Grass."
+      },
+      {
+        "id": "bird-convenience-2",
+        "targets": [
+          {
+            "start": [
+              6,
+              0
+            ],
+            "end": [
+              7,
+              22
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The bird so courteously leaves space for another member of the insect-folk to pass - how amiable!"
+      },
+      {
+        "id": "bird-afraid-1",
+        "targets": [
+          {
+            "start": [
+              8,
+              0
+            ],
+            "end": [
+              10,
+              45
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The poet uses the movement of the eyes to keenly evoke the sense of unease.\nDickinson's adoption of 'Beads,' inanimate round objects,\nalmost makes the bird's eyes fall out of their sockets from fear."
+      },
+      {
+        "id": "bird-afraid-2",
+        "targets": [
+          {
+            "start": [
+              11,
+              0
+            ],
+            "end": [
+              13,
+              22
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The portrayal of the bird as a cautious, paranoid agent culminates with the first sign of the poet's intervention\nwithin the happenings of nature. The poet offers the bird 'a Crumb.' What is the reason for this?\nHas the poet felt the bird's fright within herself?\nIs the crumb really for the bird's benefit or is the offering a soothing measure for the human being's sense of inner fright?"
+      },
+      {
+        "id": "bird-flies-1",
+        "targets": [
+          {
+            "start": [
+              14,
+              0
+            ],
+            "end": [
+              15,
+              27
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The bird unrolls his feathers into flight. Has the bird taken the crumb with him? Or has he ultimately been frightened into escape?\nFor the poet that gazes upon the flying bird, she keeps her association, still, of the movements of the bird\nwith that of human action - rowing."
+      },
+      {
+        "id": "bird-flies-2",
+        "targets": [
+          {
+            "start": [
+              16,
+              0
+            ],
+            "end": [
+              19,
+              29
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The poet imagines the bird's flight through the traces left by oars moving in water, so light and ephemeral they barely form a seam\nupon the water's silver surface. In a beautiful moment of inversion, as if the eyes of the reader are meant to see the\nsky above reflected on the watery mirror-surface, the bird has metaphorically transformed into a lightsome butterfly.\nIt leaps, plashlessly, as it swims."
+      },
+      {
+        "id": "poet-projects-1",
+        "targets": [
+          {
+            "start": [
+              3,
+              12
+            ],
+            "end": [
+              3,
+              18
+            ]
+          },
+          {
+            "start": [
+              7,
+              0
+            ],
+            "end": [
+              7,
+              22
+            ]
+          },
+          {
+            "start": [
+              11,
+              15
+            ],
+            "end": [
+              11,
+              26
+            ]
+          },
+          {
+            "start": [
+              13,
+              0
+            ],
+            "end": [
+              13,
+              21
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "In these moments of the poem, the poet anthropomorphises the bird and other creatures around her.\nThe bird is not simply a bird to be observed, but the medium through which the poet can vicariously live\nout both the cruelties and sublimities of nature."
+      },
+      {
+        "id": "poet-projects-2",
+        "targets": [
+          {
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              3,
+              24
+            ]
+          },
+          {
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              45
+            ]
+          },
+          {
+            "start": [
+              12,
+              0
+            ],
+            "end": [
+              13,
+              22
+            ]
+          },
+          {
+            "start": [
+              15,
+              0
+            ],
+            "end": [
+              15,
+              27
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "The poet's empathetic projection into the bird's life tilts from one extreme state to\nto another: from a vision of unfettered crime, to listless paranoia, ultimately to a kind of domestic return.\nBy throwing herself into the bird's life, the poet reclaims for herself a vast spectrum of\nof feelings that could not have been disclosed within the limited bounds of domestic husbandry,\nof mere feeding of an animal, the offering of 'a Crumb.'"
+      },
+      {
+        "id": "poet-achieves-1",
+        "targets": [
+          {
+            "start": [
+              16,
+              0
+            ],
+            "end": [
+              19,
+              29
+            ]
+          }
+        ],
+        "tags": [],
+        "body": "This almost exultant last stanza is suspiciously devoid of the roving bird.\nIt makes you wonder whether the poem was ever about the bird at all, in truth,\nor whether the bird's deft movements simply brought off the poet's movement\ninto artistic freedom, culminating in a series of dense metaphors whereby\nthe wings are oars, the air is water, and time substantialises into place - a \"Bank of Noon\"."
+      }
+    ]
+  }
+}

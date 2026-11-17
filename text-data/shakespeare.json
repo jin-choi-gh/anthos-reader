@@ -1,0 +1,9208 @@
+{
+  "format": "loom-textual-complex",
+  "format_version": 1,
+  "name": "vendler-1997",
+  "metadata": {
+    "title": "Sonnet 116",
+    "author": "William Shakespeare",
+    "notes": {
+      "tags": []
+    }
+  },
+  "lines": [
+    {
+      "id": "l1",
+      "text": "Let me not to the marriage of true minds"
+    },
+    {
+      "id": "l2",
+      "text": "Admit impediments; love is not love"
+    },
+    {
+      "id": "l3",
+      "text": "Which alters when it alteration finds,"
+    },
+    {
+      "id": "l4",
+      "text": "Or bends with the remover to remove."
+    },
+    {
+      "id": "l5",
+      "text": "O no, it is an ever-fixèd mark"
+    },
+    {
+      "id": "l6",
+      "text": "That looks on tempests and is never shaken;"
+    },
+    {
+      "id": "l7",
+      "text": "It is the star to every wand'ring bark,"
+    },
+    {
+      "id": "l8",
+      "text": "Whose worth's unknown, although his heighth be taken."
+    },
+    {
+      "id": "l9",
+      "text": "Love's not Time's fool, though rosy lips and cheeks"
+    },
+    {
+      "id": "l10",
+      "text": "Within his bending sickle's compass come;"
+    },
+    {
+      "id": "l11",
+      "text": "Love alters not with his brief hours and weeks,"
+    },
+    {
+      "id": "l12",
+      "text": "But bears it out even to the edge of doom."
+    },
+    {
+      "id": "l13",
+      "text": "If this be error and upon me proved,"
+    },
+    {
+      "id": "l14",
+      "text": "I never writ, nor no man ever loved."
+    }
+  ],
+  "schemata": {
+    "display": {
+      "kind": "display",
+      "units": [
+        {
+          "id": "poem",
+          "rank": "poem",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            13,
+            36
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "s1",
+          "rank": "stanza",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            13,
+            36
+          ],
+          "value": null,
+          "parent": "poem"
+        },
+        {
+          "id": "l1",
+          "rank": "line",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l2",
+          "rank": "line",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l3",
+          "rank": "line",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            38
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l4",
+          "rank": "line",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            36
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l5",
+          "rank": "line",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l6",
+          "rank": "line",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            43
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l7",
+          "rank": "line",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            39
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l8",
+          "rank": "line",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            53
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l9",
+          "rank": "line",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l10",
+          "rank": "line",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            41
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l11",
+          "rank": "line",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            47
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l12",
+          "rank": "line",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            42
+          ],
+          "value": "0",
+          "parent": "s1"
+        },
+        {
+          "id": "l13",
+          "rank": "line",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            36
+          ],
+          "value": "1",
+          "parent": "s1"
+        },
+        {
+          "id": "l14",
+          "rank": "line",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            36
+          ],
+          "value": "1",
+          "parent": "s1"
+        }
+      ]
+    },
+    "word-tokens": {
+      "kind": "word-tokens",
+      "units": [
+        {
+          "id": "l1",
+          "rank": "line",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l1.w1",
+          "rank": "word",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            3
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w2",
+          "rank": "word",
+          "start": [
+            0,
+            4
+          ],
+          "end": [
+            0,
+            6
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w3",
+          "rank": "word",
+          "start": [
+            0,
+            7
+          ],
+          "end": [
+            0,
+            10
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w4",
+          "rank": "word",
+          "start": [
+            0,
+            11
+          ],
+          "end": [
+            0,
+            13
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w5",
+          "rank": "word",
+          "start": [
+            0,
+            14
+          ],
+          "end": [
+            0,
+            17
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w6",
+          "rank": "word",
+          "start": [
+            0,
+            18
+          ],
+          "end": [
+            0,
+            26
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w7",
+          "rank": "word",
+          "start": [
+            0,
+            27
+          ],
+          "end": [
+            0,
+            29
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w8",
+          "rank": "word",
+          "start": [
+            0,
+            30
+          ],
+          "end": [
+            0,
+            34
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l1.w9",
+          "rank": "word",
+          "start": [
+            0,
+            35
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": null,
+          "parent": "l1"
+        },
+        {
+          "id": "l2",
+          "rank": "line",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l2.w1",
+          "rank": "word",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            5
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w2",
+          "rank": "word",
+          "start": [
+            1,
+            6
+          ],
+          "end": [
+            1,
+            17
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w3",
+          "rank": "word",
+          "start": [
+            1,
+            19
+          ],
+          "end": [
+            1,
+            23
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w4",
+          "rank": "word",
+          "start": [
+            1,
+            24
+          ],
+          "end": [
+            1,
+            26
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w5",
+          "rank": "word",
+          "start": [
+            1,
+            27
+          ],
+          "end": [
+            1,
+            30
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l2.w6",
+          "rank": "word",
+          "start": [
+            1,
+            31
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": null,
+          "parent": "l2"
+        },
+        {
+          "id": "l3",
+          "rank": "line",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            37
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l3.w1",
+          "rank": "word",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            5
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w2",
+          "rank": "word",
+          "start": [
+            2,
+            6
+          ],
+          "end": [
+            2,
+            12
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w3",
+          "rank": "word",
+          "start": [
+            2,
+            13
+          ],
+          "end": [
+            2,
+            17
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w4",
+          "rank": "word",
+          "start": [
+            2,
+            18
+          ],
+          "end": [
+            2,
+            20
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w5",
+          "rank": "word",
+          "start": [
+            2,
+            21
+          ],
+          "end": [
+            2,
+            31
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l3.w6",
+          "rank": "word",
+          "start": [
+            2,
+            32
+          ],
+          "end": [
+            2,
+            37
+          ],
+          "value": null,
+          "parent": "l3"
+        },
+        {
+          "id": "l4",
+          "rank": "line",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l4.w1",
+          "rank": "word",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            2
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w2",
+          "rank": "word",
+          "start": [
+            3,
+            3
+          ],
+          "end": [
+            3,
+            8
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w3",
+          "rank": "word",
+          "start": [
+            3,
+            9
+          ],
+          "end": [
+            3,
+            13
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w4",
+          "rank": "word",
+          "start": [
+            3,
+            14
+          ],
+          "end": [
+            3,
+            17
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w5",
+          "rank": "word",
+          "start": [
+            3,
+            18
+          ],
+          "end": [
+            3,
+            25
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w6",
+          "rank": "word",
+          "start": [
+            3,
+            26
+          ],
+          "end": [
+            3,
+            28
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l4.w7",
+          "rank": "word",
+          "start": [
+            3,
+            29
+          ],
+          "end": [
+            3,
+            35
+          ],
+          "value": null,
+          "parent": "l4"
+        },
+        {
+          "id": "l5",
+          "rank": "line",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l5.w1",
+          "rank": "word",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            1
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w2",
+          "rank": "word",
+          "start": [
+            4,
+            2
+          ],
+          "end": [
+            4,
+            4
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w3",
+          "rank": "word",
+          "start": [
+            4,
+            6
+          ],
+          "end": [
+            4,
+            8
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w4",
+          "rank": "word",
+          "start": [
+            4,
+            9
+          ],
+          "end": [
+            4,
+            11
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w5",
+          "rank": "word",
+          "start": [
+            4,
+            12
+          ],
+          "end": [
+            4,
+            14
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w6",
+          "rank": "word",
+          "start": [
+            4,
+            15
+          ],
+          "end": [
+            4,
+            19
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w7",
+          "rank": "word",
+          "start": [
+            4,
+            20
+          ],
+          "end": [
+            4,
+            25
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l5.w8",
+          "rank": "word",
+          "start": [
+            4,
+            26
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": null,
+          "parent": "l5"
+        },
+        {
+          "id": "l6",
+          "rank": "line",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            42
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l6.w1",
+          "rank": "word",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            4
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w2",
+          "rank": "word",
+          "start": [
+            5,
+            5
+          ],
+          "end": [
+            5,
+            10
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w3",
+          "rank": "word",
+          "start": [
+            5,
+            11
+          ],
+          "end": [
+            5,
+            13
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w4",
+          "rank": "word",
+          "start": [
+            5,
+            14
+          ],
+          "end": [
+            5,
+            22
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w5",
+          "rank": "word",
+          "start": [
+            5,
+            23
+          ],
+          "end": [
+            5,
+            26
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w6",
+          "rank": "word",
+          "start": [
+            5,
+            27
+          ],
+          "end": [
+            5,
+            29
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w7",
+          "rank": "word",
+          "start": [
+            5,
+            30
+          ],
+          "end": [
+            5,
+            35
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l6.w8",
+          "rank": "word",
+          "start": [
+            5,
+            36
+          ],
+          "end": [
+            5,
+            42
+          ],
+          "value": null,
+          "parent": "l6"
+        },
+        {
+          "id": "l7",
+          "rank": "line",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            38
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l7.w1",
+          "rank": "word",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            2
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w2",
+          "rank": "word",
+          "start": [
+            6,
+            3
+          ],
+          "end": [
+            6,
+            5
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w3",
+          "rank": "word",
+          "start": [
+            6,
+            6
+          ],
+          "end": [
+            6,
+            9
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w4",
+          "rank": "word",
+          "start": [
+            6,
+            10
+          ],
+          "end": [
+            6,
+            14
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w5",
+          "rank": "word",
+          "start": [
+            6,
+            15
+          ],
+          "end": [
+            6,
+            17
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w6",
+          "rank": "word",
+          "start": [
+            6,
+            18
+          ],
+          "end": [
+            6,
+            23
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w7",
+          "rank": "word",
+          "start": [
+            6,
+            24
+          ],
+          "end": [
+            6,
+            33
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l7.w8",
+          "rank": "word",
+          "start": [
+            6,
+            34
+          ],
+          "end": [
+            6,
+            38
+          ],
+          "value": null,
+          "parent": "l7"
+        },
+        {
+          "id": "l8",
+          "rank": "line",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            52
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l8.w1",
+          "rank": "word",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            5
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w2",
+          "rank": "word",
+          "start": [
+            7,
+            6
+          ],
+          "end": [
+            7,
+            13
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w3",
+          "rank": "word",
+          "start": [
+            7,
+            14
+          ],
+          "end": [
+            7,
+            21
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w4",
+          "rank": "word",
+          "start": [
+            7,
+            23
+          ],
+          "end": [
+            7,
+            31
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w5",
+          "rank": "word",
+          "start": [
+            7,
+            32
+          ],
+          "end": [
+            7,
+            35
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w6",
+          "rank": "word",
+          "start": [
+            7,
+            36
+          ],
+          "end": [
+            7,
+            43
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w7",
+          "rank": "word",
+          "start": [
+            7,
+            44
+          ],
+          "end": [
+            7,
+            46
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l8.w8",
+          "rank": "word",
+          "start": [
+            7,
+            47
+          ],
+          "end": [
+            7,
+            52
+          ],
+          "value": null,
+          "parent": "l8"
+        },
+        {
+          "id": "l9",
+          "rank": "line",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l9.w1",
+          "rank": "word",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            6
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w2",
+          "rank": "word",
+          "start": [
+            8,
+            7
+          ],
+          "end": [
+            8,
+            10
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w3",
+          "rank": "word",
+          "start": [
+            8,
+            11
+          ],
+          "end": [
+            8,
+            17
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w4",
+          "rank": "word",
+          "start": [
+            8,
+            18
+          ],
+          "end": [
+            8,
+            22
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w5",
+          "rank": "word",
+          "start": [
+            8,
+            24
+          ],
+          "end": [
+            8,
+            30
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w6",
+          "rank": "word",
+          "start": [
+            8,
+            31
+          ],
+          "end": [
+            8,
+            35
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w7",
+          "rank": "word",
+          "start": [
+            8,
+            36
+          ],
+          "end": [
+            8,
+            40
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w8",
+          "rank": "word",
+          "start": [
+            8,
+            41
+          ],
+          "end": [
+            8,
+            44
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l9.w9",
+          "rank": "word",
+          "start": [
+            8,
+            45
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": null,
+          "parent": "l9"
+        },
+        {
+          "id": "l10",
+          "rank": "line",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            40
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l10.w1",
+          "rank": "word",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            6
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w2",
+          "rank": "word",
+          "start": [
+            9,
+            7
+          ],
+          "end": [
+            9,
+            10
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w3",
+          "rank": "word",
+          "start": [
+            9,
+            11
+          ],
+          "end": [
+            9,
+            18
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w4",
+          "rank": "word",
+          "start": [
+            9,
+            19
+          ],
+          "end": [
+            9,
+            27
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w5",
+          "rank": "word",
+          "start": [
+            9,
+            28
+          ],
+          "end": [
+            9,
+            35
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l10.w6",
+          "rank": "word",
+          "start": [
+            9,
+            36
+          ],
+          "end": [
+            9,
+            40
+          ],
+          "value": null,
+          "parent": "l10"
+        },
+        {
+          "id": "l11",
+          "rank": "line",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            46
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l11.w1",
+          "rank": "word",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            4
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w2",
+          "rank": "word",
+          "start": [
+            10,
+            5
+          ],
+          "end": [
+            10,
+            11
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w3",
+          "rank": "word",
+          "start": [
+            10,
+            12
+          ],
+          "end": [
+            10,
+            15
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w4",
+          "rank": "word",
+          "start": [
+            10,
+            16
+          ],
+          "end": [
+            10,
+            20
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w5",
+          "rank": "word",
+          "start": [
+            10,
+            21
+          ],
+          "end": [
+            10,
+            24
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w6",
+          "rank": "word",
+          "start": [
+            10,
+            25
+          ],
+          "end": [
+            10,
+            30
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w7",
+          "rank": "word",
+          "start": [
+            10,
+            31
+          ],
+          "end": [
+            10,
+            36
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w8",
+          "rank": "word",
+          "start": [
+            10,
+            37
+          ],
+          "end": [
+            10,
+            40
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l11.w9",
+          "rank": "word",
+          "start": [
+            10,
+            41
+          ],
+          "end": [
+            10,
+            46
+          ],
+          "value": null,
+          "parent": "l11"
+        },
+        {
+          "id": "l12",
+          "rank": "line",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            41
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l12.w1",
+          "rank": "word",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            3
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w2",
+          "rank": "word",
+          "start": [
+            11,
+            4
+          ],
+          "end": [
+            11,
+            9
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w3",
+          "rank": "word",
+          "start": [
+            11,
+            10
+          ],
+          "end": [
+            11,
+            12
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w4",
+          "rank": "word",
+          "start": [
+            11,
+            13
+          ],
+          "end": [
+            11,
+            16
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w5",
+          "rank": "word",
+          "start": [
+            11,
+            17
+          ],
+          "end": [
+            11,
+            21
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w6",
+          "rank": "word",
+          "start": [
+            11,
+            22
+          ],
+          "end": [
+            11,
+            24
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w7",
+          "rank": "word",
+          "start": [
+            11,
+            25
+          ],
+          "end": [
+            11,
+            28
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w8",
+          "rank": "word",
+          "start": [
+            11,
+            29
+          ],
+          "end": [
+            11,
+            33
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w9",
+          "rank": "word",
+          "start": [
+            11,
+            34
+          ],
+          "end": [
+            11,
+            36
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l12.w10",
+          "rank": "word",
+          "start": [
+            11,
+            37
+          ],
+          "end": [
+            11,
+            41
+          ],
+          "value": null,
+          "parent": "l12"
+        },
+        {
+          "id": "l13",
+          "rank": "line",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l13.w1",
+          "rank": "word",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            2
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w2",
+          "rank": "word",
+          "start": [
+            12,
+            3
+          ],
+          "end": [
+            12,
+            7
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w3",
+          "rank": "word",
+          "start": [
+            12,
+            8
+          ],
+          "end": [
+            12,
+            10
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w4",
+          "rank": "word",
+          "start": [
+            12,
+            11
+          ],
+          "end": [
+            12,
+            16
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w5",
+          "rank": "word",
+          "start": [
+            12,
+            17
+          ],
+          "end": [
+            12,
+            20
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w6",
+          "rank": "word",
+          "start": [
+            12,
+            21
+          ],
+          "end": [
+            12,
+            25
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w7",
+          "rank": "word",
+          "start": [
+            12,
+            26
+          ],
+          "end": [
+            12,
+            28
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l13.w8",
+          "rank": "word",
+          "start": [
+            12,
+            29
+          ],
+          "end": [
+            12,
+            35
+          ],
+          "value": null,
+          "parent": "l13"
+        },
+        {
+          "id": "l14",
+          "rank": "line",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "l14.w1",
+          "rank": "word",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            1
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w2",
+          "rank": "word",
+          "start": [
+            13,
+            2
+          ],
+          "end": [
+            13,
+            7
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w3",
+          "rank": "word",
+          "start": [
+            13,
+            8
+          ],
+          "end": [
+            13,
+            12
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w4",
+          "rank": "word",
+          "start": [
+            13,
+            14
+          ],
+          "end": [
+            13,
+            17
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w5",
+          "rank": "word",
+          "start": [
+            13,
+            18
+          ],
+          "end": [
+            13,
+            20
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w6",
+          "rank": "word",
+          "start": [
+            13,
+            21
+          ],
+          "end": [
+            13,
+            24
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w7",
+          "rank": "word",
+          "start": [
+            13,
+            25
+          ],
+          "end": [
+            13,
+            29
+          ],
+          "value": null,
+          "parent": "l14"
+        },
+        {
+          "id": "l14.w8",
+          "rank": "word",
+          "start": [
+            13,
+            30
+          ],
+          "end": [
+            13,
+            35
+          ],
+          "value": null,
+          "parent": "l14"
+        }
+      ]
+    },
+    "accentual-metre": {
+      "kind": "accentual-metre",
+      "units": [
+        {
+          "id": "v1",
+          "rank": "verse",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v1.f1",
+          "rank": "foot",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            6
+          ],
+          "value": null,
+          "parent": "v1"
+        },
+        {
+          "id": "v1.s1",
+          "rank": "syllable",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            3
+          ],
+          "value": "stressed",
+          "parent": "v1.f1"
+        },
+        {
+          "id": "v1.s2",
+          "rank": "syllable",
+          "start": [
+            0,
+            4
+          ],
+          "end": [
+            0,
+            6
+          ],
+          "value": "unstressed",
+          "parent": "v1.f1"
+        },
+        {
+          "id": "v1.f2",
+          "rank": "foot",
+          "start": [
+            0,
+            7
+          ],
+          "end": [
+            0,
+            13
+          ],
+          "value": null,
+          "parent": "v1"
+        },
+        {
+          "id": "v1.s3",
+          "rank": "syllable",
+          "start": [
+            0,
+            7
+          ],
+          "end": [
+            0,
+            10
+          ],
+          "value": "stressed",
+          "parent": "v1.f2"
+        },
+        {
+          "id": "v1.s4",
+          "rank": "syllable",
+          "start": [
+            0,
+            11
+          ],
+          "end": [
+            0,
+            13
+          ],
+          "value": "unstressed",
+          "parent": "v1.f2"
+        },
+        {
+          "id": "v1.f3",
+          "rank": "foot",
+          "start": [
+            0,
+            14
+          ],
+          "end": [
+            0,
+            21
+          ],
+          "value": null,
+          "parent": "v1"
+        },
+        {
+          "id": "v1.s5",
+          "rank": "syllable",
+          "start": [
+            0,
+            14
+          ],
+          "end": [
+            0,
+            17
+          ],
+          "value": "unstressed",
+          "parent": "v1.f3"
+        },
+        {
+          "id": "v1.s6",
+          "rank": "syllable",
+          "start": [
+            0,
+            18
+          ],
+          "end": [
+            0,
+            21
+          ],
+          "value": "stressed",
+          "parent": "v1.f3"
+        },
+        {
+          "id": "v1.f4",
+          "rank": "foot",
+          "start": [
+            0,
+            21
+          ],
+          "end": [
+            0,
+            29
+          ],
+          "value": null,
+          "parent": "v1"
+        },
+        {
+          "id": "v1.s7",
+          "rank": "syllable",
+          "start": [
+            0,
+            21
+          ],
+          "end": [
+            0,
+            26
+          ],
+          "value": "unstressed",
+          "parent": "v1.f4"
+        },
+        {
+          "id": "v1.s8",
+          "rank": "syllable",
+          "start": [
+            0,
+            27
+          ],
+          "end": [
+            0,
+            29
+          ],
+          "value": "stressed",
+          "parent": "v1.f4"
+        },
+        {
+          "id": "v1.f5",
+          "rank": "foot",
+          "start": [
+            0,
+            30
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": null,
+          "parent": "v1"
+        },
+        {
+          "id": "v1.s9",
+          "rank": "syllable",
+          "start": [
+            0,
+            30
+          ],
+          "end": [
+            0,
+            34
+          ],
+          "value": "unstressed",
+          "parent": "v1.f5"
+        },
+        {
+          "id": "v1.s10",
+          "rank": "syllable",
+          "start": [
+            0,
+            35
+          ],
+          "end": [
+            0,
+            40
+          ],
+          "value": "stressed",
+          "parent": "v1.f5"
+        },
+        {
+          "id": "v2",
+          "rank": "verse",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v2.f1",
+          "rank": "foot",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            5
+          ],
+          "value": null,
+          "parent": "v2"
+        },
+        {
+          "id": "v2.s1",
+          "rank": "syllable",
+          "start": [
+            1,
+            0
+          ],
+          "end": [
+            1,
+            2
+          ],
+          "value": "unstressed",
+          "parent": "v2.f1"
+        },
+        {
+          "id": "v2.s2",
+          "rank": "syllable",
+          "start": [
+            1,
+            2
+          ],
+          "end": [
+            1,
+            5
+          ],
+          "value": "stressed",
+          "parent": "v2.f1"
+        },
+        {
+          "id": "v2.f2",
+          "rank": "foot",
+          "start": [
+            1,
+            6
+          ],
+          "end": [
+            1,
+            10
+          ],
+          "value": null,
+          "parent": "v2"
+        },
+        {
+          "id": "v2.s3",
+          "rank": "syllable",
+          "start": [
+            1,
+            6
+          ],
+          "end": [
+            1,
+            8
+          ],
+          "value": "unstressed",
+          "parent": "v2.f2"
+        },
+        {
+          "id": "v2.s4",
+          "rank": "syllable",
+          "start": [
+            1,
+            8
+          ],
+          "end": [
+            1,
+            10
+          ],
+          "value": "stressed",
+          "parent": "v2.f2"
+        },
+        {
+          "id": "v2.f3",
+          "rank": "foot",
+          "start": [
+            1,
+            10
+          ],
+          "end": [
+            1,
+            17
+          ],
+          "value": null,
+          "parent": "v2"
+        },
+        {
+          "id": "v2.s5",
+          "rank": "syllable",
+          "start": [
+            1,
+            10
+          ],
+          "end": [
+            1,
+            12
+          ],
+          "value": "unstressed",
+          "parent": "v2.f3"
+        },
+        {
+          "id": "v2.s6",
+          "rank": "syllable",
+          "start": [
+            1,
+            12
+          ],
+          "end": [
+            1,
+            17
+          ],
+          "value": "stressed",
+          "parent": "v2.f3"
+        },
+        {
+          "id": "v2.f4",
+          "rank": "foot",
+          "start": [
+            1,
+            19
+          ],
+          "end": [
+            1,
+            26
+          ],
+          "value": null,
+          "parent": "v2"
+        },
+        {
+          "id": "v2.s7",
+          "rank": "syllable",
+          "start": [
+            1,
+            19
+          ],
+          "end": [
+            1,
+            23
+          ],
+          "value": "stressed",
+          "parent": "v2.f4"
+        },
+        {
+          "id": "v2.s8",
+          "rank": "syllable",
+          "start": [
+            1,
+            24
+          ],
+          "end": [
+            1,
+            26
+          ],
+          "value": "unstressed",
+          "parent": "v2.f4"
+        },
+        {
+          "id": "v2.f5",
+          "rank": "foot",
+          "start": [
+            1,
+            27
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": null,
+          "parent": "v2"
+        },
+        {
+          "id": "v2.s9",
+          "rank": "syllable",
+          "start": [
+            1,
+            27
+          ],
+          "end": [
+            1,
+            30
+          ],
+          "value": "unstressed",
+          "parent": "v2.f5"
+        },
+        {
+          "id": "v2.s10",
+          "rank": "syllable",
+          "start": [
+            1,
+            31
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "value": "stressed",
+          "parent": "v2.f5"
+        },
+        {
+          "id": "v3",
+          "rank": "verse",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            37
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v3.f1",
+          "rank": "foot",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            8
+          ],
+          "value": null,
+          "parent": "v3"
+        },
+        {
+          "id": "v3.s1",
+          "rank": "syllable",
+          "start": [
+            2,
+            0
+          ],
+          "end": [
+            2,
+            5
+          ],
+          "value": "unstressed",
+          "parent": "v3.f1"
+        },
+        {
+          "id": "v3.s2",
+          "rank": "syllable",
+          "start": [
+            2,
+            6
+          ],
+          "end": [
+            2,
+            8
+          ],
+          "value": "stressed",
+          "parent": "v3.f1"
+        },
+        {
+          "id": "v3.f2",
+          "rank": "foot",
+          "start": [
+            2,
+            8
+          ],
+          "end": [
+            2,
+            17
+          ],
+          "value": null,
+          "parent": "v3"
+        },
+        {
+          "id": "v3.s3",
+          "rank": "syllable",
+          "start": [
+            2,
+            8
+          ],
+          "end": [
+            2,
+            12
+          ],
+          "value": "unstressed",
+          "parent": "v3.f2"
+        },
+        {
+          "id": "v3.s4",
+          "rank": "syllable",
+          "start": [
+            2,
+            13
+          ],
+          "end": [
+            2,
+            17
+          ],
+          "value": "stressed",
+          "parent": "v3.f2"
+        },
+        {
+          "id": "v3.f3",
+          "rank": "foot",
+          "start": [
+            2,
+            18
+          ],
+          "end": [
+            2,
+            23
+          ],
+          "value": null,
+          "parent": "v3"
+        },
+        {
+          "id": "v3.s5",
+          "rank": "syllable",
+          "start": [
+            2,
+            18
+          ],
+          "end": [
+            2,
+            20
+          ],
+          "value": "unstressed",
+          "parent": "v3.f3"
+        },
+        {
+          "id": "v3.s6",
+          "rank": "syllable",
+          "start": [
+            2,
+            21
+          ],
+          "end": [
+            2,
+            23
+          ],
+          "value": "stressed",
+          "parent": "v3.f3"
+        },
+        {
+          "id": "v3.f4",
+          "rank": "foot",
+          "start": [
+            2,
+            23
+          ],
+          "end": [
+            2,
+            27
+          ],
+          "value": null,
+          "parent": "v3"
+        },
+        {
+          "id": "v3.s7",
+          "rank": "syllable",
+          "start": [
+            2,
+            23
+          ],
+          "end": [
+            2,
+            26
+          ],
+          "value": "unstressed",
+          "parent": "v3.f4"
+        },
+        {
+          "id": "v3.s8",
+          "rank": "syllable",
+          "start": [
+            2,
+            26
+          ],
+          "end": [
+            2,
+            27
+          ],
+          "value": "stressed",
+          "parent": "v3.f4"
+        },
+        {
+          "id": "v3.f5",
+          "rank": "foot",
+          "start": [
+            2,
+            27
+          ],
+          "end": [
+            2,
+            37
+          ],
+          "value": null,
+          "parent": "v3"
+        },
+        {
+          "id": "v3.s9",
+          "rank": "syllable",
+          "start": [
+            2,
+            27
+          ],
+          "end": [
+            2,
+            31
+          ],
+          "value": "unstressed",
+          "parent": "v3.f5"
+        },
+        {
+          "id": "v3.s10",
+          "rank": "syllable",
+          "start": [
+            2,
+            32
+          ],
+          "end": [
+            2,
+            37
+          ],
+          "value": "stressed",
+          "parent": "v3.f5"
+        },
+        {
+          "id": "v4",
+          "rank": "verse",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v4.f1",
+          "rank": "foot",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            8
+          ],
+          "value": null,
+          "parent": "v4"
+        },
+        {
+          "id": "v4.s1",
+          "rank": "syllable",
+          "start": [
+            3,
+            0
+          ],
+          "end": [
+            3,
+            2
+          ],
+          "value": "unstressed",
+          "parent": "v4.f1"
+        },
+        {
+          "id": "v4.s2",
+          "rank": "syllable",
+          "start": [
+            3,
+            3
+          ],
+          "end": [
+            3,
+            8
+          ],
+          "value": "stressed",
+          "parent": "v4.f1"
+        },
+        {
+          "id": "v4.f2",
+          "rank": "foot",
+          "start": [
+            3,
+            9
+          ],
+          "end": [
+            3,
+            17
+          ],
+          "value": null,
+          "parent": "v4"
+        },
+        {
+          "id": "v4.s3",
+          "rank": "syllable",
+          "start": [
+            3,
+            9
+          ],
+          "end": [
+            3,
+            13
+          ],
+          "value": "unstressed",
+          "parent": "v4.f2"
+        },
+        {
+          "id": "v4.s4",
+          "rank": "syllable",
+          "start": [
+            3,
+            14
+          ],
+          "end": [
+            3,
+            17
+          ],
+          "value": "stressed",
+          "parent": "v4.f2"
+        },
+        {
+          "id": "v4.f3",
+          "rank": "foot",
+          "start": [
+            3,
+            18
+          ],
+          "end": [
+            3,
+            23
+          ],
+          "value": null,
+          "parent": "v4"
+        },
+        {
+          "id": "v4.s5",
+          "rank": "syllable",
+          "start": [
+            3,
+            18
+          ],
+          "end": [
+            3,
+            20
+          ],
+          "value": "unstressed",
+          "parent": "v4.f3"
+        },
+        {
+          "id": "v4.s6",
+          "rank": "syllable",
+          "start": [
+            3,
+            20
+          ],
+          "end": [
+            3,
+            23
+          ],
+          "value": "stressed",
+          "parent": "v4.f3"
+        },
+        {
+          "id": "v4.f4",
+          "rank": "foot",
+          "start": [
+            3,
+            23
+          ],
+          "end": [
+            3,
+            28
+          ],
+          "value": null,
+          "parent": "v4"
+        },
+        {
+          "id": "v4.s7",
+          "rank": "syllable",
+          "start": [
+            3,
+            23
+          ],
+          "end": [
+            3,
+            25
+          ],
+          "value": "unstressed",
+          "parent": "v4.f4"
+        },
+        {
+          "id": "v4.s8",
+          "rank": "syllable",
+          "start": [
+            3,
+            26
+          ],
+          "end": [
+            3,
+            28
+          ],
+          "value": "stressed",
+          "parent": "v4.f4"
+        },
+        {
+          "id": "v4.f5",
+          "rank": "foot",
+          "start": [
+            3,
+            29
+          ],
+          "end": [
+            3,
+            35
+          ],
+          "value": null,
+          "parent": "v4"
+        },
+        {
+          "id": "v4.s9",
+          "rank": "syllable",
+          "start": [
+            3,
+            29
+          ],
+          "end": [
+            3,
+            31
+          ],
+          "value": "unstressed",
+          "parent": "v4.f5"
+        },
+        {
+          "id": "v4.s10",
+          "rank": "syllable",
+          "start": [
+            3,
+            31
+          ],
+          "end": [
+            3,
+            35
+          ],
+          "value": "stressed",
+          "parent": "v4.f5"
+        },
+        {
+          "id": "v5",
+          "rank": "verse",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v5.f1",
+          "rank": "foot",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            4
+          ],
+          "value": null,
+          "parent": "v5"
+        },
+        {
+          "id": "v5.s1",
+          "rank": "syllable",
+          "start": [
+            4,
+            0
+          ],
+          "end": [
+            4,
+            1
+          ],
+          "value": "unstressed",
+          "parent": "v5.f1"
+        },
+        {
+          "id": "v5.s2",
+          "rank": "syllable",
+          "start": [
+            4,
+            2
+          ],
+          "end": [
+            4,
+            4
+          ],
+          "value": "stressed",
+          "parent": "v5.f1"
+        },
+        {
+          "id": "v5.f2",
+          "rank": "foot",
+          "start": [
+            4,
+            6
+          ],
+          "end": [
+            4,
+            11
+          ],
+          "value": null,
+          "parent": "v5"
+        },
+        {
+          "id": "v5.s3",
+          "rank": "syllable",
+          "start": [
+            4,
+            6
+          ],
+          "end": [
+            4,
+            8
+          ],
+          "value": "unstressed",
+          "parent": "v5.f2"
+        },
+        {
+          "id": "v5.s4",
+          "rank": "syllable",
+          "start": [
+            4,
+            9
+          ],
+          "end": [
+            4,
+            11
+          ],
+          "value": "stressed",
+          "parent": "v5.f2"
+        },
+        {
+          "id": "v5.f3",
+          "rank": "foot",
+          "start": [
+            4,
+            12
+          ],
+          "end": [
+            4,
+            17
+          ],
+          "value": null,
+          "parent": "v5"
+        },
+        {
+          "id": "v5.s5",
+          "rank": "syllable",
+          "start": [
+            4,
+            12
+          ],
+          "end": [
+            4,
+            14
+          ],
+          "value": "unstressed",
+          "parent": "v5.f3"
+        },
+        {
+          "id": "v5.s6",
+          "rank": "syllable",
+          "start": [
+            4,
+            15
+          ],
+          "end": [
+            4,
+            17
+          ],
+          "value": "stressed",
+          "parent": "v5.f3"
+        },
+        {
+          "id": "v5.f4",
+          "rank": "foot",
+          "start": [
+            4,
+            17
+          ],
+          "end": [
+            4,
+            22
+          ],
+          "value": null,
+          "parent": "v5"
+        },
+        {
+          "id": "v5.s7",
+          "rank": "syllable",
+          "start": [
+            4,
+            17
+          ],
+          "end": [
+            4,
+            19
+          ],
+          "value": "unstressed",
+          "parent": "v5.f4"
+        },
+        {
+          "id": "v5.s8",
+          "rank": "syllable",
+          "start": [
+            4,
+            20
+          ],
+          "end": [
+            4,
+            22
+          ],
+          "value": "stressed",
+          "parent": "v5.f4"
+        },
+        {
+          "id": "v5.f5",
+          "rank": "foot",
+          "start": [
+            4,
+            22
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": null,
+          "parent": "v5"
+        },
+        {
+          "id": "v5.s9",
+          "rank": "syllable",
+          "start": [
+            4,
+            22
+          ],
+          "end": [
+            4,
+            25
+          ],
+          "value": "unstressed",
+          "parent": "v5.f5"
+        },
+        {
+          "id": "v5.s10",
+          "rank": "syllable",
+          "start": [
+            4,
+            26
+          ],
+          "end": [
+            4,
+            30
+          ],
+          "value": "unstressed",
+          "parent": "v5.f5"
+        },
+        {
+          "id": "v6",
+          "rank": "verse",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            42
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v6.f1",
+          "rank": "foot",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            10
+          ],
+          "value": null,
+          "parent": "v6"
+        },
+        {
+          "id": "v6.s1",
+          "rank": "syllable",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            4
+          ],
+          "value": "unstressed",
+          "parent": "v6.f1"
+        },
+        {
+          "id": "v6.s2",
+          "rank": "syllable",
+          "start": [
+            5,
+            5
+          ],
+          "end": [
+            5,
+            10
+          ],
+          "value": "stressed",
+          "parent": "v6.f1"
+        },
+        {
+          "id": "v6.f2",
+          "rank": "foot",
+          "start": [
+            5,
+            11
+          ],
+          "end": [
+            5,
+            17
+          ],
+          "value": null,
+          "parent": "v6"
+        },
+        {
+          "id": "v6.s3",
+          "rank": "syllable",
+          "start": [
+            5,
+            11
+          ],
+          "end": [
+            5,
+            13
+          ],
+          "value": "unstressed",
+          "parent": "v6.f2"
+        },
+        {
+          "id": "v6.s4",
+          "rank": "syllable",
+          "start": [
+            5,
+            14
+          ],
+          "end": [
+            5,
+            17
+          ],
+          "value": "stressed",
+          "parent": "v6.f2"
+        },
+        {
+          "id": "v6.f3",
+          "rank": "foot",
+          "start": [
+            5,
+            17
+          ],
+          "end": [
+            5,
+            26
+          ],
+          "value": null,
+          "parent": "v6"
+        },
+        {
+          "id": "v6.s5",
+          "rank": "syllable",
+          "start": [
+            5,
+            17
+          ],
+          "end": [
+            5,
+            22
+          ],
+          "value": "unstressed",
+          "parent": "v6.f3"
+        },
+        {
+          "id": "v6.s6",
+          "rank": "syllable",
+          "start": [
+            5,
+            23
+          ],
+          "end": [
+            5,
+            26
+          ],
+          "value": "stressed",
+          "parent": "v6.f3"
+        },
+        {
+          "id": "v6.f4",
+          "rank": "foot",
+          "start": [
+            5,
+            27
+          ],
+          "end": [
+            5,
+            32
+          ],
+          "value": null,
+          "parent": "v6"
+        },
+        {
+          "id": "v6.s7",
+          "rank": "syllable",
+          "start": [
+            5,
+            27
+          ],
+          "end": [
+            5,
+            29
+          ],
+          "value": "unstressed",
+          "parent": "v6.f4"
+        },
+        {
+          "id": "v6.s8",
+          "rank": "syllable",
+          "start": [
+            5,
+            30
+          ],
+          "end": [
+            5,
+            32
+          ],
+          "value": "stressed",
+          "parent": "v6.f4"
+        },
+        {
+          "id": "v6.f5",
+          "rank": "foot",
+          "start": [
+            5,
+            32
+          ],
+          "end": [
+            5,
+            42
+          ],
+          "value": null,
+          "parent": "v6"
+        },
+        {
+          "id": "v6.s9",
+          "rank": "syllable",
+          "start": [
+            5,
+            32
+          ],
+          "end": [
+            5,
+            35
+          ],
+          "value": "unstressed",
+          "parent": "v6.f5"
+        },
+        {
+          "id": "v6.s10",
+          "rank": "syllable",
+          "start": [
+            5,
+            36
+          ],
+          "end": [
+            5,
+            40
+          ],
+          "value": "stressed",
+          "parent": "v6.f5"
+        },
+        {
+          "id": "v6.s11",
+          "rank": "syllable",
+          "start": [
+            5,
+            40
+          ],
+          "end": [
+            5,
+            42
+          ],
+          "value": "unstressed",
+          "parent": "v6.f5"
+        },
+        {
+          "id": "v7",
+          "rank": "verse",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            38
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v7.f1",
+          "rank": "foot",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            5
+          ],
+          "value": null,
+          "parent": "v7"
+        },
+        {
+          "id": "v7.s1",
+          "rank": "syllable",
+          "start": [
+            6,
+            0
+          ],
+          "end": [
+            6,
+            2
+          ],
+          "value": "unstressed",
+          "parent": "v7.f1"
+        },
+        {
+          "id": "v7.s2",
+          "rank": "syllable",
+          "start": [
+            6,
+            3
+          ],
+          "end": [
+            6,
+            5
+          ],
+          "value": "stressed",
+          "parent": "v7.f1"
+        },
+        {
+          "id": "v7.f2",
+          "rank": "foot",
+          "start": [
+            6,
+            6
+          ],
+          "end": [
+            6,
+            14
+          ],
+          "value": null,
+          "parent": "v7"
+        },
+        {
+          "id": "v7.s3",
+          "rank": "syllable",
+          "start": [
+            6,
+            6
+          ],
+          "end": [
+            6,
+            9
+          ],
+          "value": "unstressed",
+          "parent": "v7.f2"
+        },
+        {
+          "id": "v7.s4",
+          "rank": "syllable",
+          "start": [
+            6,
+            10
+          ],
+          "end": [
+            6,
+            14
+          ],
+          "value": "stressed",
+          "parent": "v7.f2"
+        },
+        {
+          "id": "v7.f3",
+          "rank": "foot",
+          "start": [
+            6,
+            15
+          ],
+          "end": [
+            6,
+            20
+          ],
+          "value": null,
+          "parent": "v7"
+        },
+        {
+          "id": "v7.s5",
+          "rank": "syllable",
+          "start": [
+            6,
+            15
+          ],
+          "end": [
+            6,
+            17
+          ],
+          "value": "unstressed",
+          "parent": "v7.f3"
+        },
+        {
+          "id": "v7.s6",
+          "rank": "syllable",
+          "start": [
+            6,
+            18
+          ],
+          "end": [
+            6,
+            20
+          ],
+          "value": "stressed",
+          "parent": "v7.f3"
+        },
+        {
+          "id": "v7.f4",
+          "rank": "foot",
+          "start": [
+            6,
+            20
+          ],
+          "end": [
+            6,
+            28
+          ],
+          "value": null,
+          "parent": "v7"
+        },
+        {
+          "id": "v7.s7",
+          "rank": "syllable",
+          "start": [
+            6,
+            20
+          ],
+          "end": [
+            6,
+            23
+          ],
+          "value": "unstressed",
+          "parent": "v7.f4"
+        },
+        {
+          "id": "v7.s8",
+          "rank": "syllable",
+          "start": [
+            6,
+            24
+          ],
+          "end": [
+            6,
+            28
+          ],
+          "value": "stressed",
+          "parent": "v7.f4"
+        },
+        {
+          "id": "v7.f5",
+          "rank": "foot",
+          "start": [
+            6,
+            29
+          ],
+          "end": [
+            6,
+            38
+          ],
+          "value": null,
+          "parent": "v7"
+        },
+        {
+          "id": "v7.s9",
+          "rank": "syllable",
+          "start": [
+            6,
+            29
+          ],
+          "end": [
+            6,
+            33
+          ],
+          "value": "unstressed",
+          "parent": "v7.f5"
+        },
+        {
+          "id": "v7.s10",
+          "rank": "syllable",
+          "start": [
+            6,
+            34
+          ],
+          "end": [
+            6,
+            38
+          ],
+          "value": "stressed",
+          "parent": "v7.f5"
+        },
+        {
+          "id": "v8",
+          "rank": "verse",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            52
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v8.f1",
+          "rank": "foot",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            13
+          ],
+          "value": null,
+          "parent": "v8"
+        },
+        {
+          "id": "v8.s1",
+          "rank": "syllable",
+          "start": [
+            7,
+            0
+          ],
+          "end": [
+            7,
+            5
+          ],
+          "value": "unstressed",
+          "parent": "v8.f1"
+        },
+        {
+          "id": "v8.s2",
+          "rank": "syllable",
+          "start": [
+            7,
+            6
+          ],
+          "end": [
+            7,
+            13
+          ],
+          "value": "stressed",
+          "parent": "v8.f1"
+        },
+        {
+          "id": "v8.f2",
+          "rank": "foot",
+          "start": [
+            7,
+            14
+          ],
+          "end": [
+            7,
+            21
+          ],
+          "value": null,
+          "parent": "v8"
+        },
+        {
+          "id": "v8.s3",
+          "rank": "syllable",
+          "start": [
+            7,
+            14
+          ],
+          "end": [
+            7,
+            16
+          ],
+          "value": "unstressed",
+          "parent": "v8.f2"
+        },
+        {
+          "id": "v8.s4",
+          "rank": "syllable",
+          "start": [
+            7,
+            16
+          ],
+          "end": [
+            7,
+            21
+          ],
+          "value": "stressed",
+          "parent": "v8.f2"
+        },
+        {
+          "id": "v8.f3",
+          "rank": "foot",
+          "start": [
+            7,
+            23
+          ],
+          "end": [
+            7,
+            31
+          ],
+          "value": null,
+          "parent": "v8"
+        },
+        {
+          "id": "v8.s5",
+          "rank": "syllable",
+          "start": [
+            7,
+            23
+          ],
+          "end": [
+            7,
+            25
+          ],
+          "value": "unstressed",
+          "parent": "v8.f3"
+        },
+        {
+          "id": "v8.s6",
+          "rank": "syllable",
+          "start": [
+            7,
+            25
+          ],
+          "end": [
+            7,
+            31
+          ],
+          "value": "stressed",
+          "parent": "v8.f3"
+        },
+        {
+          "id": "v8.f4",
+          "rank": "foot",
+          "start": [
+            7,
+            32
+          ],
+          "end": [
+            7,
+            43
+          ],
+          "value": null,
+          "parent": "v8"
+        },
+        {
+          "id": "v8.s7",
+          "rank": "syllable",
+          "start": [
+            7,
+            32
+          ],
+          "end": [
+            7,
+            35
+          ],
+          "value": "unstressed",
+          "parent": "v8.f4"
+        },
+        {
+          "id": "v8.s8",
+          "rank": "syllable",
+          "start": [
+            7,
+            36
+          ],
+          "end": [
+            7,
+            43
+          ],
+          "value": "stressed",
+          "parent": "v8.f4"
+        },
+        {
+          "id": "v8.f5",
+          "rank": "foot",
+          "start": [
+            7,
+            44
+          ],
+          "end": [
+            7,
+            52
+          ],
+          "value": null,
+          "parent": "v8"
+        },
+        {
+          "id": "v8.s9",
+          "rank": "syllable",
+          "start": [
+            7,
+            44
+          ],
+          "end": [
+            7,
+            46
+          ],
+          "value": "unstressed",
+          "parent": "v8.f5"
+        },
+        {
+          "id": "v8.s10",
+          "rank": "syllable",
+          "start": [
+            7,
+            47
+          ],
+          "end": [
+            7,
+            50
+          ],
+          "value": "stressed",
+          "parent": "v8.f5"
+        },
+        {
+          "id": "v8.s11",
+          "rank": "syllable",
+          "start": [
+            7,
+            50
+          ],
+          "end": [
+            7,
+            52
+          ],
+          "value": "unstressed",
+          "parent": "v8.f5"
+        },
+        {
+          "id": "v9",
+          "rank": "verse",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v9.f1",
+          "rank": "foot",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            10
+          ],
+          "value": null,
+          "parent": "v9"
+        },
+        {
+          "id": "v9.s1",
+          "rank": "syllable",
+          "start": [
+            8,
+            0
+          ],
+          "end": [
+            8,
+            6
+          ],
+          "value": "stressed",
+          "parent": "v9.f1"
+        },
+        {
+          "id": "v9.s2",
+          "rank": "syllable",
+          "start": [
+            8,
+            7
+          ],
+          "end": [
+            8,
+            10
+          ],
+          "value": "unstressed",
+          "parent": "v9.f1"
+        },
+        {
+          "id": "v9.f2",
+          "rank": "foot",
+          "start": [
+            8,
+            11
+          ],
+          "end": [
+            8,
+            22
+          ],
+          "value": null,
+          "parent": "v9"
+        },
+        {
+          "id": "v9.s3",
+          "rank": "syllable",
+          "start": [
+            8,
+            11
+          ],
+          "end": [
+            8,
+            17
+          ],
+          "value": "unstressed",
+          "parent": "v9.f2"
+        },
+        {
+          "id": "v9.s4",
+          "rank": "syllable",
+          "start": [
+            8,
+            18
+          ],
+          "end": [
+            8,
+            22
+          ],
+          "value": "stressed",
+          "parent": "v9.f2"
+        },
+        {
+          "id": "v9.f3",
+          "rank": "foot",
+          "start": [
+            8,
+            24
+          ],
+          "end": [
+            8,
+            33
+          ],
+          "value": null,
+          "parent": "v9"
+        },
+        {
+          "id": "v9.s5",
+          "rank": "syllable",
+          "start": [
+            8,
+            24
+          ],
+          "end": [
+            8,
+            30
+          ],
+          "value": "unstressed",
+          "parent": "v9.f3"
+        },
+        {
+          "id": "v9.s6",
+          "rank": "syllable",
+          "start": [
+            8,
+            31
+          ],
+          "end": [
+            8,
+            33
+          ],
+          "value": "stressed",
+          "parent": "v9.f3"
+        },
+        {
+          "id": "v9.f4",
+          "rank": "foot",
+          "start": [
+            8,
+            33
+          ],
+          "end": [
+            8,
+            40
+          ],
+          "value": null,
+          "parent": "v9"
+        },
+        {
+          "id": "v9.s7",
+          "rank": "syllable",
+          "start": [
+            8,
+            33
+          ],
+          "end": [
+            8,
+            35
+          ],
+          "value": "unstressed",
+          "parent": "v9.f4"
+        },
+        {
+          "id": "v9.s8",
+          "rank": "syllable",
+          "start": [
+            8,
+            36
+          ],
+          "end": [
+            8,
+            40
+          ],
+          "value": "stressed",
+          "parent": "v9.f4"
+        },
+        {
+          "id": "v9.f5",
+          "rank": "foot",
+          "start": [
+            8,
+            41
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": null,
+          "parent": "v9"
+        },
+        {
+          "id": "v9.s9",
+          "rank": "syllable",
+          "start": [
+            8,
+            41
+          ],
+          "end": [
+            8,
+            44
+          ],
+          "value": "unstressed",
+          "parent": "v9.f5"
+        },
+        {
+          "id": "v9.s10",
+          "rank": "syllable",
+          "start": [
+            8,
+            45
+          ],
+          "end": [
+            8,
+            51
+          ],
+          "value": "stressed",
+          "parent": "v9.f5"
+        },
+        {
+          "id": "v10",
+          "rank": "verse",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            40
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v10.f1",
+          "rank": "foot",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            6
+          ],
+          "value": null,
+          "parent": "v10"
+        },
+        {
+          "id": "v10.s1",
+          "rank": "syllable",
+          "start": [
+            9,
+            0
+          ],
+          "end": [
+            9,
+            4
+          ],
+          "value": "unstressed",
+          "parent": "v10.f1"
+        },
+        {
+          "id": "v10.s2",
+          "rank": "syllable",
+          "start": [
+            9,
+            4
+          ],
+          "end": [
+            9,
+            6
+          ],
+          "value": "stressed",
+          "parent": "v10.f1"
+        },
+        {
+          "id": "v10.f2",
+          "rank": "foot",
+          "start": [
+            9,
+            7
+          ],
+          "end": [
+            9,
+            15
+          ],
+          "value": null,
+          "parent": "v10"
+        },
+        {
+          "id": "v10.s3",
+          "rank": "syllable",
+          "start": [
+            9,
+            7
+          ],
+          "end": [
+            9,
+            10
+          ],
+          "value": "unstressed",
+          "parent": "v10.f2"
+        },
+        {
+          "id": "v10.s4",
+          "rank": "syllable",
+          "start": [
+            9,
+            11
+          ],
+          "end": [
+            9,
+            15
+          ],
+          "value": "stressed",
+          "parent": "v10.f2"
+        },
+        {
+          "id": "v10.f3",
+          "rank": "foot",
+          "start": [
+            9,
+            15
+          ],
+          "end": [
+            9,
+            23
+          ],
+          "value": null,
+          "parent": "v10"
+        },
+        {
+          "id": "v10.s5",
+          "rank": "syllable",
+          "start": [
+            9,
+            15
+          ],
+          "end": [
+            9,
+            18
+          ],
+          "value": "unstressed",
+          "parent": "v10.f3"
+        },
+        {
+          "id": "v10.s6",
+          "rank": "syllable",
+          "start": [
+            9,
+            19
+          ],
+          "end": [
+            9,
+            23
+          ],
+          "value": "stressed",
+          "parent": "v10.f3"
+        },
+        {
+          "id": "v10.f4",
+          "rank": "foot",
+          "start": [
+            9,
+            23
+          ],
+          "end": [
+            9,
+            31
+          ],
+          "value": null,
+          "parent": "v10"
+        },
+        {
+          "id": "v10.s7",
+          "rank": "syllable",
+          "start": [
+            9,
+            23
+          ],
+          "end": [
+            9,
+            27
+          ],
+          "value": "unstressed",
+          "parent": "v10.f4"
+        },
+        {
+          "id": "v10.s8",
+          "rank": "syllable",
+          "start": [
+            9,
+            28
+          ],
+          "end": [
+            9,
+            31
+          ],
+          "value": "stressed",
+          "parent": "v10.f4"
+        },
+        {
+          "id": "v10.f5",
+          "rank": "foot",
+          "start": [
+            9,
+            31
+          ],
+          "end": [
+            9,
+            40
+          ],
+          "value": null,
+          "parent": "v10"
+        },
+        {
+          "id": "v10.s9",
+          "rank": "syllable",
+          "start": [
+            9,
+            31
+          ],
+          "end": [
+            9,
+            35
+          ],
+          "value": "unstressed",
+          "parent": "v10.f5"
+        },
+        {
+          "id": "v10.s10",
+          "rank": "syllable",
+          "start": [
+            9,
+            36
+          ],
+          "end": [
+            9,
+            40
+          ],
+          "value": "stressed",
+          "parent": "v10.f5"
+        },
+        {
+          "id": "v11",
+          "rank": "verse",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            46
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v11.f1",
+          "rank": "foot",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            7
+          ],
+          "value": null,
+          "parent": "v11"
+        },
+        {
+          "id": "v11.s1",
+          "rank": "syllable",
+          "start": [
+            10,
+            0
+          ],
+          "end": [
+            10,
+            4
+          ],
+          "value": "unstressed",
+          "parent": "v11.f1"
+        },
+        {
+          "id": "v11.s2",
+          "rank": "syllable",
+          "start": [
+            10,
+            5
+          ],
+          "end": [
+            10,
+            7
+          ],
+          "value": "stressed",
+          "parent": "v11.f1"
+        },
+        {
+          "id": "v11.f2",
+          "rank": "foot",
+          "start": [
+            10,
+            7
+          ],
+          "end": [
+            10,
+            15
+          ],
+          "value": null,
+          "parent": "v11"
+        },
+        {
+          "id": "v11.s3",
+          "rank": "syllable",
+          "start": [
+            10,
+            7
+          ],
+          "end": [
+            10,
+            11
+          ],
+          "value": "unstressed",
+          "parent": "v11.f2"
+        },
+        {
+          "id": "v11.s4",
+          "rank": "syllable",
+          "start": [
+            10,
+            12
+          ],
+          "end": [
+            10,
+            15
+          ],
+          "value": "stressed",
+          "parent": "v11.f2"
+        },
+        {
+          "id": "v11.f3",
+          "rank": "foot",
+          "start": [
+            10,
+            16
+          ],
+          "end": [
+            10,
+            24
+          ],
+          "value": null,
+          "parent": "v11"
+        },
+        {
+          "id": "v11.s5",
+          "rank": "syllable",
+          "start": [
+            10,
+            16
+          ],
+          "end": [
+            10,
+            20
+          ],
+          "value": "unstressed",
+          "parent": "v11.f3"
+        },
+        {
+          "id": "v11.s6",
+          "rank": "syllable",
+          "start": [
+            10,
+            21
+          ],
+          "end": [
+            10,
+            24
+          ],
+          "value": "stressed",
+          "parent": "v11.f3"
+        },
+        {
+          "id": "v11.f4",
+          "rank": "foot",
+          "start": [
+            10,
+            25
+          ],
+          "end": [
+            10,
+            36
+          ],
+          "value": null,
+          "parent": "v11"
+        },
+        {
+          "id": "v11.s7",
+          "rank": "syllable",
+          "start": [
+            10,
+            25
+          ],
+          "end": [
+            10,
+            30
+          ],
+          "value": "unstressed",
+          "parent": "v11.f4"
+        },
+        {
+          "id": "v11.s8",
+          "rank": "syllable",
+          "start": [
+            10,
+            31
+          ],
+          "end": [
+            10,
+            36
+          ],
+          "value": "stressed",
+          "parent": "v11.f4"
+        },
+        {
+          "id": "v11.f5",
+          "rank": "foot",
+          "start": [
+            10,
+            37
+          ],
+          "end": [
+            10,
+            46
+          ],
+          "value": null,
+          "parent": "v11"
+        },
+        {
+          "id": "v11.s9",
+          "rank": "syllable",
+          "start": [
+            10,
+            37
+          ],
+          "end": [
+            10,
+            40
+          ],
+          "value": "unstressed",
+          "parent": "v11.f5"
+        },
+        {
+          "id": "v11.s10",
+          "rank": "syllable",
+          "start": [
+            10,
+            41
+          ],
+          "end": [
+            10,
+            46
+          ],
+          "value": "stressed",
+          "parent": "v11.f5"
+        },
+        {
+          "id": "v12",
+          "rank": "verse",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            41
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v12.f1",
+          "rank": "foot",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            9
+          ],
+          "value": null,
+          "parent": "v12"
+        },
+        {
+          "id": "v12.s1",
+          "rank": "syllable",
+          "start": [
+            11,
+            0
+          ],
+          "end": [
+            11,
+            3
+          ],
+          "value": "unstressed",
+          "parent": "v12.f1"
+        },
+        {
+          "id": "v12.s2",
+          "rank": "syllable",
+          "start": [
+            11,
+            4
+          ],
+          "end": [
+            11,
+            9
+          ],
+          "value": "stressed",
+          "parent": "v12.f1"
+        },
+        {
+          "id": "v12.f2",
+          "rank": "foot",
+          "start": [
+            11,
+            10
+          ],
+          "end": [
+            11,
+            16
+          ],
+          "value": null,
+          "parent": "v12"
+        },
+        {
+          "id": "v12.s3",
+          "rank": "syllable",
+          "start": [
+            11,
+            10
+          ],
+          "end": [
+            11,
+            12
+          ],
+          "value": "unstressed",
+          "parent": "v12.f2"
+        },
+        {
+          "id": "v12.s4",
+          "rank": "syllable",
+          "start": [
+            11,
+            13
+          ],
+          "end": [
+            11,
+            16
+          ],
+          "value": "stressed",
+          "parent": "v12.f2"
+        },
+        {
+          "id": "v12.f3",
+          "rank": "foot",
+          "start": [
+            11,
+            17
+          ],
+          "end": [
+            11,
+            21
+          ],
+          "value": null,
+          "parent": "v12"
+        },
+        {
+          "id": "v12.s5",
+          "rank": "syllable",
+          "start": [
+            11,
+            17
+          ],
+          "end": [
+            11,
+            19
+          ],
+          "value": "stressed",
+          "parent": "v12.f3"
+        },
+        {
+          "id": "v12.s6",
+          "rank": "syllable",
+          "start": [
+            11,
+            19
+          ],
+          "end": [
+            11,
+            21
+          ],
+          "value": "unstressed",
+          "parent": "v12.f3"
+        },
+        {
+          "id": "v12.f4",
+          "rank": "foot",
+          "start": [
+            11,
+            22
+          ],
+          "end": [
+            11,
+            33
+          ],
+          "value": null,
+          "parent": "v12"
+        },
+        {
+          "id": "v12.s7",
+          "rank": "syllable",
+          "start": [
+            11,
+            22
+          ],
+          "end": [
+            11,
+            24
+          ],
+          "value": "unstressed",
+          "parent": "v12.f4"
+        },
+        {
+          "id": "v12.s8",
+          "rank": "syllable",
+          "start": [
+            11,
+            25
+          ],
+          "end": [
+            11,
+            28
+          ],
+          "value": "unstressed",
+          "parent": "v12.f4"
+        },
+        {
+          "id": "v12.s9",
+          "rank": "syllable",
+          "start": [
+            11,
+            29
+          ],
+          "end": [
+            11,
+            33
+          ],
+          "value": "stressed",
+          "parent": "v12.f4"
+        },
+        {
+          "id": "v12.f5",
+          "rank": "foot",
+          "start": [
+            11,
+            34
+          ],
+          "end": [
+            11,
+            41
+          ],
+          "value": null,
+          "parent": "v12"
+        },
+        {
+          "id": "v12.s10",
+          "rank": "syllable",
+          "start": [
+            11,
+            34
+          ],
+          "end": [
+            11,
+            36
+          ],
+          "value": "unstressed",
+          "parent": "v12.f5"
+        },
+        {
+          "id": "v12.s11",
+          "rank": "syllable",
+          "start": [
+            11,
+            37
+          ],
+          "end": [
+            11,
+            41
+          ],
+          "value": "stressed",
+          "parent": "v12.f5"
+        },
+        {
+          "id": "v13",
+          "rank": "verse",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v13.f1",
+          "rank": "foot",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            7
+          ],
+          "value": null,
+          "parent": "v13"
+        },
+        {
+          "id": "v13.s1",
+          "rank": "syllable",
+          "start": [
+            12,
+            0
+          ],
+          "end": [
+            12,
+            2
+          ],
+          "value": "unstressed",
+          "parent": "v13.f1"
+        },
+        {
+          "id": "v13.s2",
+          "rank": "syllable",
+          "start": [
+            12,
+            3
+          ],
+          "end": [
+            12,
+            7
+          ],
+          "value": "stressed",
+          "parent": "v13.f1"
+        },
+        {
+          "id": "v13.f2",
+          "rank": "foot",
+          "start": [
+            12,
+            8
+          ],
+          "end": [
+            12,
+            14
+          ],
+          "value": null,
+          "parent": "v13"
+        },
+        {
+          "id": "v13.s3",
+          "rank": "syllable",
+          "start": [
+            12,
+            8
+          ],
+          "end": [
+            12,
+            10
+          ],
+          "value": "unstressed",
+          "parent": "v13.f2"
+        },
+        {
+          "id": "v13.s4",
+          "rank": "syllable",
+          "start": [
+            12,
+            11
+          ],
+          "end": [
+            12,
+            14
+          ],
+          "value": "stressed",
+          "parent": "v13.f2"
+        },
+        {
+          "id": "v13.f3",
+          "rank": "foot",
+          "start": [
+            12,
+            14
+          ],
+          "end": [
+            12,
+            20
+          ],
+          "value": null,
+          "parent": "v13"
+        },
+        {
+          "id": "v13.s5",
+          "rank": "syllable",
+          "start": [
+            12,
+            14
+          ],
+          "end": [
+            12,
+            16
+          ],
+          "value": "unstressed",
+          "parent": "v13.f3"
+        },
+        {
+          "id": "v13.s6",
+          "rank": "syllable",
+          "start": [
+            12,
+            17
+          ],
+          "end": [
+            12,
+            20
+          ],
+          "value": "stressed",
+          "parent": "v13.f3"
+        },
+        {
+          "id": "v13.f4",
+          "rank": "foot",
+          "start": [
+            12,
+            21
+          ],
+          "end": [
+            12,
+            25
+          ],
+          "value": null,
+          "parent": "v13"
+        },
+        {
+          "id": "v13.s7",
+          "rank": "syllable",
+          "start": [
+            12,
+            21
+          ],
+          "end": [
+            12,
+            23
+          ],
+          "value": "unstressed",
+          "parent": "v13.f4"
+        },
+        {
+          "id": "v13.s8",
+          "rank": "syllable",
+          "start": [
+            12,
+            23
+          ],
+          "end": [
+            12,
+            25
+          ],
+          "value": "stressed",
+          "parent": "v13.f4"
+        },
+        {
+          "id": "v13.f5",
+          "rank": "foot",
+          "start": [
+            12,
+            26
+          ],
+          "end": [
+            12,
+            35
+          ],
+          "value": null,
+          "parent": "v13"
+        },
+        {
+          "id": "v13.s9",
+          "rank": "syllable",
+          "start": [
+            12,
+            26
+          ],
+          "end": [
+            12,
+            28
+          ],
+          "value": "unstressed",
+          "parent": "v13.f5"
+        },
+        {
+          "id": "v13.s10",
+          "rank": "syllable",
+          "start": [
+            12,
+            29
+          ],
+          "end": [
+            12,
+            35
+          ],
+          "value": "stressed",
+          "parent": "v13.f5"
+        },
+        {
+          "id": "v14",
+          "rank": "verse",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            35
+          ],
+          "value": null,
+          "parent": null
+        },
+        {
+          "id": "v14.f1",
+          "rank": "foot",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            4
+          ],
+          "value": null,
+          "parent": "v14"
+        },
+        {
+          "id": "v14.s1",
+          "rank": "syllable",
+          "start": [
+            13,
+            0
+          ],
+          "end": [
+            13,
+            1
+          ],
+          "value": "unstressed",
+          "parent": "v14.f1"
+        },
+        {
+          "id": "v14.s2",
+          "rank": "syllable",
+          "start": [
+            13,
+            2
+          ],
+          "end": [
+            13,
+            4
+          ],
+          "value": "stressed",
+          "parent": "v14.f1"
+        },
+        {
+          "id": "v14.f2",
+          "rank": "foot",
+          "start": [
+            13,
+            4
+          ],
+          "end": [
+            13,
+            12
+          ],
+          "value": null,
+          "parent": "v14"
+        },
+        {
+          "id": "v14.s3",
+          "rank": "syllable",
+          "start": [
+            13,
+            4
+          ],
+          "end": [
+            13,
+            7
+          ],
+          "value": "unstressed",
+          "parent": "v14.f2"
+        },
+        {
+          "id": "v14.s4",
+          "rank": "syllable",
+          "start": [
+            13,
+            8
+          ],
+          "end": [
+            13,
+            12
+          ],
+          "value": "stressed",
+          "parent": "v14.f2"
+        },
+        {
+          "id": "v14.f3",
+          "rank": "foot",
+          "start": [
+            13,
+            14
+          ],
+          "end": [
+            13,
+            20
+          ],
+          "value": null,
+          "parent": "v14"
+        },
+        {
+          "id": "v14.s5",
+          "rank": "syllable",
+          "start": [
+            13,
+            14
+          ],
+          "end": [
+            13,
+            17
+          ],
+          "value": "unstressed",
+          "parent": "v14.f3"
+        },
+        {
+          "id": "v14.s6",
+          "rank": "syllable",
+          "start": [
+            13,
+            18
+          ],
+          "end": [
+            13,
+            20
+          ],
+          "value": "stressed",
+          "parent": "v14.f3"
+        },
+        {
+          "id": "v14.f4",
+          "rank": "foot",
+          "start": [
+            13,
+            21
+          ],
+          "end": [
+            13,
+            27
+          ],
+          "value": null,
+          "parent": "v14"
+        },
+        {
+          "id": "v14.s7",
+          "rank": "syllable",
+          "start": [
+            13,
+            21
+          ],
+          "end": [
+            13,
+            24
+          ],
+          "value": "unstressed",
+          "parent": "v14.f4"
+        },
+        {
+          "id": "v14.s8",
+          "rank": "syllable",
+          "start": [
+            13,
+            25
+          ],
+          "end": [
+            13,
+            27
+          ],
+          "value": "stressed",
+          "parent": "v14.f4"
+        },
+        {
+          "id": "v14.f5",
+          "rank": "foot",
+          "start": [
+            13,
+            27
+          ],
+          "end": [
+            13,
+            35
+          ],
+          "value": null,
+          "parent": "v14"
+        },
+        {
+          "id": "v14.s9",
+          "rank": "syllable",
+          "start": [
+            13,
+            27
+          ],
+          "end": [
+            13,
+            29
+          ],
+          "value": "unstressed",
+          "parent": "v14.f5"
+        },
+        {
+          "id": "v14.s10",
+          "rank": "syllable",
+          "start": [
+            13,
+            30
+          ],
+          "end": [
+            13,
+            35
+          ],
+          "value": "stressed",
+          "parent": "v14.f5"
+        }
+      ]
+    }
+  },
+  "atoms": [
+    {
+      "start": [
+        0,
+        0
+      ],
+      "end": [
+        0,
+        3
+      ],
+      "text": "Let",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w1",
+        "accentual-metre": "v1.s1"
+      }
+    },
+    {
+      "start": [
+        0,
+        3
+      ],
+      "end": [
+        0,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1.f1"
+      }
+    },
+    {
+      "start": [
+        0,
+        4
+      ],
+      "end": [
+        0,
+        6
+      ],
+      "text": "me",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w2",
+        "accentual-metre": "v1.s2"
+      }
+    },
+    {
+      "start": [
+        0,
+        6
+      ],
+      "end": [
+        0,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1"
+      }
+    },
+    {
+      "start": [
+        0,
+        7
+      ],
+      "end": [
+        0,
+        10
+      ],
+      "text": "not",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w3",
+        "accentual-metre": "v1.s3"
+      }
+    },
+    {
+      "start": [
+        0,
+        10
+      ],
+      "end": [
+        0,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1.f2"
+      }
+    },
+    {
+      "start": [
+        0,
+        11
+      ],
+      "end": [
+        0,
+        13
+      ],
+      "text": "to",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w4",
+        "accentual-metre": "v1.s4"
+      }
+    },
+    {
+      "start": [
+        0,
+        13
+      ],
+      "end": [
+        0,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1"
+      }
+    },
+    {
+      "start": [
+        0,
+        14
+      ],
+      "end": [
+        0,
+        17
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w5",
+        "accentual-metre": "v1.s5"
+      }
+    },
+    {
+      "start": [
+        0,
+        17
+      ],
+      "end": [
+        0,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1.f3"
+      }
+    },
+    {
+      "start": [
+        0,
+        18
+      ],
+      "end": [
+        0,
+        21
+      ],
+      "text": "mar",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w6",
+        "accentual-metre": "v1.s6"
+      }
+    },
+    {
+      "start": [
+        0,
+        21
+      ],
+      "end": [
+        0,
+        26
+      ],
+      "text": "riage",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w6",
+        "accentual-metre": "v1.s7"
+      }
+    },
+    {
+      "start": [
+        0,
+        26
+      ],
+      "end": [
+        0,
+        27
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1.f4"
+      }
+    },
+    {
+      "start": [
+        0,
+        27
+      ],
+      "end": [
+        0,
+        29
+      ],
+      "text": "of",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w7",
+        "accentual-metre": "v1.s8"
+      }
+    },
+    {
+      "start": [
+        0,
+        29
+      ],
+      "end": [
+        0,
+        30
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1"
+      }
+    },
+    {
+      "start": [
+        0,
+        30
+      ],
+      "end": [
+        0,
+        34
+      ],
+      "text": "true",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w8",
+        "accentual-metre": "v1.s9"
+      }
+    },
+    {
+      "start": [
+        0,
+        34
+      ],
+      "end": [
+        0,
+        35
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1",
+        "accentual-metre": "v1.f5"
+      }
+    },
+    {
+      "start": [
+        0,
+        35
+      ],
+      "end": [
+        0,
+        40
+      ],
+      "text": "minds",
+      "innermost": {
+        "display": "l1",
+        "word-tokens": "l1.w9",
+        "accentual-metre": "v1.s10"
+      }
+    },
+    {
+      "start": [
+        1,
+        0
+      ],
+      "end": [
+        1,
+        2
+      ],
+      "text": "Ad",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w1",
+        "accentual-metre": "v2.s1"
+      }
+    },
+    {
+      "start": [
+        1,
+        2
+      ],
+      "end": [
+        1,
+        5
+      ],
+      "text": "mit",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w1",
+        "accentual-metre": "v2.s2"
+      }
+    },
+    {
+      "start": [
+        1,
+        5
+      ],
+      "end": [
+        1,
+        6
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2",
+        "accentual-metre": "v2"
+      }
+    },
+    {
+      "start": [
+        1,
+        6
+      ],
+      "end": [
+        1,
+        8
+      ],
+      "text": "im",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w2",
+        "accentual-metre": "v2.s3"
+      }
+    },
+    {
+      "start": [
+        1,
+        8
+      ],
+      "end": [
+        1,
+        10
+      ],
+      "text": "pe",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w2",
+        "accentual-metre": "v2.s4"
+      }
+    },
+    {
+      "start": [
+        1,
+        10
+      ],
+      "end": [
+        1,
+        12
+      ],
+      "text": "di",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w2",
+        "accentual-metre": "v2.s5"
+      }
+    },
+    {
+      "start": [
+        1,
+        12
+      ],
+      "end": [
+        1,
+        17
+      ],
+      "text": "ments",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w2",
+        "accentual-metre": "v2.s6"
+      }
+    },
+    {
+      "start": [
+        1,
+        17
+      ],
+      "end": [
+        1,
+        19
+      ],
+      "text": "; ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2",
+        "accentual-metre": "v2"
+      }
+    },
+    {
+      "start": [
+        1,
+        19
+      ],
+      "end": [
+        1,
+        23
+      ],
+      "text": "love",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w3",
+        "accentual-metre": "v2.s7"
+      }
+    },
+    {
+      "start": [
+        1,
+        23
+      ],
+      "end": [
+        1,
+        24
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2",
+        "accentual-metre": "v2.f4"
+      }
+    },
+    {
+      "start": [
+        1,
+        24
+      ],
+      "end": [
+        1,
+        26
+      ],
+      "text": "is",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w4",
+        "accentual-metre": "v2.s8"
+      }
+    },
+    {
+      "start": [
+        1,
+        26
+      ],
+      "end": [
+        1,
+        27
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2",
+        "accentual-metre": "v2"
+      }
+    },
+    {
+      "start": [
+        1,
+        27
+      ],
+      "end": [
+        1,
+        30
+      ],
+      "text": "not",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w5",
+        "accentual-metre": "v2.s9"
+      }
+    },
+    {
+      "start": [
+        1,
+        30
+      ],
+      "end": [
+        1,
+        31
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2",
+        "accentual-metre": "v2.f5"
+      }
+    },
+    {
+      "start": [
+        1,
+        31
+      ],
+      "end": [
+        1,
+        35
+      ],
+      "text": "love",
+      "innermost": {
+        "display": "l2",
+        "word-tokens": "l2.w6",
+        "accentual-metre": "v2.s10"
+      }
+    },
+    {
+      "start": [
+        2,
+        0
+      ],
+      "end": [
+        2,
+        5
+      ],
+      "text": "Which",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w1",
+        "accentual-metre": "v3.s1"
+      }
+    },
+    {
+      "start": [
+        2,
+        5
+      ],
+      "end": [
+        2,
+        6
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3",
+        "accentual-metre": "v3.f1"
+      }
+    },
+    {
+      "start": [
+        2,
+        6
+      ],
+      "end": [
+        2,
+        8
+      ],
+      "text": "al",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w2",
+        "accentual-metre": "v3.s2"
+      }
+    },
+    {
+      "start": [
+        2,
+        8
+      ],
+      "end": [
+        2,
+        12
+      ],
+      "text": "ters",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w2",
+        "accentual-metre": "v3.s3"
+      }
+    },
+    {
+      "start": [
+        2,
+        12
+      ],
+      "end": [
+        2,
+        13
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3",
+        "accentual-metre": "v3.f2"
+      }
+    },
+    {
+      "start": [
+        2,
+        13
+      ],
+      "end": [
+        2,
+        17
+      ],
+      "text": "when",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w3",
+        "accentual-metre": "v3.s4"
+      }
+    },
+    {
+      "start": [
+        2,
+        17
+      ],
+      "end": [
+        2,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3",
+        "accentual-metre": "v3"
+      }
+    },
+    {
+      "start": [
+        2,
+        18
+      ],
+      "end": [
+        2,
+        20
+      ],
+      "text": "it",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w4",
+        "accentual-metre": "v3.s5"
+      }
+    },
+    {
+      "start": [
+        2,
+        20
+      ],
+      "end": [
+        2,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3",
+        "accentual-metre": "v3.f3"
+      }
+    },
+    {
+      "start": [
+        2,
+        21
+      ],
+      "end": [
+        2,
+        23
+      ],
+      "text": "al",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w5",
+        "accentual-metre": "v3.s6"
+      }
+    },
+    {
+      "start": [
+        2,
+        23
+      ],
+      "end": [
+        2,
+        26
+      ],
+      "text": "ter",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w5",
+        "accentual-metre": "v3.s7"
+      }
+    },
+    {
+      "start": [
+        2,
+        26
+      ],
+      "end": [
+        2,
+        27
+      ],
+      "text": "a",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w5",
+        "accentual-metre": "v3.s8"
+      }
+    },
+    {
+      "start": [
+        2,
+        27
+      ],
+      "end": [
+        2,
+        31
+      ],
+      "text": "tion",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w5",
+        "accentual-metre": "v3.s9"
+      }
+    },
+    {
+      "start": [
+        2,
+        31
+      ],
+      "end": [
+        2,
+        32
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3",
+        "accentual-metre": "v3.f5"
+      }
+    },
+    {
+      "start": [
+        2,
+        32
+      ],
+      "end": [
+        2,
+        37
+      ],
+      "text": "finds",
+      "innermost": {
+        "display": "l3",
+        "word-tokens": "l3.w6",
+        "accentual-metre": "v3.s10"
+      }
+    },
+    {
+      "start": [
+        2,
+        37
+      ],
+      "end": [
+        2,
+        38
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l3"
+      }
+    },
+    {
+      "start": [
+        3,
+        0
+      ],
+      "end": [
+        3,
+        2
+      ],
+      "text": "Or",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w1",
+        "accentual-metre": "v4.s1"
+      }
+    },
+    {
+      "start": [
+        3,
+        2
+      ],
+      "end": [
+        3,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4.f1"
+      }
+    },
+    {
+      "start": [
+        3,
+        3
+      ],
+      "end": [
+        3,
+        8
+      ],
+      "text": "bends",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w2",
+        "accentual-metre": "v4.s2"
+      }
+    },
+    {
+      "start": [
+        3,
+        8
+      ],
+      "end": [
+        3,
+        9
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4"
+      }
+    },
+    {
+      "start": [
+        3,
+        9
+      ],
+      "end": [
+        3,
+        13
+      ],
+      "text": "with",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w3",
+        "accentual-metre": "v4.s3"
+      }
+    },
+    {
+      "start": [
+        3,
+        13
+      ],
+      "end": [
+        3,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4.f2"
+      }
+    },
+    {
+      "start": [
+        3,
+        14
+      ],
+      "end": [
+        3,
+        17
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w4",
+        "accentual-metre": "v4.s4"
+      }
+    },
+    {
+      "start": [
+        3,
+        17
+      ],
+      "end": [
+        3,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4"
+      }
+    },
+    {
+      "start": [
+        3,
+        18
+      ],
+      "end": [
+        3,
+        20
+      ],
+      "text": "re",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w5",
+        "accentual-metre": "v4.s5"
+      }
+    },
+    {
+      "start": [
+        3,
+        20
+      ],
+      "end": [
+        3,
+        23
+      ],
+      "text": "mov",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w5",
+        "accentual-metre": "v4.s6"
+      }
+    },
+    {
+      "start": [
+        3,
+        23
+      ],
+      "end": [
+        3,
+        25
+      ],
+      "text": "er",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w5",
+        "accentual-metre": "v4.s7"
+      }
+    },
+    {
+      "start": [
+        3,
+        25
+      ],
+      "end": [
+        3,
+        26
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4.f4"
+      }
+    },
+    {
+      "start": [
+        3,
+        26
+      ],
+      "end": [
+        3,
+        28
+      ],
+      "text": "to",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w6",
+        "accentual-metre": "v4.s8"
+      }
+    },
+    {
+      "start": [
+        3,
+        28
+      ],
+      "end": [
+        3,
+        29
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4",
+        "accentual-metre": "v4"
+      }
+    },
+    {
+      "start": [
+        3,
+        29
+      ],
+      "end": [
+        3,
+        31
+      ],
+      "text": "re",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w7",
+        "accentual-metre": "v4.s9"
+      }
+    },
+    {
+      "start": [
+        3,
+        31
+      ],
+      "end": [
+        3,
+        35
+      ],
+      "text": "move",
+      "innermost": {
+        "display": "l4",
+        "word-tokens": "l4.w7",
+        "accentual-metre": "v4.s10"
+      }
+    },
+    {
+      "start": [
+        3,
+        35
+      ],
+      "end": [
+        3,
+        36
+      ],
+      "text": ".",
+      "innermost": {
+        "display": "l4"
+      }
+    },
+    {
+      "start": [
+        4,
+        0
+      ],
+      "end": [
+        4,
+        1
+      ],
+      "text": "O",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w1",
+        "accentual-metre": "v5.s1"
+      }
+    },
+    {
+      "start": [
+        4,
+        1
+      ],
+      "end": [
+        4,
+        2
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5.f1"
+      }
+    },
+    {
+      "start": [
+        4,
+        2
+      ],
+      "end": [
+        4,
+        4
+      ],
+      "text": "no",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w2",
+        "accentual-metre": "v5.s2"
+      }
+    },
+    {
+      "start": [
+        4,
+        4
+      ],
+      "end": [
+        4,
+        6
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5"
+      }
+    },
+    {
+      "start": [
+        4,
+        6
+      ],
+      "end": [
+        4,
+        8
+      ],
+      "text": "it",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w3",
+        "accentual-metre": "v5.s3"
+      }
+    },
+    {
+      "start": [
+        4,
+        8
+      ],
+      "end": [
+        4,
+        9
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5.f2"
+      }
+    },
+    {
+      "start": [
+        4,
+        9
+      ],
+      "end": [
+        4,
+        11
+      ],
+      "text": "is",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w4",
+        "accentual-metre": "v5.s4"
+      }
+    },
+    {
+      "start": [
+        4,
+        11
+      ],
+      "end": [
+        4,
+        12
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5"
+      }
+    },
+    {
+      "start": [
+        4,
+        12
+      ],
+      "end": [
+        4,
+        14
+      ],
+      "text": "an",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w5",
+        "accentual-metre": "v5.s5"
+      }
+    },
+    {
+      "start": [
+        4,
+        14
+      ],
+      "end": [
+        4,
+        15
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5.f3"
+      }
+    },
+    {
+      "start": [
+        4,
+        15
+      ],
+      "end": [
+        4,
+        17
+      ],
+      "text": "ev",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w6",
+        "accentual-metre": "v5.s6"
+      }
+    },
+    {
+      "start": [
+        4,
+        17
+      ],
+      "end": [
+        4,
+        19
+      ],
+      "text": "er",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w6",
+        "accentual-metre": "v5.s7"
+      }
+    },
+    {
+      "start": [
+        4,
+        19
+      ],
+      "end": [
+        4,
+        20
+      ],
+      "text": "-",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5.f4"
+      }
+    },
+    {
+      "start": [
+        4,
+        20
+      ],
+      "end": [
+        4,
+        22
+      ],
+      "text": "fi",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w7",
+        "accentual-metre": "v5.s8"
+      }
+    },
+    {
+      "start": [
+        4,
+        22
+      ],
+      "end": [
+        4,
+        25
+      ],
+      "text": "xèd",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w7",
+        "accentual-metre": "v5.s9"
+      }
+    },
+    {
+      "start": [
+        4,
+        25
+      ],
+      "end": [
+        4,
+        26
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5",
+        "accentual-metre": "v5.f5"
+      }
+    },
+    {
+      "start": [
+        4,
+        26
+      ],
+      "end": [
+        4,
+        30
+      ],
+      "text": "mark",
+      "innermost": {
+        "display": "l5",
+        "word-tokens": "l5.w8",
+        "accentual-metre": "v5.s10"
+      }
+    },
+    {
+      "start": [
+        5,
+        0
+      ],
+      "end": [
+        5,
+        4
+      ],
+      "text": "That",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w1",
+        "accentual-metre": "v6.s1"
+      }
+    },
+    {
+      "start": [
+        5,
+        4
+      ],
+      "end": [
+        5,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6.f1"
+      }
+    },
+    {
+      "start": [
+        5,
+        5
+      ],
+      "end": [
+        5,
+        10
+      ],
+      "text": "looks",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w2",
+        "accentual-metre": "v6.s2"
+      }
+    },
+    {
+      "start": [
+        5,
+        10
+      ],
+      "end": [
+        5,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6"
+      }
+    },
+    {
+      "start": [
+        5,
+        11
+      ],
+      "end": [
+        5,
+        13
+      ],
+      "text": "on",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w3",
+        "accentual-metre": "v6.s3"
+      }
+    },
+    {
+      "start": [
+        5,
+        13
+      ],
+      "end": [
+        5,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6.f2"
+      }
+    },
+    {
+      "start": [
+        5,
+        14
+      ],
+      "end": [
+        5,
+        17
+      ],
+      "text": "tem",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w4",
+        "accentual-metre": "v6.s4"
+      }
+    },
+    {
+      "start": [
+        5,
+        17
+      ],
+      "end": [
+        5,
+        22
+      ],
+      "text": "pests",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w4",
+        "accentual-metre": "v6.s5"
+      }
+    },
+    {
+      "start": [
+        5,
+        22
+      ],
+      "end": [
+        5,
+        23
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6.f3"
+      }
+    },
+    {
+      "start": [
+        5,
+        23
+      ],
+      "end": [
+        5,
+        26
+      ],
+      "text": "and",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w5",
+        "accentual-metre": "v6.s6"
+      }
+    },
+    {
+      "start": [
+        5,
+        26
+      ],
+      "end": [
+        5,
+        27
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6"
+      }
+    },
+    {
+      "start": [
+        5,
+        27
+      ],
+      "end": [
+        5,
+        29
+      ],
+      "text": "is",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w6",
+        "accentual-metre": "v6.s7"
+      }
+    },
+    {
+      "start": [
+        5,
+        29
+      ],
+      "end": [
+        5,
+        30
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6.f4"
+      }
+    },
+    {
+      "start": [
+        5,
+        30
+      ],
+      "end": [
+        5,
+        32
+      ],
+      "text": "ne",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w7",
+        "accentual-metre": "v6.s8"
+      }
+    },
+    {
+      "start": [
+        5,
+        32
+      ],
+      "end": [
+        5,
+        35
+      ],
+      "text": "ver",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w7",
+        "accentual-metre": "v6.s9"
+      }
+    },
+    {
+      "start": [
+        5,
+        35
+      ],
+      "end": [
+        5,
+        36
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6",
+        "accentual-metre": "v6.f5"
+      }
+    },
+    {
+      "start": [
+        5,
+        36
+      ],
+      "end": [
+        5,
+        40
+      ],
+      "text": "shak",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w8",
+        "accentual-metre": "v6.s10"
+      }
+    },
+    {
+      "start": [
+        5,
+        40
+      ],
+      "end": [
+        5,
+        42
+      ],
+      "text": "en",
+      "innermost": {
+        "display": "l6",
+        "word-tokens": "l6.w8",
+        "accentual-metre": "v6.s11"
+      }
+    },
+    {
+      "start": [
+        5,
+        42
+      ],
+      "end": [
+        5,
+        43
+      ],
+      "text": ";",
+      "innermost": {
+        "display": "l6"
+      }
+    },
+    {
+      "start": [
+        6,
+        0
+      ],
+      "end": [
+        6,
+        2
+      ],
+      "text": "It",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w1",
+        "accentual-metre": "v7.s1"
+      }
+    },
+    {
+      "start": [
+        6,
+        2
+      ],
+      "end": [
+        6,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7.f1"
+      }
+    },
+    {
+      "start": [
+        6,
+        3
+      ],
+      "end": [
+        6,
+        5
+      ],
+      "text": "is",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w2",
+        "accentual-metre": "v7.s2"
+      }
+    },
+    {
+      "start": [
+        6,
+        5
+      ],
+      "end": [
+        6,
+        6
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7"
+      }
+    },
+    {
+      "start": [
+        6,
+        6
+      ],
+      "end": [
+        6,
+        9
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w3",
+        "accentual-metre": "v7.s3"
+      }
+    },
+    {
+      "start": [
+        6,
+        9
+      ],
+      "end": [
+        6,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7.f2"
+      }
+    },
+    {
+      "start": [
+        6,
+        10
+      ],
+      "end": [
+        6,
+        14
+      ],
+      "text": "star",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w4",
+        "accentual-metre": "v7.s4"
+      }
+    },
+    {
+      "start": [
+        6,
+        14
+      ],
+      "end": [
+        6,
+        15
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7"
+      }
+    },
+    {
+      "start": [
+        6,
+        15
+      ],
+      "end": [
+        6,
+        17
+      ],
+      "text": "to",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w5",
+        "accentual-metre": "v7.s5"
+      }
+    },
+    {
+      "start": [
+        6,
+        17
+      ],
+      "end": [
+        6,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7.f3"
+      }
+    },
+    {
+      "start": [
+        6,
+        18
+      ],
+      "end": [
+        6,
+        20
+      ],
+      "text": "ev",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w6",
+        "accentual-metre": "v7.s6"
+      }
+    },
+    {
+      "start": [
+        6,
+        20
+      ],
+      "end": [
+        6,
+        23
+      ],
+      "text": "ery",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w6",
+        "accentual-metre": "v7.s7"
+      }
+    },
+    {
+      "start": [
+        6,
+        23
+      ],
+      "end": [
+        6,
+        24
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7.f4"
+      }
+    },
+    {
+      "start": [
+        6,
+        24
+      ],
+      "end": [
+        6,
+        28
+      ],
+      "text": "wand",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w7",
+        "accentual-metre": "v7.s8"
+      }
+    },
+    {
+      "start": [
+        6,
+        28
+      ],
+      "end": [
+        6,
+        29
+      ],
+      "text": "'",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w7",
+        "accentual-metre": "v7"
+      }
+    },
+    {
+      "start": [
+        6,
+        29
+      ],
+      "end": [
+        6,
+        33
+      ],
+      "text": "ring",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w7",
+        "accentual-metre": "v7.s9"
+      }
+    },
+    {
+      "start": [
+        6,
+        33
+      ],
+      "end": [
+        6,
+        34
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7",
+        "accentual-metre": "v7.f5"
+      }
+    },
+    {
+      "start": [
+        6,
+        34
+      ],
+      "end": [
+        6,
+        38
+      ],
+      "text": "bark",
+      "innermost": {
+        "display": "l7",
+        "word-tokens": "l7.w8",
+        "accentual-metre": "v7.s10"
+      }
+    },
+    {
+      "start": [
+        6,
+        38
+      ],
+      "end": [
+        6,
+        39
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l7"
+      }
+    },
+    {
+      "start": [
+        7,
+        0
+      ],
+      "end": [
+        7,
+        5
+      ],
+      "text": "Whose",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w1",
+        "accentual-metre": "v8.s1"
+      }
+    },
+    {
+      "start": [
+        7,
+        5
+      ],
+      "end": [
+        7,
+        6
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8.f1"
+      }
+    },
+    {
+      "start": [
+        7,
+        6
+      ],
+      "end": [
+        7,
+        13
+      ],
+      "text": "worth's",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w2",
+        "accentual-metre": "v8.s2"
+      }
+    },
+    {
+      "start": [
+        7,
+        13
+      ],
+      "end": [
+        7,
+        14
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8"
+      }
+    },
+    {
+      "start": [
+        7,
+        14
+      ],
+      "end": [
+        7,
+        16
+      ],
+      "text": "un",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w3",
+        "accentual-metre": "v8.s3"
+      }
+    },
+    {
+      "start": [
+        7,
+        16
+      ],
+      "end": [
+        7,
+        21
+      ],
+      "text": "known",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w3",
+        "accentual-metre": "v8.s4"
+      }
+    },
+    {
+      "start": [
+        7,
+        21
+      ],
+      "end": [
+        7,
+        23
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8"
+      }
+    },
+    {
+      "start": [
+        7,
+        23
+      ],
+      "end": [
+        7,
+        25
+      ],
+      "text": "al",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w4",
+        "accentual-metre": "v8.s5"
+      }
+    },
+    {
+      "start": [
+        7,
+        25
+      ],
+      "end": [
+        7,
+        31
+      ],
+      "text": "though",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w4",
+        "accentual-metre": "v8.s6"
+      }
+    },
+    {
+      "start": [
+        7,
+        31
+      ],
+      "end": [
+        7,
+        32
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8"
+      }
+    },
+    {
+      "start": [
+        7,
+        32
+      ],
+      "end": [
+        7,
+        35
+      ],
+      "text": "his",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w5",
+        "accentual-metre": "v8.s7"
+      }
+    },
+    {
+      "start": [
+        7,
+        35
+      ],
+      "end": [
+        7,
+        36
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8.f4"
+      }
+    },
+    {
+      "start": [
+        7,
+        36
+      ],
+      "end": [
+        7,
+        43
+      ],
+      "text": "heighth",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w6",
+        "accentual-metre": "v8.s8"
+      }
+    },
+    {
+      "start": [
+        7,
+        43
+      ],
+      "end": [
+        7,
+        44
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8"
+      }
+    },
+    {
+      "start": [
+        7,
+        44
+      ],
+      "end": [
+        7,
+        46
+      ],
+      "text": "be",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w7",
+        "accentual-metre": "v8.s9"
+      }
+    },
+    {
+      "start": [
+        7,
+        46
+      ],
+      "end": [
+        7,
+        47
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8",
+        "accentual-metre": "v8.f5"
+      }
+    },
+    {
+      "start": [
+        7,
+        47
+      ],
+      "end": [
+        7,
+        50
+      ],
+      "text": "tak",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w8",
+        "accentual-metre": "v8.s10"
+      }
+    },
+    {
+      "start": [
+        7,
+        50
+      ],
+      "end": [
+        7,
+        52
+      ],
+      "text": "en",
+      "innermost": {
+        "display": "l8",
+        "word-tokens": "l8.w8",
+        "accentual-metre": "v8.s11"
+      }
+    },
+    {
+      "start": [
+        7,
+        52
+      ],
+      "end": [
+        7,
+        53
+      ],
+      "text": ".",
+      "innermost": {
+        "display": "l8"
+      }
+    },
+    {
+      "start": [
+        8,
+        0
+      ],
+      "end": [
+        8,
+        6
+      ],
+      "text": "Love's",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w1",
+        "accentual-metre": "v9.s1"
+      }
+    },
+    {
+      "start": [
+        8,
+        6
+      ],
+      "end": [
+        8,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9.f1"
+      }
+    },
+    {
+      "start": [
+        8,
+        7
+      ],
+      "end": [
+        8,
+        10
+      ],
+      "text": "not",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w2",
+        "accentual-metre": "v9.s2"
+      }
+    },
+    {
+      "start": [
+        8,
+        10
+      ],
+      "end": [
+        8,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9"
+      }
+    },
+    {
+      "start": [
+        8,
+        11
+      ],
+      "end": [
+        8,
+        17
+      ],
+      "text": "Time's",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w3",
+        "accentual-metre": "v9.s3"
+      }
+    },
+    {
+      "start": [
+        8,
+        17
+      ],
+      "end": [
+        8,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9.f2"
+      }
+    },
+    {
+      "start": [
+        8,
+        18
+      ],
+      "end": [
+        8,
+        22
+      ],
+      "text": "fool",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w4",
+        "accentual-metre": "v9.s4"
+      }
+    },
+    {
+      "start": [
+        8,
+        22
+      ],
+      "end": [
+        8,
+        24
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9"
+      }
+    },
+    {
+      "start": [
+        8,
+        24
+      ],
+      "end": [
+        8,
+        30
+      ],
+      "text": "though",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w5",
+        "accentual-metre": "v9.s5"
+      }
+    },
+    {
+      "start": [
+        8,
+        30
+      ],
+      "end": [
+        8,
+        31
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9.f3"
+      }
+    },
+    {
+      "start": [
+        8,
+        31
+      ],
+      "end": [
+        8,
+        33
+      ],
+      "text": "ro",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w6",
+        "accentual-metre": "v9.s6"
+      }
+    },
+    {
+      "start": [
+        8,
+        33
+      ],
+      "end": [
+        8,
+        35
+      ],
+      "text": "sy",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w6",
+        "accentual-metre": "v9.s7"
+      }
+    },
+    {
+      "start": [
+        8,
+        35
+      ],
+      "end": [
+        8,
+        36
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9.f4"
+      }
+    },
+    {
+      "start": [
+        8,
+        36
+      ],
+      "end": [
+        8,
+        40
+      ],
+      "text": "lips",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w7",
+        "accentual-metre": "v9.s8"
+      }
+    },
+    {
+      "start": [
+        8,
+        40
+      ],
+      "end": [
+        8,
+        41
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9"
+      }
+    },
+    {
+      "start": [
+        8,
+        41
+      ],
+      "end": [
+        8,
+        44
+      ],
+      "text": "and",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w8",
+        "accentual-metre": "v9.s9"
+      }
+    },
+    {
+      "start": [
+        8,
+        44
+      ],
+      "end": [
+        8,
+        45
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9",
+        "accentual-metre": "v9.f5"
+      }
+    },
+    {
+      "start": [
+        8,
+        45
+      ],
+      "end": [
+        8,
+        51
+      ],
+      "text": "cheeks",
+      "innermost": {
+        "display": "l9",
+        "word-tokens": "l9.w9",
+        "accentual-metre": "v9.s10"
+      }
+    },
+    {
+      "start": [
+        9,
+        0
+      ],
+      "end": [
+        9,
+        4
+      ],
+      "text": "With",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w1",
+        "accentual-metre": "v10.s1"
+      }
+    },
+    {
+      "start": [
+        9,
+        4
+      ],
+      "end": [
+        9,
+        6
+      ],
+      "text": "in",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w1",
+        "accentual-metre": "v10.s2"
+      }
+    },
+    {
+      "start": [
+        9,
+        6
+      ],
+      "end": [
+        9,
+        7
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10",
+        "accentual-metre": "v10"
+      }
+    },
+    {
+      "start": [
+        9,
+        7
+      ],
+      "end": [
+        9,
+        10
+      ],
+      "text": "his",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w2",
+        "accentual-metre": "v10.s3"
+      }
+    },
+    {
+      "start": [
+        9,
+        10
+      ],
+      "end": [
+        9,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10",
+        "accentual-metre": "v10.f2"
+      }
+    },
+    {
+      "start": [
+        9,
+        11
+      ],
+      "end": [
+        9,
+        15
+      ],
+      "text": "bend",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w3",
+        "accentual-metre": "v10.s4"
+      }
+    },
+    {
+      "start": [
+        9,
+        15
+      ],
+      "end": [
+        9,
+        18
+      ],
+      "text": "ing",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w3",
+        "accentual-metre": "v10.s5"
+      }
+    },
+    {
+      "start": [
+        9,
+        18
+      ],
+      "end": [
+        9,
+        19
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10",
+        "accentual-metre": "v10.f3"
+      }
+    },
+    {
+      "start": [
+        9,
+        19
+      ],
+      "end": [
+        9,
+        23
+      ],
+      "text": "sick",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w4",
+        "accentual-metre": "v10.s6"
+      }
+    },
+    {
+      "start": [
+        9,
+        23
+      ],
+      "end": [
+        9,
+        27
+      ],
+      "text": "le's",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w4",
+        "accentual-metre": "v10.s7"
+      }
+    },
+    {
+      "start": [
+        9,
+        27
+      ],
+      "end": [
+        9,
+        28
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10",
+        "accentual-metre": "v10.f4"
+      }
+    },
+    {
+      "start": [
+        9,
+        28
+      ],
+      "end": [
+        9,
+        31
+      ],
+      "text": "com",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w5",
+        "accentual-metre": "v10.s8"
+      }
+    },
+    {
+      "start": [
+        9,
+        31
+      ],
+      "end": [
+        9,
+        35
+      ],
+      "text": "pass",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w5",
+        "accentual-metre": "v10.s9"
+      }
+    },
+    {
+      "start": [
+        9,
+        35
+      ],
+      "end": [
+        9,
+        36
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10",
+        "accentual-metre": "v10.f5"
+      }
+    },
+    {
+      "start": [
+        9,
+        36
+      ],
+      "end": [
+        9,
+        40
+      ],
+      "text": "come",
+      "innermost": {
+        "display": "l10",
+        "word-tokens": "l10.w6",
+        "accentual-metre": "v10.s10"
+      }
+    },
+    {
+      "start": [
+        9,
+        40
+      ],
+      "end": [
+        9,
+        41
+      ],
+      "text": ";",
+      "innermost": {
+        "display": "l10"
+      }
+    },
+    {
+      "start": [
+        10,
+        0
+      ],
+      "end": [
+        10,
+        4
+      ],
+      "text": "Love",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w1",
+        "accentual-metre": "v11.s1"
+      }
+    },
+    {
+      "start": [
+        10,
+        4
+      ],
+      "end": [
+        10,
+        5
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11.f1"
+      }
+    },
+    {
+      "start": [
+        10,
+        5
+      ],
+      "end": [
+        10,
+        7
+      ],
+      "text": "al",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w2",
+        "accentual-metre": "v11.s2"
+      }
+    },
+    {
+      "start": [
+        10,
+        7
+      ],
+      "end": [
+        10,
+        11
+      ],
+      "text": "ters",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w2",
+        "accentual-metre": "v11.s3"
+      }
+    },
+    {
+      "start": [
+        10,
+        11
+      ],
+      "end": [
+        10,
+        12
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11.f2"
+      }
+    },
+    {
+      "start": [
+        10,
+        12
+      ],
+      "end": [
+        10,
+        15
+      ],
+      "text": "not",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w3",
+        "accentual-metre": "v11.s4"
+      }
+    },
+    {
+      "start": [
+        10,
+        15
+      ],
+      "end": [
+        10,
+        16
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11"
+      }
+    },
+    {
+      "start": [
+        10,
+        16
+      ],
+      "end": [
+        10,
+        20
+      ],
+      "text": "with",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w4",
+        "accentual-metre": "v11.s5"
+      }
+    },
+    {
+      "start": [
+        10,
+        20
+      ],
+      "end": [
+        10,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11.f3"
+      }
+    },
+    {
+      "start": [
+        10,
+        21
+      ],
+      "end": [
+        10,
+        24
+      ],
+      "text": "his",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w5",
+        "accentual-metre": "v11.s6"
+      }
+    },
+    {
+      "start": [
+        10,
+        24
+      ],
+      "end": [
+        10,
+        25
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11"
+      }
+    },
+    {
+      "start": [
+        10,
+        25
+      ],
+      "end": [
+        10,
+        30
+      ],
+      "text": "brief",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w6",
+        "accentual-metre": "v11.s7"
+      }
+    },
+    {
+      "start": [
+        10,
+        30
+      ],
+      "end": [
+        10,
+        31
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11.f4"
+      }
+    },
+    {
+      "start": [
+        10,
+        31
+      ],
+      "end": [
+        10,
+        36
+      ],
+      "text": "hours",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w7",
+        "accentual-metre": "v11.s8"
+      }
+    },
+    {
+      "start": [
+        10,
+        36
+      ],
+      "end": [
+        10,
+        37
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11"
+      }
+    },
+    {
+      "start": [
+        10,
+        37
+      ],
+      "end": [
+        10,
+        40
+      ],
+      "text": "and",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w8",
+        "accentual-metre": "v11.s9"
+      }
+    },
+    {
+      "start": [
+        10,
+        40
+      ],
+      "end": [
+        10,
+        41
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11",
+        "accentual-metre": "v11.f5"
+      }
+    },
+    {
+      "start": [
+        10,
+        41
+      ],
+      "end": [
+        10,
+        46
+      ],
+      "text": "weeks",
+      "innermost": {
+        "display": "l11",
+        "word-tokens": "l11.w9",
+        "accentual-metre": "v11.s10"
+      }
+    },
+    {
+      "start": [
+        10,
+        46
+      ],
+      "end": [
+        10,
+        47
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l11"
+      }
+    },
+    {
+      "start": [
+        11,
+        0
+      ],
+      "end": [
+        11,
+        3
+      ],
+      "text": "But",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w1",
+        "accentual-metre": "v12.s1"
+      }
+    },
+    {
+      "start": [
+        11,
+        3
+      ],
+      "end": [
+        11,
+        4
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12.f1"
+      }
+    },
+    {
+      "start": [
+        11,
+        4
+      ],
+      "end": [
+        11,
+        9
+      ],
+      "text": "bears",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w2",
+        "accentual-metre": "v12.s2"
+      }
+    },
+    {
+      "start": [
+        11,
+        9
+      ],
+      "end": [
+        11,
+        10
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12"
+      }
+    },
+    {
+      "start": [
+        11,
+        10
+      ],
+      "end": [
+        11,
+        12
+      ],
+      "text": "it",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w3",
+        "accentual-metre": "v12.s3"
+      }
+    },
+    {
+      "start": [
+        11,
+        12
+      ],
+      "end": [
+        11,
+        13
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12.f2"
+      }
+    },
+    {
+      "start": [
+        11,
+        13
+      ],
+      "end": [
+        11,
+        16
+      ],
+      "text": "out",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w4",
+        "accentual-metre": "v12.s4"
+      }
+    },
+    {
+      "start": [
+        11,
+        16
+      ],
+      "end": [
+        11,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12"
+      }
+    },
+    {
+      "start": [
+        11,
+        17
+      ],
+      "end": [
+        11,
+        19
+      ],
+      "text": "ev",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w5",
+        "accentual-metre": "v12.s5"
+      }
+    },
+    {
+      "start": [
+        11,
+        19
+      ],
+      "end": [
+        11,
+        21
+      ],
+      "text": "en",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w5",
+        "accentual-metre": "v12.s6"
+      }
+    },
+    {
+      "start": [
+        11,
+        21
+      ],
+      "end": [
+        11,
+        22
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12"
+      }
+    },
+    {
+      "start": [
+        11,
+        22
+      ],
+      "end": [
+        11,
+        24
+      ],
+      "text": "to",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w6",
+        "accentual-metre": "v12.s7"
+      }
+    },
+    {
+      "start": [
+        11,
+        24
+      ],
+      "end": [
+        11,
+        25
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12.f4"
+      }
+    },
+    {
+      "start": [
+        11,
+        25
+      ],
+      "end": [
+        11,
+        28
+      ],
+      "text": "the",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w7",
+        "accentual-metre": "v12.s8"
+      }
+    },
+    {
+      "start": [
+        11,
+        28
+      ],
+      "end": [
+        11,
+        29
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12.f4"
+      }
+    },
+    {
+      "start": [
+        11,
+        29
+      ],
+      "end": [
+        11,
+        33
+      ],
+      "text": "edge",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w8",
+        "accentual-metre": "v12.s9"
+      }
+    },
+    {
+      "start": [
+        11,
+        33
+      ],
+      "end": [
+        11,
+        34
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12"
+      }
+    },
+    {
+      "start": [
+        11,
+        34
+      ],
+      "end": [
+        11,
+        36
+      ],
+      "text": "of",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w9",
+        "accentual-metre": "v12.s10"
+      }
+    },
+    {
+      "start": [
+        11,
+        36
+      ],
+      "end": [
+        11,
+        37
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12",
+        "accentual-metre": "v12.f5"
+      }
+    },
+    {
+      "start": [
+        11,
+        37
+      ],
+      "end": [
+        11,
+        41
+      ],
+      "text": "doom",
+      "innermost": {
+        "display": "l12",
+        "word-tokens": "l12.w10",
+        "accentual-metre": "v12.s11"
+      }
+    },
+    {
+      "start": [
+        11,
+        41
+      ],
+      "end": [
+        11,
+        42
+      ],
+      "text": ".",
+      "innermost": {
+        "display": "l12"
+      }
+    },
+    {
+      "start": [
+        12,
+        0
+      ],
+      "end": [
+        12,
+        2
+      ],
+      "text": "If",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w1",
+        "accentual-metre": "v13.s1"
+      }
+    },
+    {
+      "start": [
+        12,
+        2
+      ],
+      "end": [
+        12,
+        3
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13.f1"
+      }
+    },
+    {
+      "start": [
+        12,
+        3
+      ],
+      "end": [
+        12,
+        7
+      ],
+      "text": "this",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w2",
+        "accentual-metre": "v13.s2"
+      }
+    },
+    {
+      "start": [
+        12,
+        7
+      ],
+      "end": [
+        12,
+        8
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13"
+      }
+    },
+    {
+      "start": [
+        12,
+        8
+      ],
+      "end": [
+        12,
+        10
+      ],
+      "text": "be",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w3",
+        "accentual-metre": "v13.s3"
+      }
+    },
+    {
+      "start": [
+        12,
+        10
+      ],
+      "end": [
+        12,
+        11
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13.f2"
+      }
+    },
+    {
+      "start": [
+        12,
+        11
+      ],
+      "end": [
+        12,
+        14
+      ],
+      "text": "err",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w4",
+        "accentual-metre": "v13.s4"
+      }
+    },
+    {
+      "start": [
+        12,
+        14
+      ],
+      "end": [
+        12,
+        16
+      ],
+      "text": "or",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w4",
+        "accentual-metre": "v13.s5"
+      }
+    },
+    {
+      "start": [
+        12,
+        16
+      ],
+      "end": [
+        12,
+        17
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13.f3"
+      }
+    },
+    {
+      "start": [
+        12,
+        17
+      ],
+      "end": [
+        12,
+        20
+      ],
+      "text": "and",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w5",
+        "accentual-metre": "v13.s6"
+      }
+    },
+    {
+      "start": [
+        12,
+        20
+      ],
+      "end": [
+        12,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13"
+      }
+    },
+    {
+      "start": [
+        12,
+        21
+      ],
+      "end": [
+        12,
+        23
+      ],
+      "text": "up",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w6",
+        "accentual-metre": "v13.s7"
+      }
+    },
+    {
+      "start": [
+        12,
+        23
+      ],
+      "end": [
+        12,
+        25
+      ],
+      "text": "on",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w6",
+        "accentual-metre": "v13.s8"
+      }
+    },
+    {
+      "start": [
+        12,
+        25
+      ],
+      "end": [
+        12,
+        26
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13"
+      }
+    },
+    {
+      "start": [
+        12,
+        26
+      ],
+      "end": [
+        12,
+        28
+      ],
+      "text": "me",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w7",
+        "accentual-metre": "v13.s9"
+      }
+    },
+    {
+      "start": [
+        12,
+        28
+      ],
+      "end": [
+        12,
+        29
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13",
+        "accentual-metre": "v13.f5"
+      }
+    },
+    {
+      "start": [
+        12,
+        29
+      ],
+      "end": [
+        12,
+        35
+      ],
+      "text": "proved",
+      "innermost": {
+        "display": "l13",
+        "word-tokens": "l13.w8",
+        "accentual-metre": "v13.s10"
+      }
+    },
+    {
+      "start": [
+        12,
+        35
+      ],
+      "end": [
+        12,
+        36
+      ],
+      "text": ",",
+      "innermost": {
+        "display": "l13"
+      }
+    },
+    {
+      "start": [
+        13,
+        0
+      ],
+      "end": [
+        13,
+        1
+      ],
+      "text": "I",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w1",
+        "accentual-metre": "v14.s1"
+      }
+    },
+    {
+      "start": [
+        13,
+        1
+      ],
+      "end": [
+        13,
+        2
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14.f1"
+      }
+    },
+    {
+      "start": [
+        13,
+        2
+      ],
+      "end": [
+        13,
+        4
+      ],
+      "text": "ne",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w2",
+        "accentual-metre": "v14.s2"
+      }
+    },
+    {
+      "start": [
+        13,
+        4
+      ],
+      "end": [
+        13,
+        7
+      ],
+      "text": "ver",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w2",
+        "accentual-metre": "v14.s3"
+      }
+    },
+    {
+      "start": [
+        13,
+        7
+      ],
+      "end": [
+        13,
+        8
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14.f2"
+      }
+    },
+    {
+      "start": [
+        13,
+        8
+      ],
+      "end": [
+        13,
+        12
+      ],
+      "text": "writ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w3",
+        "accentual-metre": "v14.s4"
+      }
+    },
+    {
+      "start": [
+        13,
+        12
+      ],
+      "end": [
+        13,
+        14
+      ],
+      "text": ", ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14"
+      }
+    },
+    {
+      "start": [
+        13,
+        14
+      ],
+      "end": [
+        13,
+        17
+      ],
+      "text": "nor",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w4",
+        "accentual-metre": "v14.s5"
+      }
+    },
+    {
+      "start": [
+        13,
+        17
+      ],
+      "end": [
+        13,
+        18
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14.f3"
+      }
+    },
+    {
+      "start": [
+        13,
+        18
+      ],
+      "end": [
+        13,
+        20
+      ],
+      "text": "no",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w5",
+        "accentual-metre": "v14.s6"
+      }
+    },
+    {
+      "start": [
+        13,
+        20
+      ],
+      "end": [
+        13,
+        21
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14"
+      }
+    },
+    {
+      "start": [
+        13,
+        21
+      ],
+      "end": [
+        13,
+        24
+      ],
+      "text": "man",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w6",
+        "accentual-metre": "v14.s7"
+      }
+    },
+    {
+      "start": [
+        13,
+        24
+      ],
+      "end": [
+        13,
+        25
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14.f4"
+      }
+    },
+    {
+      "start": [
+        13,
+        25
+      ],
+      "end": [
+        13,
+        27
+      ],
+      "text": "ev",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w7",
+        "accentual-metre": "v14.s8"
+      }
+    },
+    {
+      "start": [
+        13,
+        27
+      ],
+      "end": [
+        13,
+        29
+      ],
+      "text": "er",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w7",
+        "accentual-metre": "v14.s9"
+      }
+    },
+    {
+      "start": [
+        13,
+        29
+      ],
+      "end": [
+        13,
+        30
+      ],
+      "text": " ",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14",
+        "accentual-metre": "v14.f5"
+      }
+    },
+    {
+      "start": [
+        13,
+        30
+      ],
+      "end": [
+        13,
+        35
+      ],
+      "text": "loved",
+      "innermost": {
+        "display": "l14",
+        "word-tokens": "l14.w8",
+        "accentual-metre": "v14.s10"
+      }
+    },
+    {
+      "start": [
+        13,
+        35
+      ],
+      "end": [
+        13,
+        36
+      ],
+      "text": ".",
+      "innermost": {
+        "display": "l14"
+      }
+    }
+  ],
+  "annotations": {}
+}
