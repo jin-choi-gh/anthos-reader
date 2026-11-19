@@ -1,4 +1,4 @@
-import { codePoints } from "./codePoints"
+import { codePoints, isSpace } from "./codePoints"
 import type { Position, Span, Substrate } from "./types"
 
 /** A line's length, in code points. Throws for a line the substrate does not have. */
@@ -13,7 +13,7 @@ export function textOf(substrate: Substrate, span: Span): string {
   const line = (index: number) => codePoints(lineAt(substrate, index))
   if (start.line === end.line) return line(start.line).slice(start.offset, end.offset).join("")
   const first = line(start.line).slice(start.offset).join("")
-  const middle = substrate.lines.slice(start.line + 1, end.line)
+  const middle = substrate.lines.slice(start.line + 1, end.line).map((line) => line.text)
   const last = line(end.line).slice(0, end.offset).join("")
   return [first, ...middle, last].join("\n")
 }
@@ -38,8 +38,8 @@ export function spanProblem(substrate: Substrate, span: Span): string | null {
  * Lines with no text at either end lie outside it, as loom's rule asks. Throws when no line has
  * text. */
 export function wholePoem(substrate: Substrate): Span {
-  const first = substrate.lines.findIndex((line) => line !== "")
-  const last = substrate.lines.findLastIndex((line) => line !== "")
+  const first = substrate.lines.findIndex((line) => line.text !== "")
+  const last = substrate.lines.findLastIndex((line) => line.text !== "")
   if (first < 0) throw new RangeError("the poem has no text")
   return {
     start: { line: first, offset: 0 },
@@ -143,16 +143,10 @@ export function lineRangesOf(
   return ranges
 }
 
-/** Whether a character is a space of any kind; past a line's end there is no character, which
- * counts as one. */
-function isSpace(character: string | undefined): boolean {
-  return character === undefined || /^\s$/u.test(character)
-}
-
 function lineAt(substrate: Substrate, index: number): string {
   const line = substrate.lines[index]
   if (line === undefined) throw new RangeError(`no line at index ${index}`)
-  return line
+  return line.text
 }
 
 function isIn(substrate: Substrate, position: Position): boolean {
@@ -161,7 +155,7 @@ function isIn(substrate: Substrate, position: Position): boolean {
     line !== undefined &&
     Number.isInteger(position.offset) &&
     position.offset >= 0 &&
-    position.offset <= codePoints(line).length
+    position.offset <= codePoints(line.text).length
   )
 }
 

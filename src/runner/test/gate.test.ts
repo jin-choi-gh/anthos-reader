@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest"
+import { REST } from "../../practice/parts"
 import type { Practice } from "../../practice/types"
 import { finalOf, gateOf } from "../gate"
 
-/** Two stages: a consider step and a respond step, then one consider step. The rests are at the
+/** Two stages: a step that says something and a step that asks for writing, then one that says
+ * something. The rests are at the
  * end of each stage, and the final stage is stage 2. */
 const practice: Practice = {
   id: "test",
@@ -12,18 +14,22 @@ const practice: Practice = {
     {
       name: "First",
       steps: [
-        { direction: "consider", note: "@a", prose: ["On @a."] },
-        { direction: "respond", prose: ["What does the bird eat?"] },
+        { ...REST, prose: ["On @a."] },
+        {
+          ...REST,
+          prose: ["What does the bird eat?"],
+          writing: { target: "whole", tags: [], count: "one" },
+        },
       ],
     },
-    { name: "Second", steps: [{ direction: "consider", note: "@b", prose: ["On @b."] }] },
+    { name: "Second", steps: [{ ...REST, prose: ["On @b."] }] },
   ],
 }
 const first = practice.stages[0]!
 const second = practice.stages[1]!
 
 describe("gateOf", () => {
-  it("holds the practice's step at a station, of whatever direction, with its stage", () => {
+  it("holds the practice's step at a station, whatever its parts, with its stage", () => {
     expect(gateOf(practice, { stage: 0, step: 0 })).toEqual({
       kind: "step",
       stage: first,

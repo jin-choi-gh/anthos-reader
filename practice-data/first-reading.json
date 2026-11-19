@@ -1,0 +1,215 @@
+{
+  "format": "anthos-practice",
+  "format_version": 1,
+  "id": "first-reading",
+  "title": "First reading",
+  "text": "dickinson",
+  "stages": [
+    {
+      "name": "The Bird and His Flight",
+      "steps": [
+        {
+          "prose": ["Read this poem on a bird's fleet-footed acts and his eventual flight."],
+          "highlight": [],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["In the beginning the bird is an agent of violence"],
+          "highlight": [
+            {
+              "id": "bird-violence-1",
+              "notehead": "l2 He ~ l3 halves",
+              "tags": [],
+              "body": "The bird acts like an roving criminal, moving without being witnessed and attacking the worm without a shred of compunction."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["Consider how sonic features add to the poem's power of evocation"],
+          "highlight": [
+            {
+              "id": "bird-violence-2",
+              "notehead": "l4 fellow && l4 raw",
+              "tags": [],
+              "body": "The internal near-rhyme of 'fellow' and 'raw' evokes the strange, almost foreign, brutality of the bird.\nTo the poet both worm and bird alike are fellow creatures to be encountered in nature,\nbut the bird's act of necessity cruelly undercuts any kind of convivial pretensions that the poet may project upon them."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["Is the brutality of nature the only note?"],
+          "highlight": [
+            {
+              "id": "bird-convenience-1",
+              "notehead": "l5 ~ l6",
+              "tags": [],
+              "body": "Despite the seemingly brutal act committed by the bird in the first stanza,\nthe poet continues to see the bird in the light of human custom.\nHere, the bird drinks a dew from a 'convenient' Grass."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["How are we to consider the bird?"],
+          "highlight": [
+            {
+              "id": "bird-convenience-2",
+              "notehead": "l7 ~ l8",
+              "tags": [],
+              "body": "The bird so courteously leaves space for another member of the insect-folk to pass - how amiable!"
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": [
+            "By the middle of the poem, the bird has lost its ferocity. It now appears as a creature paranoid and out of place."
+          ],
+          "highlight": [
+            {
+              "id": "bird-afraid-1",
+              "notehead": "l9 ~ l11",
+              "tags": [],
+              "body": "The poet uses the movement of the eyes to keenly evoke the sense of unease.\nDickinson's adoption of 'Beads,' inanimate round objects,\nalmost makes the bird's eyes fall out of their sockets from fear."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": [
+            "What does it mean for the poet to intervene within the acts of their own poem? What does it mean for the human being to intervene within the unfolding of nature?"
+          ],
+          "highlight": [
+            {
+              "id": "bird-afraid-2",
+              "notehead": "l12 ~ l14",
+              "tags": [],
+              "body": "The portrayal of the bird as a cautious, paranoid agent culminates with the first sign of the poet's intervention\nwithin the happenings of nature. The poet offers the bird 'a Crumb.' What is the reason for this?\nHas the poet felt the bird's fright within herself?\nIs the crumb really for the bird's benefit or is the offering a soothing measure for the human being's sense of inner fright?"
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["The bird steps into flight - what do you make of this sudden motion?"],
+          "highlight": [
+            {
+              "id": "bird-flies-1",
+              "notehead": "l15 ~ l16",
+              "tags": [],
+              "body": "The bird unrolls his feathers into flight. Has the bird taken the crumb with him? Or has he ultimately been frightened into escape?\nFor the poet that gazes upon the flying bird, she keeps her association, still, of the movements of the bird\nwith that of human action - rowing."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": [
+            "This is a final stanza of metamorphosis: the bird's flight is not merely one of movement, but also of transformation."
+          ],
+          "highlight": [
+            {
+              "id": "bird-flies-2",
+              "notehead": "l17 ~ l20",
+              "tags": [],
+              "body": "The poet imagines the bird's flight through the traces left by oars moving in water, so light and ephemeral they barely form a seam\nupon the water's silver surface. In a beautiful moment of inversion, as if the eyes of the reader are meant to see the\nsky above reflected on the watery mirror-surface, the bird has metaphorically transformed into a lightsome butterfly.\nIt leaps, plashlessly, as it swims."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": [
+            "For one critic, this poem was understood to imply the ultimate triumph of beauty over the callous reality of nature. Do you agree?"
+          ],
+          "highlight": [],
+          "writing": {
+            "target": "whole",
+            "tags": [],
+            "count": "one"
+          },
+          "recall": null
+        }
+      ]
+    },
+    {
+      "name": "Nature and the Human Being",
+      "steps": [
+        {
+          "prose": ["Read your response below from the previous stage"],
+          "highlight": [],
+          "writing": null,
+          "recall": {
+            "from": "previous"
+          }
+        },
+        {
+          "prose": [
+            "In the previous stage, we contemplated the transformation of the bird within the poem.",
+            "In this stage, we will think more about the poet's relationship to the bird."
+          ],
+          "highlight": [],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["The poet's vicarious life"],
+          "highlight": [
+            {
+              "id": "poet-projects-1",
+              "notehead": "l4 fellow && l8 To let a Beetle pass - && l12 Velvet Head && l14 I offered him a Crumb",
+              "tags": [],
+              "body": "In these moments of the poem, the poet anthropomorphises the bird and other creatures around her.\nThe bird is not simply a bird to be observed, but the medium through which the poet can vicariously live\nout both the cruelties and sublimities of nature."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": [
+            "Can you observe yourself some parts of the poem where the poet projects her own feelings into the life of the bird?"
+          ],
+          "highlight": [],
+          "writing": {
+            "target": "chosen",
+            "tags": [],
+            "count": "one"
+          },
+          "recall": null
+        },
+        {
+          "prose": ["The instability of vicarious understanding"],
+          "highlight": [
+            {
+              "id": "poet-projects-2",
+              "notehead": "l3 ~ l4 && l11 && l13 ~ l14 && l16",
+              "tags": [],
+              "body": "The poet's empathetic projection into the bird's life tilts from one extreme state to\nto another: from a vision of unfettered crime, to listless paranoia, ultimately to a kind of domestic return.\nBy throwing herself into the bird's life, the poet reclaims for herself a vast spectrum of\nof feelings that could not have been disclosed within the limited bounds of domestic husbandry,\nof mere feeding of an animal, the offering of 'a Crumb.'"
+            }
+          ],
+          "writing": null,
+          "recall": null
+        },
+        {
+          "prose": ["The high note: the poet achieves"],
+          "highlight": [
+            {
+              "id": "poet-achieves-1",
+              "notehead": "l17 ~ l20",
+              "tags": [],
+              "body": "This almost exultant last stanza is suspiciously devoid of the roving bird.\nIt makes you wonder whether the poem was ever about the bird at all, in truth,\nor whether the bird's deft movements simply brought off the poet's movement\ninto artistic freedom, culminating in a series of dense metaphors whereby\nthe wings are oars, the air is water, and time substantialises into place - a \"Bank of Noon\"."
+            }
+          ],
+          "writing": null,
+          "recall": null
+        }
+      ]
+    }
+  ]
+}

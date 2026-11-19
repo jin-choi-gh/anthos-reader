@@ -2,12 +2,15 @@ import { describe, expect, it } from "vitest"
 import type { Span, Substrate } from "../../../material/types"
 import { CHOOSING, choosingBy, passageOf, rangesOnLines } from "../choosing"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const substrate: Substrate = {
-  lines: [
+  lines: withIds([
     "A Bird, came down the Walk -",
     "He did not know I saw -",
     "He bit an Angle Worm in halves",
-  ],
+  ]),
 }
 
 const at = (line: number, offset: number) => ({ line, offset })
@@ -56,7 +59,7 @@ describe("passageOf: to whole words", () => {
   })
 
   it("is nothing when a tap falls between words", () => {
-    expect(passageOf({ lines: ["a  b"] }, at(0, 2), at(0, 3), "word")).toBeNull()
+    expect(passageOf({ lines: withIds(["a  b"]) }, at(0, 2), at(0, 3), "word")).toBeNull()
   })
 })
 

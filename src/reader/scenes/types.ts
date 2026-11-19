@@ -1,7 +1,7 @@
 import type { LemmaPart, Note, Notes, Span, Substrate, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
-/** What the scene plays: parts, with every reference already resolved. */
+/** What the scene plays: parts, with every notehead already placed. */
 export interface Subject {
   /** Which step this is. A new key starts the scene afresh. The same key with a fresh subject keeps
    * the scene's state while something around it changes, such as the notebook. */

@@ -12,7 +12,7 @@ const note = (index: number, id: string | null = null): Note => ({
   paragraphs: [],
 })
 
-/** The editor's three notes, without ids: one picked out, as on a consider step, or none. */
+/** The editor's three notes, without ids: one picked out, as on a step that highlights it, or none. */
 const set: Notes = { notes: [note(0), note(1), note(2)], rangesOn: () => [] }
 const highlight: Commentary = {
   set,
@@ -69,7 +69,7 @@ describe("the highlight: one of the editor's notes lit up in the poem", () => {
     expect(onViewer(highlight, null, tap(0)).open).toBeNull()
   })
 
-  it("picks out nothing, and can open nothing, when its reference named no note", () => {
+  it("picks out nothing, and can open nothing, when the step highlights no note", () => {
     expect(viewerOf("poem", none, null)).toEqual({
       kind: "marked",
       text: "poem",

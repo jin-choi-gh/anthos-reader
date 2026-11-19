@@ -14,7 +14,12 @@ import {
 } from "../spans"
 import type { Span, Substrate } from "../types"
 
-const substrate: Substrate = { lines: ["A Bird, came down", "the 🐦 Walk -", "He did not know"] }
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
+const substrate: Substrate = {
+  lines: withIds(["A Bird, came down", "the 🐦 Walk -", "He did not know"]),
+}
 
 const span = (
   startLine: number,
@@ -74,18 +79,18 @@ describe("spanProblem: loom's rule for spans", () => {
 describe("wholePoem", () => {
   it("runs from the start of the first line to the end of the last, in code points", () => {
     expect(wholePoem(substrate)).toEqual(span(0, 0, 2, 15))
-    expect(wholePoem({ lines: ["A Bird", "came 🐦"] })).toEqual(span(0, 0, 1, 6))
+    expect(wholePoem({ lines: withIds(["A Bird", "came 🐦"]) })).toEqual(span(0, 0, 1, 6))
   })
 
   it("leaves out lines with no text at either end, so that it keeps loom's rule", () => {
-    const edged = { lines: ["", "A Bird", "", "came down", ""] }
+    const edged = { lines: withIds(["", "A Bird", "", "came down", ""]) }
     expect(wholePoem(edged)).toEqual(span(1, 0, 3, 9))
     expect(spanProblem(edged, wholePoem(edged))).toBeNull()
   })
 
   it("throws for a poem with no text", () => {
-    expect(() => wholePoem({ lines: [] })).toThrow("the poem has no text")
-    expect(() => wholePoem({ lines: ["", ""] })).toThrow("the poem has no text")
+    expect(() => wholePoem({ lines: withIds([]) })).toThrow("the poem has no text")
+    expect(() => wholePoem({ lines: withIds(["", ""]) })).toThrow("the poem has no text")
   })
 })
 
@@ -157,7 +162,7 @@ describe("wordAt", () => {
   })
 
   it("is null between words", () => {
-    expect(wordAt({ lines: ["a  b"] }, at(0, 2))).toBeNull()
+    expect(wordAt({ lines: withIds(["a  b"]) }, at(0, 2))).toBeNull()
   })
 })
 

@@ -10,13 +10,16 @@ import {
   type NotingState,
 } from "../noting"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const noting: NotingSubject = {
   substrate: {
-    lines: [
+    lines: withIds([
       "A Bird, came down the Walk -",
       "He did not know I saw -",
       "He bit an Angle Worm in halves",
-    ],
+    ]),
   },
   tags: [],
 }

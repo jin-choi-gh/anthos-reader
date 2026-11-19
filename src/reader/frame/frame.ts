@@ -2,12 +2,12 @@ import { assertNever } from "../../assertNever"
 import type { Material } from "../../material/materials"
 import { notesFor } from "../../material/notes"
 import { sameSpan, spanProblem, wholePoem } from "../../material/spans"
-import type { Note, TextId } from "../../material/types"
+import type { TextId } from "../../material/types"
 import { notesFrom, notesOfStage } from "../../notebook/notebook"
 import type { Provenance, ReaderNote } from "../../notebook/types"
+import { annotationsOf } from "../../practice/editorsNotes"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
-import { finalPartsOf, partsOf, REST } from "../../practice/lexicon"
-import { noteFor } from "../../practice/references"
+import { finalPartsOf, REST } from "../../practice/parts"
 import type { Parts, Practice, Recall, Writing } from "../../practice/types"
 import { finalOf, gateOf, restOf } from "../../runner/gate"
 import { ruling } from "../../runner/step"
@@ -16,12 +16,13 @@ import type { Commentary, Recalled, Subject, WritingAbout } from "../scenes/type
 import type { Frame } from "./types"
 
 /** The frame where the run stands: its heading, the rulings on a step back and a step on, and
- * its subject, with every reference resolved against the editor's notes and the reader's notebook,
- * and the writing's target against the poem. A note counts as written here only on this version of
+ * its subject: the step's editor's notes, placed on the poem by their noteheads, as a set of their
+ * own, each picked out; what the reader wrote there, found in the notebook; and the writing's target,
+ * resolved against the poem. A note counts as written here only on this version of
  * the practice. A note on passages the reader chooses is found only if it was written on these
  * lines and every target keeps the rule for spans, so that its passages can be shown and chosen
- * again here. With a recall, the commentary is the notes it brings back, not the editor's: no
- * direction both highlights and recalls. */
+ * again here. With a recall, the commentary is the notes it brings back, not the editor's: problemsOf
+ * refuses a step that both highlights and recalls. */
 export function frameOf(
   practice: Practice,
   standing: Standing,
@@ -31,7 +32,7 @@ export function frameOf(
   const { station } = standing
   const gate = gateOf(practice, station)
   const parts =
-    gate.kind === "step" ? partsOf(gate.step) : gate.kind === "rest" ? REST : finalPartsOf(practice)
+    gate.kind === "step" ? gate.step : gate.kind === "rest" ? REST : finalPartsOf(practice)
   const { text } = practice
   const where: Provenance = {
     practice: practice.id,
@@ -48,13 +49,7 @@ export function frameOf(
       prose: parts.prose,
       commentary:
         parts.recall === null
-          ? {
-              set: material.notes,
-              notes: resolved(parts, material.notes.notes),
-              shown: "marked",
-              written: null,
-              recalled: null,
-            }
+          ? editorsOf(parts.highlight, material)
           : recalledOf(parts.recall, practice, where, material, written),
       writing:
         parts.writing === null
@@ -152,7 +147,7 @@ function promptOf(
   return {
     stage: from.stage,
     step: from.step,
-    prose: partsOf(gate.step).prose,
+    prose: gate.step.prose,
     stageName: gate.stage.name,
   }
 }
@@ -166,10 +161,11 @@ function placeable(note: ReaderNote, material: Material): boolean {
   )
 }
 
-/** The editor's notes a frame highlights: each reference resolved, and any that name no note
- * in the text left out. */
-function resolved(parts: Parts, notes: readonly Note[]): Note[] {
-  return parts.highlight.flatMap((ref) => noteFor(ref, notes) ?? [])
+/** The editor's notes a step highlights, as a set of their own, each placed on the poem by its
+ * notehead, and each picked out. */
+function editorsOf(highlight: Parts["highlight"], material: Material): Commentary {
+  const set = notesFor(material.substrate, annotationsOf(material.substrate, highlight))
+  return { set, notes: set.notes, shown: "marked", written: null, recalled: null }
 }
 
 /** What the writing is about, in the poem: for "whole", the whole poem; for "chosen", passages the

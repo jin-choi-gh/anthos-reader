@@ -10,12 +10,15 @@ import {
   type Passages,
 } from "../passages"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const substrate: Substrate = {
-  lines: [
+  lines: withIds([
     "A Bird, came down the Walk -",
     "He did not know I saw -",
     "He bit an Angle Worm in halves",
-  ],
+  ]),
 }
 
 const span = (

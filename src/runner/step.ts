@@ -2,7 +2,6 @@ import { nextDay, type Day } from "../clock/clock"
 import { notesFrom } from "../notebook/notebook"
 import type { ReaderNote } from "../notebook/types"
 import { fingerprintOfPractice } from "../practice/fingerprint"
-import { partsOf } from "../practice/lexicon"
 import type { Practice } from "../practice/types"
 import { finalOf, gateOf, restOf } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
@@ -59,7 +58,7 @@ function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[])
   const fingerprint = fingerprintOfPractice(practice)
   for (let step = 0; step < restOf(practice, stage); step++) {
     const gate = gateOf(practice, { stage, step })
-    if (gate.kind !== "step" || partsOf(gate.step).writing === null) continue
+    if (gate.kind !== "step" || gate.step.writing === null) continue
     if (notesFrom(notes, { practice: practice.id, fingerprint, stage, step }).length === 0) {
       return step
     }

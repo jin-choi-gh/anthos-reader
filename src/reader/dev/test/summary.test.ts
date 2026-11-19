@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { REST } from "../../../practice/parts"
 import type { Practice, Step } from "../../../practice/types"
 import { clockText, DAY, eventsText, fullWhere, notesText, shortWhere } from "../summary"
 import type { Standing } from "../../../runner/types"
@@ -11,7 +12,8 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-const consider = (ref: string): Step => ({ direction: "consider", note: ref, prose: [] })
+/** A step that only says something. */
+const say = (words: string): Step => ({ ...REST, prose: [words] })
 
 /** Two stages: two steps, then one. The rests are at step 2 and step 1. */
 const practice: Practice = {
@@ -19,8 +21,8 @@ const practice: Practice = {
   title: "Test",
   text: "poem",
   stages: [
-    { name: "The meal", steps: [consider("@a"), consider("@b")] },
-    { name: "The flight", steps: [consider("@c")] },
+    { name: "The meal", steps: [say("@a"), say("@b")] },
+    { name: "The flight", steps: [say("@c")] },
   ],
 }
 

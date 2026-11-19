@@ -1,0 +1,123 @@
+import type { Practice } from "./types"
+
+/** Whether a value read from a file or from storage is a practice: isPractice is practiceProblem
+ * finding nothing. */
+export function isPractice(value: unknown): value is Practice {
+  return practiceProblem(value) === null
+}
+
+/** What keeps a value read from a file or from storage from being a practice, saying where, or
+ * null if nothing does. Every field must be there, null where it is empty ("writing": null), and no
+ * other: a field this reader does not know would be hashed into the practice's fingerprint
+ * unseen, so it is refused. */
+export function practiceProblem(value: unknown): string | null {
+  return fieldsProblem(value, "the practice", ["id", "title", "text", "stages"], (practice) =>
+    first(
+      stringProblem(practice.id, "the practice's id"),
+      stringProblem(practice.title, "the practice's title"),
+      stringProblem(practice.text, "the practice's text"),
+      listProblem(practice.stages, "the practice's stages", (stage, s) =>
+        stageProblem(stage, `stage ${s + 1}`),
+      ),
+    ),
+  )
+}
+
+function stageProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["name", "steps"], (stage) =>
+    first(
+      stringProblem(stage.name, `${at}: its name`),
+      listProblem(stage.steps, `${at}: its steps`, (step, i) =>
+        stepProblem(step, `${at}, step ${i + 1}`),
+      ),
+    ),
+  )
+}
+
+function stepProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["prose", "highlight", "writing", "recall"], (step) =>
+    first(
+      listProblem(step.prose, `${at}: prose`, (paragraph, p) =>
+        stringProblem(paragraph, `${at}: prose paragraph ${p + 1}`),
+      ),
+      listProblem(step.highlight, `${at}: highlight`, (note, n) =>
+        noteProblem(note, `${at}, note ${n + 1}`),
+      ),
+      step.writing === null ? null : writingProblem(step.writing, `${at}: writing`),
+      step.recall === null ? null : recallProblem(step.recall, `${at}: recall`),
+    ),
+  )
+}
+
+function noteProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["id", "notehead", "tags", "body"], (note) =>
+    first(
+      stringProblem(note.id, `${at}: its id`),
+      stringProblem(note.notehead, `${at}: its notehead`),
+      tagsProblem(note.tags, `${at}: its tags`),
+      stringProblem(note.body, `${at}: its body`),
+    ),
+  )
+}
+
+function writingProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["target", "tags", "count"], (writing) =>
+    first(
+      oneOfProblem(writing.target, `${at}.target`, ["whole", "chosen"]),
+      tagsProblem(writing.tags, `${at}.tags`),
+      oneOfProblem(writing.count, `${at}.count`, ["one"]),
+    ),
+  )
+}
+
+function recallProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["from"], (recall) =>
+    oneOfProblem(recall.from, `${at}.from`, ["previous", "all"]),
+  )
+}
+
+/** A record with exactly these fields, then whatever the record's own check finds. */
+function fieldsProblem(
+  value: unknown,
+  at: string,
+  fields: readonly string[],
+  check: (record: Record<string, unknown>) => string | null,
+): string | null {
+  if (!isRecord(value)) return `${at} must be an object`
+  const missing = fields.filter((field) => !(field in value))
+  if (missing.length > 0) return `${at} has no ${missing.join(", ")}`
+  const unknown = Object.keys(value).filter((key) => !fields.includes(key))
+  if (unknown.length > 0) return `${at} has fields this reader does not know: ${unknown.join(", ")}`
+  return check(value)
+}
+
+function listProblem(
+  value: unknown,
+  at: string,
+  check: (item: unknown, index: number) => string | null,
+): string | null {
+  if (!Array.isArray(value)) return `${at} must be a list`
+  return first(...value.map((item: unknown, index) => check(item, index)))
+}
+
+function tagsProblem(value: unknown, at: string): string | null {
+  return listProblem(value, at, (tag, t) => stringProblem(tag, `${at}, tag ${t + 1}`))
+}
+
+function stringProblem(value: unknown, at: string): string | null {
+  return typeof value === "string" ? null : `${at} must be text`
+}
+
+function oneOfProblem(value: unknown, at: string, allowed: readonly string[]): string | null {
+  return typeof value === "string" && allowed.includes(value)
+    ? null
+    : `${at} must be ${allowed.map((option) => JSON.stringify(option)).join(" or ")}`
+}
+
+function first(...problems: (string | null)[]): string | null {
+  return problems.find((problem) => problem !== null) ?? null
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}

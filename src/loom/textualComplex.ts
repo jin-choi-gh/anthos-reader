@@ -4,9 +4,10 @@ import type { LoomSchema, LoomSpan, LoomUnit, LoomTextualComplex } from "./types
 // What loom's models do (loom/src/models), done on the JSON: the substrate and its spans, and the
 // trees of the schemata. Nothing here knows any particular kind of schema.
 
-/** The substrate: the textual complex's lines, in order, as loom's Substrate has them. */
+/** The substrate: the textual complex's lines, in order, each with its id, as loom's Substrate has
+ * them. */
 export function substrateOf(textualComplex: LoomTextualComplex): Substrate {
-  return { lines: textualComplex.lines.map((line) => line.text) }
+  return { lines: textualComplex.lines.map(({ id, text }) => ({ id, text })) }
 }
 
 /** A loom span as the material's: each [line, offset] pair as a position. */

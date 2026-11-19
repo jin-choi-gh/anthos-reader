@@ -28,12 +28,26 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "reader/viewer",
     "reader/praxisBar",
     "reader/dev",
+    "practice-maker",
     "app",
     "ui",
   ], // the Reader for one text: puts it all together
+  // Form Practice: makes and changes practices
+  "practice-maker": [
+    "material",
+    "loom",
+    "practice",
+    "clock",
+    "storage",
+    "reader/scenes",
+    "reader/viewer",
+    "reader/praxisBar",
+    "ui",
+    "app",
+  ],
   library: ["loom", "app"],
   ui: [],
-  app: ["library", "reader"], // App, main, the route
+  app: ["library", "reader", "practice-maker"], // App, main, the route
 }
 
 /** The layer a source file belongs to, by its path from the root ("/src/runner/gate.ts"): the

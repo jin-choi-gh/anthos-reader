@@ -1,17 +1,28 @@
 import { describe, expect, it } from "vitest"
 import { fingerprintOfPractice } from "../fingerprint"
-import type { Practice, Step } from "../types"
+import { REST } from "../parts"
+import type { EditorsNote, Practice, Step } from "../types"
 
-const consider: Step = { direction: "consider", note: "@angle-worm", prose: ["Look."] }
-const respond: Step = { direction: "respond", prose: ["What does the bird eat?"] }
+const wormNote: EditorsNote = {
+  id: "angle-worm",
+  notehead: "l3 Angle Worm",
+  tags: [],
+  body: "The worm.",
+}
+const look: Step = { ...REST, prose: ["Look."], highlight: [wormNote] }
+const ask: Step = {
+  ...REST,
+  prose: ["What does the bird eat?"],
+  writing: { target: "whole", tags: [], count: "one" },
+}
 
 const practice: Practice = {
   id: "test",
   title: "Test",
   text: "dickinson",
   stages: [
-    { name: "First", steps: [consider, respond] },
-    { name: "Second", steps: [{ direction: "recall", prose: [] }] },
+    { name: "First", steps: [look, ask] },
+    { name: "Second", steps: [{ ...REST, recall: { from: "previous" } }] },
   ],
 }
 
@@ -29,26 +40,46 @@ describe("fingerprintOfPractice: the practice's version", () => {
   })
 
   it("does not change with the order the source writes a step's keys in", () => {
-    const reordered: Step = { prose: ["Look."], note: "@angle-worm", direction: "consider" }
-    expect(fingerprintOfPractice(withSteps(reordered, respond))).toBe(
-      fingerprintOfPractice(practice),
+    const reordered: Step = {
+      recall: null,
+      writing: null,
+      highlight: [{ body: "The worm.", tags: [], notehead: "l3 Angle Worm", id: "angle-worm" }],
+      prose: ["Look."],
+    }
+    expect(fingerprintOfPractice(withSteps(reordered, ask))).toBe(fingerprintOfPractice(practice))
+  })
+
+  it("changes with any change to a step's parts, its editor's notes included, or the steps' order", () => {
+    const base = fingerprintOfPractice(practice)
+    const changed = [
+      withSteps({ ...look, prose: ["Look again."] }, ask),
+      withSteps({ ...look, prose: [""] }, ask),
+      withSteps({ ...look, highlight: [] }, ask),
+      withSteps({ ...look, highlight: [{ ...wormNote, id: "worm" }] }, ask),
+      withSteps({ ...look, highlight: [{ ...wormNote, notehead: "l3 Worm" }] }, ask),
+      withSteps({ ...look, highlight: [{ ...wormNote, tags: ["gloss"] }] }, ask),
+      withSteps({ ...look, highlight: [{ ...wormNote, body: "The angle worm." }] }, ask),
+      withSteps(look, { ...ask, writing: { target: "chosen", tags: [], count: "one" } }),
+      withSteps(look, { ...ask, writing: { target: "whole", tags: ["gloss"], count: "one" } }),
+      withSteps(look, { ...ask, writing: null }),
+      withSteps(ask, look),
+      withSteps(look),
+    ]
+    for (const edited of changed) expect(fingerprintOfPractice(edited)).not.toBe(base)
+    expect(fingerprintOfPractice(withSteps({ ...look, prose: [] }, ask))).not.toBe(
+      fingerprintOfPractice(withSteps({ ...look, prose: [""] }, ask)),
     )
   })
 
-  it("changes with any change to a step: its prose, its note, its direction, or the steps' order", () => {
-    const base = fingerprintOfPractice(practice)
-    const changed = [
-      withSteps({ ...consider, prose: ["Look again."] }, respond),
-      withSteps({ ...consider, prose: [""] }, respond),
-      withSteps({ ...consider, note: "@beads" }, respond),
-      withSteps(consider, { direction: "observe", prose: respond.prose }),
-      withSteps(respond, consider),
-      withSteps(consider),
-    ]
-    for (const edited of changed) expect(fingerprintOfPractice(edited)).not.toBe(base)
-    expect(fingerprintOfPractice(withSteps({ ...consider, prose: [] }, respond))).not.toBe(
-      fingerprintOfPractice(withSteps({ ...consider, prose: [""] }, respond)),
-    )
+  it("changes with a recall's reach", () => {
+    const all: Practice = {
+      ...practice,
+      stages: [
+        practice.stages[0]!,
+        { name: "Second", steps: [{ ...REST, recall: { from: "all" } }] },
+      ],
+    }
+    expect(fingerprintOfPractice(all)).not.toBe(fingerprintOfPractice(practice))
   })
 
   it("does not change with the practice's title or its stages' names, which are headings", () => {
@@ -66,26 +97,5 @@ describe("fingerprintOfPractice: the practice's version", () => {
       stages: [{ name: "All", steps: practice.stages.flatMap((stage) => stage.steps) }],
     }
     expect(fingerprintOfPractice(merged)).not.toBe(fingerprintOfPractice(practice))
-  })
-})
-
-describe("fingerprintOfPractice: a reflect step", () => {
-  const reflect: Step = { direction: "reflect", prose: ["Read the poem through."] }
-
-  it("is part of the version: adding one, or changing its prose, makes a new one", () => {
-    const base = fingerprintOfPractice(withSteps(reflect, consider, respond))
-    expect(base).not.toBe(fingerprintOfPractice(practice))
-    expect(
-      fingerprintOfPractice(
-        withSteps({ ...reflect, prose: ["Read it twice."] }, consider, respond),
-      ),
-    ).not.toBe(base)
-  })
-
-  it("is told from another direction with the same prose", () => {
-    const recall: Step = { direction: "recall", prose: reflect.prose }
-    expect(fingerprintOfPractice(withSteps(reflect, respond))).not.toBe(
-      fingerprintOfPractice(withSteps(recall, respond)),
-    )
   })
 })

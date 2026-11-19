@@ -5,10 +5,19 @@ import { SchemaTree, schemaOfKind, spanOf, substrateOf } from "../textualComplex
 const complex = makeTextualComplex([["A Bird, came down", "the 🐦 Walk -", "He did not know"]])
 
 describe("substrateOf and spanOf", () => {
-  it("gives the substrate as the textual complex's lines, in order", () => {
+  it("gives the substrate as the textual complex's lines, in order, each with loom's id for it", () => {
     expect(substrateOf(complex)).toEqual({
-      lines: ["A Bird, came down", "the 🐦 Walk -", "He did not know"],
+      lines: [
+        { id: "l1", text: "A Bird, came down" },
+        { id: "l2", text: "the 🐦 Walk -" },
+        { id: "l3", text: "He did not know" },
+      ],
     })
+  })
+
+  it("copies only each line's id and text", () => {
+    const extra = { ...complex, lines: complex.lines.map((line) => ({ ...line, other: 1 })) }
+    expect(substrateOf(extra).lines[0]).toStrictEqual({ id: "l1", text: "A Bird, came down" })
   })
 
   it("turns loom's [line, offset] pairs into positions", () => {
