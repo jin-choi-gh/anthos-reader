@@ -1,29 +1,29 @@
 import { useLayoutEffect, useState, useSyncExternalStore, type RefObject } from "react"
 
-/** Where things go, from the reader's width: the page alone, or the page with a margin beside it. */
-export type ReaderLayout = "page" | "spread"
+/** Where things go, from the folio's width: the page alone, or the page with a margin beside it. */
+export type PageOrSpread = "page" | "spread"
 
-/** How the reader is mostly pointed at, by the primary pointer: a finger, or a mouse or trackpad.
- * It is marked on the reader (data-input) and decides nothing else: how a passage is chosen goes
+/** How the app is mostly pointed at, by the primary pointer: a finger, or a mouse or trackpad.
+ * It is marked on the folio (data-input) and decides nothing else: how a passage is chosen goes
  * by the pointer of each press (CHOOSING, in viewer/choosing.ts), and where things go by the width. */
-export type ReaderInput = "touch" | "mouse"
+export type Pointer = "touch" | "mouse"
 
-/** The reader's width and its primary pointer, which vary apart: a narrow desktop window is a page
+/** The folio's width and its primary pointer, which vary apart: a narrow desktop window is a page
  * pointed at by a mouse, and a tablet held sideways is a spread pointed at by a finger. */
 export interface Platform {
-  layout: ReaderLayout // from the reader's width: page or spread
-  input: ReaderInput // from the primary pointer: touch or mouse
+  layout: PageOrSpread // from the folio's width: page or spread
+  input: Pointer // from the primary pointer: touch or mouse
 }
 
 export function usePlatform(ref: RefObject<HTMLElement | null>): Platform {
   return { layout: useLayout(ref), input: useInput() }
 }
 
-// Width of the reader itself, not the window: on the web the nav sidebar takes some of it
+// Width of the folio itself, not the window: on the web the nav sidebar takes some of it
 export const SPREAD_MIN_WIDTH = 900
 
-function useLayout(ref: RefObject<HTMLElement | null>): ReaderLayout {
-  const [layout, setLayout] = useState<ReaderLayout>("page")
+function useLayout(ref: RefObject<HTMLElement | null>): PageOrSpread {
+  const [layout, setLayout] = useState<PageOrSpread>("page")
 
   useLayoutEffect(() => {
     const el = ref.current
@@ -42,11 +42,11 @@ function useLayout(ref: RefObject<HTMLElement | null>): ReaderLayout {
 // laptop that also has a touchscreen
 const COARSE = "(pointer: coarse)"
 
-function useInput(): ReaderInput {
+function useInput(): Pointer {
   return useSyncExternalStore(subscribe, currentInput)
 }
 
-function currentInput(): ReaderInput {
+function currentInput(): Pointer {
   return window.matchMedia(COARSE).matches ? "touch" : "mouse"
 }
 

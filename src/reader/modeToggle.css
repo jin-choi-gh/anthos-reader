@@ -1,0 +1,32 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* The mode toggle: a pen, quiet like the way back, and filled while annotate mode is on */
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px; /* a finger-sized target */
+  padding-inline: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-note);
+  background: none;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.mode-toggle:hover {
+  color: var(--ink);
+}
+
+.mode-toggle[aria-pressed="true"] {
+  border-color: var(--edge-selected);
+  background: var(--fill-editor);
+  color: var(--ink);
+}
+
+.mode-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

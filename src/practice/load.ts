@@ -1,6 +1,10 @@
 import { practiceProblem } from "./guard"
 import type { Practice } from "./types"
 
+// The version of practice files this reader reads: 2 gave stages and steps ids, stages their days,
+// and recalls the stage or step they name
+const FORMAT_VERSION = 2
+
 // Every practice file in anthos-reader/practice-data/, read by Vite when it builds the app: file path
 // → the file's JSON. Practices are small, so all are read at once.
 const files = import.meta.glob<unknown>("../../practice-data/*.json", {
@@ -25,15 +29,15 @@ export function loadPractices(): { practices: Practice[]; problems: string[] } {
 }
 
 /** Parsed JSON checked to be a practice file this reader understands: marked "anthos-practice",
- * format version 1, and, without those two marks, a practice. Throws, naming `origin` and saying
+ * format version 2, and, without those two marks, a practice. Throws, naming `origin` and saying
  * what is wrong, when it is not. */
 export function parsePractice(data: unknown, origin: string): Practice {
   if (!isRecord(data) || data.format !== "anthos-practice") {
     throw new Error(`${origin}: not an anthos practice`)
   }
-  if (data.format_version !== 1) {
+  if (data.format_version !== FORMAT_VERSION) {
     throw new Error(
-      `${origin}: format version ${String(data.format_version)}, but this reader reads version 1`,
+      `${origin}: format version ${String(data.format_version)}, but this reader reads version ${FORMAT_VERSION}`,
     )
   }
   const { format: _format, format_version: _version, ...practice } = data

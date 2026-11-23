@@ -1,0 +1,380 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* A wider margin than the Reader's: it holds the practice being made, not a note */
+.folio.form-practice[data-layout="spread"] {
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
+}
+
+.form-practice .margin {
+  gap: 1.5rem;
+}
+
+/* On a page, the margin's parts under the poem */
+.form-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* "Read", at the right of the top bar: quiet, like the way back */
+.form-read {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.75rem;
+  border-radius: var(--radius-note);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.form-read:hover {
+  color: var(--ink);
+}
+
+.form-read:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* What is not yet written, and what is written wrong */
+.form-missing {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.form-problem {
+  margin: 0;
+  color: var(--problem);
+}
+
+.form-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Words written in place, where they will be read: no box, the focus ring only when typing */
+.form-title,
+.form-stage-name,
+.form-prose {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--ink);
+}
+
+.form-title::placeholder,
+.form-stage-name::placeholder,
+.form-prose::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.form-title:focus-visible,
+.form-stage-name:focus-visible,
+.form-prose:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* 1. The practice's name, as the library's heading is set, with what there is to do beside it */
+.form-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-title {
+  flex: 1;
+  min-width: 12rem;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.form-save:not(:disabled) {
+  border-color: var(--edge-selected);
+}
+
+.form-head .form-problem,
+.form-head .form-confirm {
+  margin-top: 0.75rem;
+}
+
+/* 2. The reel's contents, as a book's: stages by their numerals, steps under them by their numbers,
+   in the poem's face. On a spread it keeps to its share of the margin, so the card stays in reach */
+.anatomy {
+  font-family: var(--font-text);
+}
+
+.form-practice .margin .anatomy {
+  flex: none;
+  max-height: 45dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.anatomy ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anatomy-stage + .anatomy-stage {
+  margin-top: 0.75rem;
+}
+
+.anatomy-entry {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: baseline;
+  width: 100%;
+  padding: 0.125rem 0.25rem;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.anatomy-entry:hover .anatomy-text {
+  text-decoration: underline;
+  text-decoration-color: var(--line-hover);
+  text-underline-offset: 3px;
+}
+
+/* The stage or step selected: picked out as a passage is in the poem */
+.anatomy-entry[aria-current="true"] {
+  background: var(--fill-editor);
+}
+
+.anatomy-entry:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.anatomy-stage-entry {
+  font-size: 1.05rem;
+}
+
+.anatomy-step-entry {
+  font-size: 0.95rem;
+}
+
+.anatomy-number {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.anatomy-step-entry .anatomy-number {
+  color: var(--ink-faint);
+}
+
+.anatomy-entry[data-broken="true"] .anatomy-number {
+  color: var(--problem);
+}
+
+.anatomy-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The next step, and the next stage, not yet written: faint, like a line waiting to be written */
+.anatomy-new .anatomy-number,
+.anatomy-new .anatomy-text {
+  color: var(--ink-faint);
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.anatomy-new:hover .anatomy-number,
+.anatomy-new:hover .anatomy-text {
+  opacity: 1;
+}
+
+.anatomy .anatomy-steps {
+  padding-left: 2.25rem;
+}
+
+/* When a stage opens: under its name, as a poet is under a title in the library */
+.anatomy-opens {
+  margin: 0 0 0.125rem 2.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+
+/* 3. The card: the praxis bar, as the reader will see it, written in place. Its heading, and in its
+   corner, where an open note has its ×, moving and removing */
+.form-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: -0.5rem -0.5rem -0.25rem 0;
+}
+
+.form-icons {
+  display: flex;
+  flex: none;
+}
+
+/* Finger-sized, quiet like the open note's × */
+.form-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-note);
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.form-icon:hover:not(:disabled) {
+  color: var(--ink);
+}
+
+.form-icon:disabled {
+  color: var(--ink-faint);
+  opacity: 0.35;
+  cursor: default;
+}
+
+.form-icon:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
+
+@media (pointer: coarse) {
+  .form-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.form-prose {
+  min-height: 4.5em;
+  font: inherit;
+  line-height: 1.5;
+  resize: none;
+  field-sizing: content;
+}
+
+.form-stage-name {
+  font-family: var(--font-text);
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+.form-opens {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.form-days {
+  width: 3.5rem;
+  padding: 0.125rem 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--page);
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+}
+
+.form-days:hover {
+  border-color: var(--line-hover);
+}
+
+.form-days:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* What the reader does next, as one sentence, its choices written into it */
+.form-then {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 2;
+}
+
+/* Folded up, the note's form is one button: Add a note */
+.form-add-note {
+  align-self: flex-start;
+}
+
+.form-remove-note {
+  margin-right: auto;
+}
+
+/* A step's notes with something wrong, which the poem may not show */
+.form-wrong-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-wrong-notes li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--problem);
+}
+
+.form-lemma {
+  margin: 0;
+}
+
+.form-lemma q {
+  quotes: none;
+  font-style: italic;
+}
+
+/* The note's form docked at the foot of a page: a long box scrolls inside the dock */
+.dock .noting-page .text-box {
+  max-height: 20dvh;
+}
+
+/* A question asked in place */
+.form-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  border-left: 3px solid var(--line-hover);
+}
+
+.form-confirm p {
+  margin: 0;
+}
+
+.form-confirm-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-confirm-yes {
+  border-color: var(--problem);
+}

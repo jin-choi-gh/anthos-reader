@@ -2,10 +2,11 @@ import { describe, expect, it, vi } from "vitest"
 import type { Material } from "../../../material/materials"
 import type { Fingerprint } from "../../../material/types"
 import { REST } from "../../../practice/parts"
-import type { Practice, Step } from "../../../practice/types"
+import type { Parts } from "../../../practice/types"
 import { controlsOf } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 import type { Standing } from "../../../runner/types"
+import { practiceOf } from "../../../practice/test/build"
 
 /** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
 const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
@@ -26,10 +27,10 @@ const standing = (
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
 /** A step that only says something. */
-const say = (words: string): Step => ({ ...REST, prose: [words] })
+const say = (words: string): Parts => ({ ...REST, prose: [words] })
 
 /** Two stages of two steps each: the rests are at step 2. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "poem",
@@ -37,7 +38,7 @@ const practice: Practice = {
     { name: "First", steps: [say("@a"), say("@b")] },
     { name: "Second", steps: [say("@a"), say("@b")] },
   ],
-}
+})
 
 /** The controls where a run stands, and the moves their buttons asked for so far. */
 function at(where: Standing) {

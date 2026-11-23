@@ -1,7 +1,9 @@
 import { useId } from "react"
-import { Lemma } from "../../ui/Lemma"
+import { Button, FieldHeading, FieldLabel, TextBox } from "../../components/controls"
+import { Lemma } from "../../components/Lemma"
 import type { PraxisBarProtocol, WritingProjection } from "../scenes/types"
 import { ChosenPassages } from "./ChosenPassages"
+import "./praxisBar.css"
 
 /** A page of the reader's notebook, in the praxis bar. Being written: the passages, when the reader
  * chooses what the note is about, a box, Respond (when there is something new to send) and Cancel
@@ -28,12 +30,9 @@ export function NotebookPage({
           }}
         >
           {page.passages !== null && <ChosenPassages passages={page.passages} send={send} />}
-          <label htmlFor={box} className="notebook-label">
-            Your response
-          </label>
-          <textarea
+          <FieldLabel htmlFor={box}>Your response</FieldLabel>
+          <TextBox
             id={box}
-            className="notebook-box"
             rows={4}
             value={page.draft}
             onChange={(event) => send({ kind: "draft", text: event.target.value })}
@@ -46,29 +45,17 @@ export function NotebookPage({
             }}
           />
           <div className="notebook-actions">
-            {page.canCancel && (
-              <button
-                type="button"
-                className="praxis-button"
-                onClick={() => send({ kind: "cancel" })}
-              >
-                Cancel
-              </button>
-            )}
-            <button
-              type="submit"
-              className="praxis-button notebook-submit"
-              disabled={!page.canSubmit}
-            >
+            {page.canCancel && <Button onClick={() => send({ kind: "cancel" })}>Cancel</Button>}
+            <Button type="submit" className="notebook-submit" disabled={!page.canSubmit}>
               Respond
-            </button>
+            </Button>
           </div>
         </form>
       )
     case "written":
       return (
         <div className="notebook-page">
-          <p className="notebook-label">Your response</p>
+          <FieldHeading>Your response</FieldHeading>
           {page.lemma !== null && (
             <p className="notebook-lemma">
               <Lemma lemma={page.lemma} />
@@ -80,9 +67,7 @@ export function NotebookPage({
             ))}
           </div>
           <div className="notebook-actions">
-            <button type="button" className="praxis-button" onClick={() => send({ kind: "edit" })}>
-              Edit
-            </button>
+            <Button onClick={() => send({ kind: "edit" })}>Edit</Button>
           </div>
         </div>
       )

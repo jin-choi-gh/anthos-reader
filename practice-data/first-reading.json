@@ -1,20 +1,24 @@
 {
   "format": "anthos-practice",
-  "format_version": 1,
+  "format_version": 2,
   "id": "first-reading",
   "title": "First reading",
   "text": "dickinson",
   "stages": [
     {
+      "id": "stage-1",
       "name": "The Bird and His Flight",
+      "days": null,
       "steps": [
         {
+          "id": "step-1",
           "prose": ["Read this poem on a bird's fleet-footed acts and his eventual flight."],
           "highlight": [],
           "writing": null,
           "recall": null
         },
         {
+          "id": "step-2",
           "prose": ["In the beginning the bird is an agent of violence"],
           "highlight": [
             {
@@ -28,6 +32,7 @@
           "recall": null
         },
         {
+          "id": "step-3",
           "prose": ["Consider how sonic features add to the poem's power of evocation"],
           "highlight": [
             {
@@ -41,6 +46,7 @@
           "recall": null
         },
         {
+          "id": "step-4",
           "prose": ["Is the brutality of nature the only note?"],
           "highlight": [
             {
@@ -54,6 +60,7 @@
           "recall": null
         },
         {
+          "id": "step-5",
           "prose": ["How are we to consider the bird?"],
           "highlight": [
             {
@@ -67,6 +74,7 @@
           "recall": null
         },
         {
+          "id": "step-6",
           "prose": [
             "By the middle of the poem, the bird has lost its ferocity. It now appears as a creature paranoid and out of place."
           ],
@@ -82,6 +90,7 @@
           "recall": null
         },
         {
+          "id": "step-7",
           "prose": [
             "What does it mean for the poet to intervene within the acts of their own poem? What does it mean for the human being to intervene within the unfolding of nature?"
           ],
@@ -97,6 +106,7 @@
           "recall": null
         },
         {
+          "id": "step-8",
           "prose": ["The bird steps into flight - what do you make of this sudden motion?"],
           "highlight": [
             {
@@ -110,6 +120,7 @@
           "recall": null
         },
         {
+          "id": "step-9",
           "prose": [
             "This is a final stanza of metamorphosis: the bird's flight is not merely one of movement, but also of transformation."
           ],
@@ -125,6 +136,7 @@
           "recall": null
         },
         {
+          "id": "step-10",
           "prose": [
             "For one critic, this poem was understood to imply the ultimate triumph of beauty over the callous reality of nature. Do you agree?"
           ],
@@ -139,17 +151,22 @@
       ]
     },
     {
+      "id": "stage-2",
       "name": "Nature and the Human Being",
+      "days": 1,
       "steps": [
         {
+          "id": "step-11",
           "prose": ["Read your response below from the previous stage"],
           "highlight": [],
           "writing": null,
           "recall": {
-            "from": "previous"
+            "from": "stage",
+            "id": "stage-1"
           }
         },
         {
+          "id": "step-12",
           "prose": [
             "In the previous stage, we contemplated the transformation of the bird within the poem.",
             "In this stage, we will think more about the poet's relationship to the bird."
@@ -159,6 +176,7 @@
           "recall": null
         },
         {
+          "id": "step-13",
           "prose": ["The poet's vicarious life"],
           "highlight": [
             {
@@ -172,6 +190,7 @@
           "recall": null
         },
         {
+          "id": "step-14",
           "prose": [
             "Can you observe yourself some parts of the poem where the poet projects her own feelings into the life of the bird?"
           ],
@@ -184,6 +203,7 @@
           "recall": null
         },
         {
+          "id": "step-15",
           "prose": ["The instability of vicarious understanding"],
           "highlight": [
             {
@@ -197,6 +217,7 @@
           "recall": null
         },
         {
+          "id": "step-16",
           "prose": ["The high note: the poet achieves"],
           "highlight": [
             {

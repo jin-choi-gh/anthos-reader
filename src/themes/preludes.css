@@ -25,6 +25,7 @@
   --fill-chosen: rgb(13 148 136 / 0.3); /* passages chosen for a new note: the teal at 30% */
   --accent: #0d9488; /* buttons that stand out, such as − beside a chosen passage: the teal */
   --on-accent: #ffffff; /* what is drawn on the accent */
+  --problem: #b3412e; /* what is broken and must be put right, in Form Practice: a brick red */
 
   /* Interaction */
   --focus: #0b7d72; /* the keyboard focus ring: the teal, darkened */
@@ -39,4 +40,5 @@
   --radius-note: 8px;
   --radius-sheet: 12px;
   --shadow-sheet: 0 -2px 12px rgb(93 76 55 / 0.1);
+  --shadow-popup: 0 8px 24px rgb(93 76 55 / 0.14); /* a list opened from a choice, over the page */
 }

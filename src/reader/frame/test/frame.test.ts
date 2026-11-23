@@ -5,9 +5,10 @@ import type { Fingerprint } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
 import { fingerprintOfPractice } from "../../../practice/fingerprint"
 import { REST } from "../../../practice/parts"
-import type { EditorsNote, Practice, Step } from "../../../practice/types"
+import type { EditorsNote, Parts } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../frame"
+import { practiceOf } from "../../../practice/test/build"
 
 /** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
 const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
@@ -55,26 +56,26 @@ const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderN
 })
 
 /** A step that highlights one of the editor's notes. */
-const look = (id: string): Step => ({
+const look = (id: string): Parts => ({
   ...REST,
   prose: [`On ${id}.`],
   highlight: [editorsNotes[id]!],
 })
 /** A step that asks for one note on the whole poem. */
-const askWhole: Step = {
+const askWhole: Parts = {
   ...REST,
   prose: ["What does the bird eat?"],
   writing: { target: "whole", tags: [], count: "one" },
 }
 /** A step that asks for one note on passages the reader chooses. */
-const askChosen: Step = {
+const askChosen: Parts = {
   ...REST,
   prose: ["Where does the bird change?"],
   writing: { target: "chosen", tags: [], count: "one" },
 }
 
 /** Two stages: the rests are at step 2 and step 3. The note "missing" cannot be placed. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "fixture",
@@ -82,7 +83,7 @@ const practice: Practice = {
     { name: "First", steps: [look("a"), look("b")] },
     { name: "Second", steps: [look("missing"), look("a"), askWhole] },
   ],
-}
+})
 
 const noSuchStep = { allowed: false, reason: { kind: "noSuchStep" } }
 const finished = { allowed: false, reason: { kind: "finished" } }
@@ -336,13 +337,13 @@ describe("annotateFrame: the notes written in annotate mode, which can be delete
 
 describe("frameOf: a step asking for writing on chosen passages, wherever the editor puts it", () => {
   /** Writing on chosen passages first in a stage, and twice in a row after writing on the whole poem. */
-  const askingChosen: Practice = {
+  const askingChosen = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [askChosen, look("a")] },
       { name: "Second", steps: [askWhole, askChosen, askChosen] },
     ],
-  }
+  })
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const on = (stage: number, step: number, more: Partial<ReaderNote> = {}) =>
     mine(`${stage}/${step}`, "Fed.", {
@@ -413,17 +414,19 @@ describe("frameOf: a step asking for writing on chosen passages, wherever the ed
   })
 })
 
-describe("frameOf: a recall step, bringing back the stage before", () => {
-  const recalling: Practice = {
+describe("frameOf: a recall step, bringing back the stage it names", () => {
+  const recalling = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [look("a"), askChosen, askWhole] },
       {
         name: "Second",
-        steps: [{ ...REST, prose: ["Yesterday, you wrote:"], recall: { from: "previous" } }],
+        steps: [
+          { ...REST, prose: ["Yesterday, you wrote:"], recall: { from: "stage", id: "stage-1" } },
+        ],
       },
     ],
-  }
+  })
   const version = fingerprintOfPractice(recalling)
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const at = (stage: number, step: number, fingerprint = version) => ({
@@ -471,7 +474,7 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
   })
 
   it("counts the reader's note on a writing step only on this version", () => {
-    const edited: Practice = {
+    const edited = practiceOf({
       ...recalling,
       stages: [
         {
@@ -480,7 +483,7 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
         },
         recalling.stages[1]!,
       ],
-    }
+    })
     expect(frameOf(edited, standing(0, 2), material, [answered]).subject.writing?.written).toEqual(
       [],
     )
@@ -490,16 +493,55 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
   })
 })
 
+describe("frameOf: a recall step, bringing back the step it names", () => {
+  const recall = (id: string) => ({
+    ...REST,
+    prose: ["Just now, you wrote:"],
+    recall: { from: "step", id } as const,
+  })
+  const recalling = practiceOf({
+    ...practice,
+    stages: [{ name: "First", steps: [look("a"), askChosen, askWhole, recall("step-3")] }],
+  })
+  const version = fingerprintOfPractice(recalling)
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const at = (stage: number, step: number) => ({
+    from: { practice: "test", fingerprint: version, stage, step },
+  })
+  const answered = mine("r", "Worms.", at(0, 2))
+  const observed = mine("o", "A bird.", { targets: [bird], ...at(0, 1) })
+
+  it("lists only the notes written on that step, even one earlier in the same stage", () => {
+    const { commentary } = frameOf(recalling, standing(0, 3), material, [
+      observed,
+      answered,
+    ]).subject
+    expect(commentary.notes.map((note) => note.id)).toEqual(["r"])
+    expect(commentary.recalled).toEqual([
+      { prompt: ["What does the bird eat?"], whole: true, heading: "First" },
+    ])
+  })
+
+  it("lists nothing for a step that is not there", () => {
+    const gone = practiceOf({
+      ...practice,
+      stages: [{ name: "First", steps: [look("a"), askChosen, askWhole, recall("gone")] }],
+    })
+    const { commentary } = frameOf(gone, standing(0, 3), material, [observed, answered]).subject
+    expect(commentary).toMatchObject({ notes: [], recalled: [] })
+  })
+})
+
 describe("frameOf: the final stage, bringing back every stage", () => {
   /** Three stages, the first two with the same name, each asking for writing. */
-  const finishing: Practice = {
+  const finishing = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [look("a"), askChosen, askWhole] },
       { name: "First", steps: [askWhole, look("b")] },
       { name: "Third", steps: [askChosen] },
     ],
-  }
+  })
   const version = fingerprintOfPractice(finishing)
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const at = (stage: number, step: number, fingerprint = version) => ({
@@ -557,7 +599,7 @@ describe("frameOf: the final stage, bringing back every stage", () => {
   })
 
   it("recalls nothing in a practice that asks for no writing: the editor's notes, none picked out", () => {
-    const silent: Practice = { ...practice, stages: [{ name: "Only", steps: [look("a")] }] }
+    const silent = practiceOf({ ...practice, stages: [{ name: "Only", steps: [look("a")] }] })
     const { commentary } = frameOf(silent, standing(1, 0), material, []).subject
     expect(commentary).toEqual({
       set: noNotes,
@@ -570,10 +612,10 @@ describe("frameOf: the final stage, bringing back every stage", () => {
 })
 
 describe("frameOf: a step that only says something", () => {
-  const saying: Practice = {
+  const saying = practiceOf({
     ...practice,
     stages: [{ name: "First", steps: [{ ...REST, prose: ["Read the poem through."] }] }],
-  }
+  })
 
   it("gives its prose, picks out none of the editor's notes, and asks for nothing", () => {
     expect(frameOf(saying, standing(0, 0), material, []).subject).toEqual({

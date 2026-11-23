@@ -1,14 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { annotationsOf } from "../editorsNotes"
 import { finalPartsOf, REST } from "../parts"
-import type { Practice, Step } from "../types"
+import type { Parts, Practice } from "../types"
+import { practiceOf as built } from "./build"
 
-const practiceOf = (...steps: Step[]): Practice => ({
-  id: "test",
-  title: "Test",
-  text: "dickinson",
-  stages: [{ name: "Only", steps }],
-})
+const practiceOf = (...steps: Parts[]): Practice =>
+  built({ id: "test", title: "Test", text: "dickinson", stages: [{ name: "Only", steps }] })
 
 describe("REST", () => {
   it("says nothing and asks nothing", () => {

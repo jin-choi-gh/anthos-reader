@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { Substrate } from "../../material/types"
 import { REST } from "../../practice/parts"
 import type { Practice } from "../../practice/types"
+import { practiceOf } from "../../practice/test/build"
 import {
   eventOfSaving,
   eventOfWithdrawing,
@@ -12,12 +13,13 @@ import {
 
 const substrate: Substrate = { lines: [{ id: "l1", text: "He bit an Angle Worm in halves" }] }
 
-const practice = (id: string, words = "Look.", text = "dickinson"): Practice => ({
-  id,
-  title: id,
-  text,
-  stages: [{ name: "One", steps: [{ ...REST, prose: [words] }] }],
-})
+const practice = (id: string, words = "Look.", text = "dickinson"): Practice =>
+  practiceOf({
+    id,
+    title: id,
+    text,
+    stages: [{ name: "One", steps: [{ ...REST, prose: [words] }] }],
+  })
 
 const saved = (p: Practice, at = 0): MadeEvent => ({ kind: "saved", at, practice: p })
 const withdrawn = (id: string, at = 0): MadeEvent => ({ kind: "withdrawn", at, id })
@@ -53,7 +55,7 @@ describe("eventOfSaving", () => {
   })
 
   it("refuses a practice with problems on its text's lines", () => {
-    const broken: Practice = { ...practice("a"), stages: [] }
+    const broken = practiceOf({ ...practice("a"), stages: [] })
     expect(() => eventOfSaving([], broken, substrate, 0)).toThrow(
       "a practice with problems is not saved: no stages",
     )

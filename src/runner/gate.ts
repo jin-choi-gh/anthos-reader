@@ -19,6 +19,15 @@ export function restOf(practice: Practice, stage: number): number {
   return stageAt(practice, stage).steps.length
 }
 
+/** How many days after a stage is finished the next one opens: the next stage's days, or none
+ * before the final stage, which opens at once. A practice that runs gives every later stage its
+ * days; one that does not is taken to wait a day. */
+export function daysUntilNext(practice: Practice, stage: number): number {
+  stageAt(practice, stage)
+  if (stage === finalOf(practice) - 1) return 0
+  return stageAt(practice, stage + 1).days ?? 1
+}
+
 /** Where the final stage is: one past the last stage. */
 export function finalOf(practice: Practice): number {
   return practice.stages.length

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
 import type { Substrate, TextId } from "../material/types"
-import { problemsOf } from "../practice/problems"
+import { problemsOf, wordedProblem } from "../practice/problems"
 import type { Practice, PracticeId } from "../practice/types"
 import { appendEvents, readEvents, whenChanged } from "../storage/log"
 import { eventOfSaving, eventOfWithdrawing, isMadeEvent, madePracticesOf } from "./store"
@@ -47,7 +47,7 @@ export function useMadePractices(text: TextId): MadePractices {
       practices,
       save: (practice, substrate) => {
         const problems = problemsOf(practice, substrate)
-        if (problems.length > 0) return problems
+        if (problems.length > 0) return problems.map((problem) => wordedProblem(practice, problem))
         const event = eventOfSaving(standing(), practice, substrate, now())
         if (event === null || append(event)) return []
         return ["the browser did not keep it: its storage is off or full"]

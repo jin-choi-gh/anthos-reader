@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react"
+import "./bottomSheet.css"
 
 /** A sheet over the foot of the page, folded down to its handle or open. It starts as `startsOpen`
  * says, and from then on is the reader's to fold and open. */

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest"
 import { isPractice, practiceProblem } from "../guard"
 import { REST } from "../parts"
-import type { Practice } from "../types"
+import { practiceOf } from "./build"
 
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "dickinson",
@@ -19,9 +19,12 @@ const practice: Practice = {
         { ...REST, writing: { target: "chosen", tags: [], count: "one" } },
       ],
     },
-    { name: "Two", steps: [{ ...REST, recall: { from: "all" } }] },
+    {
+      name: "Two",
+      steps: [{ ...REST, prose: ["Again."], recall: { from: "step", id: "step-2" } }],
+    },
   ],
-}
+})
 
 /** The practice, as JSON would give it, with its first stage's first step changed. */
 const withFirstStep = (step: Record<string, unknown>): unknown => {
@@ -74,9 +77,10 @@ describe("isPractice and practiceProblem: a value read from a file or from stora
     expect(
       practiceProblem(withFirstStep({ writing: { target: "whole", tags: [], count: "two" } })),
     ).toBe('stage 1, step 1: writing.count must be "one"')
-    expect(practiceProblem(withFirstStep({ recall: { from: "next" } }))).toBe(
-      'stage 1, step 1: recall.from must be "previous" or "all"',
+    expect(practiceProblem(withFirstStep({ recall: { from: "previous" } }))).toBe(
+      'stage 1, step 1: recall.from must be "stage" or "step" or "all"',
     )
+    expect(practiceProblem(withFirstStep({ id: 4 }))).toBe("stage 1, step 1: its id must be text")
     expect(
       practiceProblem(
         withFirstStep({ highlight: [{ id: "worm", notehead: 3, tags: [], body: "" }] }),
@@ -87,5 +91,31 @@ describe("isPractice and practiceProblem: a value read from a file or from stora
         withFirstStep({ highlight: [{ id: "worm", notehead: "l3", tags: [1], body: "" }] }),
       ),
     ).toBe("stage 1, step 1, note 1: its tags, tag 1 must be text")
+  })
+
+  it("asks a stage for its id, its name, its days and its steps, and its days to be a number or null", () => {
+    const copy = JSON.parse(JSON.stringify(practice))
+    delete copy.stages[1].days
+    expect(practiceProblem(copy)).toBe("stage 2 has no days")
+    copy.stages[1].days = "1"
+    expect(practiceProblem(copy)).toBe("stage 2: its days must be a number, or null")
+    copy.stages[1].days = 2.5
+    expect(practiceProblem(copy)).toBeNull()
+    copy.stages[0].id = null
+    expect(practiceProblem(copy)).toBe("stage 1: its id must be text")
+  })
+
+  it("asks a recall of a stage or step for an id, and one of the whole practice for none", () => {
+    expect(practiceProblem(withFirstStep({ recall: { from: "stage", id: "stage-2" } }))).toBeNull()
+    expect(practiceProblem(withFirstStep({ recall: { from: "all" } }))).toBeNull()
+    expect(practiceProblem(withFirstStep({ recall: { from: "step" } }))).toBe(
+      "stage 1, step 1: recall has no id",
+    )
+    expect(practiceProblem(withFirstStep({ recall: { from: "step", id: 2 } }))).toBe(
+      "stage 1, step 1: recall.id must be text",
+    )
+    expect(practiceProblem(withFirstStep({ recall: { from: "all", id: "stage-1" } }))).toBe(
+      "stage 1, step 1: recall has fields this reader does not know: id",
+    )
   })
 })

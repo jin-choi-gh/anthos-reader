@@ -1,24 +1,37 @@
 import { assertNever } from "../assertNever"
 import { REST } from "../practice/parts"
-import type { EditorsNote, Practice, Recall, Stage, Step, Writing } from "../practice/types"
+import type { StepPlace } from "../practice/places"
+import type {
+  EditorsNote,
+  Practice,
+  Recall,
+  Stage,
+  StageId,
+  Step,
+  StepId,
+  Writing,
+} from "../practice/types"
 
-/** Where a step is in a draft: its stage's place, and its place in that stage, from 0. */
-type StepPlace = { readonly stage: number; readonly step: number }
-
-/** One change to a draft practice. Stages, steps and notes are named by their place, since steps
- * have no ids, and a draft's note ids may repeat until problemsOf says so. */
+/** One change to a draft practice. Stages, steps and notes are named by their place, since a
+ * draft's ids may repeat until problemsOf says so. A new stage or step comes with its id. */
 export type Edit =
   | { readonly kind: "retitle"; readonly title: string }
-  | { readonly kind: "addStage"; readonly at: number; readonly name: string }
+  | { readonly kind: "addStage"; readonly at: number; readonly id: StageId; readonly name: string }
   | { readonly kind: "renameStage"; readonly stage: number; readonly name: string }
+  | { readonly kind: "setStageDays"; readonly stage: number; readonly days: number }
   | { readonly kind: "moveStage"; readonly from: number; readonly to: number }
   | { readonly kind: "removeStage"; readonly stage: number }
-  | { readonly kind: "addStep"; readonly at: StepPlace }
+  | { readonly kind: "addStep"; readonly at: StepPlace; readonly id: StepId }
   | { readonly kind: "moveStep"; readonly from: StepPlace; readonly to: StepPlace }
   | { readonly kind: "removeStep"; readonly at: StepPlace }
   | { readonly kind: "setProse"; readonly at: StepPlace; readonly prose: readonly string[] }
-  | { readonly kind: "setWriting"; readonly at: StepPlace; readonly writing: Writing | null }
-  | { readonly kind: "setRecall"; readonly at: StepPlace; readonly recall: Recall | null }
+  | {
+      readonly kind: "setParts"
+      readonly at: StepPlace
+      readonly highlight: readonly EditorsNote[]
+      readonly writing: Writing | null
+      readonly recall: Recall | null
+    }
   | { readonly kind: "addNote"; readonly at: StepPlace; readonly note: EditorsNote }
   | {
       readonly kind: "changeNote"
@@ -35,31 +48,41 @@ export type Edit =
   | { readonly kind: "removeNote"; readonly at: StepPlace; readonly index: number }
 
 /** The draft with one edit made. An edit naming a stage, step or note the draft does not have, or a
- * place it cannot go, changes nothing, and gives back the very same draft. A new stage has no steps,
- * and a new step no parts: problemsOf says so until they are written. Moving a thing to a place
+ * place it cannot go, changes nothing, and gives back the very same draft, as do days on the first
+ * stage, which has none, and days that are not a whole number of at least 1. A new stage has no
+ * steps, and a new step no parts: problemsOf says so until they are written. A step's parts besides
+ * its prose are set together, so that one edit can leave it with one part. Moving a thing to a place
  * counts that place as if it had been taken out first: moving the first of three steps to place 2
- * makes it the last. */
+ * makes it the last. After adding, moving or removing a stage, the first stage has no days, and a
+ * later one that had none has 1. Removing a stage or step that a recall names leaves the recall
+ * naming nothing, as problemsOf says. */
 export function edited(draft: Practice, edit: Edit): Practice {
   switch (edit.kind) {
     case "retitle":
       return { ...draft, title: edit.title }
     case "addStage": {
-      const stages = inserted(draft.stages, edit.at, { name: edit.name, steps: [] })
-      return stages === null ? draft : { ...draft, stages }
+      const stage: Stage = { id: edit.id, name: edit.name, days: null, steps: [] }
+      const stages = inserted(draft.stages, edit.at, stage)
+      return stages === null ? draft : { ...draft, stages: withDays(stages) }
     }
     case "renameStage":
       return withStage(draft, edit.stage, (stage) => ({ ...stage, name: edit.name }))
+    case "setStageDays": {
+      const { days } = edit
+      if (edit.stage === 0 || !Number.isInteger(days) || days < 1) return draft
+      return withStage(draft, edit.stage, (stage) => ({ ...stage, days }))
+    }
     case "moveStage": {
       const stages = moved(draft.stages, edit.from, edit.to)
-      return stages === null ? draft : { ...draft, stages }
+      return stages === null ? draft : { ...draft, stages: withDays(stages) }
     }
     case "removeStage": {
       const stages = removed(draft.stages, edit.stage)
-      return stages === null ? draft : { ...draft, stages }
+      return stages === null ? draft : { ...draft, stages: withDays(stages) }
     }
     case "addStep":
       return withStage(draft, edit.at.stage, (stage) => {
-        const steps = inserted(stage.steps, edit.at.step, REST)
+        const steps = inserted(stage.steps, edit.at.step, { id: edit.id, ...REST })
         return steps === null ? null : { ...stage, steps }
       })
     case "moveStep":
@@ -71,10 +94,10 @@ export function edited(draft: Practice, edit: Edit): Practice {
       })
     case "setProse":
       return withStep(draft, edit.at, (step) => ({ ...step, prose: edit.prose }))
-    case "setWriting":
-      return withStep(draft, edit.at, (step) => ({ ...step, writing: edit.writing }))
-    case "setRecall":
-      return withStep(draft, edit.at, (step) => ({ ...step, recall: edit.recall }))
+    case "setParts": {
+      const { highlight, writing, recall } = edit
+      return withStep(draft, edit.at, (step) => ({ ...step, highlight, writing, recall }))
+    }
     case "addNote":
       return withStep(draft, edit.at, (step) => ({
         ...step,
@@ -103,12 +126,49 @@ export function edited(draft: Practice, edit: Edit): Practice {
 
 /** The id for a new editor's note: the first of note-1, note-2, … that no note of the draft has. */
 export function nextNoteId(draft: Practice): string {
-  const taken = new Set(
-    draft.stages.flatMap((stage) => stage.steps.flatMap((step) => step.highlight.map((n) => n.id))),
+  const steps = draft.stages.flatMap((stage) => stage.steps)
+  return firstFree(
+    "note",
+    steps.flatMap((step) => step.highlight.map((note) => note.id)),
   )
+}
+
+/** The id for a new stage: the first of stage-1, stage-2, … that no stage of the draft has and no
+ * recall names, so that a recall left naming a stage that was removed never comes to name another. */
+export function nextStageId(draft: Practice): StageId {
+  return firstFree("stage", [...draft.stages.map((stage) => stage.id), ...named(draft, "stage")])
+}
+
+/** The id for a new step: the first of step-1, step-2, … that no step of the draft has and no recall
+ * names, so that a recall left naming a step that was removed never comes to name another. */
+export function nextStepId(draft: Practice): StepId {
+  const steps = draft.stages.flatMap((stage) => stage.steps)
+  return firstFree("step", [...steps.map((step) => step.id), ...named(draft, "step")])
+}
+
+/** The first of prefix-1, prefix-2, … not taken. */
+function firstFree(prefix: string, taken: readonly string[]): string {
+  const ids = new Set(taken)
   let n = 1
-  while (taken.has(`note-${n}`)) n++
-  return `note-${n}`
+  while (ids.has(`${prefix}-${n}`)) n++
+  return `${prefix}-${n}`
+}
+
+/** The ids of the stages, or of the steps, that the draft's recalls name. */
+function named(draft: Practice, from: "stage" | "step"): string[] {
+  return draft.stages.flatMap((stage) =>
+    stage.steps.flatMap(({ recall }) =>
+      recall !== null && recall.from === from ? [recall.id] : [],
+    ),
+  )
+}
+
+/** Stages with days as their places ask: none on the first, and 1 on a later one that had none. */
+function withDays(stages: readonly Stage[]): Stage[] {
+  return stages.map((stage, s) => {
+    if (s === 0) return stage.days === null ? stage : { ...stage, days: null }
+    return stage.days === null ? { ...stage, days: 1 } : stage
+  })
 }
 
 /** A step moved from one place to another, in its stage or into another. Its new place is counted

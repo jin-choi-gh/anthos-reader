@@ -1,14 +1,15 @@
-import { nextDay, type Day } from "../clock/clock"
+import { daysAfter, type Day } from "../clock/clock"
 import { notesFrom } from "../notebook/notebook"
 import type { ReaderNote } from "../notebook/types"
 import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
-import { finalOf, gateOf, restOf } from "./gate"
+import { daysUntilNext, finalOf, gateOf, restOf } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
 
 /** Where the run stands, from the runner's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
- * finished, and which step holds the reader until they have written. */
+ * finished, as the event that finished it fixed it, and which step holds the reader until they have
+ * written. */
 export function standingOf(
   practice: Practice,
   log: readonly Event[],
@@ -22,7 +23,7 @@ export function standingOf(
   for (let stage = 0; stage < final; stage++) {
     const rest = restOf(practice, stage)
     let step = 0
-    let finished: { day: Day; index: number } | null = null
+    let finished: { day: Day; opens: Day; index: number } | null = null
 
     for (const [index, event] of log.entries()) {
       if (index < from || event.stage !== stage) continue
@@ -33,7 +34,7 @@ export function standingOf(
         event.day <= today &&
         (opened === null || event.day >= opened)
       ) {
-        finished = { day: event.day, index }
+        finished = { day: event.day, opens: event.opens, index }
       }
     }
 
@@ -42,7 +43,7 @@ export function standingOf(
       return { station, opensOn: null, heldAt: heldAt(practice, stage, notes) }
     }
     if (stage === final - 1) break
-    const opensOn = nextDay(finished.day)
+    const opensOn = finished.opens
     // A finished stage never holds the reader again: what is past is past
     if (today < opensOn) return { station, opensOn, heldAt: null }
     from = finished.index + 1
@@ -86,7 +87,8 @@ export function ruling(practice: Practice, standing: Standing, target: number): 
 }
 
 /** What the runner logs when the reader moves to a step: the visit, and the stage finished
- * the first time its rest is reached. A move the law refuses is a mistake in the caller: it throws. */
+ * the first time its rest is reached, with the day the next stage opens, by the days the practice
+ * gives it today. A move the law refuses is a mistake in the caller: it throws. */
 export function eventsOfMove(
   practice: Practice,
   standing: Standing,
@@ -105,7 +107,8 @@ export function eventsOfMove(
   const rest = restOf(practice, station.stage)
   const events: Event[] = [{ kind: "visited", stage: station.stage, step: target, at }]
   if (target === rest && opensOn === null) {
-    events.push({ kind: "finished", stage: station.stage, at, day: today })
+    const opens = daysAfter(today, daysUntilNext(practice, station.stage))
+    events.push({ kind: "finished", stage: station.stage, at, day: today, opens })
   }
   return events
 }

@@ -24,9 +24,13 @@ export function practiceProblem(value: unknown): string | null {
 }
 
 function stageProblem(value: unknown, at: string): string | null {
-  return fieldsProblem(value, at, ["name", "steps"], (stage) =>
+  return fieldsProblem(value, at, ["id", "name", "days", "steps"], (stage) =>
     first(
+      stringProblem(stage.id, `${at}: its id`),
       stringProblem(stage.name, `${at}: its name`),
+      stage.days === null || (typeof stage.days === "number" && Number.isFinite(stage.days))
+        ? null
+        : `${at}: its days must be a number, or null`,
       listProblem(stage.steps, `${at}: its steps`, (step, i) =>
         stepProblem(step, `${at}, step ${i + 1}`),
       ),
@@ -35,8 +39,9 @@ function stageProblem(value: unknown, at: string): string | null {
 }
 
 function stepProblem(value: unknown, at: string): string | null {
-  return fieldsProblem(value, at, ["prose", "highlight", "writing", "recall"], (step) =>
+  return fieldsProblem(value, at, ["id", "prose", "highlight", "writing", "recall"], (step) =>
     first(
+      stringProblem(step.id, `${at}: its id`),
       listProblem(step.prose, `${at}: prose`, (paragraph, p) =>
         stringProblem(paragraph, `${at}: prose paragraph ${p + 1}`),
       ),
@@ -70,10 +75,14 @@ function writingProblem(value: unknown, at: string): string | null {
   )
 }
 
+/** A recall names what it brings back: a stage or a step, by its id; or the whole practice, with no
+ * id. Whether what it names is there is for problemsOf to say. */
 function recallProblem(value: unknown, at: string): string | null {
-  return fieldsProblem(value, at, ["from"], (recall) =>
-    oneOfProblem(recall.from, `${at}.from`, ["previous", "all"]),
-  )
+  if (!isRecord(value)) return `${at} must be an object`
+  const from = oneOfProblem(value.from, `${at}.from`, ["stage", "step", "all"])
+  if (from !== null) return from
+  if (value.from === "all") return fieldsProblem(value, at, ["from"], () => null)
+  return fieldsProblem(value, at, ["from", "id"], (recall) => stringProblem(recall.id, `${at}.id`))
 }
 
 /** A record with exactly these fields, then whatever the record's own check finds. */

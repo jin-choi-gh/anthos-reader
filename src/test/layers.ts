@@ -12,9 +12,9 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
   runner: ["material", "practice", "clock", "notebook", "storage"], // Practice Runner
   "reader/frame": ["material", "practice", "runner", "notebook", "reader/scenes"], // Frame
   "reader/scenes": ["material", "notebook"], // Scene: never the reel or the runner
-  "reader/viewer": ["material", "reader/scenes", "ui"], // Viewer
+  "reader/viewer": ["material", "reader/scenes", "components"], // Viewer
   // Praxis Bar
-  "reader/praxisBar": ["clock", "runner", "reader/frame", "reader/scenes", "ui"],
+  "reader/praxisBar": ["clock", "runner", "reader/frame", "reader/scenes", "components"],
   "reader/dev": ["practice", "clock", "runner", "notebook"],
   reader: [
     "material",
@@ -30,7 +30,7 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "reader/dev",
     "practice-maker",
     "app",
-    "ui",
+    "components",
   ], // the Reader for one text: puts it all together
   // Form Practice: makes and changes practices
   "practice-maker": [
@@ -42,11 +42,11 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "reader/scenes",
     "reader/viewer",
     "reader/praxisBar",
-    "ui",
+    "components",
     "app",
   ],
   library: ["loom", "app"],
-  ui: [],
+  components: [], // what more than one part draws with
   app: ["library", "reader", "practice-maker"], // App, main, the route
 }
 

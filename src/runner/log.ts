@@ -25,6 +25,10 @@ export function clearLog(practice: Practice): void {
   clearEvents(logKey(practice))
 }
 
+function isDay(value: unknown): boolean {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+}
+
 function isEvent(value: unknown): value is Event {
   if (!isRecord(value)) return false
   if (!Number.isInteger(value.stage) || typeof value.at !== "number") return false
@@ -32,7 +36,8 @@ function isEvent(value: unknown): value is Event {
     case "visited":
       return Number.isInteger(value.step)
     case "finished":
-      return typeof value.day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.day)
+      // An older log's "finished" has no day the next stage opens: it is not read
+      return isDay(value.day) && isDay(value.opens)
     default:
       return false // a kind this reader does not know, such as the "responded" of an older log
   }

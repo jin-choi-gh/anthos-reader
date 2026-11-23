@@ -26,6 +26,17 @@ describe("practice-data/first-reading.json", () => {
     expect(problemsOf(firstReading, { lines: DICKINSON })).toEqual([])
   })
 
+  it("opens its second stage a day after the first, and brings back there what was written in it", () => {
+    const [first, second] = firstReading.stages
+    expect([first?.id, first?.days, second?.id, second?.days]).toEqual([
+      "stage-1",
+      null,
+      "stage-2",
+      1,
+    ])
+    expect(second?.steps[0]?.recall).toEqual({ from: "stage", id: "stage-1" })
+  })
+
   it("holds the editor's notes on the poem, each with the head written in loom's notes file", () => {
     const notes = firstReading.stages.flatMap((stage) =>
       stage.steps.flatMap((step) => step.highlight),
@@ -38,7 +49,7 @@ describe("practice-data/first-reading.json", () => {
 
 describe("parsePractice", () => {
   const practice = { id: "test", title: "Test", text: "dickinson", stages: [] }
-  const file = { format: "anthos-practice", format_version: 1, ...practice }
+  const file = { format: "anthos-practice", format_version: 2, ...practice }
 
   it("gives the practice in a practice file, without the file's marks", () => {
     expect(parsePractice(file, "test.json")).toEqual(practice)
@@ -47,13 +58,14 @@ describe("parsePractice", () => {
   it("refuses what is not a practice file, or of another version, naming it", () => {
     expect(() => parsePractice(practice, "test.json")).toThrow("test.json: not an anthos practice")
     expect(() => parsePractice(null, "test.json")).toThrow("test.json: not an anthos practice")
-    expect(() => parsePractice({ ...file, format_version: 2 }, "test.json")).toThrow(
-      "test.json: format version 2, but this reader reads version 1",
+    expect(() => parsePractice({ ...file, format_version: 1 }, "test.json")).toThrow(
+      "test.json: format version 1, but this reader reads version 2",
     )
   })
 
   it("refuses a file whose practice is not one, saying where", () => {
-    expect(() => parsePractice({ ...file, stages: [{ name: "One" }] }, "test.json")).toThrow(
+    const stages = [{ id: "stage-1", name: "One", days: null }]
+    expect(() => parsePractice({ ...file, stages }, "test.json")).toThrow(
       "test.json: stage 1 has no steps",
     )
   })

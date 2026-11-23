@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react"
+import { Folio, Message } from "../components/Folio"
+import { usePlatform } from "../components/usePlatform"
 import { loadTextualComplex } from "../loom/load"
 import { toMaterial } from "../loom/toMaterial"
 import { fingerprintOfPractice } from "../practice/fingerprint"
@@ -13,8 +15,6 @@ import type { Material } from "../material/materials"
 import { modeOf } from "./mode"
 import { ModeToggle } from "./ModeToggle"
 import { PracticeMode } from "./PracticeMode"
-import { usePlatform } from "./usePlatform"
-import "./reader.css"
 
 // The practice files, read once; each Reader takes its text's practice from them
 const practiceFiles = loadPractices()
@@ -68,11 +68,7 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   if (material === null || chosen === null) {
     // Loading, or the load failed
     content = (
-      <Layout
-        layout={layout}
-        page={<p className="reader-message">{error ?? "Loading…"}</p>}
-        notes={null}
-      />
+      <Layout layout={layout} page={<Message>{error ?? "Loading…"}</Message>} notes={null} />
     )
   } else {
     const { mode } = chosen
@@ -93,8 +89,8 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   }
 
   return (
-    <div ref={ref} className="reader" data-layout={layout} data-input={input}>
+    <Folio ref={ref} layout={layout} input={input}>
       {content}
-    </div>
+    </Folio>
   )
 }

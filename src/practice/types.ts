@@ -16,13 +16,26 @@ export interface Practice {
   readonly stages: readonly Stage[]
 }
 
+/** A stage's id, which never changes: "stage-1". Letters, digits, - and _, as loom allows ids. */
+export type StageId = string
+
+/** A step's id, which never changes: "step-4". Letters, digits, - and _, as loom allows ids. */
+export type StepId = string
+
+/** A group of steps: its id, its name, which heads its steps, its steps, and its days: how many
+ * days after the reader finishes the stage before it opens, at least 1, or null on the first
+ * stage, which is open from the start. */
 export interface Stage {
+  readonly id: StageId
   readonly name: string
+  readonly days: number | null
   readonly steps: readonly Step[]
 }
 
-/** A step, as the editor writes it: its parts, and nothing else. */
-export type Step = Parts
+/** A step, as the editor writes it: its parts, under an id that names it, and nothing else. */
+export interface Step extends Parts {
+  readonly id: StepId
+}
 
 /** What a step is made of. */
 export interface Parts {
@@ -50,9 +63,10 @@ export interface Writing {
   readonly count: "one"
 }
 
-/** The reader's notes to bring back, as they answered the practice: those written in the stage
- * before ("previous"), or in every stage before ("all"), which in the final stage is the whole
- * practice. */
-export interface Recall {
-  readonly from: "previous" | "all"
-}
+/** The reader's notes to bring back, as they answered the practice: those written in an earlier
+ * stage ("stage"), or on an earlier step ("step"), named by its id; or, in the final stage only,
+ * those written in every stage before it, the whole practice ("all"). */
+export type Recall =
+  | { readonly from: "stage"; readonly id: StageId }
+  | { readonly from: "step"; readonly id: StepId }
+  | { readonly from: "all" }

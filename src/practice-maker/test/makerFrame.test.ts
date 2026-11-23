@@ -3,9 +3,9 @@ import type { Material } from "../../material/materials"
 import { spansOfNotehead } from "../../material/noteheads"
 import type { Fingerprint } from "../../material/types"
 import { REST } from "../../practice/parts"
-import type { Practice } from "../../practice/types"
+import { practiceOf } from "../../practice/test/build"
 import { scene } from "../../reader/scenes/scene"
-import { makerFrame, noteOf } from "../makerFrame"
+import { editOfNote, makerFrame, noteOf } from "../makerFrame"
 
 const material: Material = {
   substrate: {
@@ -18,7 +18,7 @@ const material: Material = {
   poem: { title: "Fixture", author: "", stanzas: [] },
 }
 
-const draft: Practice = {
+const draft = practiceOf({
   id: "draft",
   title: "Draft",
   text: "fixture",
@@ -31,17 +31,17 @@ const draft: Practice = {
           prose: ["Look at the worm."],
           highlight: [{ id: "worm", notehead: "l2 Worm", tags: ["gloss"], body: "The worm." }],
         },
-        { ...REST, writing: { target: "whole", tags: [], count: "one" } },
+        { ...REST, prose: ["Why?"], writing: { target: "whole", tags: [], count: "one" } },
       ],
     },
   ],
-}
+})
 
 describe("makerFrame: the subject of the step being made", () => {
   it("shows the step's prose and its editor's notes, picked out, with a noting and no writing", () => {
-    const subject = makerFrame(draft, { stage: 0, step: 0 }, material)!
+    const subject = makerFrame(draft, "step-1", material, { noting: true })
     expect(subject).toMatchObject({
-      key: "form/0/0",
+      key: "form/step-1",
       text: "fixture",
       prose: ["Look at the worm."],
       writing: null,
@@ -61,16 +61,37 @@ describe("makerFrame: the subject of the step being made", () => {
   })
 
   it("leaves out a writing the step asks of the reader: the editor writes notes, not answers", () => {
-    expect(makerFrame(draft, { stage: 0, step: 1 }, material)?.writing).toBeNull()
+    expect(makerFrame(draft, "step-2", material, { noting: true }).writing).toBeNull()
   })
 
-  it("is keyed by the step's place, so another step starts the scene afresh", () => {
-    expect(makerFrame(draft, { stage: 0, step: 1 }, material)?.key).toBe("form/0/1")
+  it("is keyed by the step's id, so another step starts the scene afresh, and a moved one does not", () => {
+    expect(makerFrame(draft, "step-2", material, { noting: true }).key).toBe("form/step-2")
+    const moved = {
+      ...draft,
+      stages: [{ ...draft.stages[0]!, steps: [...draft.stages[0]!.steps].reverse() }],
+    }
+    expect(makerFrame(moved, "step-1", material, { noting: true }).key).toBe("form/step-1")
   })
 
-  it("is none for a step the draft does not have", () => {
-    expect(makerFrame(draft, { stage: 0, step: 2 }, material)).toBeNull()
-    expect(makerFrame(draft, { stage: 1, step: 0 }, material)).toBeNull()
+  it("leaves out the note taken up to be written again, so that it is not drawn twice", () => {
+    const subject = makerFrame(draft, "step-1", material, { noting: true, inHand: "worm" })
+    expect(subject.commentary.notes).toEqual([])
+    expect(subject.key).toBe("form/step-1")
+  })
+
+  it("has no noting unless the step highlights, so the scene lets go of choosing", () => {
+    expect(makerFrame(draft, "step-1", material, { noting: false }).noting).toBeNull()
+  })
+
+  it("is the poem alone with no step, or none with that id", () => {
+    for (const id of [null, "gone"]) {
+      expect(makerFrame(draft, id, material, { noting: true })).toMatchObject({
+        key: "form",
+        prose: [],
+        commentary: { notes: [] },
+        noting: null,
+      })
+    }
   })
 })
 
@@ -91,7 +112,7 @@ describe("noteOf: a noting's new note as an editor's note", () => {
   })
 
   it("takes the note the Scene sends out when the editor adds one on chosen passages", () => {
-    const subject = makerFrame(draft, { stage: 0, step: 0 }, material)!
+    const subject = makerFrame(draft, "step-1", material, { noting: true })
     let state = scene.start(subject).state
     state = scene.fromPraxisBar(state, { kind: "choosing", on: true }).state
     const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
@@ -106,5 +127,36 @@ describe("noteOf: a noting's new note as an editor's note", () => {
       tags: [],
       body: "The bird.",
     })
+  })
+})
+
+describe("editOfNote: what a note sent out by the noting does to the step", () => {
+  const at = { stage: 0, step: 0 }
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const effect = { kind: "note", targets: [bird], tags: [], body: "The bird." } as const
+
+  it("adds a new editor's note, with the first id the draft does not use", () => {
+    expect(editOfNote(draft, at, null, effect, material.substrate)).toEqual({
+      kind: "addNote",
+      at,
+      note: { id: "note-1", notehead: "l1 Bird", tags: [], body: "The bird." },
+    })
+  })
+
+  it("changes the note in hand in its place, keeping its id and its tags", () => {
+    expect(editOfNote(draft, at, "worm", effect, material.substrate)).toEqual({
+      kind: "changeNote",
+      at,
+      index: 0,
+      note: { id: "worm", notehead: "l1 Bird", tags: ["gloss"], body: "The bird." },
+    })
+  })
+
+  it("adds a new note when the note in hand is no longer the step's", () => {
+    expect(editOfNote(draft, at, "gone", effect, material.substrate)?.kind).toBe("addNote")
+  })
+
+  it("is none for a step that is not there", () => {
+    expect(editOfNote(draft, { stage: 0, step: 5 }, null, effect, material.substrate)).toBeNull()
   })
 })

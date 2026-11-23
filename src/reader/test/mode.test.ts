@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { Substrate } from "../../material/types"
 import { REST } from "../../practice/parts"
+import { practiceOf } from "../../practice/test/build"
 import type { EditorsNote, Practice } from "../../practice/types"
 import { modeOf } from "../mode"
 
@@ -11,20 +12,28 @@ const substrate: Substrate = {
   ],
 }
 
-const note = (id: string, notehead: string): EditorsNote => ({ id, notehead, tags: [], body: "" })
+const note = (id: string, notehead: string): EditorsNote => ({
+  id,
+  notehead,
+  tags: [],
+  body: "A note.",
+})
 
 /** A practice of one stage, a step for each editor's note. */
-const practiceOn = (...notes: EditorsNote[]): Practice => ({
-  id: "test",
-  title: "Test",
-  text: "dickinson",
-  stages: [{ name: "The meal", steps: notes.map((n) => ({ ...REST, highlight: [n] })) }],
-})
+const practiceOn = (...notes: EditorsNote[]): Practice =>
+  practiceOf({
+    id: "test",
+    title: "Test",
+    text: "dickinson",
+    stages: [
+      { name: "The meal", steps: notes.map((n) => ({ ...REST, prose: ["See."], highlight: [n] })) },
+    ],
+  })
 
 const runs = practiceOn(note("angle-worm", "l1 Angle Worm"), note("fellow", "l2 fellow"))
 const broken = practiceOn(note("angle-worm", "l1 Angle Worm"), note("flight", "l2 flight"))
 const brokenProblems = [
-  'stage 1 "The meal", step 2: the note flight: l2 "flight": "flight" is not in line l2: "And ate the fellow, raw,"',
+  'stage 1 "The meal", step 2, note 1: l2 "flight": "flight" is not in line l2: "And ate the fellow, raw,"',
 ]
 
 describe("modeOf, when practice is asked for", () => {

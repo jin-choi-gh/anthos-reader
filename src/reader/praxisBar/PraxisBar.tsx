@@ -1,9 +1,11 @@
 import type { Day } from "../../clock/clock"
+import { Button } from "../../components/controls"
 import type { Control, FrameControls } from "../frame/controls"
 import type { PraxisBarProjection, PraxisBarProtocol } from "../scenes/types"
 import { NotebookPage } from "./NotebookPage"
 import { NotingPage } from "./NotingPage"
 import { reasonText } from "./reasonText"
+import "./praxisBar.css"
 
 /** The praxis bar: the frame's heading, Back and Next, and the scene's projection between them.
  * `today` is only for putting a refusal into words: "tomorrow" depends on it. `label` names the bar
@@ -79,15 +81,15 @@ function ControlButton({
   switch (control.kind) {
     case "go":
       return (
-        <button type="button" className={`praxis-button ${className}`} onClick={control.go}>
+        <Button className={className} onClick={control.go}>
           {label}
-        </button>
+        </Button>
       )
     case "refused":
       return (
-        <button type="button" className={`praxis-button ${className}`} disabled>
+        <Button className={className} disabled>
           {label}
-        </button>
+        </Button>
       )
     case "none":
       return null

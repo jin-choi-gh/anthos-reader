@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest"
 import { eventsOfMove, ruling, standingOf } from "../step"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { REST } from "../../practice/parts"
-import type { Practice, Step } from "../../practice/types"
-import type { Day } from "../../clock/clock"
+import type { Practice, Parts } from "../../practice/types"
+import { nextDay, type Day } from "../../clock/clock"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 import type { Event, Standing } from "../types"
 import type { Fingerprint } from "../../material/types"
+import { practiceOf } from "../../practice/test/build"
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
@@ -21,10 +22,10 @@ const replay = (practice: Practice, log: Event[], today: Day) =>
   standingOf(practice, log, [], today)
 
 /** A step that only says something. */
-const say = (words: string): Step => ({ ...REST, prose: [`Look at ${words}.`] })
+const say = (words: string): Parts => ({ ...REST, prose: [`Look at ${words}.`] })
 
 /** Two stages of two steps each: the rests are at step 2. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "fixture",
@@ -32,10 +33,18 @@ const practice: Practice = {
     { name: "First", steps: [say("a"), say("b")] },
     { name: "Second", steps: [say("c"), say("d")] },
   ],
-}
+})
 
 const visited = (stage: number, step: number): Event => ({ kind: "visited", stage, step, at: 0 })
-const finished = (stage: number, day: Day): Event => ({ kind: "finished", stage, at: 0, day })
+/** A stage finished on a day, the next opening on the day after, as with a day's wait, unless
+ * the event says otherwise. */
+const finished = (stage: number, day: Day, opens: Day = nextDay(day)): Event => ({
+  kind: "finished",
+  stage,
+  at: 0,
+  day,
+  opens,
+})
 
 describe("step: within a stage", () => {
   it("starts at the first step of the first stage", () => {
@@ -75,6 +84,21 @@ describe("step: between stages", () => {
   it("follows the second stage's visits once it is open", () => {
     const log = [...finishedFirst, visited(1, 1)]
     expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 1))
+  })
+
+  it("opens the next stage on the day its finished event fixed, whatever the days say now", () => {
+    const slow = practiceOf({
+      ...practice,
+      stages: [
+        { name: "First", steps: [say("a"), say("b")] },
+        { name: "Second", steps: [say("c"), say("d")], days: 5 },
+      ],
+    })
+    const log = [visited(0, 2), finished(0, "2026-11-10", "2026-11-13")]
+    expect(replay(slow, log, "2026-11-12")).toEqual(standing(0, 2, "2026-11-13"))
+    expect(replay(slow, log, "2026-11-13")).toEqual(standing(1, 0))
+    // A stage already open stays open, however many days its stage is changed to wait
+    expect(replay(slow, [...log, visited(1, 1)], "2026-11-13")).toEqual(standing(1, 1))
   })
 
   it("opens the final stage as soon as the last stage is finished", () => {
@@ -184,7 +208,25 @@ describe("eventsOfMove", () => {
   it("finishes the stage, today, the first time the rest is reached", () => {
     expect(eventsOfMove(practice, standing(0, 1), 2, at, "2026-11-10")).toEqual([
       { kind: "visited", stage: 0, step: 2, at },
-      { kind: "finished", stage: 0, at, day: "2026-11-10" },
+      { kind: "finished", stage: 0, at, day: "2026-11-10", opens: "2026-11-11" },
+    ])
+  })
+
+  it("fixes the day the next stage opens by its days, and the final stage's on the day itself", () => {
+    const slow = practiceOf({
+      ...practice,
+      stages: [
+        { name: "First", steps: [say("a")] },
+        { name: "Second", steps: [say("b")], days: 3 },
+      ],
+    })
+    expect(eventsOfMove(slow, standing(0, 0), 1, at, "2026-11-30")).toEqual([
+      { kind: "visited", stage: 0, step: 1, at },
+      { kind: "finished", stage: 0, at, day: "2026-11-30", opens: "2026-12-03" },
+    ])
+    expect(eventsOfMove(slow, standing(1, 0), 1, at, "2026-12-03")).toEqual([
+      { kind: "visited", stage: 1, step: 1, at },
+      { kind: "finished", stage: 1, at, day: "2026-12-03", opens: "2026-12-03" },
     ])
   })
 
@@ -224,19 +266,19 @@ describe("eventsOfMove", () => {
 })
 
 describe("the law: a step that asks for writing holds the reader until they have written", () => {
-  const askWhole: Step = {
+  const askWhole: Parts = {
     ...REST,
     prose: ["What does the bird eat?"],
     writing: { target: "whole", tags: [], count: "one" },
   }
   /** Two stages; the first says, asks, says, asks, with its rest at step 4. */
-  const asking: Practice = {
+  const asking = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [say("a"), askWhole, say("b"), askWhole] },
       { name: "Second", steps: [say("c")] },
     ],
-  }
+  })
   /** A note in the notebook, written on a step of the first stage. */
   const written = (step: number): ReaderNote => ({
     id: `note-${step}` as NoteId,
@@ -298,19 +340,19 @@ describe("the law: a step that asks for writing holds the reader until they have
 })
 
 describe("the law: a step asking for writing on chosen passages holds the reader as one on the whole poem does", () => {
-  const askChosen: Step = {
+  const askChosen: Parts = {
     ...REST,
     prose: ["Where does the bird change?"],
     writing: { target: "chosen", tags: [], count: "one" },
   }
   /** Writing on chosen passages first in the first stage, and twice in a row, last, in the last. */
-  const askingChosen: Practice = {
+  const askingChosen = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [askChosen, say("a")] },
       { name: "Second", steps: [say("b"), askChosen, askChosen] },
     ],
-  }
+  })
   /** A note written on a step of this practice, unless written somewhere else. */
   const written = (
     stage: number,
@@ -373,19 +415,23 @@ describe("the law: a step asking for writing on chosen passages holds the reader
 })
 
 describe("the law and versions of a practice", () => {
-  const askWhole: Step = {
+  const askWhole: Parts = {
     ...REST,
     prose: ["What does the bird eat?"],
     writing: { target: "whole", tags: [], count: "one" },
   }
-  const recall: Step = { ...REST, prose: ["Yesterday, you wrote:"], recall: { from: "previous" } }
-  const versioned: Practice = {
+  const recall: Parts = {
+    ...REST,
+    prose: ["Yesterday, you wrote:"],
+    recall: { from: "stage", id: "stage-1" },
+  }
+  const versioned = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [askWhole] },
       { name: "Second", steps: [recall, say("c")] },
     ],
-  }
+  })
   const note = (fingerprint: string): ReaderNote => ({
     id: "n" as NoteId,
     targets: [{ start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }],
@@ -418,14 +464,14 @@ describe("the law and versions of a practice", () => {
 })
 
 describe("the law: a step that only says something asks for nothing, so it never holds the reader", () => {
-  const sayOnly: Step = { ...REST, prose: ["Read the poem through."] }
-  const saying: Practice = {
+  const sayOnly: Parts = { ...REST, prose: ["Read the poem through."] }
+  const saying = practiceOf({
     ...practice,
     stages: [
       { name: "First", steps: [sayOnly, say("a")] },
       { name: "Second", steps: [sayOnly] },
     ],
-  }
+  })
 
   it("is held nowhere, with nothing in the notebook", () => {
     expect(standingOf(saying, [], [], "2026-11-10").heldAt).toBeNull()

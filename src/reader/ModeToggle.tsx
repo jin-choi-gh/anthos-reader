@@ -1,5 +1,6 @@
 import { readerHref, replaceHref, type ModeName } from "../route"
-import { Pen } from "../ui/icons"
+import { Pen } from "../components/icons"
+import "./modeToggle.css"
 
 /** The pen in the top bar: switches the reader between practice mode and annotate mode, pressed in
  * annotate mode. It only changes the URL, in place, so switching adds nothing to the history and the

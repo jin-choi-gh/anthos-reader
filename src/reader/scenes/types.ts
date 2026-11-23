@@ -89,6 +89,7 @@ export type WritingMessage =
 export type NotingMessage =
   | { kind: "noteDraft"; text: string } // the reader typed
   | { kind: "addNote" } // Add note
+  | { kind: "takeUp"; targets: readonly Span[]; text: string } // a note taken in hand, to write again
 
 /** What the praxis bar tells the part that chooses passages: the writing, while its note is on
  * passages the reader chooses, or else the noting. */

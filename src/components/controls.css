@@ -1,0 +1,64 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+.field-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.text-box {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 5.5rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1rem; /* 16px or more, so a phone does not zoom in on focus */
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.text-box:hover {
+  border-color: var(--line-hover);
+}
+
+.text-box:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.button {
+  min-width: 5rem;
+  min-height: 44px; /* a finger-sized target */
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--line-hover);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+/* One line: no room for a paragraph, and nothing to drag taller */
+.text-field {
+  min-height: 0;
+  resize: none;
+}

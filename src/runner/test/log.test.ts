@@ -2,19 +2,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { appendLog, clearLog, logKey, readLog } from "../log"
 import { REST } from "../../practice/parts"
-import type { Practice, Step } from "../../practice/types"
+import type { Parts } from "../../practice/types"
 import type { Event } from "../types"
+import { practiceOf } from "../../practice/test/build"
 
-const practice: Practice = {
+const practice = practiceOf({
   id: "first-reading",
   title: "First reading",
   text: "dickinson",
   stages: [],
-}
+})
 
 const log: Event[] = [
   { kind: "visited", stage: 0, step: 1, at: 1_000 },
-  { kind: "finished", stage: 0, at: 2_000, day: "2026-11-10" },
+  { kind: "finished", stage: 0, at: 2_000, day: "2026-11-10", opens: "2026-11-11" },
 ]
 
 let stored: Map<string, string>
@@ -42,22 +43,22 @@ describe("saving and reading a run", () => {
   })
 
   it("starts a new log when a step of the practice changes, and not when only a heading does", () => {
-    const step: Step = {
+    const step: Parts = {
       ...REST,
       prose: ["What does the bird eat?"],
       writing: { target: "whole", tags: [], count: "one" },
     }
-    const one: Practice = { ...practice, stages: [{ name: "First", steps: [step] }] }
-    const renamed: Practice = {
+    const one = practiceOf({ ...practice, stages: [{ name: "First", steps: [step] }] })
+    const renamed = practiceOf({
       ...one,
       title: "Renamed",
       stages: [{ name: "Renamed", steps: [step] }],
-    }
+    })
     expect(logKey(renamed)).toBe(logKey(one))
-    const edited: Practice = {
+    const edited = practiceOf({
       ...one,
       stages: [{ name: "First", steps: [{ ...step, prose: ["What does it eat?"] }] }],
-    }
+    })
     expect(logKey(edited)).not.toBe(logKey(one))
   })
 
@@ -113,8 +114,9 @@ describe("a damaged log", () => {
       { kind: "visited", stage: 0, step: 1 }, // no time
       { kind: "visited", stage: "0", step: 1, at: 0 }, // a stage that is not a number
       { kind: "visited", stage: 0, step: 1.5, at: 0 }, // half a step
-      { kind: "finished", stage: 0, at: 0, day: "Tuesday" }, // not a date
-      { kind: "finished", stage: 0, at: 0 }, // no day
+      { kind: "finished", stage: 0, at: 0, day: "Tuesday", opens: "2026-11-11" }, // not a date
+      { kind: "finished", stage: 0, at: 0, opens: "2026-11-11" }, // no day
+      { kind: "finished", stage: 0, at: 0, day: "2026-11-10" }, // no day the next stage opens, as an older log has
       { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }, // an older kind, now kept in the notebook
     ]
     stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1]]))

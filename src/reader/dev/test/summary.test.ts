@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest"
 import { REST } from "../../../practice/parts"
-import type { Practice, Step } from "../../../practice/types"
+import type { Parts } from "../../../practice/types"
 import { clockText, DAY, eventsText, fullWhere, notesText, shortWhere } from "../summary"
 import type { Standing } from "../../../runner/types"
+import { practiceOf } from "../../../practice/test/build"
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
@@ -13,10 +14,10 @@ const standing = (
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
 /** A step that only says something. */
-const say = (words: string): Step => ({ ...REST, prose: [words] })
+const say = (words: string): Parts => ({ ...REST, prose: [words] })
 
 /** Two stages: two steps, then one. The rests are at step 2 and step 1. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "poem",
@@ -24,7 +25,7 @@ const practice: Practice = {
     { name: "The meal", steps: [say("@a"), say("@b")] },
     { name: "The flight", steps: [say("@c")] },
   ],
-}
+})
 
 describe("shortWhere", () => {
   it("names the stage and step, counting from 1", () => {

@@ -1,4 +1,5 @@
 import { useMemo, type ReactNode } from "react"
+import type { PageOrSpread } from "../components/usePlatform"
 import { assertNever } from "../assertNever"
 import { today } from "../clock/clock"
 import { Layout } from "./Layout"
@@ -8,7 +9,6 @@ import { controlsOf } from "./frame/controls"
 import { annotateFrame } from "./frame/frame"
 import { PraxisBar } from "./praxisBar/PraxisBar"
 import { useScene } from "./scenes/useScene"
-import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 
 /** Annotate mode: the text's notebook, a frame on the notes the reader wrote here and a new one, its
@@ -25,7 +25,7 @@ export function AnnotateMode({
   text: string
   material: Material
   materials: Materials
-  layout: ReaderLayout
+  layout: PageOrSpread
   topBar: ReactNode
 }) {
   const notebook = useNotebook(text)

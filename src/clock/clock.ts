@@ -60,9 +60,15 @@ function writeOffset(ms: number) {
   window.dispatchEvent(new Event("anthos-clock"))
 }
 
-/** The day after a day: "2026-11-10" → "2026-11-11". Dates, not instants, so no time zone applies. */
+/** The day after a day: "2026-11-10" → "2026-11-11". */
 export function nextDay(day: Day): Day {
+  return daysAfter(day, 1)
+}
+
+/** The day so many days after a day: "2026-11-10" and 3 → "2026-11-13"; 0 is the day itself. Dates,
+ * not instants, so no time zone applies. */
+export function daysAfter(day: Day, days: number): Day {
   const date = new Date(`${day}T00:00:00Z`)
-  date.setUTCDate(date.getUTCDate() + 1)
+  date.setUTCDate(date.getUTCDate() + days)
   return date.toISOString().slice(0, 10)
 }

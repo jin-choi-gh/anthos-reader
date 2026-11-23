@@ -8,6 +8,7 @@ import type { Provenance, ReaderNote } from "../../notebook/types"
 import { annotationsOf } from "../../practice/editorsNotes"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { finalPartsOf, REST } from "../../practice/parts"
+import { stageIndexOf, stepPlaceOf } from "../../practice/places"
 import type { Parts, Practice, Recall, Writing } from "../../practice/types"
 import { finalOf, gateOf, restOf } from "../../runner/gate"
 import { ruling } from "../../runner/step"
@@ -22,7 +23,7 @@ import type { Frame } from "./types"
  * the practice. A note on passages the reader chooses is found only if it was written on these
  * lines and every target keeps the rule for spans, so that its passages can be shown and chosen
  * again here. With a recall, the commentary is the notes it brings back, not the editor's: problemsOf
- * refuses a step that both highlights and recalls. */
+ * refuses a step with more than one part besides its prose. */
 export function frameOf(
   practice: Practice,
   standing: Standing,
@@ -87,9 +88,10 @@ export function annotateFrame(
   return { heading: null, back: null, next: null, subject }
 }
 
-/** The notes a recall brings back: the reader's notes written in the stage before, or in every
- * stage before, on this version of the practice, that can be placed on the poem, and whose station
- * is a step of this version, as it always is unless the notebook was damaged. They come in the order
+/** The notes a recall brings back: the reader's notes written in the stage it names, on the step it
+ * names, or, for the whole practice, in every stage before this one, on this version of the
+ * practice, that can be placed on the poem, and whose station is a step of this version, as it
+ * always is unless the notebook was damaged. They come in the order
  * of the stages and steps they answered, then the order written, listed, each with the prose of the
  * step it answered and whether it is on the whole poem; the first of each stage carries the
  * stage's name, as a heading. No one may delete them. */
@@ -100,12 +102,10 @@ function recalledOf(
   material: Material,
   written: readonly ReaderNote[],
 ): Commentary {
-  const found = stagesOf(recall, where.stage).flatMap((stage) =>
-    notesOfStage(written, { ...where, stage }).flatMap((note) => {
-      const prompt = promptOf(practice, note)
-      return prompt !== null && placeable(note, material) ? [{ note, prompt }] : []
-    }),
-  )
+  const found = recalledNotes(recall, practice, where, written).flatMap((note) => {
+    const prompt = promptOf(practice, note)
+    return prompt !== null && placeable(note, material) ? [{ note, prompt }] : []
+  })
   // Stable: notes on the same step keep the order written
   found.sort((a, b) => a.prompt.stage - b.prompt.stage || a.prompt.step - b.prompt.step)
   const notes = found.map(({ note }) => note)
@@ -119,16 +119,31 @@ function recalledOf(
   return { set, notes: set.notes, shown: "listed", written: null, recalled }
 }
 
-/** The stages a recall brings notes back from: the stage before this one ("previous"), or every
- * stage before it ("all"), in order; none before the first. */
-function stagesOf(recall: Recall, stage: number): number[] {
+/** The reader's notes a recall names, on this version of the practice, before they are placed: those
+ * written in the stage it names, or on the step it names, or in every stage before this one, in the
+ * order of the stages, then the order written. A stage or step that is not there, which problemsOf
+ * refuses, names none. */
+function recalledNotes(
+  recall: Recall,
+  practice: Practice,
+  where: Provenance,
+  written: readonly ReaderNote[],
+): ReaderNote[] {
   switch (recall.from) {
-    case "previous":
-      return stage > 0 ? [stage - 1] : []
+    case "stage": {
+      const stage = stageIndexOf(practice, recall.id)
+      return stage === null ? [] : notesOfStage(written, { ...where, stage })
+    }
+    case "step": {
+      const place = stepPlaceOf(practice, recall.id)
+      return place === null ? [] : notesFrom(written, { ...where, ...place })
+    }
     case "all":
-      return Array.from({ length: Math.max(stage, 0) }, (_, i) => i)
+      return Array.from({ length: Math.max(where.stage, 0) }, (_, stage) =>
+        notesOfStage(written, { ...where, stage }),
+      ).flat()
     default:
-      return assertNever(recall.from)
+      return assertNever(recall)
   }
 }
 

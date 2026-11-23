@@ -29,7 +29,7 @@ The codebase is built in eight layers: **Literary Material** (`material/`), **Pr
 
 ## The rules that follow from the layers
 
-- **A step is its parts.** No code has a kind of step: everything from the practice to the Viewer, the Praxis Bar and Form Practice works with parts.
+- **A step is its parts**, under an id that names it. No code has a kind of step: everything from the practice to the Viewer, the Praxis Bar and Form Practice works with parts.
 - **The table in `src/test/layers.ts` is the law of who may know whom**, and `src/test/architecture.test.ts` enforces it. A new folder of source must be given a layer there. Change the table only when the layers change, and `CONCEPT.md` with it.
 - **Pure core, thin shell.** Folds, deciders, the law, the practice's checks, the edits, the frame and the scene are plain functions, tested without React. Ids and times are made in the hooks and passed in. The scene does no I/O: it returns notebook entries (`Effect`s), and the session writes them.
 - **Only the gate reads the practice at a station** (`src/runner/gate.ts`).

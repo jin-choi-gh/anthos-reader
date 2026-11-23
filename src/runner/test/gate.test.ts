@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest"
 import { REST } from "../../practice/parts"
-import type { Practice } from "../../practice/types"
 import { finalOf, gateOf } from "../gate"
+import { practiceOf } from "../../practice/test/build"
 
 /** Two stages: a step that says something and a step that asks for writing, then one that says
  * something. The rests are at the
  * end of each stage, and the final stage is stage 2. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "fixture",
@@ -24,7 +24,7 @@ const practice: Practice = {
     },
     { name: "Second", steps: [{ ...REST, prose: ["On @b."] }] },
   ],
-}
+})
 const first = practice.stages[0]!
 const second = practice.stages[1]!
 

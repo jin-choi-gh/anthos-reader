@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-import { Lemma } from "../../ui/Lemma"
+import { Lemma } from "../../components/Lemma"
 import { endsSelection } from "./selection"
 import type { Note } from "../../material/types"
 import type { Recalled } from "../scenes/types"
@@ -30,7 +30,7 @@ export function NotesBlock({
   empty?: string
 }) {
   if (notes.length === 0) {
-    return <p className="margin-empty">{empty}</p>
+    return <p className="notes-empty">{empty}</p>
   }
   return (
     <div className="notes">
