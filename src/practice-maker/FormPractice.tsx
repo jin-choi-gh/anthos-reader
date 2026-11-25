@@ -259,6 +259,7 @@ function Maker({
           send={scene.toScene.praxisBar}
           label={held === null ? "New note" : "The note"}
           submit={held === null ? "Add note" : "Save note"}
+          hand="editor"
           onCancel={putDown}
           actions={
             held === null ? undefined : (

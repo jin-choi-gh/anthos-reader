@@ -36,6 +36,13 @@
   --font-text: "Literata", Georgia, serif; /* the poem and its title */
   --font-ui: system-ui, sans-serif; /* everything you operate */
 
+  /* Roles the Anthos theme added, set from this theme's own colours */
+  --rubric: var(--edge-selected); /* the editor's hand */
+  --reader-ink: var(--edge-reader); /* the reader's hand */
+  --paper-sunk: #f5ebde; /* writing boxes, a question asked in place */
+  --problem-wash: #fff7ed;
+  --font-caps: var(--font-ui); /* labels and buttons */
+
   /* Shape and depth */
   --radius-note: 8px;
   --radius-sheet: 12px;

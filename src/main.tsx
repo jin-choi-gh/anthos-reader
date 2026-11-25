@@ -1,6 +1,6 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "./themes/preludes.css" // the theme; themes/reader.css is the other, imported here instead
+import "./themes/anthos.css" // the theme; themes/reader.css and themes/preludes.css are the others
 import "./index.css"
 import App from "./App.tsx"
 

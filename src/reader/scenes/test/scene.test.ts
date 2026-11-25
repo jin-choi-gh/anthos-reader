@@ -161,7 +161,7 @@ describe("scene.start: each part staged", () => {
   it("in the final stage: the poem, and word that the practice is done", () => {
     expect(scene.praxisBar(started(at(1, 0)))).toEqual({
       asks: "recall",
-      prose: ["You have finished!"],
+      prose: ["Explicit."],
       writing: null,
       noting: null,
     })
@@ -296,7 +296,7 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.praxisBar(current)).toBeNull()
 
     current = scene.fromFrame(current, subject(at(1, 0))).state
-    expect(scene.praxisBar(current)?.prose).toEqual(["You have finished!"])
+    expect(scene.praxisBar(current)?.prose).toEqual(["Explicit."])
   })
 
   it("follows a change of mode, to annotate mode and back to the practice", () => {

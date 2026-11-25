@@ -140,6 +140,9 @@ function OpenNote({ note, onClose }: { note: Note; onClose: () => void }) {
       <header className="open-note-head">
         <h2 className="note-lemma" ref={heading} tabIndex={-1}>
           <Lemma lemma={note.lemma} />
+          <span className="note-close-mark" aria-hidden="true">
+            {" ]"}
+          </span>
         </h2>
         <button type="button" className="open-note-close" aria-label="Close note" onClick={onClose}>
           <Close size={18} />

@@ -1,29 +1,33 @@
 /* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
 
+/* A field's label: small capitals, quiet */
 .field-label {
   margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-family: var(--font-caps);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--ink-muted);
 }
 
+/* A box to write in: a gap in the page */
 .text-box {
   width: 100%;
   box-sizing: border-box;
   min-height: 5.5rem;
-  padding: 0.5rem 0.625rem;
-  border: 1px solid var(--line);
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--line-hover);
   border-radius: var(--radius-note);
-  background: var(--page);
+  background: var(--paper-sunk);
   color: var(--ink);
-  font-family: var(--font-text);
+  font-family: var(--font-ui);
   font-size: 1rem; /* 16px or more, so a phone does not zoom in on focus */
   line-height: 1.5;
   resize: vertical;
 }
 
 .text-box:hover {
-  border-color: var(--line-hover);
+  border-color: var(--ink-muted);
 }
 
 .text-box:focus-visible {
@@ -31,20 +35,34 @@
   outline-offset: 2px;
 }
 
+/* What the reader writes: the poem's face, in its italic, in the reader's ink */
+.text-box--reader {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--reader-ink);
+}
+
+/* A button: small capitals on a hairline, never a filled pill */
 .button {
   min-width: 5rem;
   min-height: 44px; /* a finger-sized target */
   padding: 0 1rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-hover);
   border-radius: var(--radius-note);
-  background: var(--surface);
+  background: transparent;
   color: var(--ink);
-  font: inherit;
+  font-family: var(--font-caps);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   cursor: pointer;
 }
 
 .button:hover:not(:disabled) {
-  border-color: var(--line-hover);
+  border-color: var(--ink);
 }
 
 .button:focus-visible {
@@ -54,7 +72,20 @@
 
 .button:disabled {
   color: var(--ink-faint);
+  border-color: var(--line);
   cursor: default;
+}
+
+/* The one action a part is for: in the editor's hand */
+.button--primary:not(:disabled) {
+  color: var(--rubric);
+  border-color: var(--rubric);
+}
+
+/* What the reader does with what they wrote: in the reader's hand */
+.button--reader:not(:disabled) {
+  color: var(--reader-ink);
+  border-color: var(--reader-ink);
 }
 
 /* One line: no room for a paragraph, and nothing to drag taller */

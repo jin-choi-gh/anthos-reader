@@ -7,8 +7,10 @@
 body {
   margin: 0;
   font-family: var(--font-ui);
+  font-kerning: normal;
   color: var(--ink);
   background: var(--page);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Text the reader selects, anywhere: the poem, a note, the praxis bar */

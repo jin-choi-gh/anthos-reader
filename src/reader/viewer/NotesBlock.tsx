@@ -53,6 +53,9 @@ export function NotesBlock({
             >
               {recall !== null && !showLemma ? (
                 <button type="button" className="note-lemma note-prompt" aria-pressed={selected}>
+                  <span className="note-pilcrow" aria-hidden="true">
+                    ¶{" "}
+                  </span>
                   {prompt.length > 0 ? prompt.join(" ") : "Your response"}
                 </button>
               ) : (
@@ -60,7 +63,14 @@ export function NotesBlock({
                   {prompt.length > 0 && (
                     <div className="note-prompt">
                       {prompt.map((paragraph, i) => (
-                        <p key={i}>{paragraph}</p>
+                        <p key={i}>
+                          {i === 0 && (
+                            <span className="note-pilcrow" aria-hidden="true">
+                              ¶{" "}
+                            </span>
+                          )}
+                          {paragraph}
+                        </p>
                       ))}
                     </div>
                   )}

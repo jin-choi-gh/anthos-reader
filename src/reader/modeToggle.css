@@ -10,8 +10,11 @@
   border: 1px solid transparent;
   border-radius: var(--radius-note);
   background: none;
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
+  font-family: var(--font-caps);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   color: var(--ink-muted);
   cursor: pointer;
 }
@@ -20,10 +23,11 @@
   color: var(--ink);
 }
 
+/* Annotate mode is the reader's own hand */
 .mode-toggle[aria-pressed="true"] {
-  border-color: var(--edge-selected);
-  background: var(--fill-editor);
-  color: var(--ink);
+  border-color: var(--reader-ink);
+  background: var(--fill-chosen);
+  color: var(--reader-ink);
 }
 
 .mode-toggle:focus-visible {

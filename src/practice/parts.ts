@@ -10,7 +10,7 @@ export const REST: Parts = { prose: [], highlight: [], writing: null, recall: nu
 export function finalPartsOf(practice: Practice): Parts {
   const asks = practice.stages.some((stage) => stage.steps.some((step) => step.writing !== null))
   return {
-    prose: ["You have finished!"],
+    prose: ["Explicit."],
     highlight: [],
     writing: null,
     recall: asks ? { from: "all" } : null,

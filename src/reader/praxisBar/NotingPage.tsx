@@ -8,7 +8,9 @@ import "./praxisBar.css"
  * targets); the box for the note, under its label ("Your note" unless given another); and the
  * button that adds it ("Add note" unless given another), which can be pressed once the box says
  * something, as can Ctrl or Cmd with Enter in the box; and, when given, Cancel, and other actions
- * before it. Every change goes to the scene, which holds the note so far and adds it. */
+ * before it. Every change goes to the scene, which holds the note so far and adds it. `hand` says
+ * whose note it is, for how it is drawn: the reader's (unless given another), or the editor's, in
+ * Form Practice. */
 export function NotingPage({
   page,
   send,
@@ -16,6 +18,7 @@ export function NotingPage({
   submit = "Add note",
   onCancel,
   actions,
+  hand = "reader",
 }: {
   page: NotingProjection
   send: (message: PraxisBarProtocol["toScene"]) => void
@@ -23,12 +26,14 @@ export function NotingPage({
   submit?: string
   onCancel?: (() => void) | undefined
   actions?: ReactNode
+  hand?: "reader" | "editor"
 }) {
   const box = useId()
 
   return (
     <form
       className="notebook-page noting-page"
+      data-hand={hand}
       onSubmit={(event) => {
         event.preventDefault()
         send({ kind: "addNote" })
@@ -38,6 +43,7 @@ export function NotingPage({
       <FieldLabel htmlFor={box}>{label}</FieldLabel>
       <TextBox
         id={box}
+        className={hand === "reader" ? "text-box--reader" : undefined}
         rows={4}
         value={page.draft}
         onChange={(event) => send({ kind: "noteDraft", text: event.target.value })}
@@ -52,7 +58,11 @@ export function NotingPage({
       <div className="notebook-actions">
         {actions}
         {onCancel !== undefined && <Button onClick={onCancel}>Cancel</Button>}
-        <Button type="submit" className="notebook-submit" disabled={!page.canAdd}>
+        <Button
+          type="submit"
+          className={hand === "reader" ? "notebook-submit" : "button--primary"}
+          disabled={!page.canAdd}
+        >
           {submit}
         </Button>
       </div>

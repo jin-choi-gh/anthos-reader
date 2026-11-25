@@ -33,6 +33,7 @@ export function NotebookPage({
           <FieldLabel htmlFor={box}>Your response</FieldLabel>
           <TextBox
             id={box}
+            className="text-box--reader"
             rows={4}
             value={page.draft}
             onChange={(event) => send({ kind: "draft", text: event.target.value })}

@@ -15,7 +15,7 @@
 .poet {
   margin: 0.25em 0 0;
   font-family: var(--font-ui);
-  font-size: 0.7em;
+  font-size: 0.72em;
   letter-spacing: 0.02em;
   color: var(--ink-muted);
 }
@@ -41,8 +41,9 @@
   position: absolute;
   inset-inline-end: 100%;
   padding-inline-end: 1em;
+  font-family: var(--font-ui); /* its figures are oldstyle */
   font-size: 0.7em;
-  line-height: calc(1.6em / 0.7); /* align with the line's first baseline */
+  line-height: calc(1.58em / 0.7); /* align with the line's first baseline */
   font-variant-numeric: tabular-nums;
   color: var(--ink-faint);
   user-select: none;
@@ -53,47 +54,36 @@
   color: var(--ink-faint);
 }
 
+/* The notes as a commentary prints them: entries between hairlines, no boxes */
 .notes {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
-/* Each note in its own box; the whole box is what you click */
 .note {
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-note);
-  background: var(--surface);
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
   cursor: pointer;
-  transition:
-    border-color 120ms ease,
-    background-color 120ms ease;
 }
 
-.note:hover {
-  border-color: var(--line-hover);
-}
-
-.note[data-selected="true"] {
-  background: var(--fill-editor);
-  border-color: var(--edge-selected);
-}
-
-/* Keyboard focus is on the lemma's button, but the ring goes round the whole box */
+/* Keyboard focus is on the lemma's button, but the ring goes round the whole entry */
 .note:has(.note-lemma:focus-visible) {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
-/* The lemma: a button that looks like the head of a commentary entry */
+/* The lemma: the head of a commentary entry, in the poem's face */
 .note-lemma {
   display: block;
+  margin: 0;
   padding: 0;
   border: 0;
   background: none;
   color: inherit;
-  font: inherit;
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.45;
   text-align: start;
   cursor: pointer;
 }
@@ -108,40 +98,82 @@
   font-style: italic;
 }
 
+/* The selected note: its lemma under the gloss, as its words are in the poem */
+.note[data-selected="true"] .note-lemma > :not(.note-close-mark) {
+  background: var(--fill-editor);
+  border-radius: var(--radius-note);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .note p {
   margin: 0.5em 0 0;
 }
 
-/* Recalled notes: the name of the stage they were written in, above its first, like the praxis
-   bar's heading */
-.notes-heading {
-  margin: 0.5rem 0 0;
+/* The reader's own notes, listed (annotate mode, and notes recalled): in the reader's hand */
+.notes .note > p {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.53;
+  color: var(--reader-ink);
+}
+
+.notes .note-lemma {
   color: var(--ink-muted);
-  font-family: var(--font-ui);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+}
+
+/* Recalled notes: the name of the stage they were written in, above its first */
+.notes-heading {
+  margin: 1.25rem 0 0.25rem;
+  color: var(--ink-muted);
+  font-family: var(--font-caps);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }
 
 .notes-heading:first-child {
   margin-top: 0;
 }
 
-/* A recalled note's prompt: the editor's words it answered, quieter than the reader's own */
+/* A recalled note's prompt: the editor's words it answered, after a pilcrow, quieter than the
+   reader's own */
 .note-prompt {
   color: var(--ink-muted);
   font-family: var(--font-ui);
   font-size: 0.875rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.note-pilcrow {
+  color: var(--rubric);
+  font-family: var(--font-text);
 }
 
 .note .note-prompt p {
   margin: 0 0 0.375em;
+  font-family: var(--font-ui);
+  font-style: normal;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
 }
 
-/* Practice mode: the note the reader opened from the poem. Not a choice in a list, so no pointer */
+/* Practice mode: the editor's note the reader opened from the poem, closed by the editor's ] */
 .open-note {
   cursor: auto;
+}
+
+.note-close-mark {
+  color: var(--rubric);
+  font-style: normal;
+}
+
+.open-note > p {
+  font-size: 0.9375rem;
+  line-height: 1.53;
+  color: var(--ink);
 }
 
 /* The lemma as a heading, with the X in the top right-hand corner */
@@ -164,17 +196,17 @@
 .open-note-head .note-lemma:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-note);
 }
 
-/* A finger-sized X, pulled into the box's corner */
+/* A finger-sized X, pulled into the entry's corner */
 .open-note-close {
   flex: none;
   display: grid;
   place-items: center;
   width: 44px;
   height: 44px;
-  margin: -0.75rem -1rem 0 0;
+  margin: -0.75rem -0.75rem 0 0;
   border: 0;
   border-radius: var(--radius-note);
   background: none;
@@ -195,6 +227,9 @@
 .line-text mark {
   background: var(--fill-editor);
   color: inherit;
+  border-radius: var(--radius-note);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 /* Practice mode: a highlight the reader can tap to open its note */
@@ -210,7 +245,7 @@
 
 /* Its note open: underlined in the selected note's edge colour */
 .line-text mark[role="button"][data-open="true"] {
-  box-shadow: inset 0 -2px var(--edge-selected);
+  box-shadow: inset 0 -1.5px var(--rubric);
 }
 
 /* Choosing passages: the poem is the reader's to choose from. A double tap is two taps, not a zoom,
@@ -224,6 +259,7 @@
 /* The chosen targets, and the passage being chosen, over the poem's text */
 .line-text [data-chosen="true"] {
   background: var(--fill-chosen);
+  box-shadow: inset 0 -1.5px var(--reader-ink);
 }
 
 .line-text [data-choice="true"] {
@@ -240,11 +276,15 @@
 .note-delete {
   min-height: 32px;
   padding: 0 0.75rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-hover);
   border-radius: var(--radius-note);
-  background: var(--surface);
+  background: transparent;
   color: var(--ink-muted);
-  font: inherit;
+  font-family: var(--font-caps);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   cursor: pointer;
 }
 

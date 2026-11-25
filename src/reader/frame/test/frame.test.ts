@@ -234,7 +234,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
 
   it("in the final stage: word that the practice is done", () => {
     const { subject } = frameOf(practice, standing(2, 0), material, [])
-    expect(subject.prose).toEqual(["You have finished!"])
+    expect(subject.prose).toEqual(["Explicit."])
     expect(subject.writing).toBeNull()
   })
 
@@ -566,7 +566,7 @@ describe("frameOf: the final stage, bringing back every stage", () => {
   it("is headed by the practice, says it is done, and asks nothing", () => {
     const { heading, subject } = finalOf([])
     expect(heading).toBe("Test")
-    expect(subject.prose).toEqual(["You have finished!"])
+    expect(subject.prose).toEqual(["Explicit."])
     expect(subject.writing).toBeNull()
     expect(subject.noting).toBeNull()
   })
