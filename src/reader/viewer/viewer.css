@@ -33,6 +33,7 @@
   display: block;
   padding-inline-start: calc(var(--indent, 0) * 1.5em + 2em);
   text-indent: -2em;
+  white-space: pre-wrap; /* consecutive spaces are kept as they are in the poem */
 }
 
 /* Numbers sit outside the block, so they don't affect its centring */
