@@ -45,7 +45,7 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "components",
     "app",
   ],
-  library: ["loom", "app"],
+  library: ["material", "loom", "app"],
   components: [], // what more than one part draws with
   app: ["library", "reader", "practice-maker"], // App, main, the route
 }
