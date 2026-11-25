@@ -55,33 +55,6 @@ export function Pen(props: IconProps) {
   )
 }
 
-/** Move up: an arrow pointing up. */
-export function ArrowUp(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M12 19V5M6 11l6-6 6 6" />
-    </Icon>
-  )
-}
-
-/** Move down: an arrow pointing down. */
-export function ArrowDown(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M12 5v14M6 13l6 6 6-6" />
-    </Icon>
-  )
-}
-
-/** Remove: a bin, since an × closes. */
-export function Bin(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />
-    </Icon>
-  )
-}
-
 /** A choice to open: a "v" pointing down. */
 export function ChevronDown(props: IconProps) {
   return (

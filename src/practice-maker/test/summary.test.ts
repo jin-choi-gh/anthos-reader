@@ -10,6 +10,7 @@ import {
   romanOf,
   partLabel,
   partOf,
+  partWord,
   recallLabel,
   recallTargets,
   stageLabel,
@@ -91,6 +92,14 @@ describe("labels: stages, steps and recalls in words", () => {
     expect(partLabel(practice, { ...REST, recall: { from: "stage", id: "gone" } })).toBe(
       "Reader recall · gone, removed",
     )
+  })
+
+  it("name a step's part in a word or two for the reel's contents", () => {
+    expect(partWord(say("a"))).toBeNull()
+    expect(partWord({ ...REST, highlight: [note] })).toBe("1 note")
+    expect(partWord({ ...REST, highlight: [note, { ...note, id: "bird" }] })).toBe("2 notes")
+    expect(partWord(ask("a", "chosen"))).toBe("write")
+    expect(partWord({ ...REST, recall: { from: "stage", id: "gone" } })).toBe("recall")
   })
 })
 

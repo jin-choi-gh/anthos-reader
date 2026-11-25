@@ -2,28 +2,32 @@ import { useId, useState } from "react"
 import type { Problem } from "../practice/problems"
 import type { Practice } from "../practice/types"
 import "../reader/praxisBar/praxisBar.css"
-import { CardHead } from "./CardHead"
+import { CardTools } from "./CardTools"
 import { Confirm } from "./Confirm"
 import type { Edit } from "./edits"
-import { isBroken, romanOf } from "./summary"
+import type { Selection } from "./selection"
+import { excerptOf, isBroken, partWord, romanOf } from "./summary"
 
-/** The third part of the margin, for a stage: a card like the praxis bar, its numeral over its name,
- * written in place, and when it opens: from the start, for the first, or so many days after the
- * stage before is finished. In its corner, moving it and removing it, asked first. What is written
- * wrong in it is said in it. */
+/** The card for a stage: in its corner, moving it and removing it, asked first; its numeral over
+ * its name, written in place; when it opens, from the start, for the first, or so many days after
+ * the stage before is finished; what is written wrong in it; and its steps, each by its number, the
+ * start of its prose and its part, a way to select it. */
 export function StageCard({
   practice,
   stage: s,
   problems,
   edit,
   onRemove,
+  onSelect,
 }: {
   practice: Practice
   stage: number
   problems: readonly Problem[]
   edit: (edit: Edit) => void
   onRemove: () => void
+  onSelect: (selection: Selection) => void
 }) {
+  const stepsHeading = useId()
   const [removing, setRemoving] = useState(false)
   const stage = practice.stages[s]
   if (stage === undefined) return null
@@ -33,8 +37,7 @@ export function StageCard({
 
   return (
     <section className="praxis-bar form-card" aria-label={`Stage ${numeral}`}>
-      <CardHead
-        heading={`Stage ${numeral}`}
+      <CardTools
         what={`stage ${numeral}`}
         onUp={s === 0 ? null : () => edit({ kind: "moveStage", from: s, to: s - 1 })}
         onDown={
@@ -59,14 +62,17 @@ export function StageCard({
           onNo={() => setRemoving(false)}
         />
       )}
-      <input
-        className="form-stage-name"
-        type="text"
-        value={stage.name}
-        placeholder="Name this stage"
-        aria-label="The stage's name"
-        onChange={(event) => edit({ kind: "renameStage", stage: s, name: event.target.value })}
-      />
+      <div className="form-stage-head">
+        <span className="form-numeral">stage {numeral}</span>
+        <input
+          className="form-stage-name"
+          type="text"
+          value={stage.name}
+          placeholder="Name this stage"
+          aria-label="The stage's name"
+          onChange={(event) => edit({ kind: "renameStage", stage: s, name: event.target.value })}
+        />
+      </div>
       {s === 0 ? (
         <p className="form-opens">Open from the start.</p>
       ) : (
@@ -81,6 +87,30 @@ export function StageCard({
           {problem.text}
         </p>
       ))}
+      {steps > 0 && (
+        <div>
+          <h3 className="form-list-head" id={stepsHeading}>
+            <span className="form-label">its steps · {steps}</span>
+          </h3>
+          <ol className="form-stage-steps" aria-labelledby={stepsHeading}>
+            {stage.steps.map((step, i) => (
+              <li key={`${i}:${step.id}`}>
+                <button
+                  type="button"
+                  className="form-stage-step"
+                  onClick={() => onSelect({ kind: "step", id: step.id })}
+                >
+                  <span className="anatomy-number">{i + 1}</span>
+                  <span className="anatomy-text">
+                    {excerptOf(step.prose) || <span className="form-missing">No prose yet</span>}
+                  </span>
+                  <span className="anatomy-part">{partWord(step)}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </section>
   )
 }
