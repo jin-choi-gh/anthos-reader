@@ -10,8 +10,8 @@ interface Entry {
   author: string | null
 }
 
-/** Every textual complex in text-data/, by title and poet, each a link to read it and a link to
- * Form Practice for it. */
+/** Every textual complex in text-data/, by title and poet, each a link to read it and, in
+ * development only, a link to edit its practice in Form Practice. */
 export function Library() {
   const { value: entries, error } = useLoaded("library", loadEntries)
 
@@ -32,12 +32,11 @@ export function Library() {
                 <span className="library-title">{entry.title}</span>
                 {entry.author !== null && <span className="library-poet">{entry.author}</span>}
               </a>
-              <a className="library-form" href={formHref(entry.file)}>
-                Form Practice
-              </a>
-              <a className="library-form" href={formHref(entry.file, true)}>
-                New practice
-              </a>
+              {import.meta.env.DEV && (
+                <a className="library-form" href={formHref(entry.file)}>
+                  Edit practice
+                </a>
+              )}
             </li>
           ))}
         </ul>

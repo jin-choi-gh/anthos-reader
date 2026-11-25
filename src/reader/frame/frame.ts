@@ -42,6 +42,8 @@ export function frameOf(
   }
   return {
     heading: gate.kind === "final" ? practice.title : gate.stage.name,
+    position:
+      gate.kind === "step" ? { step: station.step + 1, of: restOf(practice, station.stage) } : null,
     back: ruling(practice, standing, station.step - 1),
     next: ruling(practice, standing, station.step + 1),
     subject: {
@@ -85,7 +87,7 @@ export function annotateFrame(
     writing: null,
     noting: { substrate: material.substrate, tags: [] },
   }
-  return { heading: null, back: null, next: null, subject }
+  return { heading: null, position: null, back: null, next: null, subject }
 }
 
 /** The notes a recall brings back: the reader's notes written in the stage it names, on the step it

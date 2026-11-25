@@ -68,7 +68,7 @@ export function FormPractice({ file, fresh }: { file: TextId; fresh: boolean }) 
   useEffect(() => {
     if (material === null) return
     const previous = document.title
-    document.title = `Form Practice · ${material.poem.title} · Anthos`
+    document.title = `Edit practice · ${material.poem.title} · Anthos`
     return () => {
       document.title = previous
     }

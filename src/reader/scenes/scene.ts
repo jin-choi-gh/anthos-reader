@@ -8,6 +8,7 @@ import type { WritingState } from "./parts/writing"
 import type { Passages } from "./passages"
 import { reply } from "./reply"
 import type {
+  Asks,
   FrameProtocol,
   NotingSubject,
   PassageMessage,
@@ -124,8 +125,18 @@ export const scene = {
         ? null
         : noting.notingOf(current.subject.noting, current.noting)
     if (prose.length === 0 && page === null && note === null) return null
-    return { prose, writing: page, noting: note }
+    return { asks: asksOf(current.subject), prose, writing: page, noting: note }
   },
+}
+
+/** What a subject asks of the reader besides its prose, from its parts: writing first, then a
+ * recall, then the editor's notes picked out; nothing with a noting; otherwise only reading. */
+export function asksOf(subject: Subject): Asks {
+  if (subject.noting !== null) return null
+  if (subject.writing !== null) return "write"
+  if (subject.commentary.recalled !== null) return "recall"
+  if (subject.commentary.shown === "marked" && subject.commentary.notes.length > 0) return "notes"
+  return "read"
 }
 
 /** The part that chooses passages, with its subject and state. */

@@ -125,6 +125,19 @@ describe("frameOf: where the frame may go", () => {
   })
 })
 
+describe("frameOf: the step's position in its stage", () => {
+  it("on a step: its number, from 1, and how many steps its stage has", () => {
+    expect(frameOf(practice, standing(0, 1), material, []).position).toEqual({ step: 2, of: 2 })
+    expect(frameOf(practice, standing(1, 0), material, []).position).toEqual({ step: 1, of: 3 })
+  })
+
+  it("at a rest, in the final stage and in annotate mode: none", () => {
+    expect(frameOf(practice, standing(0, 2), material, []).position).toBeNull()
+    expect(frameOf(practice, standing(2, 0), material, []).position).toBeNull()
+    expect(annotateFrame("poem", material, []).position).toBeNull()
+  })
+})
+
 describe("frameOf: the subject, made of parts, in the practice's text", () => {
   it("on a step with an editor's note: the note, placed by its notehead and picked out, and the prose", () => {
     const { subject } = frameOf(practice, standing(0, 1), material, [])

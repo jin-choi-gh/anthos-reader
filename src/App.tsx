@@ -10,9 +10,12 @@ function App() {
   const screen = route.screen === "library" ? null : `${route.screen}/${route.file}`
   useScrollToTopOnChange(screen)
   if (route.screen === "library") return <Library />
-  // Form Practice for a new file starts afresh, as a reader does
-  if (route.screen === "form")
+  // Form Practice, in development only: elsewhere its address opens the library. For a new file it
+  // starts afresh, as a reader does
+  if (route.screen === "form") {
+    if (!import.meta.env.DEV) return <Library />
     return <FormPractice key={route.file} file={route.file} fresh={route.fresh} />
+  }
   // A new file is a new reader: nothing in one poem carries over to the next. A new mode is not a
   // new reader: the reader keeps its loaded text, and changes only its mode
   return <Reader key={route.file} file={route.file} mode={route.mode} />
