@@ -1,9 +1,11 @@
 /** A text's id: its file in text-data/, "dickinson". */
 export type TextId = string
 
-/** The poem's lines, as loom keeps them: every line of the text, in order, from 0. */
+/** The poem's lines, as loom keeps them: every line of the text, in order, from 0, each with loom's
+ * id for it ("l4"), by which a notehead names the line. loom gives no two lines the same id. This id
+ * is not the display line's (Line.id), which names a unit of the display schema. */
 export interface Substrate {
-  readonly lines: readonly string[]
+  readonly lines: readonly { readonly id: string; readonly text: string }[]
 }
 
 /** A place in the poem: a line of the substrate, from 0, and an offset in that line, in code points. */

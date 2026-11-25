@@ -1,6 +1,6 @@
 import { assertNever } from "../../../assertNever"
 import type { Span } from "../../../material/types"
-import { choose, givenOut, onPassages as passagesAfter, passagesOf } from "../passages"
+import { choose, givenOut, inHand, onPassages as passagesAfter, passagesOf } from "../passages"
 import type {
   Effect,
   NotingMessage,
@@ -33,10 +33,13 @@ export function onPassages(state: NotingState, message: PassageMessage): NotingS
   return passagesAfter(state, message)
 }
 
-/** What the reader writes in the praxis bar: types, or adds the note. Adding, while the draft says
- * something, sends out a new note, on the chosen targets or the whole poem when none is chosen,
- * with the subject's tags and the draft, trimmed, as its body; then a new note starts, with
- * choosing as it was. What changes nothing gives back the very same state. */
+/** What the reader writes in the praxis bar: types, adds the note, or takes a note up to write it
+ * again. Adding, while the draft says something, sends out a new note, on the chosen targets or the
+ * whole poem when none is chosen, with the subject's tags and the draft, trimmed, as its body; then
+ * a new note starts, with choosing as it was. Taking a note up makes its targets the chosen ones,
+ * joined as passages are, and none for a note on the whole poem, and its words the draft, with
+ * choosing as it was; taking up none and nothing puts the note in hand down. What changes nothing
+ * gives back the very same state. */
 export function onPraxisBar(
   noting: NotingSubject,
   state: NotingState,
@@ -57,6 +60,15 @@ export function onPraxisBar(
         effects: [{ kind: "note", targets, tags: noting.tags, body }],
       }
     }
+    case "takeUp":
+      return {
+        state: {
+          ...state,
+          targets: inHand(noting.substrate, message.targets),
+          draft: message.text,
+        },
+        effects: [],
+      }
     default:
       return assertNever(message)
   }

@@ -1,10 +1,17 @@
 import type { Day } from "../clock/clock"
 import type { Stage, Step } from "../practice/types"
 
-/** What the runner logs: the reader came to a step, or reached a stage's rest. */
+/** What the runner logs: the reader came to a step, or reached a stage's rest, which finishes the
+ * stage, on a day, and fixes the day the next stage opens. */
 export type Event =
   | { readonly kind: "visited"; readonly stage: number; readonly step: number; readonly at: number }
-  | { readonly kind: "finished"; readonly stage: number; readonly at: number; readonly day: Day }
+  | {
+      readonly kind: "finished"
+      readonly stage: number
+      readonly at: number
+      readonly day: Day
+      readonly opens: Day
+    }
 
 /** Where the reader is. stage is stages.length in the final stage; step is
  * steps.length at a stage's rest. */

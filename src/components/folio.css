@@ -1,0 +1,110 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* A: page */
+.folio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "text";
+  padding: 3rem 16px 4rem 3rem; /* left padding leaves room for line numbers */
+}
+
+/* C: spread */
+.folio[data-layout="spread"] {
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+  grid-template-areas: "text margin";
+  column-gap: 4rem;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 3rem;
+}
+
+/* Page layout: room at the foot, so lines under the sheet can be scrolled clear of it */
+.folio[data-layout="page"] {
+  padding-bottom: calc(var(--sheet-handle, 3rem) + 2rem);
+}
+
+.folio[data-layout="page"]:has(.bottom-sheet[data-open="true"]) {
+  padding-bottom: calc(var(--sheet-height, 45dvh) + 2rem);
+}
+
+.folio-text {
+  grid-area: text;
+}
+
+/* The top bar: back to the library at the left of the text column, the mode toggle at its right. It
+   rises into the reader's top padding, so the poem moves down only a little; the negative inline
+   margin lines the chevron up with the column's edge. */
+.folio-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: -2rem 0 1rem -0.5rem;
+}
+
+/* Page layout: what scrolls into view stops above the sheet, not behind it */
+html:has(.folio[data-layout="page"]) {
+  scroll-padding-bottom: calc(var(--sheet-handle) + 1rem);
+}
+
+html:has(.bottom-sheet[data-open="true"]) {
+  scroll-padding-bottom: calc(var(--sheet-height) + 1rem);
+}
+
+/* Room above whatever scrolls into view, in both layouts */
+html {
+  scroll-padding-top: 2rem;
+}
+
+/* Centre title and poem together by the longest line; keep both left-aligned */
+.folio-page {
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+  font-family: var(--font-text);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* "Loading…" and load errors: in the interface's face and size, not the poem's, like the library's */
+.folio-message {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+/* Room at the foot of the page, so the poem's last lines can be scrolled clear of the dock */
+.folio[data-layout="page"]:has(.dock) {
+  padding-bottom: calc(var(--dock-height, 12rem) + 2rem);
+}
+
+/* What scrolls into view stops above the dock, or above the note's sheet when that is taller */
+html:has(.folio[data-layout="page"] .dock) {
+  scroll-padding-bottom: calc(max(var(--dock-height, 0px), var(--dock-sheet-height, 0px)) + 1rem);
+}
+
+/* Annotate mode on a page: the notes' sheet sits just above the docked praxis bar, and the page
+   leaves room for both */
+.folio:has(.dock) .bottom-sheet {
+  bottom: var(--dock-height, 0px);
+  z-index: 1;
+}
+
+/* Folded down to its handle, the rest of the sheet lies behind the docked bar, which takes the taps */
+.folio:has(.bottom-sheet) .dock {
+  z-index: 2;
+}
+
+.folio[data-layout="page"]:has(.dock):has(.bottom-sheet) {
+  padding-bottom: calc(var(--dock-height, 12rem) + var(--sheet-handle, 3rem) + 2rem);
+}
+
+.folio[data-layout="page"]:has(.dock):has(.bottom-sheet[data-open="true"]) {
+  padding-bottom: calc(var(--dock-height, 12rem) + var(--sheet-height, 45dvh) + 2rem);
+}
+
+html:has(.folio[data-layout="page"] .dock):has(.bottom-sheet) {
+  scroll-padding-bottom: calc(var(--dock-height, 0px) + var(--sheet-handle, 3rem) + 1rem);
+}

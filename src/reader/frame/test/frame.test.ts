@@ -1,11 +1,17 @@
 import { describe, expect, it } from "vitest"
 import type { Material } from "../../../material/materials"
-import type { Fingerprint, Note } from "../../../material/types"
+import { notesFor } from "../../../material/notes"
+import type { Fingerprint } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
 import { fingerprintOfPractice } from "../../../practice/fingerprint"
-import type { Practice, Step } from "../../../practice/types"
+import { REST } from "../../../practice/parts"
+import type { EditorsNote, Parts } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../frame"
+import { practiceOf } from "../../../practice/test/build"
+
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
 const standing = (
@@ -15,24 +21,23 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-/** A note as notesFor makes one, with only what these tests look at. */
-const note = (index: number, id: string | null): Note => ({
-  index,
-  id,
-  lemma: [],
-  tags: [],
-  paragraphs: [],
-})
-
-const notes = [note(0, "a"), note(1, null), note(2, "b")]
-
-/** The material: two lines of poem, and the editor's notes. */
+/** The material: two lines of poem. */
 const material: Material = {
-  substrate: { lines: ["A Bird, came down the Walk -", "He bit an Angle Worm in halves"] },
+  substrate: { lines: withIds(["A Bird, came down the Walk -", "He bit an Angle Worm in halves"]) },
   fingerprint: "f" as Fingerprint,
   poem: { title: "Fixture", author: "", stanzas: [] },
-  notes: { notes: notes, rangesOn: () => [] },
 }
+
+/** The editor's notes the practice's steps highlight, by their ids. "missing" cannot be placed on
+ * these lines. */
+const editorsNotes: Record<string, EditorsNote> = {
+  a: { id: "a", notehead: "l1 Bird", tags: [], body: "On the bird." },
+  b: { id: "b", notehead: "l2 Worm", tags: ["gloss"], body: "On the worm.\n\nAnd its halves." },
+  missing: { id: "missing", notehead: "l9", tags: [], body: "Nowhere." },
+}
+
+/** A commentary of none of the editor's notes. */
+const noNotes = expect.objectContaining({ notes: [] })
 
 /** The whole of that poem. */
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
@@ -50,23 +55,35 @@ const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderN
   ...more,
 })
 
-const consider = (ref: string): Step => ({
-  direction: "consider",
-  note: ref,
-  prose: [`On ${ref}.`],
+/** A step that highlights one of the editor's notes. */
+const look = (id: string): Parts => ({
+  ...REST,
+  prose: [`On ${id}.`],
+  highlight: [editorsNotes[id]!],
 })
-const respond: Step = { direction: "respond", prose: ["What does the bird eat?"] }
+/** A step that asks for one note on the whole poem. */
+const askWhole: Parts = {
+  ...REST,
+  prose: ["What does the bird eat?"],
+  writing: { target: "whole", tags: [], count: "one" },
+}
+/** A step that asks for one note on passages the reader chooses. */
+const askChosen: Parts = {
+  ...REST,
+  prose: ["Where does the bird change?"],
+  writing: { target: "chosen", tags: [], count: "one" },
+}
 
-/** Two stages: the rests are at step 2 and step 3. "@missing" is in no note. */
-const practice: Practice = {
+/** Two stages: the rests are at step 2 and step 3. The note "missing" cannot be placed. */
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "fixture",
   stages: [
-    { name: "First", steps: [consider("@a"), consider("@b")] },
-    { name: "Second", steps: [consider("@missing"), consider("@a"), respond] },
+    { name: "First", steps: [look("a"), look("b")] },
+    { name: "Second", steps: [look("missing"), look("a"), askWhole] },
   ],
-}
+})
 
 const noSuchStep = { allowed: false, reason: { kind: "noSuchStep" } }
 const finished = { allowed: false, reason: { kind: "finished" } }
@@ -109,15 +126,23 @@ describe("frameOf: where the frame may go", () => {
 })
 
 describe("frameOf: the subject, made of parts, in the practice's text", () => {
-  it("on a consider step: the highlight on the note its reference names, and the prose", () => {
+  it("on a step with an editor's note: the note, placed by its notehead and picked out, and the prose", () => {
     const { subject } = frameOf(practice, standing(0, 1), material, [])
     expect(subject).toEqual({
       key: "test/0/1",
       text: "fixture",
-      prose: ["On @b."],
+      prose: ["On b."],
       commentary: {
-        set: material.notes,
-        notes: [notes[2]],
+        set: expect.objectContaining({ notes: subject.commentary.notes }),
+        notes: [
+          {
+            index: 0,
+            id: "b",
+            lemma: [{ kind: "quote", text: "Worm" }],
+            tags: ["gloss"],
+            paragraphs: ["On the worm.", "And its halves."],
+          },
+        ],
         shown: "marked",
         written: null,
         recalled: null,
@@ -125,23 +150,24 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       writing: null,
       noting: null,
     })
-    expect(subject.commentary.notes[0]).toBe(notes[2])
+    expect(subject.commentary.set.rangesOn(1)).toEqual([{ start: 16, end: 20, noteIndex: 0 }])
+    expect(subject.commentary.set.rangesOn(0)).toEqual([])
   })
 
-  it("on a consider step whose reference names no note: nothing picked out, still the prose", () => {
+  it("on a step whose note cannot be placed on these lines: nothing picked out, still the prose", () => {
     const { subject } = frameOf(practice, standing(1, 0), material, [])
     expect(subject.commentary.notes).toEqual([])
-    expect(subject.prose).toEqual(["On @missing."])
+    expect(subject.prose).toEqual(["On missing."])
   })
 
-  it("on a respond step: the prose, nothing picked out, and a page for one note on the poem", () => {
+  it("on a step asking for writing on the whole poem: the prose, nothing picked out, and a page for one note", () => {
     const { subject } = frameOf(practice, standing(1, 2), material, [])
     expect(subject).toEqual({
       key: "test/1/2",
       text: "fixture",
       prose: ["What does the bird eat?"],
       commentary: {
-        set: material.notes,
+        set: noNotes,
         notes: [],
         shown: "marked",
         written: null,
@@ -157,7 +183,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
     })
   })
 
-  it("on a respond step: what the reader has written on that very step, and nothing else", () => {
+  it("on a step asking for writing: what the reader has written on that very step, and nothing else", () => {
     const written = (id: string, step: number): ReaderNote => ({
       id: id as NoteId,
       targets: [whole],
@@ -181,7 +207,7 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         text: "fixture",
         prose: [],
         commentary: {
-          set: material.notes,
+          set: noNotes,
           notes: [],
           shown: "marked",
           written: null,
@@ -215,10 +241,18 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
 })
 
 describe("frameOf: the set the editor's notes come from", () => {
-  it("is the material's notes, and the notes picked out are notes of it", () => {
-    const { commentary } = frameOf(practice, standing(0, 1), material, []).subject
-    expect(commentary.set).toBe(material.notes)
-    expect(commentary.notes.every((picked) => commentary.set.notes.includes(picked))).toBe(true)
+  it("is the step's own notes, placed as notesFor places them, every one picked out", () => {
+    const { commentary } = frameOf(practice, standing(0, 0), material, []).subject
+    const placed = notesFor(material.substrate, [
+      {
+        id: "a",
+        targets: [{ start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }],
+        tags: [],
+        body: "On the bird.",
+      },
+    ])
+    expect(commentary.set.notes).toEqual(placed.notes)
+    expect(commentary.notes).toBe(commentary.set.notes)
   })
 })
 
@@ -301,32 +335,31 @@ describe("annotateFrame: the notes written in annotate mode, which can be delete
   })
 })
 
-describe("frameOf: an observe step, wherever the editor puts it", () => {
-  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
-  /** Observe first in a stage, and twice in a row after a respond. */
-  const observing: Practice = {
+describe("frameOf: a step asking for writing on chosen passages, wherever the editor puts it", () => {
+  /** Writing on chosen passages first in a stage, and twice in a row after writing on the whole poem. */
+  const askingChosen = practiceOf({
     ...practice,
     stages: [
-      { name: "First", steps: [observe, consider("@a")] },
-      { name: "Second", steps: [respond, observe, observe] },
+      { name: "First", steps: [askChosen, look("a")] },
+      { name: "Second", steps: [askWhole, askChosen, askChosen] },
     ],
-  }
+  })
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const on = (stage: number, step: number, more: Partial<ReaderNote> = {}) =>
     mine(`${stage}/${step}`, "Fed.", {
       targets: [bird],
-      from: { practice: "test", fingerprint: fingerprintOfPractice(observing), stage, step },
+      from: { practice: "test", fingerprint: fingerprintOfPractice(askingChosen), stage, step },
       ...more,
     })
 
   it("asks for one note on passages the reader chooses from the poem's lines, with no notes picked out", () => {
-    const { subject } = frameOf(observing, standing(0, 0), material, [])
+    const { subject } = frameOf(askingChosen, standing(0, 0), material, [])
     expect(subject).toEqual({
       key: "test/0/0",
       text: "fixture",
       prose: ["Where does the bird change?"],
       commentary: {
-        set: material.notes,
+        set: noNotes,
         notes: [],
         shown: "marked",
         written: null,
@@ -344,12 +377,12 @@ describe("frameOf: an observe step, wherever the editor puts it", () => {
 
   it("finds the note written on that very step, and not on the step beside it", () => {
     const notes = [on(1, 1), on(1, 2), on(0, 0)]
-    expect(frameOf(observing, standing(1, 1), material, notes).subject.writing?.written).toEqual([
-      notes[0],
-    ])
-    expect(frameOf(observing, standing(1, 2), material, notes).subject.writing?.written).toEqual([
-      notes[1],
-    ])
+    expect(frameOf(askingChosen, standing(1, 1), material, notes).subject.writing?.written).toEqual(
+      [notes[0]],
+    )
+    expect(frameOf(askingChosen, standing(1, 2), material, notes).subject.writing?.written).toEqual(
+      [notes[1]],
+    )
   })
 
   it("finds only a note written on these lines whose every target keeps the rule for spans", () => {
@@ -360,35 +393,46 @@ describe("frameOf: an observe step, wherever the editor puts it", () => {
         targets: [{ start: { line: 0, offset: 0 }, end: { line: 5, offset: 1 } }],
       }),
     ]
-    expect(frameOf(observing, standing(0, 0), material, notes).subject.writing?.written).toEqual([])
+    expect(frameOf(askingChosen, standing(0, 0), material, notes).subject.writing?.written).toEqual(
+      [],
+    )
   })
 
-  it("leaves a respond step's note found, whatever lines it was written on", () => {
+  it("leaves the note of a step asking for writing on the whole poem found, whatever lines it was written on", () => {
     const old = mine("r", "Worms.", {
-      from: { practice: "test", fingerprint: fingerprintOfPractice(observing), stage: 1, step: 0 },
+      from: {
+        practice: "test",
+        fingerprint: fingerprintOfPractice(askingChosen),
+        stage: 1,
+        step: 0,
+      },
       fingerprint: "g" as Fingerprint,
     })
-    expect(frameOf(observing, standing(1, 0), material, [old]).subject.writing?.written).toEqual([
-      old,
-    ])
+    expect(frameOf(askingChosen, standing(1, 0), material, [old]).subject.writing?.written).toEqual(
+      [old],
+    )
   })
 })
 
-describe("frameOf: a recall step, bringing back the stage before", () => {
-  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
-  const recalling: Practice = {
+describe("frameOf: a recall step, bringing back the stage it names", () => {
+  const recalling = practiceOf({
     ...practice,
     stages: [
-      { name: "First", steps: [consider("@a"), observe, respond] },
-      { name: "Second", steps: [{ direction: "recall", prose: ["Yesterday, you wrote:"] }] },
+      { name: "First", steps: [look("a"), askChosen, askWhole] },
+      {
+        name: "Second",
+        steps: [
+          { ...REST, prose: ["Yesterday, you wrote:"], recall: { from: "stage", id: "stage-1" } },
+        ],
+      },
     ],
-  }
+  })
   const version = fingerprintOfPractice(recalling)
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const at = (stage: number, step: number, fingerprint = version) => ({
     from: { practice: "test", fingerprint, stage, step },
   })
-  // Written in this order: the respond note first, then the observe note
+  // Written in this order: the note on the whole poem first, then the note on chosen passages
   const answered = mine("r", "Worms.", at(0, 2))
   const observed = mine("o", "A bird.", { targets: [bird], ...at(0, 1) })
   const recallAt = (written: readonly ReaderNote[]) =>
@@ -430,16 +474,16 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
   })
 
   it("counts the reader's note on a writing step only on this version", () => {
-    const edited: Practice = {
+    const edited = practiceOf({
       ...recalling,
       stages: [
         {
           ...recalling.stages[0]!,
-          steps: [consider("@a"), observe, { ...respond, prose: ["Now?"] }],
+          steps: [look("a"), askChosen, { ...askWhole, prose: ["Now?"] }],
         },
         recalling.stages[1]!,
       ],
-    }
+    })
     expect(frameOf(edited, standing(0, 2), material, [answered]).subject.writing?.written).toEqual(
       [],
     )
@@ -449,17 +493,55 @@ describe("frameOf: a recall step, bringing back the stage before", () => {
   })
 })
 
+describe("frameOf: a recall step, bringing back the step it names", () => {
+  const recall = (id: string) => ({
+    ...REST,
+    prose: ["Just now, you wrote:"],
+    recall: { from: "step", id } as const,
+  })
+  const recalling = practiceOf({
+    ...practice,
+    stages: [{ name: "First", steps: [look("a"), askChosen, askWhole, recall("step-3")] }],
+  })
+  const version = fingerprintOfPractice(recalling)
+  const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
+  const at = (stage: number, step: number) => ({
+    from: { practice: "test", fingerprint: version, stage, step },
+  })
+  const answered = mine("r", "Worms.", at(0, 2))
+  const observed = mine("o", "A bird.", { targets: [bird], ...at(0, 1) })
+
+  it("lists only the notes written on that step, even one earlier in the same stage", () => {
+    const { commentary } = frameOf(recalling, standing(0, 3), material, [
+      observed,
+      answered,
+    ]).subject
+    expect(commentary.notes.map((note) => note.id)).toEqual(["r"])
+    expect(commentary.recalled).toEqual([
+      { prompt: ["What does the bird eat?"], whole: true, heading: "First" },
+    ])
+  })
+
+  it("lists nothing for a step that is not there", () => {
+    const gone = practiceOf({
+      ...practice,
+      stages: [{ name: "First", steps: [look("a"), askChosen, askWhole, recall("gone")] }],
+    })
+    const { commentary } = frameOf(gone, standing(0, 3), material, [observed, answered]).subject
+    expect(commentary).toMatchObject({ notes: [], recalled: [] })
+  })
+})
+
 describe("frameOf: the final stage, bringing back every stage", () => {
-  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
   /** Three stages, the first two with the same name, each asking for writing. */
-  const finishing: Practice = {
+  const finishing = practiceOf({
     ...practice,
     stages: [
-      { name: "First", steps: [consider("@a"), observe, respond] },
-      { name: "First", steps: [respond, consider("@b")] },
-      { name: "Third", steps: [observe] },
+      { name: "First", steps: [look("a"), askChosen, askWhole] },
+      { name: "First", steps: [askWhole, look("b")] },
+      { name: "Third", steps: [askChosen] },
     ],
-  }
+  })
   const version = fingerprintOfPractice(finishing)
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const at = (stage: number, step: number, fingerprint = version) => ({
@@ -517,10 +599,10 @@ describe("frameOf: the final stage, bringing back every stage", () => {
   })
 
   it("recalls nothing in a practice that asks for no writing: the editor's notes, none picked out", () => {
-    const silent: Practice = { ...practice, stages: [{ name: "Only", steps: [consider("@a")] }] }
+    const silent = practiceOf({ ...practice, stages: [{ name: "Only", steps: [look("a")] }] })
     const { commentary } = frameOf(silent, standing(1, 0), material, []).subject
     expect(commentary).toEqual({
-      set: material.notes,
+      set: noNotes,
       notes: [],
       shown: "marked",
       written: null,
@@ -529,21 +611,19 @@ describe("frameOf: the final stage, bringing back every stage", () => {
   })
 })
 
-describe("frameOf: a reflect step", () => {
-  const reflecting: Practice = {
+describe("frameOf: a step that only says something", () => {
+  const saying = practiceOf({
     ...practice,
-    stages: [
-      { name: "First", steps: [{ direction: "reflect", prose: ["Read the poem through."] }] },
-    ],
-  }
+    stages: [{ name: "First", steps: [{ ...REST, prose: ["Read the poem through."] }] }],
+  })
 
   it("gives its prose, picks out none of the editor's notes, and asks for nothing", () => {
-    expect(frameOf(reflecting, standing(0, 0), material, []).subject).toEqual({
+    expect(frameOf(saying, standing(0, 0), material, []).subject).toEqual({
       key: "test/0/0",
       text: "fixture",
       prose: ["Read the poem through."],
       commentary: {
-        set: material.notes,
+        set: noNotes,
         notes: [],
         shown: "marked",
         written: null,
@@ -555,6 +635,6 @@ describe("frameOf: a reflect step", () => {
   })
 
   it("lets the reader on, with or without anything written", () => {
-    expect(frameOf(reflecting, standing(0, 0), material, []).next).toEqual({ allowed: true, to: 1 })
+    expect(frameOf(saying, standing(0, 0), material, []).next).toEqual({ allowed: true, to: 1 })
   })
 })

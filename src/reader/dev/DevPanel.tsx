@@ -5,6 +5,7 @@ import type { Practice } from "../../practice/types"
 import { clearLog } from "../../runner/log"
 import type { Run } from "../../runner/useRun"
 import { clockText, DAY, eventsText, fullWhere, notesText, shortWhere } from "./summary"
+import "./devPanel.css"
 
 /** Development only: where the run is, and three things a reader can never do. It works the clock,
  * the run's log and the notebook directly, beside the frame and the scene, never through them: a new

@@ -9,7 +9,7 @@ const notes = [note(0), note(1)]
 const set: Notes = { notes, rangesOn: () => [] }
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
 
-const considering: Subject = {
+const highlighting: Subject = {
   key: "p/0/0",
   text: "poem",
   prose: ["Look."],
@@ -17,7 +17,7 @@ const considering: Subject = {
   writing: null,
   noting: null,
 }
-const responding: Subject = {
+const asking: Subject = {
   key: "p/0/1",
   text: "poem",
   prose: ["What does the bird eat?"],
@@ -44,26 +44,26 @@ const submit = { from: "praxisBar", message: { kind: "submit" } } as const
 
 describe("receive: envelopes from the frame", () => {
   it("keeps the very same state for the subject the scene is on, as when the mode first mounts", () => {
-    const current = scene.start(considering).state
-    expect(receive(current, fromFrame(considering))).toEqual({ state: current, effects: [] })
-    expect(receive(current, fromFrame(considering)).state).toBe(current)
+    const current = scene.start(highlighting).state
+    expect(receive(current, fromFrame(highlighting))).toEqual({ state: current, effects: [] })
+    expect(receive(current, fromFrame(highlighting)).state).toBe(current)
   })
 
   it("starts the scene again on a new subject", () => {
-    const current = scene.start(considering).state
+    const current = scene.start(highlighting).state
     expect(receive(current, fromFrame(annotating))).toEqual(scene.start(annotating))
   })
 })
 
 describe("receive: envelopes from the viewer", () => {
   it("passes them to the scene: the highlight's tap opens the note, the X closes it", () => {
-    const opened = receive(scene.start(considering).state, tap(1)).state
+    const opened = receive(scene.start(highlighting).state, tap(1)).state
     expect(scene.viewer(opened).open).toBe(1)
     expect(scene.viewer(receive(opened, close).state).open).toBeNull()
   })
 
   it("keeps the very same state when nothing changes, so React draws nothing again", () => {
-    const current = scene.start(considering).state
+    const current = scene.start(highlighting).state
     expect(receive(current, tap(0)).state).toBe(current)
     expect(receive(current, close).state).toBe(current)
   })
@@ -71,8 +71,8 @@ describe("receive: envelopes from the viewer", () => {
 
 describe("receive: envelopes from the praxis bar", () => {
   it("keeps what is typed, and sends the note out only on Respond", () => {
-    const writing = receive(scene.start(responding).state, typed("Worms.")).state
-    expect(receive(scene.start(responding).state, typed("Worms.")).effects).toEqual([])
+    const writing = receive(scene.start(asking).state, typed("Worms.")).state
+    expect(receive(scene.start(asking).state, typed("Worms.")).effects).toEqual([])
     expect(receive(writing, submit).effects).toEqual([
       { kind: "note", targets: [whole], tags: [], body: "Worms." },
     ])
@@ -81,12 +81,12 @@ describe("receive: envelopes from the praxis bar", () => {
 
 describe("receive: a walk", () => {
   it("follows envelopes in order, from the frame, the viewer and the praxis bar", () => {
-    const envelopes = [tap(0), fromFrame(considering), tap(1), close, tap(1)]
+    const envelopes = [tap(0), fromFrame(highlighting), tap(1), close, tap(1)]
     const end = envelopes.reduce(
       (current, envelope) => receive(current, envelope).state,
       scene.start(annotating).state,
     )
-    expect(end.subject).toBe(considering)
+    expect(end.subject).toBe(highlighting)
     expect(scene.viewer(end).open).toBe(1)
   })
 })

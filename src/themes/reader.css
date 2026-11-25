@@ -25,6 +25,7 @@
   --fill-chosen: #c4f6fb; /* passages chosen for a new note */
   --accent: #d9b54a; /* buttons that stand out, such as − beside a chosen passage */
   --on-accent: #000000; /* what is drawn on the accent */
+  --problem: #b00020; /* what is broken and must be put right, in Form Practice: a red */
 
   /* Interaction */
   --focus: #3b6fd8; /* the keyboard focus ring */
@@ -39,4 +40,5 @@
   --radius-note: 8px;
   --radius-sheet: 12px;
   --shadow-sheet: 0 -2px 12px rgb(0 0 0 / 0.08);
+  --shadow-popup: 0 8px 24px rgb(0 0 0 / 0.12); /* a list opened from a choice, over the page */
 }

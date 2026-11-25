@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest"
 import type { Material } from "../../../material/materials"
-import type { Fingerprint, Note } from "../../../material/types"
+import type { Fingerprint } from "../../../material/types"
 import type { NoteId, ReaderNote } from "../../../notebook/types"
 import { fingerprintOfPractice } from "../../../practice/fingerprint"
-import type { Practice, Step } from "../../../practice/types"
+import { REST } from "../../../practice/parts"
+import type { EditorsNote, Parts } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../../frame/frame"
 import { scene, type SceneState } from "../scene"
 import type { Subject } from "../types"
+import { practiceOf } from "../../../practice/test/build"
+
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
 
 // The scene as the frame drives it: subjects made by frameOf and annotateFrame, so these tests also
 // show that the frame and the scene agree.
@@ -20,23 +25,22 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-const note = (index: number, id: string | null): Note => ({
-  index,
-  id,
-  lemma: [],
-  tags: [],
-  paragraphs: [],
-})
-
-const notes = [note(0, "a"), note(1, null), note(2, "b")]
-
-/** The material: two lines of poem, and the editor's notes. */
+/** The material: two lines of poem. */
 const material: Material = {
-  substrate: { lines: ["A Bird, came down the Walk -", "He bit an Angle Worm in halves"] },
+  substrate: { lines: withIds(["A Bird, came down the Walk -", "He bit an Angle Worm in halves"]) },
   fingerprint: "f" as Fingerprint,
   poem: { title: "Fixture", author: "", stanzas: [] },
-  notes: { notes: notes, rangesOn: () => [] },
 }
+
+/** The editor's notes the practice's steps highlight, by their ids. */
+const editorsNotes: Record<string, EditorsNote> = {
+  a: { id: "a", notehead: "l1 Bird", tags: [], body: "On the bird." },
+  b: { id: "b", notehead: "l2 Worm", tags: [], body: "On the worm." },
+}
+
+/** The set of a step's own editor's notes, by their ids, as the viewer is given it. */
+const setOf = (...ids: string[]) =>
+  expect.objectContaining({ notes: ids.map((id, index) => expect.objectContaining({ index, id })) })
 
 /** The whole of that poem. */
 const whole = { start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }
@@ -58,20 +62,27 @@ const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderN
 const annotating = (written: readonly ReaderNote[]) =>
   annotateFrame("poem", material, written).subject
 
-const consider = (ref: string): Step => ({
-  direction: "consider",
-  note: ref,
-  prose: [`On ${ref}.`],
+/** A step that highlights one of the editor's notes. */
+const look = (id: string): Parts => ({
+  ...REST,
+  prose: [`On ${id}.`],
+  highlight: [editorsNotes[id]!],
 })
-const respond: Step = { direction: "respond", prose: ["What does the bird eat?"] }
+/** A step that asks for one note on the whole poem. */
+const askWhole: Parts = {
+  ...REST,
+  prose: ["What does the bird eat?"],
+  writing: { target: "whole", tags: [], count: "one" },
+}
 
-/** One stage: consider, consider, respond. The rest is at step 3; the final stage is stage 1. */
-const practice: Practice = {
+/** One stage: two steps with a note each, then one asking for writing. The rest is at step 3; the
+ * final stage is stage 1. */
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "poem",
-  stages: [{ name: "Only", steps: [consider("@a"), consider("@b"), respond] }],
-}
+  stages: [{ name: "Only", steps: [look("a"), look("b"), askWhole] }],
+})
 
 /** The subject of a frame of the practice, with what is in the notebook. */
 const at = (stage: number, step: number, written: readonly ReaderNote[] = []) =>
@@ -89,26 +100,26 @@ function started(on: Subject): SceneState {
 }
 
 describe("scene.start: each part staged", () => {
-  it("on a consider step: its note picked out, closed; the prose; no writing", () => {
+  it("on a step with an editor's note: its note picked out, closed; the prose; no writing", () => {
     const current = started(at(0, 1))
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
-      marked: [2],
+      notes: setOf("b"),
+      marked: [0],
       open: null,
       choosing: false,
       chosen: [],
     })
-    expect(scene.praxisBar(current)).toEqual({ prose: ["On @b."], writing: null, noting: null })
+    expect(scene.praxisBar(current)).toEqual({ prose: ["On b."], writing: null, noting: null })
   })
 
-  it("on a respond step: the poem with nothing picked out; the prose and a blank page", () => {
+  it("on a step asking for writing: the poem with nothing picked out; the prose and a blank page", () => {
     const current = started(at(0, 2))
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
+      notes: setOf(),
       marked: [],
       open: null,
       choosing: false,
@@ -132,7 +143,7 @@ describe("scene.start: each part staged", () => {
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
+      notes: setOf(),
       marked: [],
       open: null,
       choosing: false,
@@ -173,14 +184,14 @@ describe("scene.start: each part staged", () => {
 
 describe("scene.fromViewer and fromPraxisBar", () => {
   it("opens the note by its highlight and closes it by its X", () => {
-    const opened = scene.fromViewer(started(at(0, 1)), tap(2))
-    expect(scene.viewer(opened.state).open).toBe(2)
+    const opened = scene.fromViewer(started(at(0, 1)), tap(0))
+    expect(scene.viewer(opened.state).open).toBe(0)
     expect(scene.viewer(scene.fromViewer(opened.state, close).state).open).toBeNull()
   })
 
   it("gives back the very same state when nothing changed", () => {
     const current = started(at(0, 1))
-    expect(scene.fromViewer(current, tap(0)).state).toBe(current)
+    expect(scene.fromViewer(current, tap(1)).state).toBe(current) // no note 1 is shown
     expect(scene.fromPraxisBar(current, { kind: "submit" }).state).toBe(current) // nothing to write
   })
 
@@ -202,7 +213,7 @@ describe("scene.fromViewer and fromPraxisBar", () => {
 describe("scene.fromFrame: cuts and holds", () => {
   it("does nothing when the frame names the very subject the scene is on: the open note stays", () => {
     const step = at(0, 1)
-    const current = scene.fromViewer(started(step), tap(2)).state
+    const current = scene.fromViewer(started(step), tap(0)).state
     const answer = scene.fromFrame(current, subject(step))
     expect(answer.state).toBe(current)
     expect(answer.effects).toEqual([])
@@ -251,7 +262,7 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
+      notes: setOf("a"),
       marked: [0],
       open: null,
       choosing: false,
@@ -263,8 +274,8 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
-      marked: [2],
+      notes: setOf("b"),
+      marked: [0],
       open: null,
       choosing: false,
       chosen: [],
@@ -291,8 +302,8 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
-      marked: [2],
+      notes: setOf("b"),
+      marked: [0],
       open: null,
       choosing: false,
       chosen: [],
@@ -349,6 +360,15 @@ describe("noting in annotate mode", () => {
     current = scene.fromFrame(current, subject(annotating([mine("n1", "Beads.")]))).state
     expect(scene.praxisBar(current)?.noting).toMatchObject({ choosing: true, draft: "Worms." })
     expect(scene.viewer(current).chosen).toEqual([bird])
+  })
+
+  it("takes a note up: its passages chosen and drawn, its words in the box, the open note closed", () => {
+    let current = started(annotating([mine("n1", "Worms.")]))
+    current = scene.fromViewer(current, tap(0)).state
+    const taken = scene.fromPraxisBar(current, { kind: "takeUp", targets: [bird], text: "A bird." })
+    expect(taken.effects).toEqual([])
+    expect(scene.viewer(taken.state)).toMatchObject({ chosen: [bird], open: null })
+    expect(scene.praxisBar(taken.state)?.noting).toMatchObject({ draft: "A bird.", canAdd: true })
   })
 
   it("starts afresh after a change of mode, and has no noting in practice mode", () => {
@@ -446,24 +466,28 @@ describe("annotate mode: turning to the new note closes the open one", () => {
 
   it("leaves practice mode's open note alone: its praxis bar speaks to the writing", () => {
     let current = started(at(0, 1))
-    current = scene.fromViewer(current, tap(2)).state
+    current = scene.fromViewer(current, tap(0)).state
     expect(scene.fromPraxisBar(current, { kind: "draft", text: "x" }).state).toBe(current)
   })
 })
 
-describe("an observe step: the writing chooses the passages, not the noting", () => {
-  const observe: Step = { direction: "observe", prose: ["Where does the bird change?"] }
-  const observing: Practice = { ...practice, stages: [{ name: "Only", steps: [observe] }] }
+describe("a step asking for writing on chosen passages: the writing chooses them, not the noting", () => {
+  const askChosen: Parts = {
+    ...REST,
+    prose: ["Where does the bird change?"],
+    writing: { target: "chosen", tags: [], count: "one" },
+  }
+  const askingChosen = practiceOf({ ...practice, stages: [{ name: "Only", steps: [askChosen] }] })
   const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
   const worm = { start: { line: 1, offset: 10 }, end: { line: 1, offset: 20 } }
   const from = {
     practice: "test",
-    fingerprint: fingerprintOfPractice(observing),
+    fingerprint: fingerprintOfPractice(askingChosen),
     stage: 0,
     step: 0,
   }
   const here = (written: readonly ReaderNote[] = []) =>
-    frameOf(observing, standing(0, 0), material, written).subject
+    frameOf(askingChosen, standing(0, 0), material, written).subject
 
   it("takes the toggle and each passage chosen, and the viewer draws them while writing", () => {
     let current = started(here())
@@ -526,7 +550,7 @@ describe("an observe step: the writing chooses the passages, not the noting", ()
   })
 })
 
-describe("a respond step: no passages to choose", () => {
+describe("a step asking for writing on the whole poem: no passages to choose", () => {
   it("ignores the toggle and a passage chosen, and draws none", () => {
     const current = started(at(0, 2))
     const bird = { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }
@@ -537,13 +561,18 @@ describe("a respond step: no passages to choose", () => {
 })
 
 describe("a recall step: the stage before's notes, listed to read", () => {
-  const recalling: Practice = {
+  const recalling = practiceOf({
     ...practice,
     stages: [
-      { name: "First", steps: [consider("@a"), respond] },
-      { name: "Second", steps: [{ direction: "recall", prose: ["Yesterday, you wrote:"] }] },
+      { name: "First", steps: [look("a"), askWhole] },
+      {
+        name: "Second",
+        steps: [
+          { ...REST, prose: ["Yesterday, you wrote:"], recall: { from: "stage", id: "stage-1" } },
+        ],
+      },
     ],
-  }
+  })
   const from = {
     practice: "test",
     fingerprint: fingerprintOfPractice(recalling),
@@ -609,21 +638,19 @@ describe("the final stage: every response, listed to read", () => {
   })
 })
 
-describe("a reflect step: the poem, and the editor's prompt", () => {
-  const reflecting: Practice = {
+describe("a step that only says something: the poem, and the editor's prompt", () => {
+  const saying = practiceOf({
     ...practice,
-    stages: [
-      { name: "Only", steps: [{ direction: "reflect", prose: ["Read the poem through."] }] },
-    ],
-  }
-  const here = () => frameOf(reflecting, standing(0, 0), material, []).subject
+    stages: [{ name: "Only", steps: [{ ...REST, prose: ["Read the poem through."] }] }],
+  })
+  const here = () => frameOf(saying, standing(0, 0), material, []).subject
 
   it("draws the poem with nothing picked out, and only the prompt in the praxis bar", () => {
     const current = started(here())
     expect(scene.viewer(current)).toEqual({
       kind: "marked",
       text: "poem",
-      notes: material.notes,
+      notes: setOf(),
       marked: [],
       open: null,
       choosing: false,

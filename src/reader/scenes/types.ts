@@ -1,7 +1,7 @@
 import type { LemmaPart, Note, Notes, Span, Substrate, TextId } from "../../material/types"
 import type { NoteId, ReaderNote } from "../../notebook/types"
 
-/** What the scene plays: parts, with every reference already resolved. */
+/** What the scene plays: parts, with every notehead already placed. */
 export interface Subject {
   /** Which step this is. A new key starts the scene afresh. The same key with a fresh subject keeps
    * the scene's state while something around it changes, such as the notebook. */
@@ -89,6 +89,7 @@ export type WritingMessage =
 export type NotingMessage =
   | { kind: "noteDraft"; text: string } // the reader typed
   | { kind: "addNote" } // Add note
+  | { kind: "takeUp"; targets: readonly Span[]; text: string } // a note taken in hand, to write again
 
 /** What the praxis bar tells the part that chooses passages: the writing, while its note is on
  * passages the reader chooses, or else the noting. */

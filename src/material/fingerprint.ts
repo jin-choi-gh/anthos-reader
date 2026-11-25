@@ -1,9 +1,10 @@
 import type { Fingerprint, Substrate } from "./types"
 
-/** The substrate's fingerprint: the hash of its lines joined by line breaks. A line never holds a
- * line break, so different lines never join to the same text. */
+/** The substrate's fingerprint: the hash of its lines' text joined by line breaks. A line never
+ * holds a line break, so different lines never join to the same text. The lines' ids are left out:
+ * the fingerprint is of the text alone. */
 export function fingerprintOf(substrate: Substrate): Fingerprint {
-  return hashOf(substrate.lines.join("\n")) as Fingerprint
+  return hashOf(substrate.lines.map((line) => line.text).join("\n")) as Fingerprint
 }
 
 /** A text's hash, behind every fingerprint: 53 bits (cyrb53), as 14 hex digits. The same text always

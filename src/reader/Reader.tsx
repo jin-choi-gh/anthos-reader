@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef } from "react"
+import { Folio, Message } from "../components/Folio"
+import { usePlatform } from "../components/usePlatform"
 import { loadTextualComplex } from "../loom/load"
 import { toMaterial } from "../loom/toMaterial"
 import { fingerprintOfPractice } from "../practice/fingerprint"
-import { practiceFor } from "../practice/practices"
+import { practiceFor } from "../practice/choose"
+import { loadPractices } from "../practice/load"
+import { useMadePractices } from "../practice-maker/useMadePractices"
 import type { ModeName } from "../route"
 import { useLoaded } from "../useLoaded"
 import { AnnotateMode } from "./AnnotateMode"
@@ -11,8 +15,9 @@ import type { Material } from "../material/materials"
 import { modeOf } from "./mode"
 import { ModeToggle } from "./ModeToggle"
 import { PracticeMode } from "./PracticeMode"
-import { usePlatform } from "./usePlatform"
-import "./reader.css"
+
+// The practice files, read once; each Reader takes its text's practice from them
+const practiceFiles = loadPractices()
 
 /** One file's material, made from its textual complex. */
 async function loadMaterial(file: string): Promise<Material> {
@@ -26,6 +31,7 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
   const { value: material, error } = useLoaded(file, loadMaterial)
+  const made = useMadePractices(file)
 
   // The tab names the poem while it is open, and goes back to what it said when the reader closes
   useEffect(() => {
@@ -43,15 +49,18 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
     [file, material],
   )
 
-  // The mode asked for, if the text's practice can run; otherwise annotate mode, and why not
-  const chosen = useMemo(
-    () => (material === null ? null : modeOf(asked, practiceFor(file), material.notes.notes)),
-    [asked, file, material],
-  )
+  // The mode asked for, if the text's practice can run; otherwise annotate mode, and why not. The
+  // text's practice is the one last saved for it in the browser, or else its practice file
+  const chosen = useMemo(() => {
+    if (material === null) return null
+    const practice = practiceFor(file, practiceFiles.practices, made.practices)
+    return modeOf(asked, practice, material.substrate)
+  }, [asked, file, material, made.practices])
 
-  // In development, say why a text's practice cannot run
+  // In development, say why a practice file could not be read, and why a text's practice cannot run
   useEffect(() => {
     if (!import.meta.env.DEV || chosen === null) return
+    for (const problem of practiceFiles.problems) console.warn(problem)
     for (const problem of chosen.problems) console.warn(`The practice for ${file}: ${problem}`)
   }, [chosen, file])
 
@@ -59,11 +68,7 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   if (material === null || chosen === null) {
     // Loading, or the load failed
     content = (
-      <Layout
-        layout={layout}
-        page={<p className="reader-message">{error ?? "Loading…"}</p>}
-        notes={null}
-      />
+      <Layout layout={layout} page={<Message>{error ?? "Loading…"}</Message>} notes={null} />
     )
   } else {
     const { mode } = chosen
@@ -84,8 +89,8 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   }
 
   return (
-    <div ref={ref} className="reader" data-layout={layout} data-input={input}>
+    <Folio ref={ref} layout={layout} input={input}>
       {content}
-    </div>
+    </Folio>
   )
 }

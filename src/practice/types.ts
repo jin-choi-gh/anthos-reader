@@ -16,50 +16,43 @@ export interface Practice {
   readonly stages: readonly Stage[]
 }
 
+/** A stage's id, which never changes: "stage-1". Letters, digits, - and _, as loom allows ids. */
+export type StageId = string
+
+/** A step's id, which never changes: "step-4". Letters, digits, - and _, as loom allows ids. */
+export type StepId = string
+
+/** A group of steps: its id, its name, which heads its steps, its steps, and its days: how many
+ * days after the reader finishes the stage before it opens, at least 1, or null on the first
+ * stage, which is open from the start. */
 export interface Stage {
+  readonly id: StageId
   readonly name: string
+  readonly days: number | null
   readonly steps: readonly Step[]
 }
 
-/** A step, as the editor writes it: one direction. */
-export type Step = ReflectStep | ConsiderStep | RespondStep | ObserveStep | RecallStep
-
-export interface ReflectStep {
-  readonly direction: "reflect"
-  readonly prose: readonly string[]
+/** A step, as the editor writes it: its parts, under an id that names it, and nothing else. */
+export interface Step extends Parts {
+  readonly id: StepId
 }
 
-export interface ConsiderStep {
-  readonly direction: "consider"
-  readonly note: string // a reference to the editor's note: "@angle-worm"
-  readonly prose: readonly string[]
-}
-
-export interface RespondStep {
-  readonly direction: "respond"
-  readonly prose: readonly string[]
-}
-
-export interface ObserveStep {
-  readonly direction: "observe"
-  readonly prose: readonly string[]
-}
-
-export interface RecallStep {
-  readonly direction: "recall"
-  readonly prose: readonly string[]
-}
-
-/** What a step is made of, whatever its direction. */
+/** What a step is made of. */
 export interface Parts {
-  /** The step's words. */
   readonly prose: readonly string[]
-  /** References to the editor's notes to highlight in the poem: "@angle-worm". */
-  readonly highlight: readonly string[]
-  /** What the reader is asked to write, or null when nothing is asked. */
+  readonly highlight: readonly EditorsNote[]
   readonly writing: Writing | null
-  /** The reader's own notes to bring back, or null when none are. */
   readonly recall: Recall | null
+}
+
+/** A note the editor writes in the step that shows it, as loom has one: its id ("bird-flies-1"),
+ * which loom allows to hold only letters, digits, - and _; its notehead, where it is on the poem
+ * ("l4 fellow && l4 raw"); its tags; and its body, paragraphs parted by blank lines. */
+export interface EditorsNote {
+  readonly id: string
+  readonly notehead: string
+  readonly tags: readonly string[]
+  readonly body: string
 }
 
 /** One note, with the tags the step gives it, which the reader may revise: on the whole poem
@@ -70,9 +63,10 @@ export interface Writing {
   readonly count: "one"
 }
 
-/** The reader's notes to bring back, as they answered the practice: those written in the stage
- * before ("previous"), or in every stage before ("all"), which in the final stage is the whole
- * practice. */
-export interface Recall {
-  readonly from: "previous" | "all"
-}
+/** The reader's notes to bring back, as they answered the practice: those written in an earlier
+ * stage ("stage"), or on an earlier step ("step"), named by its id; or, in the final stage only,
+ * those written in every stage before it, the whole practice ("all"). */
+export type Recall =
+  | { readonly from: "stage"; readonly id: StageId }
+  | { readonly from: "step"; readonly id: StepId }
+  | { readonly from: "all" }

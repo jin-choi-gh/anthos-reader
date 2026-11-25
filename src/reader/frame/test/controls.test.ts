@@ -1,17 +1,21 @@
 import { describe, expect, it, vi } from "vitest"
 import type { Material } from "../../../material/materials"
 import type { Fingerprint } from "../../../material/types"
-import type { Practice, Step } from "../../../practice/types"
+import { REST } from "../../../practice/parts"
+import type { Parts } from "../../../practice/types"
 import { controlsOf } from "../controls"
 import { annotateFrame, frameOf } from "../frame"
 import type { Standing } from "../../../runner/types"
+import { practiceOf } from "../../../practice/test/build"
 
-/** The material: two lines of poem, and the editor's notes. */
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
+/** The material: two lines of poem. */
 const material: Material = {
-  substrate: { lines: ["A Bird, came down the Walk -", "He bit an Angle Worm in halves"] },
+  substrate: { lines: withIds(["A Bird, came down the Walk -", "He bit an Angle Worm in halves"]) },
   fingerprint: "f" as Fingerprint,
   poem: { title: "Fixture", author: "", stanzas: [] },
-  notes: { notes: [], rangesOn: () => [] },
 }
 
 /** Where a run stands: at a station, with when the next stage opens and where it holds. */
@@ -22,18 +26,19 @@ const standing = (
   heldAt: number | null = null,
 ): Standing => ({ station: { stage, step }, opensOn, heldAt })
 
-const consider = (ref: string): Step => ({ direction: "consider", note: ref, prose: [] })
+/** A step that only says something. */
+const say = (words: string): Parts => ({ ...REST, prose: [words] })
 
 /** Two stages of two steps each: the rests are at step 2. */
-const practice: Practice = {
+const practice = practiceOf({
   id: "test",
   title: "Test",
   text: "poem",
   stages: [
-    { name: "First", steps: [consider("@a"), consider("@b")] },
-    { name: "Second", steps: [consider("@a"), consider("@b")] },
+    { name: "First", steps: [say("@a"), say("@b")] },
+    { name: "Second", steps: [say("@a"), say("@b")] },
   ],
-}
+})
 
 /** The controls where a run stands, and the moves their buttons asked for so far. */
 function at(where: Standing) {

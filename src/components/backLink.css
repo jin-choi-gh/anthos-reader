@@ -1,0 +1,23 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 44px; /* a finger-sized target */
+  padding-inline: 0.5rem;
+  border-radius: var(--radius-note);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--ink);
+}
+
+.back-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

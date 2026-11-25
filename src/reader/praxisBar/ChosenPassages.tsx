@@ -1,5 +1,7 @@
-import { Lemma } from "../../ui/Lemma"
+import { Button } from "../../components/controls"
+import { Lemma } from "../../components/Lemma"
 import type { PassagesProjection, PraxisBarProtocol } from "../scenes/types"
+import "./praxisBar.css"
 
 /** The passages of a note being written: the toggle for choosing them in the poem, and the chosen
  * targets, one row each in the poem's order, each with a button to remove it. Both go to the
@@ -13,14 +15,13 @@ export function ChosenPassages({
 }) {
   return (
     <>
-      <button
-        type="button"
-        className="praxis-button noting-toggle"
+      <Button
+        className="noting-toggle"
         aria-pressed={passages.choosing}
         onClick={() => send({ kind: "choosing", on: !passages.choosing })}
       >
         Choose passages
-      </button>
+      </Button>
       {passages.chosen.length > 0 && (
         <ol className="noting-targets" aria-label="Chosen passages">
           {passages.chosen.map((lemma, index) => (

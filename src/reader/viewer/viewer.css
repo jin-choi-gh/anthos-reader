@@ -1,0 +1,259 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* Title block: 2 poem lines of space before the poem */
+.title-block {
+  margin-bottom: 2lh;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.poet {
+  margin: 0.25em 0 0;
+  font-family: var(--font-ui);
+  font-size: 0.7em;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+
+.stanza + .stanza {
+  margin-top: 1.6em;
+}
+
+.line {
+  position: relative;
+}
+
+/* Hanging indent: the first line starts at the line's indent; a line too long to fit turns over 2em further in */
+.line-text {
+  display: block;
+  padding-inline-start: calc(var(--indent, 0) * 1.5em + 2em);
+  text-indent: -2em;
+  white-space: pre-wrap; /* consecutive spaces are kept as they are in the poem */
+}
+
+/* Numbers sit outside the block, so they don't affect its centring */
+.line-number {
+  position: absolute;
+  inset-inline-end: 100%;
+  padding-inline-end: 1em;
+  font-size: 0.7em;
+  line-height: calc(1.6em / 0.7); /* align with the line's first baseline */
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  user-select: none;
+}
+
+.notes-empty {
+  margin: 0;
+  color: var(--ink-faint);
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Each note in its own box; the whole box is what you click */
+.note {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.note:hover {
+  border-color: var(--line-hover);
+}
+
+.note[data-selected="true"] {
+  background: var(--fill-editor);
+  border-color: var(--edge-selected);
+}
+
+/* Keyboard focus is on the lemma's button, but the ring goes round the whole box */
+.note:has(.note-lemma:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The lemma: a button that looks like the head of a commentary entry */
+.note-lemma {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.note-lemma:focus-visible {
+  outline: none;
+}
+
+/* Quotes from the poem in italics, without quotation marks; citations ("lines 1–4") upright */
+.note-lemma q {
+  quotes: none;
+  font-style: italic;
+}
+
+.note p {
+  margin: 0.5em 0 0;
+}
+
+/* Recalled notes: the name of the stage they were written in, above its first, like the praxis
+   bar's heading */
+.notes-heading {
+  margin: 0.5rem 0 0;
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.notes-heading:first-child {
+  margin-top: 0;
+}
+
+/* A recalled note's prompt: the editor's words it answered, quieter than the reader's own */
+.note-prompt {
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+
+.note .note-prompt p {
+  margin: 0 0 0.375em;
+}
+
+/* Practice mode: the note the reader opened from the poem. Not a choice in a list, so no pointer */
+.open-note {
+  cursor: auto;
+}
+
+/* The lemma as a heading, with the X in the top right-hand corner */
+.open-note-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.open-note-head .note-lemma {
+  margin: 0;
+}
+
+/* The heading takes the focus when the note opens: a ring only when the keyboard opened it */
+.open-note-head .note-lemma:focus {
+  outline: none;
+}
+
+.open-note-head .note-lemma:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* A finger-sized X, pulled into the box's corner */
+.open-note-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -0.75rem -1rem 0 0;
+  border: 0;
+  border-radius: var(--radius-note);
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.open-note-close:hover {
+  color: var(--ink);
+}
+
+.open-note-close:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
+
+/* The selected note's words in the poem: the same colour as its box, so the two read together */
+.line-text mark {
+  background: var(--fill-editor);
+  color: inherit;
+}
+
+/* Practice mode: a highlight the reader can tap to open its note */
+.line-text mark[role="button"] {
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.line-text mark[role="button"]:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Its note open: underlined in the selected note's edge colour */
+.line-text mark[role="button"][data-open="true"] {
+  box-shadow: inset 0 -2px var(--edge-selected);
+}
+
+/* Choosing passages: the poem is the reader's to choose from. A double tap is two taps, not a zoom,
+   and a long press brings up no menu of the browser's */
+.choosing-area[data-choosing="true"] {
+  cursor: text;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* The chosen targets, and the passage being chosen, over the poem's text */
+.line-text [data-chosen="true"] {
+  background: var(--fill-chosen);
+}
+
+.line-text [data-choice="true"] {
+  background: var(--selection);
+}
+
+/* Delete, at the foot of the selected note, on the right: quiet, like the way back */
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.note-delete {
+  min-height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.note-delete:hover {
+  border-color: var(--line-hover);
+  color: var(--ink);
+}
+
+.note-delete:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

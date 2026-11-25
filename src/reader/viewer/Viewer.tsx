@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
-import { Close } from "../../ui/icons"
-import { Lemma } from "../../ui/Lemma"
+import { Message } from "../../components/Folio"
+import { Close } from "../../components/icons"
+import { Lemma } from "../../components/Lemma"
 import type { Materials } from "../../material/materials"
 import { rangesOnLines } from "./choosing"
 import type { LineRange } from "./cut"
@@ -9,6 +10,7 @@ import { PoemBlock } from "./PoemBlock"
 import type { ViewerProjection, ViewerProtocol } from "../scenes/types"
 import { TitleBlock } from "./TitleBlock"
 import { useChoosing } from "./useChoosing"
+import "./viewer.css"
 import type { Note, Span } from "../../material/types"
 
 /** What both parts of the viewer draw from: the scene's projection, with the notes it shows; the
@@ -37,7 +39,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
     () => (substrate === null || choice === null ? none : rangesOnLines(substrate, [choice])),
     [substrate, choice],
   )
-  if (material === null) return <p className="reader-message">Loading…</p>
+  if (material === null) return <Message>Loading…</Message>
   const { poem } = material
   const { rangesOn } = projection.notes
   const choosing = { chosenOn, choiceOn }

@@ -10,13 +10,16 @@ import {
   type NotingState,
 } from "../noting"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const noting: NotingSubject = {
   substrate: {
-    lines: [
+    lines: withIds([
       "A Bird, came down the Walk -",
       "He did not know I saw -",
       "He bit an Angle Worm in halves",
-    ],
+    ]),
   },
   tags: [],
 }
@@ -159,5 +162,43 @@ describe("addNote: the note added", () => {
     const blank = { ...two, draft: "   " }
     expect(onPraxisBar(noting, blank, { kind: "addNote" })).toEqual({ state: blank, effects: [] })
     expect(onPraxisBar(noting, blank, { kind: "addNote" }).state).toBe(blank)
+  })
+})
+
+describe("takeUp: a note taken in hand, to write again", () => {
+  it("makes its targets the chosen ones, in the poem's order, and its words the draft", () => {
+    const taken = bar(startNoting(), { kind: "takeUp", targets: [he, bird], text: "Worms." })
+    expect(taken).toEqual({ choosing: false, targets: [bird, he], draft: "Worms." })
+    expect(bar(choosing, { kind: "takeUp", targets: [he], text: "" }).choosing).toBe(true)
+  })
+
+  it("joins targets that overlap or touch, as chosen passages are", () => {
+    const taken = bar(choosing, {
+      kind: "takeUp",
+      targets: [span(0, 2, 0, 6), span(0, 4, 0, 10)],
+      text: "A bird.",
+    })
+    expect(taken.targets).toEqual([span(0, 2, 0, 10)])
+  })
+
+  it("chooses nothing for a note on the whole poem, which is what nothing chosen means", () => {
+    const taken = bar(choosing, { kind: "takeUp", targets: [span(0, 0, 2, 30)], text: "All." })
+    expect(taken.targets).toEqual([])
+    expect(onPraxisBar(noting, taken, { kind: "addNote" }).effects).toEqual([
+      { kind: "note", targets: [span(0, 0, 2, 30)], tags: [], body: "All." },
+    ])
+  })
+
+  it("puts the note in hand down when none and nothing are taken up", () => {
+    const taken = bar(choosing, { kind: "takeUp", targets: [he], text: "Worms." })
+    expect(bar(taken, { kind: "takeUp", targets: [], text: "" })).toEqual(choosing)
+  })
+
+  it("sends the note out again, on its passages as chosen now, when it is added", () => {
+    const taken = bar(choosing, { kind: "takeUp", targets: [he], text: "Worms." })
+    const more = onChoose(noting, taken, bird)
+    expect(onPraxisBar(noting, more, { kind: "addNote" }).effects).toEqual([
+      { kind: "note", targets: [bird, he], tags: [], body: "Worms." },
+    ])
   })
 })

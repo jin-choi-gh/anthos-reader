@@ -14,6 +14,9 @@ import {
   type WritingState,
 } from "../writing"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const targets: readonly Span[] = [{ start: { line: 0, offset: 0 }, end: { line: 1, offset: 30 } }]
 const saved: ReaderNote = {
   id: "n" as NoteId,
@@ -208,14 +211,14 @@ describe("keepWriting: the page, when the notebook changes", () => {
   })
 })
 
-// A note on passages the reader chooses, as an observe step asks for
+// A note on passages the reader chooses, as a step's writing on chosen passages asks for
 
 const lines: Substrate = {
-  lines: [
+  lines: withIds([
     "A Bird, came down the Walk -",
     "He did not know I saw -",
     "He bit an Angle Worm in halves",
-  ],
+  ]),
 }
 const span = (
   startLine: number,

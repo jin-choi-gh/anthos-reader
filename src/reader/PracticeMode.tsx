@@ -1,4 +1,5 @@
 import { useMemo, type ReactNode } from "react"
+import type { PageOrSpread } from "../components/usePlatform"
 import { assertNever } from "../assertNever"
 import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
@@ -11,7 +12,6 @@ import { Layout } from "./Layout"
 import type { Material, Materials } from "../material/materials"
 import { PraxisBar } from "./praxisBar/PraxisBar"
 import { useScene } from "./scenes/useScene"
-import type { ReaderLayout } from "./usePlatform"
 import { ViewerNotes, ViewerPage } from "./viewer/Viewer"
 import { DevPanel } from "./dev/DevPanel"
 
@@ -29,7 +29,7 @@ export function PracticeMode({
   practice: Practice
   material: Material
   materials: Materials
-  layout: ReaderLayout
+  layout: PageOrSpread
   topBar: ReactNode
 }) {
   const notebook = useNotebook(practice.text)
@@ -66,7 +66,7 @@ export function PracticeMode({
   const listed = scene.viewer.kind === "listed"
   const count = scene.viewer.kind === "listed" ? scene.viewer.shown.length : 0
   // The final stage brings back the reader's responses to the whole practice; a recall step, to
-  // the stage before
+  // the stage or step it names
   const label =
     run.standing.station.stage === finalOf(practice) ? "Your responses" : "Responses to Recall"
 

@@ -3,12 +3,15 @@ import { notesFor, lemmaOf } from "../notes"
 import { wholePoem } from "../spans"
 import type { Annotation, Span, Substrate } from "../types"
 
+/** Lines of the substrate, each with the id loom would give it: "l1", "l2", and on. */
+const withIds = (texts: readonly string[]) => texts.map((text, i) => ({ id: `l${i + 1}`, text }))
+
 const substrate: Substrate = {
-  lines: [
+  lines: withIds([
     "A Bird, came down the Walk -",
     "He did not know I saw -",
     "He bit an Angle Worm in halves",
-  ],
+  ]),
 }
 
 const span = (
@@ -68,7 +71,7 @@ describe("notesFor: lemmas", () => {
   })
 
   it("cites the whole poem when lines with no text lie at either end", () => {
-    const edged = { lines: ["", ...substrate.lines, ""] }
+    const edged = { lines: withIds(["", ...substrate.lines.map((line) => line.text), ""]) }
     expect(lemmaOf(edged, [span(1, 0, 3, 30)])).toEqual([
       { kind: "citation", text: "the whole poem" },
     ])

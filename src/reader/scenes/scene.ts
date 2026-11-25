@@ -85,7 +85,8 @@ export const scene = {
         return reply(withWriting(current, answer.state), answer.effects)
       }
       case "noteDraft":
-      case "addNote": {
+      case "addNote":
+      case "takeUp": {
         const subject = current.subject.noting
         if (subject === null || current.noting === null) return reply(current)
         const answer = noting.onPraxisBar(subject, current.noting, message)

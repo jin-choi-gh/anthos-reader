@@ -1,0 +1,23 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* Spread: the margin stays in view, level with the title, and scrolls on its own, never the poem.
+   7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window. */
+.margin {
+  grid-area: margin;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  align-self: start;
+  position: sticky;
+  top: 3rem;
+  max-height: calc(100dvh - 7rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Practice mode on a spread: the praxis bar, then the open note, stacked in the margin */
+.margin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

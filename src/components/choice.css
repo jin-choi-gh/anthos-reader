@@ -1,0 +1,126 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* The choice in its sentence: the option chosen, in ink, on a hairline, with a small chevron */
+.choice {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  max-width: 100%;
+  padding: 0 0.125rem;
+  border: 0;
+  border-bottom: 1px solid var(--line-hover);
+  border-radius: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: inherit;
+  text-align: start;
+  vertical-align: baseline;
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+
+.choice:hover,
+.choice[aria-expanded="true"] {
+  border-bottom-color: var(--edge-selected);
+}
+
+.choice:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.choice-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.choice svg {
+  flex: none;
+  align-self: center;
+  color: var(--ink-muted);
+  transition: transform 150ms ease;
+}
+
+.choice[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.choice[data-broken="true"] {
+  border-bottom-color: var(--problem);
+  color: var(--problem);
+}
+
+.choice[data-broken="true"] svg {
+  color: var(--problem);
+}
+
+/* The list, over the page: a box like a note's, raised a little */
+.choice-list {
+  position: fixed;
+  z-index: 20;
+  max-width: min(26rem, calc(100vw - 16px));
+  margin: 0;
+  padding: 0.375rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  box-shadow: var(--shadow-popup);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  list-style: none;
+  animation: choice-open 120ms ease-out;
+}
+
+@keyframes choice-open {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+/* Each option: a tick before the one chosen, the one under the pointer or the keyboard picked out as
+   a selected note is */
+.choice-option {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.125rem;
+  padding: 0.4375rem 0.75rem 0.4375rem 0.375rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.choice-option[data-active="true"] {
+  background: var(--fill-editor);
+}
+
+.choice-option[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.choice-tick {
+  display: grid;
+  align-self: center;
+  color: var(--edge-selected);
+}
+
+.choice-option[aria-disabled="true"] {
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choice,
+  .choice svg,
+  .choice-list {
+    transition: none;
+    animation: none;
+  }
+}

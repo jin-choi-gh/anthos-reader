@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { advance, clockOffset, dayOf, nextDay, now, resetClock, today } from "../clock"
+import { advance, clockOffset, daysAfter, dayOf, nextDay, now, resetClock, today } from "../clock"
 
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * HOUR
@@ -121,5 +121,15 @@ describe("nextDay", () => {
     expect(nextDay("2028-02-28")).toBe("2028-02-29")
     expect(nextDay("2028-02-29")).toBe("2028-03-01")
     expect(nextDay("2027-02-28")).toBe("2027-03-01")
+  })
+})
+
+describe("daysAfter", () => {
+  it("counts whole calendar days on, across months, years and leap days, 0 being the day itself", () => {
+    expect(daysAfter("2026-11-10", 0)).toBe("2026-11-10")
+    expect(daysAfter("2026-11-10", 3)).toBe("2026-11-13")
+    expect(daysAfter("2026-11-29", 3)).toBe("2026-12-02")
+    expect(daysAfter("2026-12-30", 7)).toBe("2027-01-06")
+    expect(daysAfter("2028-02-27", 2)).toBe("2028-02-29")
   })
 })

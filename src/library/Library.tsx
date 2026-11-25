@@ -1,5 +1,5 @@
 import { loadTextualComplex, textualComplexFiles } from "../loom/load"
-import { readerHref } from "../route"
+import { formHref, readerHref } from "../route"
 import { useLoaded } from "../useLoaded"
 import "./library.css"
 
@@ -10,7 +10,8 @@ interface Entry {
   author: string | null
 }
 
-/** Every textual complex in text-data/, by title and poet, each a link to read it. */
+/** Every textual complex in text-data/, by title and poet, each a link to read it and a link to
+ * Form Practice for it. */
 export function Library() {
   const { value: entries, error } = useLoaded("library", loadEntries)
 
@@ -26,10 +27,16 @@ export function Library() {
       ) : (
         <ul className="library-list">
           {entries.map((entry) => (
-            <li key={entry.file}>
+            <li key={entry.file} className="library-item">
               <a className="library-entry" href={readerHref(entry.file)}>
                 <span className="library-title">{entry.title}</span>
                 {entry.author !== null && <span className="library-poet">{entry.author}</span>}
+              </a>
+              <a className="library-form" href={formHref(entry.file)}>
+                Form Practice
+              </a>
+              <a className="library-form" href={formHref(entry.file, true)}>
+                New practice
               </a>
             </li>
           ))}

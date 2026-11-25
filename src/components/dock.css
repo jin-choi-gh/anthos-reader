@@ -1,0 +1,22 @@
+/* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
+
+/* Practice mode on a page: the praxis bar docked at the foot of the screen, edge to edge */
+.dock {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+}
+
+/* The open note: a sheet over the praxis bar, rising from the foot of the screen */
+.dock-sheet {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  max-height: 60dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 16px calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  box-shadow: var(--shadow-sheet);
+}
