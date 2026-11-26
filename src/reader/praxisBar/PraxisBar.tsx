@@ -18,9 +18,11 @@ const ASKED: Record<Exclude<Asks, null>, string> = {
 
 /** The praxis bar: the frame's heading, the step's position in its stage, Back and Next, and the
  * scene's projection between them. On a step of a stage it also names what the step asks; at a
- * rest, which has nothing to say, it sets a dinkus; in the final stage, with no buttons, it is a
- * colophon. `today` is only for putting a refusal into words: "tomorrow" depends on it. `label`
- * names the bar to assistive technology: what the reader is doing in it. */
+ * rest, which has nothing to say, it sets a dinkus, and Next, refused, is left out for the words of
+ * its refusal; in the final stage, with nowhere further to go and only Back, it is a colophon. When
+ * Next finishes the stage, it says that it completes it; on a stage finished already, it is Next.
+ * `today` is only for putting a refusal into words: "tomorrow" depends on it. `label` names the bar
+ * to assistive technology: what the reader is doing in it. */
 export function PraxisBar({
   controls,
   projection,
@@ -40,7 +42,11 @@ export function PraxisBar({
   const buttons = back.kind !== "none" || next.kind !== "none"
   const asks = position === null ? null : (projection?.asks ?? null)
   const rest = heading !== null && position === null && projection === null && buttons
-  const colophon = heading !== null && position === null && !buttons && projection !== null
+  // The final stage: something to say, with no step and nowhere further to go
+  const colophon =
+    heading !== null && position === null && projection !== null && next.kind === "none"
+  // At a rest, a refused Next is not drawn: the refusal's words say what waits
+  const shownNext: Control = rest && next.kind === "refused" ? { kind: "none" } : next
 
   return (
     <section className="praxis-bar" aria-label={label} data-colophon={colophon}>
@@ -81,8 +87,8 @@ export function PraxisBar({
           <ControlButton control={back} label="Back" className="praxis-back" way="back" />
           {why !== null && <p className="praxis-why">{why}</p>}
           <ControlButton
-            control={next}
-            label="Next"
+            control={shownNext}
+            label={next.kind === "go" && next.finishes ? "Complete Stage" : "Next"}
             className="praxis-next button--primary"
             way="on"
           />

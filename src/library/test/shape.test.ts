@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { longestOf, shapeOf, silhouetteOf } from "../silhouette"
+import { longestOf, shapeOf, silhouetteOf } from "../shape"
 
 const measure = { width: 44, indent: 3, row: 2, gap: 1, stanzaGap: 4 }
 

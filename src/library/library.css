@@ -38,6 +38,19 @@
   vertical-align: 0.3em;
 }
 
+/* At the right of the heading's line: how many poems, and the light toggle, which adds nothing to
+   the line's height */
+.library-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: -0.75rem;
+}
+
+.library-tools .light-toggle {
+  margin-block: -0.75rem;
+}
+
 .library-count {
   margin: 0;
   font-family: var(--font-caps);

@@ -83,13 +83,24 @@ describe("controlsOf: the frame's buttons", () => {
     expect(moveTo).toHaveBeenCalledExactlyOnceWith(1)
   })
 
-  it("in the final stage: the practice's title, and no buttons at all", () => {
-    const { controls } = at(standing(2, 0))
-    expect(controls).toEqual({
+  it("in the final stage: the practice's title, Back to the last stage's last step, and no Next", () => {
+    const { controls, moveTo } = at(standing(2, 0))
+    expect(controls).toMatchObject({
       heading: "Test",
       position: null,
-      back: { kind: "none" },
+      back: { kind: "go", finishes: false },
       next: { kind: "none" },
+    })
+    press(controls.back)
+    expect(moveTo).toHaveBeenCalledExactlyOnceWith(1)
+  })
+
+  it("says whether Next finishes the stage: on its last step, only the first time", () => {
+    expect(at(standing(0, 0)).controls.next).toMatchObject({ kind: "go", finishes: false })
+    expect(at(standing(0, 1)).controls.next).toMatchObject({ kind: "go", finishes: true })
+    expect(at(standing(0, 1, "2026-11-12")).controls.next).toMatchObject({
+      kind: "go",
+      finishes: false,
     })
   })
 

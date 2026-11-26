@@ -42,6 +42,12 @@
   margin: -2rem 0 1rem -0.5rem;
 }
 
+/* What is at the right of the top bar, side by side */
+.folio-tools {
+  display: flex;
+  align-items: center;
+}
+
 /* Page layout: what scrolls into view stops above the sheet, not behind it */
 html:has(.folio[data-layout="page"]) {
   scroll-padding-bottom: calc(var(--sheet-handle) + 1rem);
@@ -107,4 +113,9 @@ html:has(.folio[data-layout="page"] .dock) {
 
 html:has(.folio[data-layout="page"] .dock):has(.bottom-sheet) {
   scroll-padding-bottom: calc(var(--dock-height, 0px) + var(--sheet-handle, 3rem) + 1rem);
+}
+
+/* The sheet open: what scrolls into view stops above the whole of it, not its handle */
+html:has(.folio[data-layout="page"] .dock):has(.bottom-sheet[data-open="true"]) {
+  scroll-padding-bottom: calc(var(--dock-height, 0px) + var(--sheet-height, 45dvh) + 1rem);
 }

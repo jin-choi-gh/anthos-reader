@@ -14,6 +14,10 @@
   top: 3rem;
   max-height: calc(100dvh - 7rem);
   overflow-y: auto;
+}
+
+/* With nothing to scroll, it would hold the scrolls over it and do nothing with them */
+.margin[data-scrolls="true"] {
   overscroll-behavior: contain;
 }
 

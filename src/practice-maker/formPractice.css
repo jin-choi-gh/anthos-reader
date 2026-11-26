@@ -45,6 +45,11 @@
   top: 0;
   max-height: 100dvh;
   overflow-y: auto;
+}
+
+/* With nothing to scroll, a column would hold the scrolls over it and do nothing with them */
+.form-practice[data-layout="spread"] .form-reel[data-scrolls="true"],
+.form-practice[data-layout="spread"] .form-card-column[data-scrolls="true"] {
   overscroll-behavior: contain;
 }
 
@@ -219,10 +224,15 @@
   padding-inline: 8px;
 }
 
+/* The last row: where the draft stands, and the light toggle at its right */
 .form-practice[data-layout="page"] .form-status {
   order: 1;
-  flex-basis: 100%;
+  flex: 1 1 calc(100% - 4rem);
   padding: 0 0.5rem 0.25rem;
+}
+
+.form-practice[data-layout="page"] .light-toggle {
+  order: 2;
 }
 
 .form-practice[data-layout="page"] .form-top > .form-problem,

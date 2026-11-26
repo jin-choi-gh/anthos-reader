@@ -63,6 +63,7 @@
 .note {
   padding: 1rem 0;
   border-top: 1px solid var(--line);
+  overflow-wrap: anywhere; /* a word too long for the line is broken, never scrolled to */
   cursor: pointer;
 }
 
@@ -199,14 +200,16 @@
   border-radius: var(--radius-note);
 }
 
-/* A finger-sized X, pulled into the entry's corner */
+/* A finger-sized X, pulled up into the entry's corner. Drawn at the right of its target, so that it
+   ends where the entry does, and nothing reaches past it for the margin to scroll to */
 .open-note-close {
   flex: none;
   display: grid;
-  place-items: center;
+  place-items: center end;
   width: 44px;
   height: 44px;
-  margin: -0.75rem -0.75rem 0 0;
+  margin: -0.75rem 0 0;
+  padding: 0;
   border: 0;
   border-radius: var(--radius-note);
   background: none;

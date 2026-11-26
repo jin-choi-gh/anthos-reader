@@ -5,6 +5,7 @@ import { Button } from "../components/controls"
 import { Dock } from "../components/Dock"
 import { Folio, FolioText, Message } from "../components/Folio"
 import { usePlatform, type PageOrSpread } from "../components/usePlatform"
+import { useScrolls } from "../components/useScrolls"
 import { loadTextualComplex } from "../loom/load"
 import { toMaterial } from "../loom/toMaterial"
 import type { Material } from "../material/materials"
@@ -119,6 +120,10 @@ function Maker({
   // Whether Save found things to put right, until there are none
   const [short, setShort] = useState(false)
   const title = useRef<HTMLInputElement>(null)
+  const reel = useRef<HTMLDivElement>(null)
+  const cardColumn = useRef<HTMLDivElement>(null)
+  useScrolls(reel)
+  useScrolls(cardColumn)
   // The way to the scene, for its own effects to speak back to it, kept once the scene is drawn
   const toScene = useRef<SceneHandle["toScene"] | null>(null)
 
@@ -389,7 +394,7 @@ function Maker({
         onSave={save}
         onNext={toUnfinished}
       />
-      <div className="form-reel">
+      <div className="form-reel" ref={reel}>
         <PracticeName draft={draft} poem={material.poem} titleRef={title} />
         {layout === "spread" ? (
           contents
@@ -405,7 +410,9 @@ function Maker({
       <FolioText top={<p className="form-caption">{captionOf(practice, selection, composing)}</p>}>
         <ViewerPage projection={scene.viewer} materials={materials} send={toViewer} />
       </FolioText>
-      <div className="form-card-column">{card}</div>
+      <div className="form-card-column" ref={cardColumn}>
+        {card}
+      </div>
       {docked && (
         <Dock>
           <section className="praxis-bar" aria-label="The note">

@@ -2,6 +2,7 @@ import { useState, type Ref } from "react"
 import { assertNever } from "../assertNever"
 import { BackLink } from "../components/BackLink"
 import { Button } from "../components/controls"
+import { LightToggle } from "../LightToggle"
 import type { Poem } from "../material/types"
 import { libraryHref } from "../route"
 import { Confirm } from "./Confirm"
@@ -10,7 +11,7 @@ import type { Draft } from "./useDraft"
 /** The top bar, across the whole screen: the way back to the library, what the screen is, marked
  * as for development only, and at the right where the draft stands, Read, and whichever is there to
  * do: Discard and Save, while the draft has changes not yet saved; Take back, for a saved practice
- * with none. Under it, when there is any: the question asked before discarding, taking back, or
+ * with none; then the light toggle. Under it, when there is any: the question asked before discarding, taking back, or
  * starting a new practice over unsaved changes, when Edit practice was opened for one; a browser
  * that is not keeping the draft; and, after Save found things to put right (`unfinished`, while there
  * are any), how many, with the way to the next of them (`onNext`), or what kept the draft from being
@@ -58,6 +59,7 @@ export function PracticeHead({
         {idle && !unsaved && origin.from === "saved" && (
           <Button onClick={() => setAsking("takeBack")}>Take back</Button>
         )}
+        <LightToggle />
       </div>
       {draft.askingNew && (
         <Confirm

@@ -36,13 +36,15 @@ export type Gate =
   | { readonly kind: "final" }
 
 /** Why the law refuses a move: there is no such step; the next stage is not open; a step on
- * the way asks for writing the reader has not done; or the practice is over. */
+ * the way asks for writing the reader has not done; or, past the final stage, the practice is over. */
 export type Reason =
   | { readonly kind: "noSuchStep" }
   | { readonly kind: "waiting"; readonly opensOn: Day | null }
   | { readonly kind: "unanswered" }
   | { readonly kind: "finished" }
 
+/** The law on a move: allowed, to a step of the stage the reader stands in, and whether it finishes
+ * that stage; or refused, with its reason. */
 export type Ruling =
-  | { readonly allowed: true; readonly to: number }
+  | { readonly allowed: true; readonly to: number; readonly finishes: boolean }
   | { readonly allowed: false; readonly reason: Reason }

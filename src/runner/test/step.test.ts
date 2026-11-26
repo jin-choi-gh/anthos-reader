@@ -106,6 +106,23 @@ describe("step: between stages", () => {
     expect(replay(practice, log, "2026-11-11")).toEqual(standing(2, 0))
   })
 
+  it("stands in the last stage when the reader went back to it after finishing it", () => {
+    const log = [visited(0, 2), finished(0, "2026-11-10"), visited(1, 2)]
+    const done = [...log, finished(1, "2026-11-11", "2026-11-11")]
+    expect(replay(practice, [...done, visited(1, 0)], "2026-11-11")).toEqual(
+      standing(1, 0, "2026-11-11"),
+    )
+    expect(replay(practice, [...done, visited(1, 0), visited(1, 2)], "2026-11-11")).toEqual(
+      standing(2, 0),
+    )
+  })
+
+  it("counts no visit to the last stage from before it was finished as going back", () => {
+    const log = [visited(0, 2), finished(0, "2026-11-10"), visited(1, 1)]
+    const done = [...log, finished(1, "2026-11-11", "2026-11-11")]
+    expect(replay(practice, done, "2026-11-11")).toEqual(standing(2, 0))
+  })
+
   it("opens the final stage at once for a practice with no stages", () => {
     const empty = { ...practice, stages: [] }
     expect(replay(empty, [], "2026-11-10")).toEqual(standing(0, 0))
@@ -142,9 +159,19 @@ describe("ruling", () => {
 
   it("allows any step of the stage, the rest included, and jumps between them", () => {
     for (const target of [0, 1, 2]) {
-      expect(ruling(practice, open, target)).toEqual({ allowed: true, to: target })
-      expect(ruling(practice, waiting, target)).toEqual({ allowed: true, to: target })
+      expect(ruling(practice, open, target)).toMatchObject({ allowed: true, to: target })
+      expect(ruling(practice, waiting, target)).toMatchObject({ allowed: true, to: target })
     }
+  })
+
+  it("says a move finishes the stage only when it reaches the rest of a stage not yet finished", () => {
+    expect(ruling(practice, open, 1)).toEqual({ allowed: true, to: 1, finishes: false })
+    expect(ruling(practice, open, 2)).toEqual({ allowed: true, to: 2, finishes: true })
+    expect(ruling(practice, standing(0, 1, "2026-11-11"), 2)).toEqual({
+      allowed: true,
+      to: 2,
+      finishes: false,
+    })
   })
 
   it("refuses to go beyond the rest: the next stage is not open yet", () => {
@@ -171,10 +198,35 @@ describe("ruling", () => {
     }
   })
 
-  it("refuses every move in the final stage", () => {
+  it("counts the final stage's moves from the last stage's rest: back into the last stage", () => {
     const final = standing(2, 0)
-    for (const target of [-1, 0, 1, 3]) {
+    for (const target of [0, 1]) {
       expect(ruling(practice, final, target)).toEqual({
+        allowed: true,
+        to: target,
+        finishes: false,
+      })
+    }
+  })
+
+  it("refuses a step past the final stage: the practice is over", () => {
+    for (const here of [standing(2, 0), standing(1, 1, "2026-11-12")]) {
+      expect(ruling(practice, here, 3)).toEqual({ allowed: false, reason: { kind: "finished" } })
+    }
+  })
+
+  it("in the last stage, gone back to and finished already, lets the reader on to the rest, finishing nothing", () => {
+    expect(ruling(practice, standing(1, 1, "2026-11-12"), 2)).toEqual({
+      allowed: true,
+      to: 2,
+      finishes: false,
+    })
+  })
+
+  it("refuses every move for a practice with no stages, which has nothing to go back to", () => {
+    const empty = practiceOf({ ...practice, stages: [] })
+    for (const target of [-1, 0, 1]) {
+      expect(ruling(empty, standing(0, 0), target)).toEqual({
         allowed: false,
         reason: { kind: "finished" },
       })
@@ -243,9 +295,25 @@ describe("eventsOfMove", () => {
     }
   })
 
-  it("records nothing in the final stage", () => {
+  it("records a step back from the final stage as a visit in the last stage, finishing nothing", () => {
     const final = standing(2, 0)
-    expect(eventsOfMove(practice, final, 1, at, "2026-11-10")).toEqual([])
+    expect(eventsOfMove(practice, final, 1, at, "2026-11-10")).toEqual([
+      { kind: "visited", stage: 1, step: 1, at },
+    ])
+  })
+
+  it("records nothing for a move from the final stage to the last stage's rest, where it stands", () => {
+    expect(eventsOfMove(practice, standing(2, 0), 2, at, "2026-11-10")).toEqual([])
+  })
+
+  it("records only the visit when the reader goes on to the rest of the last stage, finished already", () => {
+    expect(eventsOfMove(practice, standing(1, 1, "2026-11-11"), 2, at, "2026-11-12")).toEqual([
+      { kind: "visited", stage: 1, step: 2, at },
+    ])
+  })
+
+  it("refuses a step past the final stage", () => {
+    expect(() => eventsOfMove(practice, standing(2, 0), 3, at, "2026-11-10")).toThrow(/finished/)
   })
 
   it("agrees with step: a walk through both stages, fed back into the log", () => {
@@ -261,6 +329,24 @@ describe("eventsOfMove", () => {
     expect(walk(2, "2026-11-10")).toEqual(standing(0, 2, "2026-11-11"))
     expect(replay(practice, log, "2026-11-11")).toEqual(standing(1, 0))
     expect(walk(2, "2026-11-11")).toEqual(standing(2, 0))
+    expect(log.filter((event) => event.kind === "finished")).toHaveLength(2)
+  })
+
+  it("agrees with step: back from the final stage into the last, and on to the final stage again", () => {
+    const log: Event[] = [visited(0, 2), finished(0, "2026-11-10"), visited(1, 2)]
+    log.push(finished(1, "2026-11-11", "2026-11-11"))
+    const walk = (target: number, today: Day) => {
+      log.push(...eventsOfMove(practice, replay(practice, log, today), target, at, today))
+      return replay(practice, log, today)
+    }
+
+    expect(replay(practice, log, "2026-11-11")).toEqual(standing(2, 0))
+    expect(walk(1, "2026-11-11")).toEqual(standing(1, 1, "2026-11-11"))
+    expect(walk(0, "2026-11-11")).toEqual(standing(1, 0, "2026-11-11"))
+    // Days later the reader is still where they went back to
+    expect(replay(practice, log, "2026-11-20")).toEqual(standing(1, 0, "2026-11-11"))
+    expect(walk(1, "2026-11-20")).toEqual(standing(1, 1, "2026-11-11"))
+    expect(walk(2, "2026-11-20")).toEqual(standing(2, 0))
     expect(log.filter((event) => event.kind === "finished")).toHaveLength(2)
   })
 })
@@ -326,8 +412,8 @@ describe("the law: a step that asks for writing holds the reader until they have
     const held = standing(0, 1, null, 1)
     expect(ruling(asking, held, 2)).toEqual({ allowed: false, reason: { kind: "unanswered" } })
     expect(ruling(asking, held, 4)).toEqual({ allowed: false, reason: { kind: "unanswered" } })
-    expect(ruling(asking, held, 1)).toEqual({ allowed: true, to: 1 })
-    expect(ruling(asking, held, 0)).toEqual({ allowed: true, to: 0 })
+    expect(ruling(asking, held, 1)).toEqual({ allowed: true, to: 1, finishes: false })
+    expect(ruling(asking, held, 0)).toEqual({ allowed: true, to: 0, finishes: false })
   })
 
   it("lets the reader on once the note is written", () => {
@@ -459,7 +545,7 @@ describe("the law and versions of a practice", () => {
     const log = [visited(0, 1), finished(0, "2026-11-10")]
     const here = standingOf(versioned, log, [note(fingerprintOfPractice(versioned))], "2026-11-11")
     expect(here).toEqual(standing(1, 0))
-    expect(ruling(versioned, here, 1)).toEqual({ allowed: true, to: 1 })
+    expect(ruling(versioned, here, 1)).toEqual({ allowed: true, to: 1, finishes: false })
   })
 })
 
@@ -479,7 +565,7 @@ describe("the law: a step that only says something asks for nothing, so it never
 
   it("lets the reader on to the rest, which finishes the stage", () => {
     const here = standingOf(saying, [], [], "2026-11-10")
-    expect(ruling(saying, here, 2)).toEqual({ allowed: true, to: 2 })
+    expect(ruling(saying, here, 2)).toEqual({ allowed: true, to: 2, finishes: true })
     expect(eventsOfMove(saying, here, 2, 0, "2026-11-10")).toEqual([
       visited(0, 2),
       finished(0, "2026-11-10"),

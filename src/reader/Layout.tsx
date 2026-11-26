@@ -5,12 +5,13 @@ import { Dock } from "../components/Dock"
 import { FolioText } from "../components/Folio"
 import { Margin } from "../components/Margin"
 import type { PageOrSpread } from "../components/usePlatform"
+import { LightToggle } from "../LightToggle"
 import { libraryHref } from "../route"
 
 /** Where the reader's parts go: the page in the poem's column, under the top bar (the way back to
- * the library, and whatever else the top bar is given), and beside it the notes and the praxis bar.
- * The notes are either one open note ("open"), or a list to look through ("list"). Every mode places
- * its parts here, so they are placed alike. */
+ * the library, whatever else the top bar is given, and the light toggle), and beside it the notes
+ * and the praxis bar. The notes are either one open note ("open"), or a list to look through
+ * ("list"). Every mode places its parts here, so they are placed alike. */
 export function Layout({
   layout,
   topBar,
@@ -38,7 +39,10 @@ export function Layout({
         top={
           <>
             <BackLink href={libraryHref}>Library</BackLink>
-            {topBar}
+            <div className="folio-tools">
+              {topBar}
+              <LightToggle />
+            </div>
           </>
         }
         under={dev}

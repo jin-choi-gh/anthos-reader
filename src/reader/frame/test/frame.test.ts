@@ -93,19 +93,24 @@ describe("frameOf: where the frame may go", () => {
     const frame = frameOf(practice, standing(1, 0), material, [])
     expect(frame.heading).toBe("Second")
     expect(frame.back).toEqual(noSuchStep)
-    expect(frame.next).toEqual({ allowed: true, to: 1 })
+    expect(frame.next).toEqual({ allowed: true, to: 1, finishes: false })
   })
 
-  it("on the last step: the rest is ahead", () => {
+  it("on the last step: the rest is ahead, and reaching it finishes the stage", () => {
     const frame = frameOf(practice, standing(0, 1), material, [])
-    expect(frame.back).toEqual({ allowed: true, to: 0 })
-    expect(frame.next).toEqual({ allowed: true, to: 2 })
+    expect(frame.back).toEqual({ allowed: true, to: 0, finishes: false })
+    expect(frame.next).toEqual({ allowed: true, to: 2, finishes: true })
+  })
+
+  it("on the last step of a stage finished already: on to the rest, finishing nothing", () => {
+    const frame = frameOf(practice, standing(0, 1, "2026-11-12"), material, [])
+    expect(frame.next).toEqual({ allowed: true, to: 2, finishes: false })
   })
 
   it("at the rest, waiting: back to the last step, and the next stage not open until its day", () => {
     const frame = frameOf(practice, standing(0, 2, "2026-11-12"), material, [])
     expect(frame.heading).toBe("First")
-    expect(frame.back).toEqual({ allowed: true, to: 1 })
+    expect(frame.back).toEqual({ allowed: true, to: 1, finishes: false })
     expect(frame.next).toEqual({
       allowed: false,
       reason: { kind: "waiting", opensOn: "2026-11-12" },
@@ -117,10 +122,10 @@ describe("frameOf: where the frame may go", () => {
     expect(frame.next).toEqual({ allowed: false, reason: { kind: "unanswered" } })
   })
 
-  it("in the final stage: headed by the practice, and nowhere to go", () => {
+  it("in the final stage: headed by the practice, back to the last stage's last step, and on nowhere", () => {
     const frame = frameOf(practice, standing(2, 0), material, [])
     expect(frame.heading).toBe("Test")
-    expect(frame.back).toEqual(finished)
+    expect(frame.back).toEqual({ allowed: true, to: 2, finishes: false })
     expect(frame.next).toEqual(finished)
   })
 })
@@ -648,6 +653,10 @@ describe("frameOf: a step that only says something", () => {
   })
 
   it("lets the reader on, with or without anything written", () => {
-    expect(frameOf(saying, standing(0, 0), material, []).next).toEqual({ allowed: true, to: 1 })
+    expect(frameOf(saying, standing(0, 0), material, []).next).toEqual({
+      allowed: true,
+      to: 1,
+      finishes: true,
+    })
   })
 })

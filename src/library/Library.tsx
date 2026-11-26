@@ -1,9 +1,10 @@
+import { LightToggle } from "../LightToggle"
 import { loadTextualComplex, textualComplexFiles } from "../loom/load"
 import { toPoem } from "../loom/toPoem"
 import { formHref, readerHref } from "../route"
 import { useLoaded } from "../useLoaded"
 import { Silhouette } from "./Silhouette"
-import { longestOf, shapeOf, silhouetteOf, type Measure, type Shape } from "./silhouette"
+import { longestOf, shapeOf, silhouetteOf, type Measure, type Shape } from "./shape"
 import "./library.css"
 
 /** One poem in the library: its file in text-data/, what its metadata says it is, its first line,
@@ -38,11 +39,14 @@ export function Library() {
             </span>
           )}
         </h1>
-        {entries !== null && entries.length > 0 && (
-          <p className="library-count">
-            {entries.length === 1 ? "1 poem" : `${entries.length} poems`}, by first line
-          </p>
-        )}
+        <div className="library-tools">
+          {entries !== null && entries.length > 0 && (
+            <p className="library-count">
+              {entries.length === 1 ? "1 poem" : `${entries.length} poems`}, by first line
+            </p>
+          )}
+          <LightToggle />
+        </div>
       </header>
       {error !== null ? (
         <p className="library-message">{error}</p>

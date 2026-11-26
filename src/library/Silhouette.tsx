@@ -1,4 +1,4 @@
-import type { Bar } from "./silhouette"
+import type { Bar } from "./shape"
 
 /** A poem's silhouette, drawn from its bars: a picture for the eye only, so it says nothing to
  * assistive technology. */
