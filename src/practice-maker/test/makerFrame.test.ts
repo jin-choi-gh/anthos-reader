@@ -14,6 +14,7 @@ const material: Material = {
       { id: "l2", text: "He bit an Angle Worm in halves" },
     ],
   },
+  words: [],
   fingerprint: "f" as Fingerprint,
   poem: { title: "Fixture", author: "", stanzas: [] },
 }

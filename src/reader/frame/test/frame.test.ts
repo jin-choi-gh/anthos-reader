@@ -24,6 +24,7 @@ const standing = (
 /** The material: two lines of poem. */
 const material: Material = {
   substrate: { lines: withIds(["A Bird, came down the Walk -", "He bit an Angle Worm in halves"]) },
+  words: [],
   fingerprint: "f" as Fingerprint,
   poem: { title: "Fixture", author: "", stanzas: [] },
 }

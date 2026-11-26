@@ -11,11 +11,16 @@ const stanzas = [
 ]
 
 describe("toMaterial", () => {
-  it("builds the substrate, its fingerprint and the poem together", () => {
+  it("builds the substrate, its words, its fingerprint and the poem together", () => {
     const material = toMaterial(makeTextualComplex(stanzas))
     expect(material.substrate).toEqual({ lines: withIds(stanzas[0]!) })
     expect(material.fingerprint).toBe(fingerprintOf({ lines: withIds(stanzas[0]!) }))
     expect(material.poem.stanzas[0]!.lines.map((line) => line.text)).toEqual(stanzas[0])
+    expect(material.words).toHaveLength(6 + 6 + 7)
+    expect(material.words[0]).toEqual({
+      start: { line: 0, offset: 0 },
+      end: { line: 0, offset: 1 },
+    })
   })
 
   it("does not read loom's annotations, even one whose target breaks loom's rule for spans", () => {
@@ -24,7 +29,7 @@ describe("toMaterial", () => {
         { targets: [{ start: [0, 28], end: [1, 2] }], body: "Starts at a line's end." },
       ],
     })
-    expect(Object.keys(toMaterial(complex))).toEqual(["substrate", "fingerprint", "poem"])
+    expect(Object.keys(toMaterial(complex))).toEqual(["substrate", "words", "fingerprint", "poem"])
   })
 
   it("refuses a poem with no text", () => {
