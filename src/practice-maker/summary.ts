@@ -1,17 +1,19 @@
 import { assertNever } from "../assertNever"
 import { stageIndexOf, stepPlaceOf, type StepPlace } from "../practice/places"
 import type { Problem, ProblemAbout } from "../practice/problems"
-import type { Parts, Practice, Recall } from "../practice/types"
+import type { Parts, Practice, Recall, Restore } from "../practice/types"
 
 /** A part a step may ask besides its prose. */
-export type PartName = "highlight" | "writing" | "recall"
+export type PartName = "highlight" | "writing" | "recall" | "restore"
 
-/** The part a step asks besides its prose: the first it has of highlight, writing and recall, or
+/** The part a step asks besides its prose: the first it has of highlight, writing, recall and
+ * restore, or
  * null for none. A step with more than one, which problemsOf refuses, is taken by its first. */
 export function partOf(step: Parts): PartName | null {
   if (step.highlight.length > 0) return "highlight"
   if (step.writing !== null) return "writing"
   if (step.recall !== null) return "recall"
+  if (step.restore !== null) return "restore"
   return null
 }
 
@@ -98,6 +100,8 @@ export function partLabel(practice: Practice, step: Parts): string | null {
       return `Reader response · ${step.writing?.target === "chosen" ? "chosen passages" : "whole poem"}`
     case "recall":
       return step.recall === null ? null : `Reader recall · ${recallShort(practice, step.recall)}`
+    case "restore":
+      return step.restore === null ? null : `Restore · ${gapsShort(step.restore)}`
     case null:
       return null
     default:
@@ -118,11 +122,20 @@ export function partWord(step: Parts): string | null {
       return "write"
     case "recall":
       return "recall"
+    case "restore":
+      return step.restore === null ? null : gapsShort(step.restore)
     case null:
       return null
     default:
       return assertNever(part)
   }
+}
+
+/** What a restore takes out, in the fewest words: "1 word", "3 words", "4 lines". */
+function gapsShort(restore: Restore): string {
+  const n = restore.gaps.length
+  const what = restore.of === "words" ? "word" : "line"
+  return `${n} ${what}${n === 1 ? "" : "s"}`
 }
 
 /** What a recall names, in the fewest words: "Stage 1", "Stage 1, step 10". */
@@ -146,11 +159,18 @@ function recallShort(practice: Practice, recall: Recall): string {
 }
 
 // What is written wrong, as opposed to what is not yet written
-const BROKEN: ReadonlySet<ProblemAbout> = new Set(["id", "days", "parts", "notehead", "recall"])
+const BROKEN: ReadonlySet<ProblemAbout> = new Set([
+  "id",
+  "days",
+  "parts",
+  "notehead",
+  "recall",
+  "gap",
+])
 
 /** Whether a problem is something written wrong (an id, days, a step's parts, a notehead, a
- * recall), to be shown as broken, rather than something not yet written (a title, a name, steps,
- * prose, a body), which a new practice starts with. */
+ * recall, a gap), to be shown as broken, rather than something not yet written (a title, a name,
+ * steps, prose, a body, a restore's gaps), which a new practice starts with. */
 export function isBroken(problem: Problem): boolean {
   return BROKEN.has(problem.about)
 }

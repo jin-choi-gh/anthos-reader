@@ -7,7 +7,8 @@ import type { Substrate } from "../material/types"
 import { annotationsOf } from "../practice/editorsNotes"
 import type { StepPlace } from "../practice/places"
 import type { Problem } from "../practice/problems"
-import type { EditorsNote, Practice, Recall, Writing } from "../practice/types"
+import { gapsOf, slipsOf } from "../practice/restore"
+import type { EditorsNote, Practice, Recall, Restore, Writing } from "../practice/types"
 import "../reader/praxisBar/praxisBar.css"
 import { CardTools } from "./CardTools"
 import { Confirm } from "./Confirm"
@@ -22,6 +23,7 @@ const THEN: readonly { part: PartName | "none"; words: string }[] = [
   { part: "highlight", words: "looks at notes in the poem" },
   { part: "writing", words: "writes a response" },
   { part: "recall", words: "reads back what they wrote" },
+  { part: "restore", words: "puts back" },
 ]
 
 /** What the card needs of the desk for a highlighting step: the form for its note, new or taken
@@ -37,7 +39,10 @@ export interface NotesHandle {
  * it is in the stage, and its prose, written in a box at the size it is read; then one sentence for
  * what the reader does next, which is the part the step asks besides its prose, and what that part
  * is about. A highlighting step lists its notes, each with what is wrong with it, to be taken up and
- * edited, and then the form for a note. In its corner, moving it and removing it, asked first.
+ * edited, and then the form for a note. A step that restores says whether it takes out words or
+ * lines, and shows its slips as the reader will be given them, each of which can be put back;
+ * changing words to lines, or leaving the part, while it has gaps, asks first, as they go. In its
+ * corner, moving it and removing it, asked first.
  * Highlighting chosen before any note is written is held by the desk (`highlighting`), since a step
  * with no notes does not highlight; leaving it while the step has notes asks first, as the notes
  * go. */
@@ -66,6 +71,8 @@ export function StepCard({
   const proseBox = useId()
   const [removing, setRemoving] = useState(false)
   const [leaving, setLeaving] = useState<PartName | "none" | null>(null)
+  // Words or lines asked for while the restore has gaps, which go: whether to, not yet answered
+  const [retaking, setRetaking] = useState<Restore["of"] | null>(null)
   const stage = practice.stages[at.stage]
   const step = stage?.steps[at.step]
   if (stage === undefined || step === undefined) return null
@@ -81,6 +88,7 @@ export function StepCard({
     highlight?: readonly EditorsNote[]
     writing?: Writing | null
     recall?: Recall | null
+    restore?: Restore | null
   }) =>
     edit({
       kind: "setParts",
@@ -88,6 +96,7 @@ export function StepCard({
       highlight: parts.highlight ?? [],
       writing: parts.writing ?? null,
       recall: parts.recall ?? null,
+      restore: parts.restore ?? null,
     })
 
   /** Switches the step to another part, keeping what it asked if it asked it already. */
@@ -102,6 +111,8 @@ export function StepCard({
         const nearest = targets.findLast((t) => t.recall.from === "step") ?? targets.at(-1)
         return setParts({ recall: step.recall ?? nearest?.recall ?? null })
       }
+      case "restore":
+        return setParts({ restore: step.restore ?? { of: "words", gaps: [] } })
       case null:
         return setParts({})
       default:
@@ -109,10 +120,20 @@ export function StepCard({
     }
   }
 
+  const gaps = step.restore?.gaps.length ?? 0
   const choose = (next: PartName | null) => {
     if (next === part) return
-    if (step.highlight.length > 0 && next !== "highlight") setLeaving(next ?? "none")
+    const losing =
+      (step.highlight.length > 0 && next !== "highlight") || (gaps > 0 && next !== "restore")
+    if (losing) setLeaving(next ?? "none")
     else switchTo(next)
+  }
+
+  /** What the restore takes out, words or lines; changed while it has gaps, asked first, as they go. */
+  const takeOut = (of: Restore["of"]) => {
+    if (step.restore === null || of === step.restore.of) return
+    if (gaps > 0) setRetaking(of)
+    else setParts({ restore: { of, gaps: [] } })
   }
 
   return (
@@ -186,6 +207,21 @@ export function StepCard({
             <WritingAbout writing={step.writing} onChange={(writing) => setParts({ writing })} />
           </>
         )}
+        {part === "restore" && step.restore !== null && (
+          <>
+            {" "}
+            <Choice
+              label="What the reader puts back"
+              value={step.restore.of}
+              options={[
+                { key: "words", label: "words" },
+                { key: "lines", label: "lines" },
+              ]}
+              onChange={(key) => takeOut(key === "lines" ? "lines" : "words")}
+            />
+            {" taken out of the poem"}
+          </>
+        )}
         {part === "recall" && step.recall !== null && (
           <>
             {" in "}
@@ -204,13 +240,37 @@ export function StepCard({
       )}
       {leaving !== null && (
         <Confirm
-          question={`Remove this step's ${step.highlight.length} ${step.highlight.length === 1 ? "note" : "notes"}?`}
-          yes="Remove notes"
+          question={
+            part === "restore"
+              ? "Remove this step's gaps?"
+              : `Remove this step's ${step.highlight.length} ${step.highlight.length === 1 ? "note" : "notes"}?`
+          }
+          yes={part === "restore" ? "Remove gaps" : "Remove notes"}
           onYes={() => {
             setLeaving(null)
             switchTo(leaving === "none" ? null : leaving)
           }}
           onNo={() => setLeaving(null)}
+        />
+      )}
+
+      {retaking !== null && (
+        <Confirm
+          question="Remove this step's gaps?"
+          yes="Remove gaps"
+          onYes={() => {
+            setRetaking(null)
+            setParts({ restore: { of: retaking, gaps: [] } })
+          }}
+          onNo={() => setRetaking(null)}
+        />
+      )}
+
+      {part === "restore" && step.restore !== null && (
+        <RestoreSlips
+          restore={step.restore}
+          substrate={substrate}
+          onRemove={(index) => edit({ kind: "removeGap", at, index })}
         />
       )}
 
@@ -237,6 +297,81 @@ export function StepCard({
           </p>
         ))}
     </section>
+  )
+}
+
+/** A restore's slips, as the reader will be given them, in alphabetical order, each with its −,
+ * which puts it back in the poem; a gap that can no longer be placed, as when the poem has changed,
+ * by its notehead, to be taken away. With fewer than two, it says how a gap is made. */
+function RestoreSlips({
+  restore,
+  substrate,
+  onRemove,
+}: {
+  restore: Restore
+  substrate: Substrate
+  onRemove: (index: number) => void
+}) {
+  const head = useId()
+  const placed = gapsOf(substrate, restore)
+  // Each gap in the order the reader is given its slip: slipsOf's, for the very same order
+  const left = [...placed]
+  const ordered = slipsOf(placed.map((gap) => gap.text)).flatMap((text) => {
+    const at = left.findIndex((gap) => gap.text === text)
+    return at === -1 ? [] : left.splice(at, 1)
+  })
+  const lost = restore.gaps.flatMap((notehead, index) =>
+    placed.some((gap) => gap.index === index) ? [] : [{ index, notehead }],
+  )
+  const what = restore.of === "words" ? "word" : "line"
+  const count = restore.gaps.length
+
+  return (
+    <div className="form-restore">
+      <div className="form-list-head">
+        <h3 className="form-label" id={head}>
+          slips · {count}
+        </h3>
+        <span className="form-hint">As the reader will be given them</span>
+      </div>
+      {count > 0 && (
+        <ul className="form-slips" data-of={restore.of} aria-labelledby={head}>
+          {ordered.map((gap) => (
+            <li key={gap.index} className="form-slip">
+              <span>{gap.text}</span>
+              <button
+                type="button"
+                className="noting-remove"
+                aria-label={`Put “${gap.text}” back in the poem`}
+                onClick={() => onRemove(gap.index)}
+              >
+                −
+              </button>
+            </li>
+          ))}
+          {lost.map((gap) => (
+            <li key={gap.index} className="form-slip" data-broken="true">
+              <code className="form-notehead">{gap.notehead}</code>
+              <button
+                type="button"
+                className="noting-remove"
+                aria-label={`Take away the gap ${gap.notehead}`}
+                onClick={() => onRemove(gap.index)}
+              >
+                −
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {count < 2 && (
+        <p className="form-hint form-slips-hint">
+          {count === 0
+            ? `Tap a ${what} in the poem to take it out; a restore needs two at least.`
+            : `Tap one more ${what} in the poem; a restore needs two at least.`}
+        </p>
+      )}
+    </div>
   )
 }
 

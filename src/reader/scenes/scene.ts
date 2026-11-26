@@ -2,7 +2,10 @@ import { assertNever } from "../../assertNever"
 import type { Span } from "../../material/types"
 import { keepOpen, onViewer, viewerOf, type OpenNote } from "./parts/commentary"
 import * as noting from "./parts/noting"
+import * as picking from "./parts/picking"
 import type { NotingState } from "./parts/noting"
+import * as restoring from "./parts/restore"
+import type { RestoreState } from "./parts/restore"
 import * as writing from "./parts/writing"
 import type { WritingState } from "./parts/writing"
 import type { Passages } from "./passages"
@@ -29,6 +32,8 @@ export interface SceneState {
   readonly writing: WritingState | null
   /** The new note, when the subject has noting. */
   readonly noting: NotingState | null
+  /** The game, when the subject restores. */
+  readonly restore: RestoreState | null
 }
 
 export const scene = {
@@ -36,7 +41,8 @@ export const scene = {
   start(subject: Subject): Reply<SceneState> {
     const page = subject.writing === null ? null : writing.startWriting(subject.writing)
     const note = subject.noting === null ? null : noting.startNoting()
-    return reply({ subject, open: null, writing: page, noting: note })
+    const game = subject.restore === null ? null : restoring.startRestoring(subject.restore)
+    return reply({ subject, open: null, writing: page, noting: note, restore: game })
   },
 
   /** The frame's new subject. The very same subject changes nothing. A new key starts the scene
@@ -53,27 +59,44 @@ export const scene = {
           ? writing.startWriting(subject.writing)
           : writing.keepWriting(before, subject.writing, current.writing)
     const note = subject.noting === null ? null : (current.noting ?? noting.startNoting())
+    const was = current.subject.restore
+    const game =
+      subject.restore === null
+        ? null
+        : was === null || current.restore === null
+          ? restoring.startRestoring(subject.restore)
+          : restoring.keepRestoring(was, subject.restore, current.restore)
     return reply({
       subject,
       open: keepOpen(subject.commentary, current.open),
       writing: page,
       noting: note,
+      restore: game,
     })
   },
 
-  /** The viewer speaks to the commentary, which may withdraw a note from the notebook, and a chosen
+  /** The viewer speaks to the commentary, which may withdraw a note from the notebook; a chosen
    * passage to the part that chooses passages: the writing, or the noting, which then also closes
-   * the open note. */
+   * the open note; a tapped gap to the restore; and a word or line picked to the picking, which
+   * sends it out. */
   fromViewer(current: SceneState, message: ViewerProtocol["toScene"]): Reply<SceneState> {
     if (message.kind === "choose") return reply(chosen(current, message.span))
+    if (message.kind === "pick") {
+      const subject = current.subject.picking
+      return reply(current, subject === null ? [] : picking.onPick(subject, message))
+    }
+    if (message.kind === "empty") {
+      if (current.restore === null) return reply(current)
+      return reply(withRestore(current, restoring.onViewer(current.restore, message)))
+    }
     const answer = onViewer(current.subject.commentary, current.open, message)
     const state = answer.open === current.open ? current : { ...current, open: answer.open }
     return reply(state, answer.effects)
   },
 
-  /** The praxis bar speaks to the writing, to the noting, or about passages to the part that
-   * chooses them; the writing and the noting may write in the notebook. Speaking to the noting also
-   * closes the open note. */
+  /** The praxis bar speaks to the writing, to the noting, about passages to the part that chooses
+   * them, or to the restore; the writing and the noting may write in the notebook, and the restore
+   * send out that the step is restored. Speaking to the noting also closes the open note. */
   fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
     switch (message.kind) {
       case "draft":
@@ -96,24 +119,36 @@ export const scene = {
       case "choosing":
       case "unchoose":
         return reply(passagesAfter(current, message))
+      case "take":
+      case "check": {
+        const subject = current.subject.restore
+        if (subject === null || current.restore === null) return reply(current)
+        const answer = restoring.onPraxisBar(subject, current.restore, message)
+        return reply(withRestore(current, answer.state), answer.effects)
+      }
       default:
         return assertNever(message)
     }
   },
 
-  /** The commentary's notes; and the passages being chosen, and whether choosing is on, from the
-   * part that chooses them: none when no part does. */
+  /** The commentary's notes; the passages being chosen, and whether choosing is on, from the part
+   * that chooses them: none when no part does; the restore's gaps; and the words or lines to pick. */
   viewer(current: SceneState): ViewerProjection {
     const commentary = viewerOf(current.subject.text, current.subject.commentary, current.open)
     const passages = choosingOf(current)
+    const game = current.subject.restore
     return {
       ...commentary,
       choosing: passages?.choosing ?? false,
       chosen: passages?.targets ?? [],
+      restore:
+        game === null || current.restore === null ? null : restoring.gapsOf(game, current.restore),
+      picking: current.subject.picking === null ? null : picking.pickingOf(current.subject.picking),
     }
   },
 
-  /** The prose, the writing and the noting; nothing at all when there is none, as at the rest. */
+  /** The prose, the writing, the noting and the restore's slips; nothing at all when there is none,
+   * as at the rest. */
   praxisBar(current: SceneState): PraxisBarProjection | null {
     const { prose } = current.subject
     const page =
@@ -124,17 +159,23 @@ export const scene = {
       current.subject.noting === null || current.noting === null
         ? null
         : noting.notingOf(current.subject.noting, current.noting)
-    if (prose.length === 0 && page === null && note === null) return null
-    return { asks: asksOf(current.subject), prose, writing: page, noting: note }
+    const game =
+      current.subject.restore === null || current.restore === null
+        ? null
+        : restoring.trayOf(current.subject.restore, current.restore)
+    if (prose.length === 0 && page === null && note === null && game === null) return null
+    return { asks: asksOf(current.subject), prose, writing: page, noting: note, restore: game }
   },
 }
 
 /** What a subject asks of the reader besides its prose, from its parts: writing first, then a
- * recall, then the editor's notes picked out; nothing with a noting; otherwise only reading. */
+ * recall, then restoring, then the editor's notes picked out; nothing with a noting or a picking;
+ * otherwise only reading. */
 export function asksOf(subject: Subject): Asks {
-  if (subject.noting !== null) return null
+  if (subject.noting !== null || subject.picking !== null) return null
   if (subject.writing !== null) return "write"
   if (subject.commentary.recalled !== null) return "recall"
+  if (subject.restore !== null) return "restore"
   if (subject.commentary.shown === "marked" && subject.commentary.notes.length > 0) return "notes"
   return "read"
 }
@@ -202,6 +243,11 @@ function choosingOf(current: SceneState): Passages | null {
 /** The scene once the writing has answered. Nothing changed gives back the very same scene. */
 function withWriting(current: SceneState, page: WritingState): SceneState {
   return page === current.writing ? current : { ...current, writing: page }
+}
+
+/** The scene once the restore has answered. Nothing changed gives back the very same scene. */
+function withRestore(current: SceneState, game: RestoreState): SceneState {
+  return game === current.restore ? current : { ...current, restore: game }
 }
 
 /** The scene once the noting has answered: its new state, and the open note closed, since the reader

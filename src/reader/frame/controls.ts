@@ -39,5 +39,7 @@ function controlOf(decision: Ruling | null, moveTo: (step: number) => void): Con
   if (decision.reason.kind === "finished") return { kind: "none" }
   // A step that asks for writing: Next is not there at all until the reader has written
   if (decision.reason.kind === "unanswered") return { kind: "none" }
+  // A step that restores, not yet restored: neither Back nor Next until every gap is
+  if (decision.reason.kind === "restoring") return { kind: "none" }
   return { kind: "refused", reason: decision.reason }
 }

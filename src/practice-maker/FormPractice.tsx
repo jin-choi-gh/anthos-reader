@@ -11,7 +11,7 @@ import { toMaterial } from "../loom/toMaterial"
 import type { Material } from "../material/materials"
 import { spansOfNotehead } from "../material/noteheads"
 import type { TextId } from "../material/types"
-import { loadPractices } from "../practice/load"
+import { loadPractices, practiceFileOf } from "../practice/load"
 import { stageIndexOf, stepPlaceOf } from "../practice/places"
 import { problemsOf } from "../practice/problems"
 import type { Practice, StepId } from "../practice/types"
@@ -24,7 +24,7 @@ import { useLoaded } from "../useLoaded"
 import { Anatomy } from "./Anatomy"
 import { Confirm } from "./Confirm"
 import { nextStageId, nextStepId } from "./edits"
-import { editOfNote, makerFrame } from "./makerFrame"
+import { editOfNote, editOfPick, makerFrame } from "./makerFrame"
 import { PracticeHead, PracticeName } from "./PracticeHead"
 import {
   firstSelection,
@@ -137,7 +137,7 @@ function Maker({
     setRemovingNote(false)
   }
 
-  const problems = useMemo(() => problemsOf(practice, substrate), [practice, substrate])
+  const problems = useMemo(() => problemsOf(practice, material), [practice, material])
   if (short && problems.length === 0) setShort(false)
   const stepId = selection?.kind === "step" ? selection.id : null
   const at = stepId === null ? null : stepPlaceOf(practice, stepId)
@@ -163,9 +163,18 @@ function Maker({
         toScene.current?.praxisBar({ kind: "choosing", on: false })
         return
       }
+      case "pick": {
+        // A word or line of the poem, taken out as a gap, or put back
+        if (at === null) return
+        const change = editOfPick(practice, at, effect.span, substrate)
+        if (change !== null) edit(change)
+        return
+      }
       case "revise":
       case "withdraw":
-        // The editor's notes are not the reader's: the scene never sends these out here
+      case "restored":
+        // The editor's notes are not the reader's, and the step being made is not played: the
+        // scene never sends these out here
         return
       default:
         return assertNever(effect)
@@ -216,7 +225,7 @@ function Maker({
   }
 
   // The poem: a tap on a note's highlight takes the note up, unless a note is being written, when
-  // the tap goes no further; a passage chosen goes to the scene
+  // the tap goes no further; a passage chosen, and a word or line picked, go to the scene
   const toViewer = (message: ViewerProtocol["toScene"]) => {
     switch (message.kind) {
       case "tapNote": {
@@ -228,8 +237,10 @@ function Maker({
       }
       case "closeNote":
       case "deleteNote":
+      case "empty":
         return
       case "choose":
+      case "pick":
         return scene.toScene.viewer(message)
       default:
         return assertNever(message)
@@ -302,12 +313,24 @@ function Maker({
   const save = () => {
     if (problems.length === 0) {
       setShort(false)
-      setRefused(draft.save(substrate))
+      setRefused(draft.save(material))
       return
     }
     setRefused([])
     setShort(true)
     toUnfinished()
+  }
+
+  /** Hands the editor the practice as a practice file, named by its id, to put in practice-data/. */
+  const exportFile = () => {
+    const url = URL.createObjectURL(
+      new Blob([practiceFileOf(practice)], { type: "application/json" }),
+    )
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `${practice.id}.json`
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   const addStage = () => {
@@ -393,6 +416,7 @@ function Maker({
         refused={refused}
         onSave={save}
         onNext={toUnfinished}
+        onExport={problems.length === 0 ? exportFile : null}
       />
       <div className="form-reel" ref={reel}>
         <PracticeName draft={draft} poem={material.poem} titleRef={title} />
@@ -425,7 +449,8 @@ function Maker({
 }
 
 /** The line over the poem, saying what it shows: the stage or step selected as the reader sees it,
- * or, while a note is being written, where its passages are chosen. */
+ * or, while a note is being written, where its passages are chosen; or, for a step that restores,
+ * how its words or lines are taken out. */
 function captionOf(practice: Practice, selection: Selection | null, composing: boolean): string {
   if (composing) return "Choose the note's passages in the poem"
   if (selection === null) return "The poem"
@@ -434,9 +459,14 @@ function captionOf(practice: Practice, selection: Selection | null, composing: b
     return stage === null ? "The poem" : `The poem as stage ${romanOf(stage + 1)} opens`
   }
   const at = stepPlaceOf(practice, selection.id)
-  return at === null
-    ? "The poem"
-    : `Step ${at.step + 1} of stage ${romanOf(at.stage + 1)}, as the reader sees it`
+  if (at === null) return "The poem"
+  const where = `Step ${at.step + 1} of stage ${romanOf(at.stage + 1)}`
+  const restore = practice.stages[at.stage]?.steps[at.step]?.restore ?? null
+  if (restore !== null) {
+    const what = restore.of === "words" ? "word" : "line"
+    return `${where}: tap a ${what} to take it out of the poem, or tap it again to put it back`
+  }
+  return `${where}, as the reader sees it`
 }
 
 /** The texts the viewer can draw: only this one. */

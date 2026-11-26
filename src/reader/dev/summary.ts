@@ -16,8 +16,8 @@ export function shortWhere(practice: Practice, station: Station): string {
   return `${stage}, step ${station.step + 1} of ${gate.stage.steps.length}`
 }
 
-/** Where the run is, in full: the stage's name, the step that holds the reader until they write,
- * and when the next stage opens while waiting. */
+/** Where the run is, in full: the stage's name, the step that holds the reader until they answer
+ * it (write, or restore), and when the next stage opens while waiting. */
 export function fullWhere(practice: Practice, standing: Standing): string {
   const { station, opensOn, heldAt } = standing
   const gate = gateOf(practice, station)
@@ -25,7 +25,7 @@ export function fullWhere(practice: Practice, standing: Standing): string {
   const stage = `stage ${station.stage + 1} of ${practice.stages.length}, "${gate.stage.name}"`
   if (gate.kind === "step") {
     const where = `${stage}: step ${station.step + 1} of ${gate.stage.steps.length}`
-    return heldAt === null ? where : `${where}, held at step ${heldAt + 1} until written`
+    return heldAt === null ? where : `${where}, held at step ${heldAt + 1} until answered`
   }
   if (opensOn === null) return `${stage}: the rest`
   return `${stage}: the rest, the next stage opens ${opensOn}`

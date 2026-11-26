@@ -111,12 +111,15 @@ describe("scene.start: each part staged", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     expect(scene.praxisBar(current)).toEqual({
       asks: "notes",
       prose: ["On b."],
       writing: null,
       noting: null,
+      restore: null,
     })
   })
 
@@ -130,6 +133,8 @@ describe("scene.start: each part staged", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     expect(scene.praxisBar(current)).toEqual({
       asks: "write",
@@ -142,6 +147,7 @@ describe("scene.start: each part staged", () => {
         passages: null,
       },
       noting: null,
+      restore: null,
     })
   })
 
@@ -155,6 +161,8 @@ describe("scene.start: each part staged", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     expect(scene.praxisBar(current)).toBeNull()
   })
@@ -165,6 +173,7 @@ describe("scene.start: each part staged", () => {
       prose: ["Explicit."],
       writing: null,
       noting: null,
+      restore: null,
     })
   })
 
@@ -181,12 +190,15 @@ describe("scene.start: each part staged", () => {
       recalled: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     expect(scene.praxisBar(current)).toEqual({
       asks: null,
       prose: [],
       writing: null,
       noting: { choosing: false, chosen: [], draft: "", canAdd: false },
+      restore: null,
     })
   })
 })
@@ -276,6 +288,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     current = scene.fromViewer(current, tap(0)).state
 
@@ -288,6 +302,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
 
     current = scene.fromFrame(current, subject(at(0, 2))).state
@@ -316,6 +332,8 @@ describe("scene.fromFrame: cuts and holds", () => {
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
   })
 })
@@ -602,6 +620,8 @@ describe("a recall step: the stage before's notes, listed to read", () => {
       recalled: [{ prompt: ["What does the bird eat?"], whole: true, heading: "First" }],
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
   })
 
@@ -620,6 +640,7 @@ describe("a recall step: the stage before's notes, listed to read", () => {
       prose: ["Yesterday, you wrote:"],
       writing: null,
       noting: null,
+      restore: null,
     })
   })
 })
@@ -665,12 +686,15 @@ describe("a step that only says something: the poem, and the editor's prompt", (
       open: null,
       choosing: false,
       chosen: [],
+      restore: null,
+      picking: null,
     })
     expect(scene.praxisBar(current)).toEqual({
       asks: "read",
       prose: ["Read the poem through."],
       writing: null,
       noting: null,
+      restore: null,
     })
   })
 
@@ -694,5 +718,155 @@ describe("asksOf: what a subject asks of the reader besides its prose", () => {
 
   it("asks nothing with a noting, as in annotate mode", () => {
     expect(asksOf(annotating([]))).toBeNull()
+  })
+})
+
+describe("the scene on a step that restores", () => {
+  const game: Parts = {
+    ...REST,
+    prose: ["Put them back."],
+    restore: { of: "words", gaps: ["l2 Worm", "l1 Bird"] },
+  }
+  const restoring = practiceOf({
+    id: "restoring",
+    title: "Restoring",
+    text: "poem",
+    stages: [{ name: "Only", steps: [look("a"), game] }],
+  })
+  /** The game's subject: held at it, not yet restored; or not held, restored. */
+  const playing = frameOf(restoring, standing(0, 1, null, 1), material, []).subject
+  const won = frameOf(restoring, standing(0, 1), material, []).subject
+  const take = (slip: number) => ({ kind: "take", slip }) as const
+  const check = { kind: "check" } as const
+
+  it("asks the reader to restore, and lies every slip in the praxis bar, none in a gap", () => {
+    expect(asksOf(playing)).toBe("restore")
+    expect(scene.praxisBar(started(playing))).toEqual({
+      asks: "restore",
+      prose: ["Put them back."],
+      writing: null,
+      noting: null,
+      restore: {
+        of: "words",
+        slips: [
+          { text: "Bird", placed: false, restored: false },
+          { text: "Worm", placed: false, restored: false },
+        ],
+        canCheck: false,
+        restored: 0,
+        gaps: 2,
+        returned: null,
+        whole: false,
+      },
+    })
+  })
+
+  it("never tells the viewer what an empty gap takes out", () => {
+    const viewer = scene.viewer(started(playing))
+    expect(viewer.restore).toEqual({
+      of: "words",
+      next: 0,
+      gaps: [
+        { state: "empty", span: { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } } },
+        { state: "empty", span: { start: { line: 1, offset: 16 }, end: { line: 1, offset: 20 } } },
+      ],
+    })
+    expect(JSON.stringify(viewer)).not.toMatch(/Bird|Worm/)
+  })
+
+  it("plays a game through: wrong, given back, right, and the step restored, sent out once", () => {
+    let current = started(playing)
+    const send = (message: Parameters<typeof scene.fromPraxisBar>[1]) => {
+      const answer = scene.fromPraxisBar(current, message)
+      current = answer.state
+      return answer.effects
+    }
+    expect(send(take(1))).toEqual([])
+    expect(send(take(0))).toEqual([])
+    expect(scene.viewer(current).restore?.gaps.map((gap) => gap.state)).toEqual([
+      "filled",
+      "filled",
+    ])
+    expect(send(check)).toEqual([])
+    expect(scene.praxisBar(current)?.restore).toMatchObject({ returned: 2, restored: 0 })
+    expect(scene.viewer(current).restore?.next).toBe(0)
+
+    // A filled gap tapped in the viewer gives its slip back
+    expect(send(take(1))).toEqual([])
+    current = scene.fromViewer(current, { kind: "empty", gap: 0 }).state
+    expect(scene.praxisBar(current)?.restore?.slips.every((slip) => !slip.placed)).toBe(true)
+
+    expect(send(take(0))).toEqual([])
+    expect(send(take(1))).toEqual([])
+    expect(send(check)).toEqual([{ kind: "restored" }])
+    expect(send(check)).toEqual([])
+    expect(scene.praxisBar(current)?.restore).toMatchObject({ whole: true, restored: 2 })
+  })
+
+  it("keeps the game when the frame's subject is fresh but the same, and makes it whole once restored", () => {
+    let current = scene.fromPraxisBar(started(playing), take(1)).state
+    const again = frameOf(restoring, standing(0, 1, null, 1), material, []).subject
+    current = scene.fromFrame(current, subject(again)).state
+    expect(scene.viewer(current).restore?.gaps[0]).toMatchObject({ state: "filled", text: "Worm" })
+    current = scene.fromFrame(current, subject(won)).state
+    expect(scene.praxisBar(current)?.restore?.whole).toBe(true)
+    expect(scene.viewer(current).restore?.gaps.map((gap) => gap.state)).toEqual([
+      "restored",
+      "restored",
+    ])
+  })
+
+  it("starts the game afresh on another step and back", () => {
+    let current = scene.fromPraxisBar(started(playing), take(1)).state
+    current = scene.fromFrame(current, subject(at(0, 0))).state
+    current = scene.fromFrame(current, subject(playing)).state
+    expect(scene.viewer(current).restore?.gaps.map((gap) => gap.state)).toEqual(["empty", "empty"])
+  })
+
+  it("shows a step restored already whole, with the poem's own words", () => {
+    expect(scene.viewer(started(won)).restore?.gaps).toEqual([
+      expect.objectContaining({ state: "restored", text: "Bird" }),
+      expect.objectContaining({ state: "restored", text: "Worm" }),
+    ])
+  })
+
+  it("has no restore on any other step", () => {
+    const current = started(at(0, 1))
+    expect(scene.viewer(current).restore).toBeNull()
+    expect(scene.praxisBar(current)?.restore).toBeNull()
+  })
+})
+
+describe("the scene with a picking, as Form Practice has one", () => {
+  const picking: Subject = {
+    ...at(0, 0),
+    commentary: { ...at(0, 0).commentary, notes: [] },
+    picking: {
+      of: "words",
+      units: [
+        { span: { start: { line: 0, offset: 0 }, end: { line: 0, offset: 1 } }, taken: false },
+        { span: { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }, taken: true },
+      ],
+    },
+  }
+
+  it("draws each word to pick, and asks nothing of a reader", () => {
+    const current = started(picking)
+    expect(scene.viewer(current).picking).toEqual({ of: "words", units: picking.picking!.units })
+    expect(asksOf(picking)).toBeNull()
+  })
+
+  it("sends a word picked in the viewer out, by its span, changing nothing of its own", () => {
+    const current = started(picking)
+    const answer = scene.fromViewer(current, { kind: "pick", unit: 1 })
+    expect(answer.state).toBe(current)
+    expect(answer.effects).toEqual([
+      { kind: "pick", span: { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } } },
+    ])
+  })
+
+  it("sends nothing out for a pick where there is no picking", () => {
+    const current = started(at(0, 0))
+    expect(scene.fromViewer(current, { kind: "pick", unit: 0 }).effects).toEqual([])
   })
 })

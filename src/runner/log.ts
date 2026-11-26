@@ -38,6 +38,8 @@ function isEvent(value: unknown): value is Event {
     case "finished":
       // An older log's "finished" has no day the next stage opens: it is not read
       return isDay(value.day) && isDay(value.opens)
+    case "restored":
+      return Number.isInteger(value.step)
     default:
       return false // a kind this reader does not know, such as the "responded" of an older log
   }

@@ -46,9 +46,9 @@ describe("fullWhere", () => {
     expect(fullWhere(practice, standing(0, 0))).toBe('stage 1 of 2, "The meal": step 1 of 2')
   })
 
-  it("says which step holds the reader until they have written", () => {
+  it("says which step holds the reader until they have answered it", () => {
     expect(fullWhere(practice, standing(0, 0, null, 1))).toBe(
-      'stage 1 of 2, "The meal": step 1 of 2, held at step 2 until written',
+      'stage 1 of 2, "The meal": step 1 of 2, held at step 2 until answered',
     )
   })
 

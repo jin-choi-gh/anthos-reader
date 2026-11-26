@@ -12,6 +12,7 @@ import {
 } from "../store"
 
 const substrate: Substrate = { lines: [{ id: "l1", text: "He bit an Angle Worm in halves" }] }
+const text = { substrate, words: [] }
 
 const practice = (id: string, words = "Look.", text = "dickinson"): Practice =>
   practiceOf({
@@ -51,26 +52,26 @@ describe("madePracticesOf: the practices saved for a text, as they stand", () =>
 describe("eventOfSaving", () => {
   it("saves a practice with no problems, at the time given", () => {
     const p = practice("a")
-    expect(eventOfSaving([], p, substrate, 42)).toEqual({ kind: "saved", at: 42, practice: p })
+    expect(eventOfSaving([], p, text, 42)).toEqual({ kind: "saved", at: 42, practice: p })
   })
 
   it("refuses a practice with problems on its text's lines", () => {
     const broken = practiceOf({ ...practice("a"), stages: [] })
-    expect(() => eventOfSaving([], broken, substrate, 0)).toThrow(
+    expect(() => eventOfSaving([], broken, text, 0)).toThrow(
       "a practice with problems is not saved: no stages",
     )
   })
 
   it("adds nothing for a practice saved just as it is", () => {
     const p = practice("a")
-    expect(eventOfSaving([p], JSON.parse(JSON.stringify(p)), substrate, 1)).toBeNull()
+    expect(eventOfSaving([p], JSON.parse(JSON.stringify(p)), text, 1)).toBeNull()
   })
 
   it("saves a change to the title or a stage's name, which makes no new version", () => {
     const p = practice("a")
-    expect(eventOfSaving([p], { ...p, title: "Renamed" }, substrate, 1)).not.toBeNull()
+    expect(eventOfSaving([p], { ...p, title: "Renamed" }, text, 1)).not.toBeNull()
     const renamed = { ...p, stages: [{ ...p.stages[0]!, name: "Renamed" }] }
-    expect(eventOfSaving([p], renamed, substrate, 1)).not.toBeNull()
+    expect(eventOfSaving([p], renamed, text, 1)).not.toBeNull()
   })
 })
 

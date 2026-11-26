@@ -19,8 +19,14 @@
   cursor: pointer;
 }
 
-.mode-toggle:hover {
+.mode-toggle:hover:not([aria-disabled="true"]) {
   color: var(--ink);
+}
+
+/* Locked while the reader puts the poem back together: there, faint, and doing nothing */
+.mode-toggle[aria-disabled="true"] {
+  color: var(--ink-faint);
+  cursor: default;
 }
 
 /* Annotate mode is the reader's own hand */

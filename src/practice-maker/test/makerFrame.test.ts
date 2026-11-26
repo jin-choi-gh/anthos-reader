@@ -5,7 +5,7 @@ import type { Fingerprint } from "../../material/types"
 import { REST } from "../../practice/parts"
 import { practiceOf } from "../../practice/test/build"
 import { scene } from "../../reader/scenes/scene"
-import { editOfNote, makerFrame, noteOf } from "../makerFrame"
+import { editOfNote, editOfPick, makerFrame, noteOf, pickingOf } from "../makerFrame"
 
 const material: Material = {
   substrate: {
@@ -159,5 +159,98 @@ describe("editOfNote: what a note sent out by the noting does to the step", () =
 
   it("is none for a step that is not there", () => {
     expect(editOfNote(draft, { stage: 0, step: 5 }, null, effect, material.substrate)).toBeNull()
+  })
+})
+
+describe("a step that restores, in Form Practice", () => {
+  const lines = ["A Bird, came down the Walk -", "Hope", "the bird, the worm"]
+  const words = (line: number, text: string) =>
+    [...text.matchAll(/[\p{L}\p{N}]+/gu)].map((match) => ({
+      start: { line, offset: match.index },
+      end: { line, offset: match.index + match[0].length },
+    }))
+  const poem: Material = {
+    ...material,
+    substrate: { lines: lines.map((text, i) => ({ id: `l${i + 1}`, text })) },
+    words: lines.flatMap((text, line) => words(line, text)),
+  }
+  const restoring = (of: "words" | "lines", ...gaps: string[]) =>
+    practiceOf({
+      id: "draft",
+      title: "Draft",
+      text: "fixture",
+      stages: [
+        { name: "One", steps: [{ ...REST, prose: ["Put them back."], restore: { of, gaps } }] },
+      ],
+    })
+  const at = { stage: 0, step: 0 }
+  const span = (line: number, start: number, end: number) => ({
+    start: { line, offset: start },
+    end: { line, offset: end },
+  })
+
+  it("gives its subject a picking of the poem's words, each saying whether a gap takes it out", () => {
+    const subject = makerFrame(restoring("words", "l1 Walk"), "step-1", poem, { noting: false })
+    expect(subject.picking?.of).toBe("words")
+    expect(subject.picking?.units.map((unit) => unit.taken)).toEqual([
+      ...[false, false, false, false, false, true],
+      false,
+      ...[false, false, false, false],
+    ])
+  })
+
+  it("gives a picking of the lines with text, whole, when the restore takes out lines", () => {
+    const picking = pickingOf({ of: "lines", gaps: ["l2"] }, poem)
+    expect(picking.units).toEqual([
+      { span: span(0, 0, 28), taken: false },
+      { span: span(1, 0, 4), taken: true },
+      { span: span(2, 0, 18), taken: false },
+    ])
+  })
+
+  it("gives no picking to a step that does not restore", () => {
+    expect(makerFrame(draft, "step-1", material, { noting: true }).picking).toBeNull()
+  })
+
+  it("makes a gap of a word picked, before the first gap after it in the poem", () => {
+    const practice = restoring("words", "l1 Walk")
+    expect(editOfPick(practice, at, span(0, 2, 6), poem.substrate)).toEqual({
+      kind: "addGap",
+      at,
+      gap: "l1 Bird",
+      index: 0,
+    })
+    expect(editOfPick(practice, at, span(2, 4, 8), poem.substrate)).toEqual({
+      kind: "addGap",
+      at,
+      gap: "l3 bird",
+      index: 1,
+    })
+  })
+
+  it("writes a repeated word by its occurrence, and a line of one word as the line", () => {
+    const practice = restoring("words")
+    expect(editOfPick(practice, at, span(2, 10, 13), poem.substrate)).toMatchObject({
+      gap: "l3 the[2]",
+    })
+    expect(editOfPick(practice, at, span(1, 0, 4), poem.substrate)).toMatchObject({ gap: "l2" })
+  })
+
+  it("takes the gap away when the word picked is one a gap takes out, however it is written", () => {
+    const practice = restoring("words", "l3 bird", "l3 the[2]", "l2 Hope")
+    expect(editOfPick(practice, at, span(2, 10, 13), poem.substrate)).toEqual({
+      kind: "removeGap",
+      at,
+      index: 1,
+    })
+    expect(editOfPick(practice, at, span(1, 0, 4), poem.substrate)).toEqual({
+      kind: "removeGap",
+      at,
+      index: 2,
+    })
+  })
+
+  it("makes no edit for a step that does not restore", () => {
+    expect(editOfPick(draft, at, span(0, 2, 6), poem.substrate)).toBeNull()
   })
 })

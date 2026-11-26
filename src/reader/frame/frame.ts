@@ -9,11 +9,19 @@ import { annotationsOf } from "../../practice/editorsNotes"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { finalPartsOf, REST } from "../../practice/parts"
 import { stageIndexOf, stepPlaceOf } from "../../practice/places"
-import type { Parts, Practice, Recall, Writing } from "../../practice/types"
+import { gapsOf, slipsOf } from "../../practice/restore"
+import type { Parts, Practice, Recall, Restore, Writing } from "../../practice/types"
 import { finalOf, gateOf, restOf, standsAt } from "../../runner/gate"
 import { ruling } from "../../runner/step"
 import type { Standing } from "../../runner/types"
-import type { Commentary, Recalled, Subject, WritingAbout } from "../scenes/types"
+import type {
+  Commentary,
+  Gap,
+  Recalled,
+  RestoreSubject,
+  Subject,
+  WritingAbout,
+} from "../scenes/types"
 import type { Frame } from "./types"
 
 /** The frame where the run stands: its heading, the rulings on a step back and a step on, and
@@ -23,7 +31,8 @@ import type { Frame } from "./types"
  * the practice. A note on passages the reader chooses is found only if it was written on these
  * lines and every target keeps the rule for spans, so that its passages can be shown and chosen
  * again here. With a recall, the commentary is the notes it brings back, not the editor's: problemsOf
- * refuses a step with more than one part besides its prose. */
+ * refuses a step with more than one part besides its prose. With a restore, the subject has its gaps
+ * and slips, restored already unless the reader is held at the step. */
 export function frameOf(
   practice: Practice,
   standing: Standing,
@@ -66,8 +75,21 @@ export function frameOf(
               written: writtenOn(parts.writing, material, notesFrom(written, where)),
             },
       noting: null,
+      restore:
+        parts.restore === null
+          ? null
+          : restoreOf(parts.restore, material, standing.heldAt !== station.step),
+      picking: null,
     },
   }
+}
+
+/** A restore's gaps, placed by their noteheads and in the poem's order, each with the text it takes
+ * out (gapsOf); its slips, that same text, in alphabetical order (slipsOf); and whether it is
+ * restored already. A gap that cannot be placed, which problemsOf refuses, is left out. */
+function restoreOf(restore: Restore, material: Material, restored: boolean): RestoreSubject {
+  const gaps: Gap[] = gapsOf(material.substrate, restore).map(({ span, text }) => ({ span, text }))
+  return { of: restore.of, gaps, slips: slipsOf(gaps.map((gap) => gap.text)), restored }
 }
 
 /** The frame in annotate mode: no practice and no runner, so no heading and no rulings. It never
@@ -88,6 +110,8 @@ export function annotateFrame(
     commentary: { set, notes: set.notes, shown: "listed", written: mine, recalled: null },
     writing: null,
     noting: { substrate: material.substrate, tags: [] },
+    restore: null,
+    picking: null,
   }
   return { heading: null, position: null, back: null, next: null, subject }
 }

@@ -39,7 +39,8 @@ function stageProblem(value: unknown, at: string): string | null {
 }
 
 function stepProblem(value: unknown, at: string): string | null {
-  return fieldsProblem(value, at, ["id", "prose", "highlight", "writing", "recall"], (step) =>
+  const fields = ["id", "prose", "highlight", "writing", "recall", "restore"]
+  return fieldsProblem(value, at, fields, (step) =>
     first(
       stringProblem(step.id, `${at}: its id`),
       listProblem(step.prose, `${at}: prose`, (paragraph, p) =>
@@ -50,6 +51,7 @@ function stepProblem(value: unknown, at: string): string | null {
       ),
       step.writing === null ? null : writingProblem(step.writing, `${at}: writing`),
       step.recall === null ? null : recallProblem(step.recall, `${at}: recall`),
+      step.restore === null ? null : restoreProblem(step.restore, `${at}: restore`),
     ),
   )
 }
@@ -71,6 +73,19 @@ function writingProblem(value: unknown, at: string): string | null {
       oneOfProblem(writing.target, `${at}.target`, ["whole", "chosen"]),
       tagsProblem(writing.tags, `${at}.tags`),
       oneOfProblem(writing.count, `${at}.count`, ["one"]),
+    ),
+  )
+}
+
+/** A restore takes out words or lines, and names its gaps by their noteheads. Whether they can be
+ * placed, and are words or lines, is for problemsOf to say. */
+function restoreProblem(value: unknown, at: string): string | null {
+  return fieldsProblem(value, at, ["of", "gaps"], (restore) =>
+    first(
+      oneOfProblem(restore.of, `${at}.of`, ["words", "lines"]),
+      listProblem(restore.gaps, `${at}.gaps`, (gap, g) =>
+        stringProblem(gap, `${at}, gap ${g + 1}`),
+      ),
     ),
   )
 }

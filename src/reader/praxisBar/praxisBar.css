@@ -340,3 +340,132 @@
 .noting-page[data-hand="editor"] .noting-remove {
   color: var(--rubric);
 }
+
+/* The slips: how many gaps are restored, the tray, and Check */
+.slips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slips-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.slips-count {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+/* The slips are pieces of the poem, so in its face: slips of paper laid on the page */
+.slips-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.slips-tray[data-of="lines"] {
+  flex-direction: column;
+}
+
+.slip {
+  min-height: 44px; /* a finger-sized target */
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--line-hover);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  text-align: start;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .slip:hover:not(:disabled) {
+    border-color: var(--reader-ink);
+    color: var(--reader-ink);
+  }
+}
+
+.slip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* A slip in a gap, not yet checked: its place kept in the tray, an empty outline, so that nothing
+   shifts */
+.slip:disabled {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+/* A slip matched to its gap: green, as its words now are in the poem */
+.slip[data-restored="true"] {
+  border-style: solid;
+  border-color: var(--restored);
+  background: var(--fill-restored);
+  color: var(--restored);
+}
+
+.slips-tray[data-of="lines"] .slip {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Check, where Next would be, with what the last check gave back, or why it waits, beside it. The
+   frame's Back and Next are not there while the game is: this row takes their place, drawn as theirs */
+.slips-check {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.slips-why {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+/* The poem whole again: said once, in green */
+.slips-whole {
+  margin: 0;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 1.0625rem;
+  color: var(--restored);
+}
+
+.slips-whole:focus {
+  outline: none;
+}
+
+/* Docked, a tray of long slips scrolls inside the bar, so that Check stays in reach */
+.dock .slips-tray {
+  max-height: 24dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.dock .slip {
+  font-size: 1rem;
+}
+
+.dock .slips-check {
+  padding-top: 0.75rem;
+}

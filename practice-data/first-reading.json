@@ -1,6 +1,6 @@
 {
   "format": "anthos-practice",
-  "format_version": 2,
+  "format_version": 3,
   "id": "first-reading",
   "title": "First reading",
   "text": "dickinson",
@@ -15,7 +15,8 @@
           "prose": ["Read this poem on a bird's fleet-footed acts and his eventual flight."],
           "highlight": [],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-2",
@@ -29,7 +30,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-3",
@@ -43,7 +45,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-4",
@@ -57,7 +60,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-5",
@@ -71,7 +75,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-6",
@@ -87,7 +92,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-7",
@@ -103,7 +109,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-8",
@@ -117,7 +124,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-9",
@@ -133,7 +141,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-10",
@@ -146,7 +155,8 @@
             "tags": [],
             "count": "one"
           },
-          "recall": null
+          "recall": null,
+          "restore": null
         }
       ]
     },
@@ -163,7 +173,8 @@
           "recall": {
             "from": "stage",
             "id": "stage-1"
-          }
+          },
+          "restore": null
         },
         {
           "id": "step-12",
@@ -173,7 +184,8 @@
           ],
           "highlight": [],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-13",
@@ -187,7 +199,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-14",
@@ -200,7 +213,8 @@
             "tags": [],
             "count": "one"
           },
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-15",
@@ -214,7 +228,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         },
         {
           "id": "step-16",
@@ -228,7 +243,8 @@
             }
           ],
           "writing": null,
-          "recall": null
+          "recall": null,
+          "restore": null
         }
       ]
     }

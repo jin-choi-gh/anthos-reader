@@ -30,7 +30,7 @@ export function PracticeMode({
   material: Material
   materials: Materials
   layout: PageOrSpread
-  topBar: ReactNode
+  topBar: (locked: boolean) => ReactNode
 }) {
   const notebook = useNotebook(practice.text)
   const run = useRun(practice, notebook.notes)
@@ -41,7 +41,11 @@ export function PracticeMode({
     [practice, run.standing, material, notebook.notes],
   )
   const controls = controlsOf(frame, run.moveTo)
-  // What the scene writes goes into the notebook, with where it was written, in which version
+  // At a step that restores and is not restored the reader may not leave, not even for annotate
+  // mode: the pen is locked as Back and Next are taken away
+  const locked = frame.subject.restore !== null && !frame.subject.restore.restored
+  // What the scene writes goes into the notebook, with where it was written, in which version; a
+  // step restored goes into the run's log
   const fingerprint = useMemo(() => fingerprintOfPractice(practice), [practice])
   const where = { practice: practice.id, fingerprint, ...run.standing.station }
   const scene = useScene(frame.subject, (effect) => {
@@ -58,6 +62,12 @@ export function PracticeMode({
         return notebook.revise(effect.id, effect.targets, effect.body)
       case "withdraw":
         return notebook.withdraw(effect.id)
+      case "restored":
+        // Kept in the run's log, not the notebook: the reader is held at the step no longer
+        return run.restored()
+      case "pick":
+        // Only Form Practice picks: the scene never sends this out here
+        return
       default:
         return assertNever(effect)
     }
@@ -73,7 +83,7 @@ export function PracticeMode({
   return (
     <Layout
       layout={layout}
-      topBar={topBar}
+      topBar={topBar(locked)}
       dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} notes={notebook.notes} />}
       page={<ViewerPage {...viewer} />}
       notes={listed || scene.viewer.open !== null ? <ViewerNotes {...viewer} /> : null}

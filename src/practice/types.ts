@@ -43,6 +43,7 @@ export interface Parts {
   readonly highlight: readonly EditorsNote[]
   readonly writing: Writing | null
   readonly recall: Recall | null
+  readonly restore: Restore | null
 }
 
 /** A note the editor writes in the step that shows it, as loom has one: its id ("bird-flies-1"),
@@ -61,6 +62,14 @@ export interface Writing {
   readonly target: "whole" | "chosen"
   readonly tags: readonly string[]
   readonly count: "one"
+}
+
+/** Words or lines of the poem to take out and give the reader to put back: which of the two the
+ * step takes out (of), and its gaps, each a notehead with one target, one of the poem's words
+ * ("l3 Angle", "l1 the[2]") or a whole line ("l8"). */
+export interface Restore {
+  readonly of: "words" | "lines"
+  readonly gaps: readonly string[]
 }
 
 /** The reader's notes to bring back, as they answered the practice: those written in an earlier

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { now } from "../clock/clock"
-import type { Substrate, TextId } from "../material/types"
+import type { Material } from "../material/materials"
+import type { TextId } from "../material/types"
 import { problemsOf, wordedProblem } from "../practice/problems"
 import type { Practice, PracticeId } from "../practice/types"
 import { appendEvents, readEvents, whenChanged } from "../storage/log"
@@ -12,7 +13,7 @@ import type { MadeEvent } from "./store"
  * saved (nothing when it was), and a way to take one back. */
 export interface MadePractices {
   practices: readonly Practice[]
-  save(practice: Practice, substrate: Substrate): string[]
+  save(practice: Practice, text: Pick<Material, "substrate" | "words">): string[]
   withdraw(id: PracticeId): void
 }
 
@@ -45,10 +46,10 @@ export function useMadePractices(text: TextId): MadePractices {
     const standing = () => madePracticesOf(text, latest.current)
     return {
       practices,
-      save: (practice, substrate) => {
-        const problems = problemsOf(practice, substrate)
+      save: (practice, text) => {
+        const problems = problemsOf(practice, text)
         if (problems.length > 0) return problems.map((problem) => wordedProblem(practice, problem))
-        const event = eventOfSaving(standing(), practice, substrate, now())
+        const event = eventOfSaving(standing(), practice, text, now())
         if (event === null || append(event)) return []
         return ["the browser did not keep it: its storage is off or full"]
       },

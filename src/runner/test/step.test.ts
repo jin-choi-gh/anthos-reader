@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { eventsOfMove, ruling, standingOf } from "../step"
+import { eventOfRestoring, eventsOfMove, isRestoring, ruling, standingOf } from "../step"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { REST } from "../../practice/parts"
 import type { Practice, Parts } from "../../practice/types"
@@ -570,5 +570,150 @@ describe("the law: a step that only says something asks for nothing, so it never
       visited(0, 2),
       finished(0, "2026-11-10"),
     ])
+  })
+})
+
+describe("the law: a step that restores holds the reader there until every gap is restored", () => {
+  const restore = { of: "words", gaps: ["l1 Bird", "l1 Walk"] } as const
+  const game: Parts = { ...REST, prose: ["Put them back."], restore }
+  const ask: Parts = {
+    ...REST,
+    prose: ["Why?"],
+    writing: { target: "whole", tags: [], count: "one" },
+  }
+  /** Stage 1: a, the game, c, its rest at 3; stage 2: d, its rest at 1. */
+  const restoring = practiceOf({
+    id: "restoring",
+    title: "Restoring",
+    text: "fixture",
+    stages: [
+      { name: "First", steps: [say("a"), game, say("c")] },
+      { name: "Second", steps: [say("d")] },
+    ],
+  })
+  const restored = (stage: number, step: number): Event => ({
+    kind: "restored",
+    stage,
+    step,
+    at: 0,
+  })
+  const today = "2026-11-10"
+  const at = 1_000
+
+  it("holds the reader at the game until the log has it restored", () => {
+    expect(replay(restoring, [], today)).toEqual(standing(0, 0, null, 1))
+    expect(replay(restoring, [visited(0, 1)], today)).toEqual(standing(0, 1, null, 1))
+    expect(replay(restoring, [visited(0, 1), restored(0, 1)], today)).toEqual(standing(0, 1))
+  })
+
+  it("counts only the game's own restoring, not another step's", () => {
+    const log = [visited(0, 1), restored(0, 0), restored(1, 1)]
+    expect(replay(restoring, log, today).heldAt).toBe(1)
+  })
+
+  it("lets the reader come to the game, but not past it", () => {
+    const before = standing(0, 0, null, 1)
+    expect(ruling(restoring, before, 1)).toEqual({ allowed: true, to: 1, finishes: false })
+    expect(ruling(restoring, before, 2)).toEqual({
+      allowed: false,
+      reason: { kind: "unanswered" },
+    })
+  })
+
+  it("at the game, refuses every move away from it, back, on or a jump, as restoring", () => {
+    const here = standing(0, 1, null, 1)
+    for (const target of [-1, 0, 2, 3, 4]) {
+      expect(ruling(restoring, here, target)).toEqual({
+        allowed: false,
+        reason: { kind: "restoring" },
+      })
+    }
+    expect(() => eventsOfMove(restoring, here, 0, at, today)).toThrow(/restoring/)
+  })
+
+  it("once restored, lets the reader go back and on again", () => {
+    const here = replay(restoring, [visited(0, 1), restored(0, 1)], today)
+    expect(ruling(restoring, here, 0)).toEqual({ allowed: true, to: 0, finishes: false })
+    expect(ruling(restoring, here, 2)).toEqual({ allowed: true, to: 2, finishes: false })
+  })
+
+  it("does not lock the reader at a step that asks for writing: only on is refused", () => {
+    const writing = practiceOf({ ...restoring, stages: [{ name: "One", steps: [say("a"), ask] }] })
+    const here = standing(0, 1, null, 1)
+    expect(ruling(writing, here, 0)).toEqual({ allowed: true, to: 0, finishes: false })
+    expect(ruling(writing, here, 2)).toEqual({ allowed: false, reason: { kind: "unanswered" } })
+  })
+
+  it("never holds the reader in a finished stage, gone back to from the final stage", () => {
+    const last = practiceOf({ ...restoring, stages: [{ name: "Only", steps: [say("a"), game] }] })
+    const log = [visited(0, 1), restored(0, 1), visited(0, 2), finished(0, today, today)]
+    expect(replay(last, log, today)).toEqual(standing(1, 0))
+    const back = [...log, ...eventsOfMove(last, replay(last, log, today), 1, at, today)]
+    expect(replay(last, back, today)).toEqual(standing(0, 1, today))
+    expect(ruling(last, replay(last, back, today), 0)).toMatchObject({ allowed: true })
+  })
+
+  it("walks: to the game, refused, restored, on to the rest, and back to look again", () => {
+    const log: Event[] = []
+    const walk = (target: number) => {
+      log.push(...eventsOfMove(restoring, replay(restoring, log, today), target, at, today))
+      return replay(restoring, log, today)
+    }
+    expect(walk(1)).toEqual(standing(0, 1, null, 1))
+    expect(ruling(restoring, replay(restoring, log, today), 0).allowed).toBe(false)
+    const event = eventOfRestoring(restoring, log, { stage: 0, step: 1 }, at)
+    expect(event).toEqual({ kind: "restored", stage: 0, step: 1, at })
+    log.push(event!)
+    expect(walk(2)).toEqual(standing(0, 2))
+    expect(walk(3)).toEqual(standing(0, 3, nextDay(today)))
+    expect(walk(1)).toEqual(standing(0, 1, nextDay(today)))
+    expect(walk(0)).toEqual(standing(0, 0, nextDay(today)))
+  })
+
+  describe("eventOfRestoring", () => {
+    it("gives the step restored, once: nothing when the log has it already", () => {
+      const station = { stage: 0, step: 1 }
+      expect(eventOfRestoring(restoring, [], station, at)).toEqual({
+        kind: "restored",
+        stage: 0,
+        step: 1,
+        at,
+      })
+      expect(eventOfRestoring(restoring, [restored(0, 1)], station, at)).toBeNull()
+    })
+
+    it("throws at a station that is not a step that restores: a step, a rest, the final stage", () => {
+      for (const station of [
+        { stage: 0, step: 0 },
+        { stage: 0, step: 3 },
+        { stage: 2, step: 0 },
+      ]) {
+        expect(() => eventOfRestoring(restoring, [], station, at)).toThrow(/does not restore/)
+      }
+    })
+  })
+
+  describe("isRestoring", () => {
+    it("is true only at a game not yet restored", () => {
+      expect(isRestoring(restoring, [], today)).toBe(false)
+      expect(isRestoring(restoring, [visited(0, 1)], today)).toBe(true)
+      expect(isRestoring(restoring, [visited(0, 1), restored(0, 1)], today)).toBe(false)
+      const on = [visited(0, 1), restored(0, 1), visited(0, 2)]
+      expect(isRestoring(restoring, on, today)).toBe(false)
+    })
+
+    it("reads only the log: a step before the game that asks for writing changes nothing", () => {
+      const asking = practiceOf({
+        ...restoring,
+        stages: [{ name: "One", steps: [ask, game] }],
+      })
+      // With nothing written, the hold is at the writing; the reader is at the game all the same
+      expect(isRestoring(asking, [visited(0, 1)], today)).toBe(true)
+    })
+
+    it("is false in a finished stage, even at a game the log does not have restored", () => {
+      const log = [visited(0, 1), visited(0, 3), finished(0, today, nextDay(today)), visited(0, 1)]
+      expect(isRestoring(restoring, log, today)).toBe(false)
+    })
   })
 })

@@ -6,6 +6,7 @@ import type { Asks, PraxisBarProjection, PraxisBarProtocol } from "../scenes/typ
 import { NotebookPage } from "./NotebookPage"
 import { NotingPage } from "./NotingPage"
 import { reasonText } from "./reasonText"
+import { SlipTray } from "./SlipTray"
 import "./praxisBar.css"
 
 /** What a step asks of the reader, in the words the praxis bar names it by, after a pilcrow. */
@@ -14,6 +15,7 @@ const ASKED: Record<Exclude<Asks, null>, string> = {
   notes: "notes",
   write: "write",
   recall: "look back",
+  restore: "restore",
 }
 
 /** The praxis bar: the frame's heading, the step's position in its stage, Back and Next, and the
@@ -98,8 +100,8 @@ export function PraxisBar({
   )
 }
 
-/** The scene's part of the praxis bar: the prose, then the writing or the noting, whichever the
- * frame has. */
+/** The scene's part of the praxis bar: the prose, then the writing, the noting or the slips,
+ * whichever the frame has. */
 function Projection({
   projection,
   send,
@@ -118,6 +120,7 @@ function Projection({
       )}
       {projection.writing !== null && <NotebookPage page={projection.writing} send={send} />}
       {projection.noting !== null && <NotingPage page={projection.noting} send={send} />}
+      {projection.restore !== null && <SlipTray tray={projection.restore} send={send} />}
     </>
   )
 }

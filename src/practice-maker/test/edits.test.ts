@@ -110,6 +110,7 @@ describe("edited: one change to a draft", () => {
       highlight: [],
       writing: null,
       recall: { from: "step", id: "step-1" },
+      restore: null,
     })
     const removed = edited(recalled, { kind: "removeStep", at: { stage: 0, step: 0 } })
     expect(words(removed)).toEqual([["b"], ["c"]])
@@ -120,14 +121,33 @@ describe("edited: one change to a draft", () => {
     const at = { stage: 0, step: 0 }
     const writing = { target: "chosen", tags: ["gloss"], count: "one" } as const
     let changed = edited(draft, { kind: "setProse", at, prose: ["Look.", "Again."] })
-    changed = edited(changed, { kind: "setParts", at, highlight: [], writing, recall: null })
+    changed = edited(changed, {
+      kind: "setParts",
+      at,
+      highlight: [],
+      writing,
+      recall: null,
+      restore: null,
+    })
     expect(changed.stages[0]!.steps[0]).toEqual({
       id: "step-1",
       prose: ["Look.", "Again."],
       highlight: [],
       writing,
       recall: null,
+      restore: null,
     })
+  })
+
+  it("sets a restore as one of the parts, so that setting another takes the restore away", () => {
+    const at = { stage: 0, step: 0 }
+    const restore = { of: "words", gaps: ["l1 Bird", "l1 Walk"] } as const
+    const parts = { kind: "setParts", at, highlight: [], writing: null, recall: null } as const
+    const restoring = edited(draft, { ...parts, restore })
+    expect(restoring.stages[0]!.steps[0]!.restore).toEqual(restore)
+    const writing = { target: "whole", tags: [], count: "one" } as const
+    const asking = edited(restoring, { ...parts, writing, restore: null })
+    expect(asking.stages[0]!.steps[0]).toMatchObject({ writing, restore: null })
   })
 
   it("adds, changes, moves and removes a step's editor's notes", () => {
@@ -145,7 +165,7 @@ describe("edited: one change to a draft", () => {
   })
 
   it("changes nothing, giving back the very same draft, for a place the draft does not have", () => {
-    const none = { highlight: [], writing: null, recall: null }
+    const none = { highlight: [], writing: null, recall: null, restore: null }
     const nowhere: Edit[] = [
       { kind: "addStage", at: 3, id: "stage-3", name: "Far" },
       { kind: "addStage", at: -1, id: "stage-3", name: "Before" },
@@ -231,6 +251,7 @@ describe("nextStageId and nextStepId: the ids for a new stage and a new step", (
         highlight: [],
         writing: null,
         recall,
+        restore: null,
       })
     const step = edited(recalling({ from: "step", id: "step-1" }), {
       kind: "removeStep",
@@ -240,5 +261,31 @@ describe("nextStageId and nextStepId: the ids for a new stage and a new step", (
     const stage = recalling({ from: "stage", id: "stage-7" })
     expect(nextStageId({ ...stage, stages: stage.stages.slice(1) })).toBe("stage-1")
     expect(nextStageId(recalling({ from: "stage", id: "stage-3" }))).toBe("stage-4")
+  })
+})
+
+describe("edited: a restore's gaps", () => {
+  const at = { stage: 0, step: 1 }
+  const restoring = edited(draft, {
+    kind: "setParts",
+    at,
+    highlight: [],
+    writing: null,
+    recall: null,
+    restore: { of: "words", gaps: ["l1 Bird", "l3 Worm"] },
+  })
+  const gaps = (practice: Practice) => practice.stages[0]!.steps[1]!.restore?.gaps
+
+  it("adds a gap at a place in the restore, and takes one away", () => {
+    const added = edited(restoring, { kind: "addGap", at, index: 1, gap: "l2 did" })
+    expect(gaps(added)).toEqual(["l1 Bird", "l2 did", "l3 Worm"])
+    expect(gaps(edited(added, { kind: "removeGap", at, index: 0 }))).toEqual(["l2 did", "l3 Worm"])
+  })
+
+  it("changes nothing for a step that does not restore, or a place the restore does not have", () => {
+    const step = { stage: 0, step: 0 }
+    expect(edited(restoring, { kind: "addGap", at: step, index: 0, gap: "l1 A" })).toBe(restoring)
+    expect(edited(restoring, { kind: "addGap", at, index: 5, gap: "l1 A" })).toBe(restoring)
+    expect(edited(restoring, { kind: "removeGap", at, index: 2 })).toBe(restoring)
   })
 })

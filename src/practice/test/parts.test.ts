@@ -9,7 +9,7 @@ const practiceOf = (...steps: Parts[]): Practice =>
 
 describe("REST", () => {
   it("says nothing and asks nothing", () => {
-    expect(REST).toEqual({ prose: [], highlight: [], writing: null, recall: null })
+    expect(REST).toEqual({ prose: [], highlight: [], writing: null, recall: null, restore: null })
   })
 })
 
@@ -21,6 +21,7 @@ describe("finalPartsOf: the final stage", () => {
       highlight: [],
       writing: null,
       recall: { from: "all" },
+      restore: null,
     })
   })
 

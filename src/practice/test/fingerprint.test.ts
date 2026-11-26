@@ -46,6 +46,7 @@ describe("fingerprintOfPractice: the practice's version", () => {
 
   it("does not change with the order the source writes a step's keys in", () => {
     const reordered: Step = {
+      restore: null,
       recall: null,
       writing: null,
       highlight: [{ body: "The worm.", tags: [], notehead: "l3 Angle Worm", id: "angle-worm" }],
@@ -87,6 +88,22 @@ describe("fingerprintOfPractice: the practice's version", () => {
     const base = fingerprintOfPractice(practice)
     expect(fingerprintOfPractice(recalling({ from: "step", id: "ask" }))).not.toBe(base)
     expect(fingerprintOfPractice(recalling({ from: "all" }))).not.toBe(base)
+  })
+
+  it("changes with a restore: what it takes out, and its gaps", () => {
+    const second = practice.stages[1]!
+    const restoring = (restore: Step["restore"]): Practice => ({
+      ...practice,
+      stages: [practice.stages[0]!, { ...second, steps: [{ ...second.steps[0]!, restore }] }],
+    })
+    const words = fingerprintOfPractice(restoring({ of: "words", gaps: ["l1 Bird", "l1 Walk"] }))
+    expect(words).not.toBe(fingerprintOfPractice(practice))
+    expect(
+      fingerprintOfPractice(restoring({ of: "words", gaps: ["l1 Bird", "l1 came"] })),
+    ).not.toBe(words)
+    expect(
+      fingerprintOfPractice(restoring({ of: "lines", gaps: ["l1 Bird", "l1 Walk"] })),
+    ).not.toBe(words)
   })
 
   it("does not change with the title, or the stages' names, ids and days: no new run", () => {

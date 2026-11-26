@@ -4,12 +4,12 @@ import type { ReaderNote } from "../notebook/types"
 import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
 import { daysUntilNext, finalOf, gateOf, restOf, standsAt } from "./gate"
-import type { Event, Ruling, Standing } from "./types"
+import type { Event, Ruling, Standing, Station } from "./types"
 
 /** Where the run stands, from the runner's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
  * finished, as the event that finished it fixed it, and which step holds the reader until they have
- * written. Once the last stage is finished the reader is in the final stage, unless they have since
+ * answered it: written, or restored. Once the last stage is finished the reader is in the final stage, unless they have since
  * gone back to a step of the last stage, to look again: then they are there, held nowhere. */
 export function standingOf(
   practice: Practice,
@@ -35,6 +35,8 @@ export function standingOf(
           visitedAt = index
         }
       } else if (
+        // A step restored moves no one: it only lifts its hold (heldAt)
+        event.kind === "finished" &&
         finished === null &&
         event.day <= today &&
         (opened === null || event.day >= opened)
@@ -45,7 +47,7 @@ export function standingOf(
 
     const station = { stage, step }
     if (finished === null) {
-      return { station, opensOn: null, heldAt: heldAt(practice, stage, notes) }
+      return { station, opensOn: null, heldAt: heldAt(practice, stage, notes, log) }
     }
     const opensOn = finished.opens
     if (stage === final - 1) {
@@ -63,12 +65,19 @@ export function standingOf(
 }
 
 /** The first step of a stage that asks for writing and has none in the notebook, written on this
- * version of the practice, or null. */
-function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[]): number | null {
+ * version of the practice, or that restores and is not restored in the log; or null. */
+function heldAt(
+  practice: Practice,
+  stage: number,
+  notes: readonly ReaderNote[],
+  log: readonly Event[],
+): number | null {
   const fingerprint = fingerprintOfPractice(practice)
   for (let step = 0; step < restOf(practice, stage); step++) {
     const gate = gateOf(practice, { stage, step })
-    if (gate.kind !== "step" || gate.step.writing === null) continue
+    if (gate.kind !== "step") continue
+    if (gate.step.restore !== null && !isRestored(log, { stage, step })) return step
+    if (gate.step.writing === null) continue
     if (notesFrom(notes, { practice: practice.id, fingerprint, stage, step }).length === 0) {
       return step
     }
@@ -76,16 +85,35 @@ function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[])
   return null
 }
 
+/** Whether the log has the step at a station restored. */
+function isRestored(log: readonly Event[], station: Station): boolean {
+  return log.some(
+    (event) =>
+      event.kind === "restored" && event.stage === station.stage && event.step === station.step,
+  )
+}
+
+/** Whether the step at a station restores. */
+function restores(practice: Practice, station: Station): boolean {
+  const gate = gateOf(practice, station)
+  return gate.kind === "step" && gate.step.restore !== null
+}
+
 /** Whether the reader may move to a step of the stage they stand in (standsAt), and whether the
- * move finishes it, or why not. From the final stage, which stands at the last stage's rest, the
- * reader may go back into the last stage; past that rest the practice is over. A move finishes a
- * stage when it reaches the rest of a stage not yet finished. */
+ * move finishes it, or why not. Held at a step that restores, the reader may not leave it at all.
+ * From the final stage, which stands at the last stage's rest, the reader may go back into the last
+ * stage; past that rest the practice is over. A move finishes a stage when it reaches the rest of a
+ * stage not yet finished. */
 export function ruling(practice: Practice, standing: Standing, target: number): Ruling {
   const { station, opensOn, heldAt } = standing
   const final = finalOf(practice)
   const here = standsAt(practice, station)
   // A practice with no stages has nowhere to go back to
   if (here.stage === final) return { allowed: false, reason: { kind: "finished" } }
+  // Held at a step that restores: nowhere else, back or on, until every gap is restored
+  if (heldAt === here.step && target !== here.step && restores(practice, here)) {
+    return { allowed: false, reason: { kind: "restoring" } }
+  }
   const rest = restOf(practice, here.stage)
   if (!Number.isInteger(target) || target < 0) {
     return { allowed: false, reason: { kind: "noSuchStep" } }
@@ -126,4 +154,29 @@ export function eventsOfMove(
     events.push({ kind: "finished", stage: here.stage, at, day: today, opens })
   }
   return events
+}
+
+/** What the runner logs when the reader has restored every gap of the step they are at: that it is
+ * restored, once; null when the log has it restored already. A station that is not a step that
+ * restores is a mistake in the caller: it throws. */
+export function eventOfRestoring(
+  practice: Practice,
+  log: readonly Event[],
+  station: Station,
+  at: number,
+): Event | null {
+  if (!restores(practice, station)) {
+    throw new RangeError(`stage ${station.stage}, step ${station.step} does not restore`)
+  }
+  if (isRestored(log, station)) return null
+  return { kind: "restored", stage: station.stage, step: station.step, at }
+}
+
+/** Whether the reader is at a step that restores and is not restored, in a stage not yet finished:
+ * there they may not leave, not even for annotate mode. It reads only the log and the day, not the
+ * notebook, since where the reader stands does not depend on what they wrote. */
+export function isRestoring(practice: Practice, log: readonly Event[], today: Day): boolean {
+  const { station, opensOn } = standingOf(practice, log, [], today)
+  if (opensOn !== null) return false
+  return restores(practice, station) && !isRestored(log, station)
 }

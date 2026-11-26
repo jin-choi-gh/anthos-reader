@@ -1,7 +1,13 @@
 import type { Parts, Practice } from "./types"
 
 /** A stage's rest: nothing said, nothing asked. It has no id: only the runner adds it. */
-export const REST: Parts = { prose: [], highlight: [], writing: null, recall: null }
+export const REST: Parts = {
+  prose: [],
+  highlight: [],
+  writing: null,
+  recall: null,
+  restore: null,
+}
 
 /** The final stage of a practice, which has no id: word that it is done, and, when any of its steps
  * asks for writing, everything the reader wrote in it, brought back from every stage, the only
@@ -14,5 +20,6 @@ export function finalPartsOf(practice: Practice): Parts {
     highlight: [],
     writing: null,
     recall: asks ? { from: "all" } : null,
+    restore: null,
   }
 }

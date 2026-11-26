@@ -105,6 +105,35 @@ describe("isPractice and practiceProblem: a value read from a file or from stora
     expect(practiceProblem(copy)).toBe("stage 1: its id must be text")
   })
 
+  it("asks a restore for whether it takes out words or lines, and for its gaps as text", () => {
+    expect(
+      practiceProblem(withFirstStep({ restore: { of: "words", gaps: ["l3 Angle"] } })),
+    ).toBeNull()
+    expect(practiceProblem(withFirstStep({ restore: { of: "lines", gaps: [] } }))).toBeNull()
+    expect(practiceProblem(withFirstStep({ restore: { of: "stanzas", gaps: [] } }))).toBe(
+      'stage 1, step 1: restore.of must be "words" or "lines"',
+    )
+    expect(practiceProblem(withFirstStep({ restore: { of: "words", gaps: "l3" } }))).toBe(
+      "stage 1, step 1: restore.gaps must be a list",
+    )
+    expect(practiceProblem(withFirstStep({ restore: { of: "words", gaps: ["l3", 4] } }))).toBe(
+      "stage 1, step 1: restore, gap 2 must be text",
+    )
+    expect(practiceProblem(withFirstStep({ restore: { gaps: [] } }))).toBe(
+      "stage 1, step 1: restore has no of",
+    )
+    expect(practiceProblem(withFirstStep({ restore: { of: "words", gaps: [], decoys: [] } }))).toBe(
+      "stage 1, step 1: restore has fields this reader does not know: decoys",
+    )
+  })
+
+  it("asks a step for its restore, null where it has none, as an older practice has none", () => {
+    const { restore: _restore, ...older } = practice.stages[0]!.steps[0]!
+    const copy = JSON.parse(JSON.stringify(practice))
+    copy.stages[0].steps[0] = older
+    expect(practiceProblem(copy)).toBe("stage 1, step 1 has no restore")
+  })
+
   it("asks a recall of a stage or step for an id, and one of the whole practice for none", () => {
     expect(practiceProblem(withFirstStep({ recall: { from: "stage", id: "stage-2" } }))).toBeNull()
     expect(practiceProblem(withFirstStep({ recall: { from: "all" } }))).toBeNull()

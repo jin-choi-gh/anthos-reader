@@ -16,6 +16,8 @@ const highlighting: Subject = {
   commentary: { set, notes: [notes[1]!], shown: "marked", written: null, recalled: null },
   writing: null,
   noting: null,
+  restore: null,
+  picking: null,
 }
 const asking: Subject = {
   key: "p/0/1",
@@ -24,6 +26,8 @@ const asking: Subject = {
   commentary: { set, notes: [], shown: "marked", written: null, recalled: null },
   writing: { about: { kind: "fixed", targets: [whole] }, tags: [], count: "one", written: [] },
   noting: null,
+  restore: null,
+  picking: null,
 }
 const annotating: Subject = {
   key: "annotate",
@@ -32,6 +36,8 @@ const annotating: Subject = {
   commentary: { set, notes, shown: "listed", written: null, recalled: null },
   writing: null,
   noting: null,
+  restore: null,
+  picking: null,
 }
 
 const fromFrame = (subject: Subject) =>
@@ -88,5 +94,35 @@ describe("receive: a walk", () => {
     )
     expect(end.subject).toBe(highlighting)
     expect(scene.viewer(end).open).toBe(1)
+  })
+})
+
+describe("receive: a step restored", () => {
+  const playing: Subject = {
+    key: "p/0/2",
+    text: "poem",
+    prose: ["Put them back."],
+    commentary: { set, notes: [], shown: "marked", written: null, recalled: null },
+    writing: null,
+    noting: null,
+    restore: {
+      of: "words",
+      gaps: [
+        { span: { start: { line: 0, offset: 0 }, end: { line: 0, offset: 1 } }, text: "A" },
+        { span: { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }, text: "Bird" },
+      ],
+      slips: ["A", "Bird"],
+      restored: false,
+    },
+    picking: null,
+  }
+  const praxisBar = (message: { kind: "take"; slip: number } | { kind: "check" }) =>
+    ({ from: "praxisBar", message }) as const
+
+  it("hands the mode that the step is restored, as the reader's last check fits every slip", () => {
+    let current = scene.start(playing).state
+    current = receive(current, praxisBar({ kind: "take", slip: 0 })).state
+    current = receive(current, praxisBar({ kind: "take", slip: 1 })).state
+    expect(receive(current, praxisBar({ kind: "check" })).effects).toEqual([{ kind: "restored" }])
   })
 })

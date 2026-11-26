@@ -168,6 +168,8 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       },
       writing: null,
       noting: null,
+      restore: null,
+      picking: null,
     })
     expect(subject.commentary.set.rangesOn(1)).toEqual([{ start: 16, end: 20, noteIndex: 0 }])
     expect(subject.commentary.set.rangesOn(0)).toEqual([])
@@ -199,6 +201,8 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         written: [],
       },
       noting: null,
+      restore: null,
+      picking: null,
     })
   })
 
@@ -234,6 +238,8 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         },
         writing: null,
         noting: null,
+        restore: null,
+        picking: null,
       })
     }
   })
@@ -391,6 +397,8 @@ describe("frameOf: a step asking for writing on chosen passages, wherever the ed
         written: [],
       },
       noting: null,
+      restore: null,
+      picking: null,
     })
   })
 
@@ -650,6 +658,8 @@ describe("frameOf: a step that only says something", () => {
       },
       writing: null,
       noting: null,
+      restore: null,
+      picking: null,
     })
   })
 
@@ -659,5 +669,70 @@ describe("frameOf: a step that only says something", () => {
       to: 1,
       finishes: true,
     })
+  })
+})
+
+describe("frameOf: a step that restores", () => {
+  const game = (of: "words" | "lines", ...gaps: string[]): Parts => ({
+    ...REST,
+    prose: ["Put them back."],
+    restore: { of, gaps },
+  })
+  const restoring = (step: Parts) =>
+    practiceOf({
+      ...practice,
+      stages: [{ name: "First", steps: [{ ...REST, prose: ["Read."] }, step] }],
+    })
+  const at = (step: Parts, heldAt: number | null = 1) =>
+    frameOf(restoring(step), standing(0, 1, null, heldAt), material, []).subject
+
+  it("places its gaps in the poem's order, however the editor lists them, each with its text", () => {
+    const { restore } = at(game("words", "l2 Worm", "l1 Walk", "l1 Bird", "l2 Angle"))
+    expect(restore?.of).toBe("words")
+    expect(restore?.gaps).toEqual([
+      { span: { start: { line: 0, offset: 2 }, end: { line: 0, offset: 6 } }, text: "Bird" },
+      { span: { start: { line: 0, offset: 22 }, end: { line: 0, offset: 26 } }, text: "Walk" },
+      { span: { start: { line: 1, offset: 10 }, end: { line: 1, offset: 15 } }, text: "Angle" },
+      { span: { start: { line: 1, offset: 16 }, end: { line: 1, offset: 20 } }, text: "Worm" },
+    ])
+  })
+
+  it("takes out whole lines, punctuation and all", () => {
+    const { restore } = at(game("lines", "l2", "l1"))
+    expect(restore?.gaps.map((gap) => gap.text)).toEqual([
+      "A Bird, came down the Walk -",
+      "He bit an Angle Worm in halves",
+    ])
+  })
+
+  it("gives its slips, the gaps' texts, in alphabetical order, the same every time", () => {
+    const step = game("words", "l2 Worm", "l1 Walk", "l1 Bird", "l2 Angle")
+    expect(at(step).restore?.slips).toEqual(["Angle", "Bird", "Walk", "Worm"])
+    expect(at(step).restore?.slips).toEqual(at(step).restore?.slips)
+  })
+
+  it("is not restored while the reader is held at it, and restored once they are not", () => {
+    const step = game("words", "l1 Bird", "l1 Walk")
+    expect(at(step, 1).restore?.restored).toBe(false)
+    expect(at(step, null).restore?.restored).toBe(true)
+  })
+
+  it("picks out none of the editor's notes, and asks for no writing", () => {
+    const subject = at(game("words", "l1 Bird", "l1 Walk"))
+    expect(subject.commentary.notes).toEqual([])
+    expect(subject.writing).toBeNull()
+    expect(subject.prose).toEqual(["Put them back."])
+  })
+
+  it("leaves out a gap that cannot be placed", () => {
+    const { restore } = at(game("words", "l1 Bird", "l9 Walk", "l1 Walk"))
+    expect(restore?.gaps.map((gap) => gap.text)).toEqual(["Bird", "Walk"])
+  })
+
+  it("has no restore at a rest, in the final stage, or in annotate mode", () => {
+    const practice = restoring(game("words", "l1 Bird", "l1 Walk"))
+    expect(frameOf(practice, standing(0, 2), material, []).subject.restore).toBeNull()
+    expect(frameOf(practice, standing(1, 0), material, []).subject.restore).toBeNull()
+    expect(annotateFrame("fixture", material, []).subject.restore).toBeNull()
   })
 })

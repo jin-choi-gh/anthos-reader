@@ -89,6 +89,12 @@
   border-color: var(--reader-ink);
 }
 
+/* Check, in a game: the colour of a match */
+.button--restore:not(:disabled) {
+  color: var(--restored);
+  border-color: var(--restored);
+}
+
 /* One line: no room for a paragraph, and nothing to drag taller */
 .text-field {
   min-height: 0;

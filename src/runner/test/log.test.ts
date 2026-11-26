@@ -98,6 +98,14 @@ describe("saving and reading a run", () => {
   })
 })
 
+describe("a step restored", () => {
+  it("is read back as it was kept", () => {
+    const kept: Event[] = [...log, { kind: "restored", stage: 0, step: 1, at: 7 }]
+    appendLog(practice, kept)
+    expect(readLog(practice)).toEqual(kept)
+  })
+})
+
 describe("a damaged log", () => {
   it("reads as empty when it is not JSON, or not a list", () => {
     for (const saved of ["{not json", '{"kind":"visited"}', "null", "3"]) {
@@ -118,6 +126,8 @@ describe("a damaged log", () => {
       { kind: "finished", stage: 0, at: 0, opens: "2026-11-11" }, // no day
       { kind: "finished", stage: 0, at: 0, day: "2026-11-10" }, // no day the next stage opens, as an older log has
       { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }, // an older kind, now kept in the notebook
+      { kind: "restored", stage: 0, at: 0 }, // no step
+      { kind: "restored", stage: 0, step: 0.5, at: 0 }, // half a step
     ]
     stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1]]))
     expect(readLog(practice)).toEqual(log)

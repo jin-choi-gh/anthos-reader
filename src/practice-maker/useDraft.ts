@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
-import type { Substrate, TextId } from "../material/types"
+import type { Material } from "../material/materials"
+import type { TextId } from "../material/types"
 import { practiceFor } from "../practice/choose"
 import { isPractice } from "../practice/guard"
 import type { Practice } from "../practice/types"
@@ -27,7 +28,7 @@ export interface Draft {
   /** Starts a new practice, with a new id, in place of the draft. */
   startNew(): void
   /** Saves the draft, giving back what kept it from being saved: nothing when it was. */
-  save(substrate: Substrate): string[]
+  save(text: Pick<Material, "substrate" | "words">): string[]
   /** Takes back the saved practice the draft is, so that the text runs what it ran before. */
   takeBack(): void
 }
@@ -93,8 +94,8 @@ export function useDraft(
     startNew() {
       keep(newPractice(text, crypto.randomUUID()))
     },
-    save(substrate) {
-      const problems = made.save(latest.current ?? base, substrate)
+    save(text) {
+      const problems = made.save(latest.current ?? base, text)
       if (problems.length === 0) keep(null)
       return problems
     },

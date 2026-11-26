@@ -11,7 +11,8 @@ import type { Draft } from "./useDraft"
 /** The top bar, across the whole screen: the way back to the library, what the screen is, marked
  * as for development only, and at the right where the draft stands, Read, and whichever is there to
  * do: Discard and Save, while the draft has changes not yet saved; Take back, for a saved practice
- * with none; then the light toggle. Under it, when there is any: the question asked before discarding, taking back, or
+ * with none; Export, for a practice with neither changes nor problems (`onExport`, null otherwise),
+ * as a practice file; then the light toggle. Under it, when there is any: the question asked before discarding, taking back, or
  * starting a new practice over unsaved changes, when Edit practice was opened for one; a browser
  * that is not keeping the draft; and, after Save found things to put right (`unfinished`, while there
  * are any), how many, with the way to the next of them (`onNext`), or what kept the draft from being
@@ -23,6 +24,7 @@ export function PracticeHead({
   refused,
   onSave,
   onNext,
+  onExport,
 }: {
   draft: Draft
   readHref: string
@@ -30,6 +32,7 @@ export function PracticeHead({
   refused: readonly string[]
   onSave: () => void
   onNext: () => void
+  onExport: (() => void) | null
 }) {
   const [asking, setAsking] = useState<"discard" | "takeBack" | null>(null)
   const { origin, unsaved } = draft
@@ -59,6 +62,7 @@ export function PracticeHead({
         {idle && !unsaved && origin.from === "saved" && (
           <Button onClick={() => setAsking("takeBack")}>Take back</Button>
         )}
+        {idle && !unsaved && onExport !== null && <Button onClick={onExport}>Export</Button>}
         <LightToggle />
       </div>
       {draft.askingNew && (

@@ -20,7 +20,9 @@ describe("newPractice: a practice to start writing", () => {
   })
 
   it("has only what is missing for its problems: a title, a stage's name, a step's prose", () => {
-    const about = problemsOf(newPractice("dickinson", "abc"), substrate).map((p) => p.about)
+    const about = problemsOf(newPractice("dickinson", "abc"), { substrate, words: [] }).map(
+      (p) => p.about,
+    )
     expect(about).toEqual(["title", "name", "prose"])
   })
 })

@@ -5,6 +5,7 @@ import type {
   EditorsNote,
   Practice,
   Recall,
+  Restore,
   Stage,
   StageId,
   Step,
@@ -31,6 +32,7 @@ export type Edit =
       readonly highlight: readonly EditorsNote[]
       readonly writing: Writing | null
       readonly recall: Recall | null
+      readonly restore: Restore | null
     }
   | { readonly kind: "addNote"; readonly at: StepPlace; readonly note: EditorsNote }
   | {
@@ -46,6 +48,13 @@ export type Edit =
       readonly to: number
     }
   | { readonly kind: "removeNote"; readonly at: StepPlace; readonly index: number }
+  | {
+      readonly kind: "addGap"
+      readonly at: StepPlace
+      readonly index: number
+      readonly gap: string
+    }
+  | { readonly kind: "removeGap"; readonly at: StepPlace; readonly index: number }
 
 /** The draft with one edit made. An edit naming a stage, step or note the draft does not have, or a
  * place it cannot go, changes nothing, and gives back the very same draft, as do days on the first
@@ -55,7 +64,8 @@ export type Edit =
  * counts that place as if it had been taken out first: moving the first of three steps to place 2
  * makes it the last. After adding, moving or removing a stage, the first stage has no days, and a
  * later one that had none has 1. Removing a stage or step that a recall names leaves the recall
- * naming nothing, as problemsOf says. */
+ * naming nothing, as problemsOf says. A gap is added to, or taken from, a step that restores; a step
+ * that does not changes nothing. */
 export function edited(draft: Practice, edit: Edit): Practice {
   switch (edit.kind) {
     case "retitle":
@@ -95,8 +105,8 @@ export function edited(draft: Practice, edit: Edit): Practice {
     case "setProse":
       return withStep(draft, edit.at, (step) => ({ ...step, prose: edit.prose }))
     case "setParts": {
-      const { highlight, writing, recall } = edit
-      return withStep(draft, edit.at, (step) => ({ ...step, highlight, writing, recall }))
+      const { highlight, writing, recall, restore } = edit
+      return withStep(draft, edit.at, (step) => ({ ...step, highlight, writing, recall, restore }))
     }
     case "addNote":
       return withStep(draft, edit.at, (step) => ({
@@ -118,6 +128,18 @@ export function edited(draft: Practice, edit: Edit): Practice {
       return withStep(draft, edit.at, (step) => {
         const highlight = removed(step.highlight, edit.index)
         return highlight === null ? null : { ...step, highlight }
+      })
+    case "addGap":
+      return withStep(draft, edit.at, (step) => {
+        if (step.restore === null) return null
+        const gaps = inserted(step.restore.gaps, edit.index, edit.gap)
+        return gaps === null ? null : { ...step, restore: { ...step.restore, gaps } }
+      })
+    case "removeGap":
+      return withStep(draft, edit.at, (step) => {
+        if (step.restore === null) return null
+        const gaps = removed(step.restore.gaps, edit.index)
+        return gaps === null ? null : { ...step, restore: { ...step.restore, gaps } }
       })
     default:
       return assertNever(edit)

@@ -39,11 +39,12 @@ const practice: Practice = practiceOf({
 })
 
 describe("partOf: the part a step asks besides its prose", () => {
-  it("is its highlight, writing or recall, or none", () => {
+  it("is its highlight, writing, recall or restore, or none", () => {
     expect(partOf(say("a"))).toBeNull()
     expect(partOf({ ...REST, highlight: [note] })).toBe("highlight")
     expect(partOf(ask("a"))).toBe("writing")
     expect(partOf({ ...REST, recall: { from: "stage", id: "stage-1" } })).toBe("recall")
+    expect(partOf({ ...REST, restore: { of: "words", gaps: [] } })).toBe("restore")
   })
 
   it("takes a step with more than one by its first", () => {
@@ -94,12 +95,21 @@ describe("labels: stages, steps and recalls in words", () => {
     )
   })
 
+  it("name a restore's part for the anatomy by what it takes out", () => {
+    const restore = { of: "lines", gaps: ["l1", "l2", "l3"] } as const
+    expect(partLabel(practice, { ...REST, restore })).toBe("Restore · 3 lines")
+  })
+
   it("name a step's part in a word or two for the reel's contents", () => {
     expect(partWord(say("a"))).toBeNull()
     expect(partWord({ ...REST, highlight: [note] })).toBe("1 note")
     expect(partWord({ ...REST, highlight: [note, { ...note, id: "bird" }] })).toBe("2 notes")
     expect(partWord(ask("a", "chosen"))).toBe("write")
     expect(partWord({ ...REST, recall: { from: "stage", id: "gone" } })).toBe("recall")
+    expect(partWord({ ...REST, restore: { of: "words", gaps: ["l1 Bird", "l1 Walk"] } })).toBe(
+      "2 words",
+    )
+    expect(partWord({ ...REST, restore: { of: "lines", gaps: ["l1"] } })).toBe("1 line")
   })
 })
 
@@ -140,7 +150,9 @@ describe("recallTargets: what a recall may name", () => {
                   },
             ),
           }
-          const about = problemsOf(recalling, substrate).filter((p) => p.about === "recall")
+          const about = problemsOf(recalling, { substrate, words: [] }).filter(
+            (p) => p.about === "recall",
+          )
           expect(about, JSON.stringify(recall)).toEqual([])
         }
       }

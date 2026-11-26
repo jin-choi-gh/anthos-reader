@@ -1,8 +1,9 @@
 import type { Day } from "../clock/clock"
 import type { Stage, Step } from "../practice/types"
 
-/** What the runner logs: the reader came to a step, or reached a stage's rest, which finishes the
- * stage, on a day, and fixes the day the next stage opens. */
+/** What the runner logs: the reader came to a step; reached a stage's rest, which finishes the
+ * stage, on a day, and fixes the day the next stage opens; or restored every gap of a step that
+ * restores. */
 export type Event =
   | { readonly kind: "visited"; readonly stage: number; readonly step: number; readonly at: number }
   | {
@@ -11,6 +12,12 @@ export type Event =
       readonly at: number
       readonly day: Day
       readonly opens: Day
+    }
+  | {
+      readonly kind: "restored"
+      readonly stage: number
+      readonly step: number
+      readonly at: number
     }
 
 /** Where the reader is. stage is stages.length in the final stage; step is
@@ -36,11 +43,14 @@ export type Gate =
   | { readonly kind: "final" }
 
 /** Why the law refuses a move: there is no such step; the next stage is not open; a step on
- * the way asks for writing the reader has not done; or, past the final stage, the practice is over. */
+ * the way asks for writing the reader has not done, or restores and is not restored; the reader is
+ * at a step that restores and is not restored, which they may not leave; or, past the final stage,
+ * the practice is over. */
 export type Reason =
   | { readonly kind: "noSuchStep" }
   | { readonly kind: "waiting"; readonly opensOn: Day | null }
   | { readonly kind: "unanswered" }
+  | { readonly kind: "restoring" }
   | { readonly kind: "finished" }
 
 /** The law on a move: allowed, to a step of the stage the reader stands in, and whether it finishes

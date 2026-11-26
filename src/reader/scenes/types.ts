@@ -13,6 +13,41 @@ export interface Subject {
   readonly writing: WritingSubject | null
   /** A new note on passages the reader chooses, or null: then no passage can be chosen. */
   readonly noting: NotingSubject | null
+  /** Words or lines taken out of the poem, for the reader to put back, or null. */
+  readonly restore: RestoreSubject | null
+  /** In Form Practice, the poem's words or lines, each to pick, or null. */
+  readonly picking: PickingSubject | null
+}
+
+/** In Form Practice, for a step that restores: what it takes out, words or lines, and each of the
+ * poem's words, or each of its lines, in the poem's order, to pick, with whether a gap of the step
+ * takes it out. */
+export interface PickingSubject {
+  readonly of: "words" | "lines"
+  readonly units: readonly PickUnit[]
+}
+
+/** A word or a line to pick: where it is, and whether a gap takes it out. */
+export interface PickUnit {
+  readonly span: Span
+  readonly taken: boolean
+}
+
+/** Words or lines taken out of the poem: which of the two; the gaps, in the poem's order; the
+ * slips, the gaps' texts in the order they lie for the reader; and whether the step is restored
+ * already, as it is when the reader comes back to it: then every gap starts restored. */
+export interface RestoreSubject {
+  readonly of: "words" | "lines"
+  readonly gaps: readonly Gap[]
+  readonly slips: readonly string[]
+  readonly restored: boolean
+}
+
+/** A gap: where it is in the poem, and the text it takes out, which is what a slip must carry to
+ * fit it. */
+export interface Gap {
+  readonly span: Span
+  readonly text: string
 }
 
 /** The notes a subject shows, from one set (the editor's, or the reader's): highlighted in the poem,
@@ -74,8 +109,14 @@ export type CommentaryMessage =
   | { kind: "closeNote" }
   | { kind: "deleteNote"; id: string } // the reader's own note with that id
 
+/** What the viewer tells the restore. */
+export type GapMessage = { kind: "empty"; gap: number } // a filled gap tapped: its slip goes back
+
+/** What the viewer tells the picking. */
+export type PickMessage = { kind: "pick"; unit: number } // the word or line at that place, picked
+
 export interface ViewerProtocol {
-  toScene: CommentaryMessage | { kind: "choose"; span: Span } // a passage the reader chose, while choosing is on: for the part that chooses
+  toScene: CommentaryMessage | GapMessage | PickMessage | { kind: "choose"; span: Span } // a passage the reader chose, while choosing is on: for the part that chooses
 }
 
 /** What the praxis bar tells the writing. */
@@ -97,17 +138,25 @@ export type PassageMessage =
   | { kind: "choosing"; on: boolean } // the toggle for choosing passages
   | { kind: "unchoose"; index: number } // −: the chosen target at that place in the table
 
+/** What the praxis bar tells the restore. */
+export type RestoreMessage =
+  | { kind: "take"; slip: number } // the slip at that place in the tray, into the first empty gap
+  | { kind: "check" } // Check: every gap filled
+
 export interface PraxisBarProtocol {
-  toScene: WritingMessage | NotingMessage | PassageMessage
+  toScene: WritingMessage | NotingMessage | PassageMessage | RestoreMessage
 }
 
-/** What the reader has written, sent out to the notebook: a new annotation, a revision, or a
- * withdrawal. For a new note, the mode adds the fingerprint and where it was written; the notebook
+/** What the scene sends out for the mode to keep: for the notebook, what the reader has written, a
+ * new annotation, a revision, or a withdrawal; for the run's log, that every gap of the step is
+ * restored; for Form Practice, a word or line picked, by its span. For a new note, the mode adds the fingerprint and where it was written; the notebook
  * makes the id and the time. */
 export type Effect =
   | { kind: "note"; targets: readonly Span[]; tags: readonly string[]; body: string }
   | { kind: "revise"; id: NoteId; targets: readonly Span[]; body: string }
   | { kind: "withdraw"; id: NoteId }
+  | { kind: "restored" }
+  | { kind: "pick"; span: Span }
 
 /** The commentary's share of what the viewer draws: the notes it shows, picked out ("marked") or
  * listed beside the poem ("listed"), and the open one. */
@@ -123,24 +172,64 @@ export type CommentaryProjection =
       recalled: readonly Recalled[] | null // for notes recalled, by their place in the set
     }
 
-/** What the viewer draws: the commentary's share, whether choosing is on, and the chosen targets. */
+/** What the viewer draws: the commentary's share, whether choosing is on, the chosen targets, the
+ * restore's gaps, and, in Form Practice, the words or lines to pick. */
 export type ViewerProjection = CommentaryProjection & {
   choosing: boolean
   chosen: readonly Span[]
+  restore: GapsProjection | null
+  picking: PickingProjection | null
 }
 
+/** The words or lines to pick, for the viewer, each with whether a gap takes it out. */
+export interface PickingProjection {
+  of: "words" | "lines"
+  units: readonly PickUnit[]
+}
+
+/** The restore's gaps, for the viewer: whether they are words or lines, the gap the next slip fills
+ * (null when none is empty), and each gap, in the poem's order: empty, with no text, for the text it
+ * takes out is never drawn until it is restored; filled, with the text of the slip in it, right or
+ * wrong; or restored, with the poem's own text. */
+export interface GapsProjection {
+  of: "words" | "lines"
+  next: number | null
+  gaps: readonly GapProjection[]
+}
+
+export type GapProjection =
+  | { state: "empty"; span: Span }
+  | { state: "filled"; span: Span; text: string }
+  | { state: "restored"; span: Span; text: string }
+
 /** What a subject asks of the reader besides its prose, from its parts: to write; to look back at
- * the notes it recalls; to look at the editor's notes it picks out; or only to read. With a noting,
- * as in annotate mode, it asks nothing: null. */
-export type Asks = "read" | "notes" | "write" | "recall" | null
+ * the notes it recalls; to restore the poem; to look at the editor's notes it picks out; or only to
+ * read. With a noting, as in annotate mode, it asks nothing: null. */
+export type Asks = "read" | "notes" | "write" | "recall" | "restore" | null
 
 /** What the praxis bar draws between the frame's heading and its buttons: the prose, the writing,
- * and the noting. */
+ * the noting, and the restore's slips. */
 export interface PraxisBarProjection {
   asks: Asks
   prose: readonly string[]
   writing: WritingProjection | null
   noting: NotingProjection | null
+  restore: SlipsProjection | null
+}
+
+/** The restore's slips, for the praxis bar: whether they are words or lines; every slip, in the
+ * order it lies, whether it is in a gap, and whether it is matched there, its gap restored; whether Check may be pressed, as it may once every gap
+ * is filled and the poem is not yet whole; how many gaps are restored, of how many; how many slips
+ * the last check gave back, until the reader moves a slip again (null otherwise); and whether the
+ * poem is whole, every gap restored. */
+export interface SlipsProjection {
+  of: "words" | "lines"
+  slips: readonly { text: string; placed: boolean; restored: boolean }[]
+  canCheck: boolean
+  restored: number
+  gaps: number
+  returned: number | null
+  whole: boolean
 }
 
 /** Passages being chosen: whether choosing is on, and each chosen target's lemma, in the poem's
@@ -170,7 +259,7 @@ export type WritingProjection =
     }
   | { kind: "written"; body: string; lemma: readonly LemmaPart[] | null }
 
-/** The scene's answer to anything: its next state, and what it writes in the notebook. */
+/** The scene's answer to anything: its next state, and what it sends out for the mode to keep. */
 export interface Reply<State> {
   state: State
   effects: readonly Effect[]

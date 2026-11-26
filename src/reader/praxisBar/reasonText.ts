@@ -12,6 +12,7 @@ export function reasonText(reason: Reason, today: Day): string | null {
       if (reason.opensOn === nextDay(today)) return "The next stage opens tomorrow."
       return `The next stage opens on ${dayAndMonth(reason.opensOn)}.`
     case "unanswered": // Next is not drawn: the writing box says what is asked
+    case "restoring": // neither Back nor Next is drawn: the slips say what is asked
     case "finished":
       return null
     default:

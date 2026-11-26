@@ -40,6 +40,8 @@
   --rubric: var(--edge-selected); /* the editor's hand */
   --reader-ink: var(--edge-reader); /* the reader's hand */
   --paper-sunk: #f5ebde; /* writing boxes, a question asked in place */
+  --restored: #2f6b3c; /* a gap restored, a slip matched, and Check */
+  --fill-restored: #e6eedc;
   --problem-wash: #fff7ed;
   --font-caps: var(--font-ui); /* labels and buttons */
 

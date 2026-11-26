@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react"
+import { today } from "../clock/clock"
 import { Folio, Message } from "../components/Folio"
 import { usePlatform } from "../components/usePlatform"
 import { loadTextualComplex } from "../loom/load"
@@ -7,7 +8,9 @@ import { fingerprintOfPractice } from "../practice/fingerprint"
 import { practiceFor } from "../practice/choose"
 import { loadPractices } from "../practice/load"
 import { useMadePractices } from "../practice-maker/useMadePractices"
-import type { ModeName } from "../route"
+import { readerHref, replaceHref, type ModeName } from "../route"
+import { readLog } from "../runner/log"
+import { isRestoring } from "../runner/step"
 import { useLoaded } from "../useLoaded"
 import { AnnotateMode } from "./AnnotateMode"
 import { Layout } from "./Layout"
@@ -50,12 +53,23 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
   )
 
   // The mode asked for, if the text's practice can run; otherwise annotate mode, and why not. The
-  // text's practice is the one last saved for it in the browser, or else its practice file
+  // text's practice is the one last saved for it in the browser, or else its practice file. Annotate
+  // mode, asked for while the reader is at a step that restores and is not restored, is not opened:
+  // the run's log, read as the mode is picked, says so
   const chosen = useMemo(() => {
     if (material === null) return null
     const practice = practiceFor(file, practiceFiles.practices, made.practices)
-    return modeOf(asked, practice, material.substrate)
+    const restoring =
+      asked === "annotate" && practice !== null && isRestoring(practice, readLog(practice), today())
+    return modeOf(asked, practice, material, restoring)
   }, [asked, file, material, made.practices])
+
+  // Annotate mode refused, the address says the practice, so that the pen switches from where the
+  // reader is
+  const refused = asked === "annotate" && chosen?.mode.name === "practice"
+  useEffect(() => {
+    if (refused) replaceHref(readerHref(file))
+  }, [refused, file])
 
   // In development, say why a practice file could not be read, and why a text's practice cannot run
   useEffect(() => {
@@ -72,19 +86,21 @@ export function Reader({ file, mode: asked }: { file: string; mode: ModeName }) 
     )
   } else {
     const { mode } = chosen
-    // The pen, only when there is a practice to switch to or from
-    const topBar = mode.practice !== null && <ModeToggle file={file} mode={mode.name} />
-    const parts = { material, materials, layout, topBar }
+    // The pen, only when there is a practice to switch to or from; locked as practice mode says
+    const pen = (locked: boolean) =>
+      mode.practice !== null && <ModeToggle file={file} mode={mode.name} locked={locked} />
+    const parts = { material, materials, layout }
     content =
       mode.name === "practice" ? (
         // A new version of the practice is a new run, so a new mode
         <PracticeMode
           key={fingerprintOfPractice(mode.practice)}
           practice={mode.practice}
+          topBar={pen}
           {...parts}
         />
       ) : (
-        <AnnotateMode text={file} {...parts} />
+        <AnnotateMode text={file} topBar={pen(false)} {...parts} />
       )
   }
 

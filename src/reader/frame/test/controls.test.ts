@@ -123,3 +123,25 @@ describe("controlsOf: a step that asks for writing", () => {
     expect(controls.back.kind).toBe("go")
   })
 })
+
+describe("controlsOf: a step that restores", () => {
+  const game: Parts = { ...REST, prose: ["Put them back."], restore: { of: "lines", gaps: [] } }
+  const restoring = practiceOf({
+    id: "restoring",
+    title: "Restoring",
+    text: "poem",
+    stages: [{ name: "Only", steps: [say("@a"), game, say("@c")] }],
+  })
+
+  it("has neither Back nor Next until every gap is restored", () => {
+    const controls = controlsOf(frameOf(restoring, standing(0, 1, null, 1), material, []), vi.fn())
+    expect(controls.back).toEqual({ kind: "none" })
+    expect(controls.next).toEqual({ kind: "none" })
+  })
+
+  it("has both once it is restored", () => {
+    const controls = controlsOf(frameOf(restoring, standing(0, 1), material, []), vi.fn())
+    expect(controls.back.kind).toBe("go")
+    expect(controls.next.kind).toBe("go")
+  })
+})

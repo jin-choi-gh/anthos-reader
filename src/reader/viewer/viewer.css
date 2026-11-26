@@ -300,3 +300,117 @@
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* A gap: what the editor took out, marked as an edition marks a lacuna, [ ... ], every gap of a
+   kind the same width, so that its size gives nothing away */
+.gap {
+  border-radius: var(--radius-note);
+}
+
+/* A word gap, or any empty gap, never breaks over a line; a line placed in a gap turns over as the
+   poem's own lines do */
+.gap[data-of="words"],
+.gap[data-state="empty"] {
+  white-space: nowrap;
+}
+
+.gap-bracket {
+  font-family: var(--font-text);
+  font-style: normal;
+  color: var(--rubric);
+}
+
+.gap-dots {
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+
+/* The gap the next slip fills: a gap in the page, as a writing box is, under the reader's pencil */
+.gap[data-next="true"] {
+  background: var(--paper-sunk);
+  box-shadow: inset 0 -1.5px var(--reader-ink);
+}
+
+.gap[data-next="true"] .gap-bracket,
+.gap[data-next="true"] .gap-dots {
+  color: var(--reader-ink);
+}
+
+/* A slip placed and not yet checked: the reader's conjecture, in their italic, in faint brackets.
+   It is a button, drawn as the words it holds; tapped, the slip goes back */
+button.gap {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+button.gap:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.gap[data-state="filled"] .gap-word {
+  font-style: italic;
+  color: var(--reader-ink);
+}
+
+.gap[data-state="filled"] .gap-bracket {
+  color: var(--ink-faint);
+}
+
+@media (hover: hover) {
+  .gap[data-state="filled"]:hover .gap-word {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--ink-faint);
+  }
+}
+
+/* Restored: the poem's own words again, matched, in green, the brackets gone */
+.gap[data-state="restored"] {
+  color: var(--restored);
+  text-decoration: underline;
+  text-decoration-color: var(--restored);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+/* Form Practice: every word, or every line, of the poem is a button; tapped, it is taken out as a
+   gap, or put back */
+.pick {
+  border-radius: var(--radius-note);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .pick:hover {
+    background: var(--paper-sunk);
+    box-shadow: inset 0 -1.5px var(--rubric);
+  }
+}
+
+.pick:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+/* Taken out: in the editor's brackets, under the editor's gloss */
+.pick[data-taken="true"] {
+  background: var(--fill-editor);
+}
+
+.pick[data-taken="true"]::before {
+  content: "[";
+  color: var(--rubric);
+}
+
+.pick[data-taken="true"]::after {
+  content: "]";
+  color: var(--rubric);
+}

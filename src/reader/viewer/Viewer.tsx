@@ -5,6 +5,7 @@ import { Lemma } from "../../components/Lemma"
 import type { Materials } from "../../material/materials"
 import { rangesOnLines } from "./choosing"
 import type { LineRange } from "./cut"
+import { gapRangesOn, pickRangesOn } from "./gaps"
 import { NotesBlock } from "./NotesBlock"
 import { PoemBlock } from "./PoemBlock"
 import type { ViewerProjection, ViewerProtocol } from "../scenes/types"
@@ -24,7 +25,9 @@ interface ViewerProps {
 /** The viewer's page: the projection's text, its title and its poem. Marked, its highlights can be
  * tapped; listed, the open note's words are marked, and the poem is only read. Either way the
  * chosen targets are drawn, and while choosing is on the reader chooses passages of the poem here,
- * each sent to the scene once chosen. */
+ * each sent to the scene once chosen; a restore's gaps are drawn, a filled one tapped sending
+ * its slip back; and, in Form Practice, the words or lines to pick are buttons, each picked sent to
+ * the scene. */
 export function ViewerPage({ projection, materials, send }: ViewerProps) {
   const material = materials(projection.text)
   const substrate = material?.substrate ?? null
@@ -39,10 +42,30 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
     () => (substrate === null || choice === null ? none : rangesOnLines(substrate, [choice])),
     [substrate, choice],
   )
+  const gapsOn = useMemo(
+    () => (substrate === null ? noGaps : gapRangesOn(substrate, projection.restore)),
+    [substrate, projection.restore],
+  )
+  const emptyGap = useCallback((gap: number) => send({ kind: "empty", gap }), [send])
+  const picksOn = useMemo(
+    () => (substrate === null ? noPicks : pickRangesOn(substrate, projection.picking)),
+    [substrate, projection.picking],
+  )
+  const pick = useCallback((unit: number) => send({ kind: "pick", unit }), [send])
   if (material === null) return <Message>Loading…</Message>
   const { poem } = material
   const { rangesOn } = projection.notes
-  const choosing = { chosenOn, choiceOn }
+  // Drawn over the text, or in place of it: the passages chosen, the one being chosen, the gaps
+  const drawn = {
+    chosenOn,
+    choiceOn,
+    gaps: projection.restore,
+    gapsOn,
+    onEmptyGap: emptyGap,
+    picking: projection.picking,
+    picksOn,
+    onPick: pick,
+  }
 
   return (
     <>
@@ -55,7 +78,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
             marked={projection.marked}
             open={projection.open}
             onTapNote={(note) => send({ kind: "tapNote", note })}
-            {...choosing}
+            {...drawn}
           />
         ) : (
           <PoemBlock
@@ -63,7 +86,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
             rangesOn={rangesOn}
             marked={projection.open === null ? [] : [projection.open]}
             open={projection.open}
-            {...choosing}
+            {...drawn}
           />
         )}
       </div>
@@ -73,6 +96,16 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
 
 /** No ranges on any line. */
 function none(): LineRange[] {
+  return []
+}
+
+/** No gaps on any line. */
+function noGaps() {
+  return []
+}
+
+/** Nothing to pick on any line. */
+function noPicks() {
   return []
 }
 

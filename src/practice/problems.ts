@@ -1,8 +1,10 @@
 import { assertNever } from "../assertNever"
+import type { Material } from "../material/materials"
 import { spansOfNotehead } from "../material/noteheads"
-import type { Substrate } from "../material/types"
+import { comparePositions, lineLength, sameSpan } from "../material/spans"
+import type { Span, Substrate } from "../material/types"
 import { stageIndexOf, stepPlaceOf } from "./places"
-import type { Practice, Recall } from "./types"
+import type { Practice, Recall, Restore } from "./types"
 
 /** One thing that keeps a practice from running: its place (the stage, the step in it and the note
  * in that, each from 0, null where the problem is not in one), what it is about, and what is wrong,
@@ -16,8 +18,8 @@ export interface Problem {
 }
 
 /** What a problem is about: something not yet written (the practice's stages or title, a stage's
- * name or steps, a step's prose, a note's body), or something written wrong (an id, a stage's
- * days, a step's parts, a note's notehead, a recall). */
+ * name or steps, a step's prose, a note's body, a restore's gaps), or something written wrong (an
+ * id, a stage's days, a step's parts, a note's notehead, a recall, a restore's gap). */
 export type ProblemAbout =
   | "stages"
   | "title"
@@ -30,20 +32,26 @@ export type ProblemAbout =
   | "parts"
   | "notehead"
   | "recall"
+  | "gaps"
+  | "gap"
 
 // An id, as loom allows one: letters, digits, - and _
 const ID = /^[A-Za-z0-9_-]+$/
 
-/** Everything that keeps a practice from running on its text, whose lines are given, in the
+/** Everything that keeps a practice from running on its text, whose lines and words are given, in the
  * practice's order: no title; no stages; a stage with no name or no steps; an id that is malformed,
  * or that a stage, step or note before it, of the same kind, has already; days on the first stage,
  * or days on a later one that are not a whole number of at least 1; a step with no prose, or with
  * more than one of highlight, writing and recall, since a step asks one thing of the reader and a
  * subject has one commentary; a note with no body, or a notehead that cannot be placed on the lines;
  * and a recall of the whole practice, which only the final stage makes, or one naming a stage or step
- * that is not there, that does not come before it, or that asks for nothing to be written. None
- * means the practice can run. */
-export function problemsOf(practice: Practice, substrate: Substrate): Problem[] {
+ * that is not there, that does not come before it, or that asks for nothing to be written; and a restore with fewer than two gaps, a gap that cannot be placed
+ * or that is not what the restore takes out, or gaps that overlap. None means the practice can run. */
+export function problemsOf(
+  practice: Practice,
+  text: Pick<Material, "substrate" | "words">,
+): Problem[] {
+  const { substrate } = text
   const problems: Problem[] = []
   const add = (
     place: { stage?: number; step?: number; note?: number },
@@ -90,9 +98,18 @@ export function problemsOf(practice: Practice, substrate: Substrate): Problem[] 
       const at = { stage: s, step: i }
       idOf(at, step.id, stepIds)
       if (!step.prose.some((paragraph) => paragraph.trim() !== "")) add(at, "prose", "no prose")
-      const parts = [step.highlight.length > 0, step.writing !== null, step.recall !== null]
+      const parts = [
+        step.highlight.length > 0,
+        step.writing !== null,
+        step.recall !== null,
+        step.restore !== null,
+      ]
       if (parts.filter(Boolean).length > 1) {
-        add(at, "parts", "more than one of highlight, writing and recall: a step asks one thing")
+        add(
+          at,
+          "parts",
+          "more than one of highlight, writing, recall and restore: a step asks one thing",
+        )
       }
       step.highlight.forEach((note, n) => {
         const on = { ...at, note: n }
@@ -105,9 +122,78 @@ export function problemsOf(practice: Practice, substrate: Substrate): Problem[] 
         const wrong = recallProblem(practice, step.recall, at)
         if (wrong !== null) add(at, "recall", wrong)
       }
+      if (step.restore !== null) {
+        for (const { about, text: wrong } of restoreProblems(step.restore, text)) {
+          add(at, about, wrong)
+        }
+      }
     })
   })
   return problems
+}
+
+/** What keeps a restore from being played: fewer than two gaps (not yet written); and, written
+ * wrong, a gap whose notehead cannot be placed, or places more than one passage, or is not what
+ * the restore takes out (exactly one of the poem's words, or one whole line with text), and two gaps
+ * that overlap, as the same word named twice does. A gap is judged by where it is placed, however
+ * its notehead is written: "l5" and "l5 Hope" are the same word on a line that is only "Hope". */
+function restoreProblems(
+  restore: Restore,
+  text: Pick<Material, "substrate" | "words">,
+): { about: "gaps" | "gap"; text: string }[] {
+  const problems: { about: "gaps" | "gap"; text: string }[] = []
+  if (restore.gaps.length < 2) {
+    problems.push({ about: "gaps", text: "fewer than two gaps: a restore needs two at least" })
+  }
+  const placed: { gap: string; span: Span }[] = []
+  for (const gap of restore.gaps) {
+    const named = `gap ${JSON.stringify(gap)}`
+    const spans = spansOfNotehead(text.substrate, gap)
+    if ("problem" in spans) {
+      problems.push({ about: "gap", text: `${named}: ${spans.problem}` })
+      continue
+    }
+    const [span, ...more] = spans.spans
+    if (span === undefined || more.length > 0) {
+      problems.push({ about: "gap", text: `${named} is more than one passage` })
+      continue
+    }
+    const fits = restore.of === "words" ? isWord(text.words, span) : isLine(text.substrate, span)
+    if (!fits) {
+      const what = restore.of === "words" ? "one of the poem's words" : "one whole line"
+      problems.push({ about: "gap", text: `${named} is not ${what}` })
+      continue
+    }
+    const overlapped = placed.find((other) => overlap(other.span, span))
+    if (overlapped !== undefined) {
+      const other = JSON.stringify(overlapped.gap)
+      problems.push({ about: "gap", text: `${named} overlaps the gap ${other}` })
+      continue
+    }
+    placed.push({ gap, span })
+  }
+  return problems
+}
+
+/** Whether a span is exactly one of the poem's words. */
+function isWord(words: readonly Span[], span: Span): boolean {
+  return words.some((word) => sameSpan(word, span))
+}
+
+/** Whether a span is exactly one whole line, with text. */
+function isLine(substrate: Substrate, span: Span): boolean {
+  const { start, end } = span
+  return (
+    start.line === end.line &&
+    start.offset === 0 &&
+    end.offset === lineLength(substrate, end.line) &&
+    end.offset > 0
+  )
+}
+
+/** Whether two spans share any of the poem: each starts before the other ends. */
+function overlap(a: Span, b: Span): boolean {
+  return comparePositions(a.start, b.end) < 0 && comparePositions(b.start, a.end) < 0
 }
 
 /** A problem in words, with its place first: `stage 2 "Nature", step 3: no prose`. */

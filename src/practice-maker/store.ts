@@ -1,4 +1,5 @@
-import type { Substrate, TextId } from "../material/types"
+import type { Material } from "../material/materials"
+import type { TextId } from "../material/types"
 import { samePractice } from "../practice/fingerprint"
 import { isPractice } from "../practice/guard"
 import { problemsOf, wordedProblem } from "../practice/problems"
@@ -31,15 +32,15 @@ export function madePracticesOf(text: TextId, events: readonly MadeEvent[]): Pra
 
 /** The event that saves a practice for its text, at a time given from outside. Null when the
  * practice is saved just as it is, whole (samePractice), since saving it again would change
- * nothing. Throws for a practice with problems on its text's lines:
+ * nothing. Throws for a practice with problems on its text's lines and words:
  * only a practice with none is saved. */
 export function eventOfSaving(
   saved: readonly Practice[],
   practice: Practice,
-  substrate: Substrate,
+  text: Pick<Material, "substrate" | "words">,
   at: number,
 ): MadeEvent | null {
-  const problems = problemsOf(practice, substrate)
+  const problems = problemsOf(practice, text)
   if (problems.length > 0) {
     const words = problems.map((problem) => wordedProblem(practice, problem))
     throw new RangeError(`a practice with problems is not saved: ${words.join("; ")}`)
