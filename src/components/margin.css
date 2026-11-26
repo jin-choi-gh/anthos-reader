@@ -4,14 +4,20 @@
    7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window. */
 .margin {
   grid-area: margin;
+  padding-left: 2rem;
+  border-left: 1px solid var(--line);
   font-family: var(--font-ui);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.9375rem;
+  line-height: 1.53;
   align-self: start;
   position: sticky;
   top: 3rem;
   max-height: calc(100dvh - 7rem);
   overflow-y: auto;
+}
+
+/* With nothing to scroll, it would hold the scrolls over it and do nothing with them */
+.margin[data-scrolls="true"] {
   overscroll-behavior: contain;
 }
 
@@ -19,5 +25,5 @@
 .margin {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 2rem;
 }

@@ -1,7 +1,6 @@
 import { useId, useState, type ReactNode } from "react"
 import { assertNever } from "../assertNever"
 import { Choice } from "../components/Choice"
-import { Button } from "../components/controls"
 import { Lemma } from "../components/Lemma"
 import { notesFor } from "../material/notes"
 import type { Substrate } from "../material/types"
@@ -10,7 +9,7 @@ import type { StepPlace } from "../practice/places"
 import type { Problem } from "../practice/problems"
 import type { EditorsNote, Practice, Recall, Writing } from "../practice/types"
 import "../reader/praxisBar/praxisBar.css"
-import { CardHead } from "./CardHead"
+import { CardTools } from "./CardTools"
 import { Confirm } from "./Confirm"
 import type { Edit } from "./edits"
 import { paragraphsOf, proseText } from "./prose"
@@ -25,23 +24,23 @@ const THEN: readonly { part: PartName | "none"; words: string }[] = [
   { part: "recall", words: "reads back what they wrote" },
 ]
 
-/** What the card needs of the margin for a highlighting step: the form for its note, new or taken
+/** What the card needs of the desk for a highlighting step: the form for its note, new or taken
  * up (none while it is docked at the foot of a page); the note in hand, if any; and the way to take
- * a note up. The notes themselves are in the poem, where a tap takes one up. */
+ * a note up, from the card's list or by a tap on it in the poem. */
 export interface NotesHandle {
   form: ReactNode
   inHand: string | null
   onTakeUp: (index: number) => void
 }
 
-/** The third part of the margin, for a step: the step as the reader will see it, in the praxis bar,
- * its stage's name over it and its prose written in place; then one sentence for what the reader
- * does next, which is the part the step asks besides its prose, and what that part is about. A
- * highlighting step's notes are in the poem: its card has only the form for a note, and those of its
- * notes with something wrong, to be taken up and put right. In its corner, moving it and removing
- * it, asked first. Highlighting chosen before any note is written is held by the margin
- * (`highlighting`), since a step with no notes does not highlight; leaving it while the step has
- * notes asks first, as the notes go. */
+/** The card for a step, set as the reader will see it in the praxis bar: its stage's name, where
+ * it is in the stage, and its prose, written in a box at the size it is read; then one sentence for
+ * what the reader does next, which is the part the step asks besides its prose, and what that part
+ * is about. A highlighting step lists its notes, each with what is wrong with it, to be taken up and
+ * edited, and then the form for a note. In its corner, moving it and removing it, asked first.
+ * Highlighting chosen before any note is written is held by the desk (`highlighting`), since a step
+ * with no notes does not highlight; leaving it while the step has notes asks first, as the notes
+ * go. */
 export function StepCard({
   practice,
   at,
@@ -64,6 +63,7 @@ export function StepCard({
   notes: NotesHandle
 }) {
   const then = useId()
+  const proseBox = useId()
   const [removing, setRemoving] = useState(false)
   const [leaving, setLeaving] = useState<PartName | "none" | null>(null)
   const stage = practice.stages[at.stage]
@@ -120,13 +120,25 @@ export function StepCard({
       className="praxis-bar form-card"
       aria-label={`Step ${at.step + 1} of stage ${romanOf(at.stage + 1)}`}
     >
-      <CardHead
-        heading={stage.name.trim() === "" ? `Stage ${romanOf(at.stage + 1)}` : stage.name}
+      <CardTools
         what={`step ${at.step + 1}`}
         onUp={above === null ? null : () => edit({ kind: "moveStep", from: at, to: above })}
         onDown={below === null ? null : () => edit({ kind: "moveStep", from: at, to: below })}
         onRemove={() => setRemoving(true)}
       />
+      <div className="praxis-head">
+        <h2 className="praxis-heading">
+          {stage.name.trim() === "" ? `Stage ${romanOf(at.stage + 1)}` : stage.name}
+        </h2>
+        <span className="praxis-position">
+          step {at.step + 1} of {stage.steps.length}
+        </span>
+      </div>
+      <div className="praxis-steps" aria-hidden="true">
+        {stage.steps.map((_, i) => (
+          <i key={i} data-at={i < at.step ? "done" : i === at.step ? "here" : "ahead"} />
+        ))}
+      </div>
       {removing && (
         <Confirm
           question={`Remove step ${at.step + 1} of stage ${romanOf(at.stage + 1)}?`}
@@ -139,10 +151,19 @@ export function StepCard({
         />
       )}
 
-      <ProseBox
-        prose={step.prose}
-        onChange={(paragraphs) => edit({ kind: "setProse", at, prose: paragraphs })}
-      />
+      <div>
+        <div className="form-field-head">
+          <label className="form-label" htmlFor={proseBox}>
+            the reader is told
+          </label>
+          <span className="form-hint">A blank line starts a paragraph.</span>
+        </div>
+        <ProseBox
+          id={proseBox}
+          prose={step.prose}
+          onChange={(paragraphs) => edit({ kind: "setProse", at, prose: paragraphs })}
+        />
+      </div>
 
       <p className="form-then">
         <span id={then}>Then the reader</span>{" "}
@@ -195,7 +216,7 @@ export function StepCard({
 
       {part === "highlight" && (
         <>
-          <WrongNotes
+          <StepNotes
             notes={step.highlight}
             inHand={notes.inHand}
             substrate={substrate}
@@ -223,9 +244,11 @@ export function StepCard({
  * draft its paragraphs; whenever the draft's paragraphs are not what the box says, as when the draft
  * changes elsewhere, it shows the draft's. */
 function ProseBox({
+  id,
   prose,
   onChange,
 }: {
+  id: string
   prose: readonly string[]
   onChange: (prose: string[]) => void
 }) {
@@ -233,11 +256,11 @@ function ProseBox({
   const shown = sameParagraphs(paragraphsOf(text), prose) ? text : proseText(prose)
   return (
     <textarea
+      id={id}
       className="form-prose"
-      aria-label="What the reader is told at this step"
       rows={3}
       value={shown}
-      placeholder="What the reader is told at this step. A blank line starts a new paragraph."
+      placeholder="What the reader is told at this step"
       onChange={(event) => {
         setText(event.target.value)
         const paragraphs = paragraphsOf(event.target.value)
@@ -307,10 +330,11 @@ function RecallFrom({
   )
 }
 
-/** The step's notes with something wrong, which the poem may not show, or not show as wrong: each
- * by its lemma, or its notehead when it cannot be placed, with what is wrong, and Edit, which takes
- * it up to be put right. The note in hand is left out. Nothing, when none is wrong. */
-function WrongNotes({
+/** The step's notes, as the margin prints them: each by its lemma, or its notehead when it cannot
+ * be placed, then its words, cut at three lines, its notehead, Edit, which takes it up to be put
+ * right, and what is wrong with it, if anything. The note in hand is being written in the form
+ * under the list, and is left out. Nothing, when the step has no notes but the one in hand. */
+function StepNotes({
   notes,
   inHand,
   substrate,
@@ -323,29 +347,53 @@ function WrongNotes({
   problems: readonly Problem[]
   onTakeUp: (index: number) => void
 }) {
-  const wrong = notes
+  const heading = useId()
+  const listed = notes
     .map((note, n) => ({ note, n, problems: problems.filter((p) => p.note === n) }))
-    .filter(({ note, problems: found }) => note.id !== inHand && found.length > 0)
-  if (wrong.length === 0) return null
+    .filter(({ note }) => note.id !== inHand)
+  if (listed.length === 0) return null
   const placed = notesFor(substrate, annotationsOf(substrate, notes)).notes
   return (
-    <ul className="form-wrong-notes">
-      {wrong.map(({ note, n, problems: found }) => {
-        const lemma = placed.find((each) => each.id === note.id)
-        return (
-          <li key={`${n}:${note.id}`}>
-            <p className="form-lemma">
-              {lemma === undefined ? <code>{note.notehead}</code> : <Lemma lemma={lemma.lemma} />}
-            </p>
-            {found.map((problem, i) => (
-              <p key={i} className="form-problem">
-                {problem.text}
+    <div>
+      <div className="form-list-head">
+        <h3 className="form-label" id={heading}>
+          the editor’s notes · {notes.length}
+        </h3>
+        <span className="form-hint">Or tap a note in the poem</span>
+      </div>
+      <ul className="form-notes" aria-labelledby={heading}>
+        {listed.map(({ note, n, problems: found }) => {
+          const lemma = placed.find((each) => each.id === note.id)
+          const words = lemma?.lemma.map((part) => part.text).join(" · ") ?? note.notehead
+          return (
+            <li key={`${n}:${note.id}`} className="form-note">
+              <p className="form-lemma">
+                {lemma === undefined ? <code>{note.notehead}</code> : <Lemma lemma={lemma.lemma} />}
+                <span className="note-close-mark" aria-hidden="true">
+                  {" ]"}
+                </span>
               </p>
-            ))}
-            <Button onClick={() => onTakeUp(n)}>Edit</Button>
-          </li>
-        )
-      })}
-    </ul>
+              {note.body.trim() !== "" && <p className="form-note-body">{note.body}</p>}
+              <div className="form-note-foot">
+                <code className="form-notehead">{note.notehead}</code>
+                <button
+                  type="button"
+                  className="form-tool"
+                  aria-label={`Edit the note on ${words}`}
+                  onClick={() => onTakeUp(n)}
+                >
+                  edit
+                </button>
+              </div>
+              {found.map((problem, i) => (
+                <p key={i} className="form-problem">
+                  {problem.text}
+                </p>
+              ))}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }

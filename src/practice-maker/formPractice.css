@@ -1,40 +1,193 @@
 /* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
 
-/* A wider margin than the Reader's: it holds the practice being made, not a note */
-.folio.form-practice[data-layout="spread"] {
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
+/* The desk. On a page: the top bar, the reel, the poem and the card, one under another */
+.folio.form-practice {
+  grid-template-areas: "top" "reel" "text" "card";
+  padding-top: 0;
+  padding-inline: 0;
 }
 
-.form-practice .margin {
-  gap: 1.5rem;
+.form-practice[data-layout="page"] .form-reel,
+.form-practice[data-layout="page"] .form-card-column {
+  padding-inline: 16px;
 }
 
-/* On a page, the margin's parts under the poem */
-.form-parts {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.form-practice[data-layout="page"] .folio-text {
+  padding: 1.5rem 16px 0 3rem;
+}
+
+.form-practice[data-layout="page"] .form-card-column {
   margin-top: 2.5rem;
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
-  line-height: 1.5;
 }
 
-/* "Read", at the right of the top bar: quiet, like the way back */
+/* On a spread: the bar across the top, and three columns under it, the poem's between hairlines.
+   The reel and the card stay in view and scroll on their own, never the poem */
+.folio.form-practice[data-layout="spread"] {
+  grid-template-columns: 19.5rem minmax(0, 1fr) 25.5rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas: "top top top" "reel text card";
+  column-gap: 0;
+  max-width: none;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+}
+
+.form-practice[data-layout="spread"] .folio-text {
+  padding: 1.5rem 2rem 4rem 3rem;
+  border-inline: 1px solid var(--line);
+}
+
+.form-practice[data-layout="spread"] .form-reel,
+.form-practice[data-layout="spread"] .form-card-column {
+  align-self: start;
+  position: sticky;
+  top: 0;
+  max-height: 100dvh;
+  overflow-y: auto;
+}
+
+/* With nothing to scroll, a column would hold the scrolls over it and do nothing with them */
+.form-practice[data-layout="spread"] .form-reel[data-scrolls="true"],
+.form-practice[data-layout="spread"] .form-card-column[data-scrolls="true"] {
+  overscroll-behavior: contain;
+}
+
+.form-practice[data-layout="spread"] .form-reel {
+  padding: 1.5rem 1.5rem 3rem 1.75rem;
+}
+
+.form-practice[data-layout="spread"] .form-card-column {
+  padding: 1.5rem 2rem 3rem;
+}
+
+/* A spread too narrow for three columns: the reel over the card, beside the poem */
+@media (max-width: 74.99rem) {
+  .folio.form-practice[data-layout="spread"] {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: "top top" "text reel" "text card";
+  }
+
+  .form-practice[data-layout="spread"] .folio-text {
+    border-inline-start: 0;
+  }
+
+  .form-practice[data-layout="spread"] .form-reel {
+    position: static;
+    max-height: 40dvh;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+.form-reel {
+  grid-area: reel;
+}
+
+.form-card-column {
+  grid-area: card;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.53;
+}
+
+/* The line over the poem, saying what it shows */
+.form-practice .folio-top {
+  justify-content: center;
+  margin: 0 0 2rem;
+}
+
+.form-caption {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* Words for assistive technology only */
+.form-said {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Small capitals: the editor's labels, the tools, the words of the top bar */
+.form-what,
+.form-dev,
+.form-read,
+.form-tool,
+.form-label,
+.form-numeral,
+.form-compose-what,
+.anatomy-part,
+.form-fold summary {
+  font-family: var(--font-caps);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+/* 1. The top bar: the way back, what this is (and that it is a tool), and saving */
+.form-top {
+  grid-area: top;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-ui);
+}
+
+.form-top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.375rem 1.5rem 0.375rem 1.25rem;
+}
+
+.form-what {
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.form-dev {
+  padding: 0 0.4375rem 0.125rem;
+  border: 1px dashed var(--line-hover);
+  border-radius: var(--radius-note);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.form-spacer {
+  flex: 1;
+}
+
+.form-status {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
 .form-read {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding-inline: 0.75rem;
+  padding-inline: 0.5rem;
   border-radius: var(--radius-note);
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--ink-muted);
   text-decoration: none;
 }
 
 .form-read:hover {
   color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 .form-read:focus-visible {
@@ -42,33 +195,95 @@
   outline-offset: 2px;
 }
 
-/* What is not yet written, and what is written wrong */
+/* What the bar has to say or ask, under it at the right, under the buttons it follows from */
+.form-top > .form-problem,
+.form-top > .form-confirm {
+  max-width: 34rem;
+  margin: 0 1.5rem 0.875rem auto;
+}
+
+.form-next {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.form-next:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* On a page, the bar's words over two rows: where the draft stands goes under the rest */
+.form-practice[data-layout="page"] .form-top-bar {
+  padding-inline: 8px;
+}
+
+/* The last row: where the draft stands, and the light toggle at its right */
+.form-practice[data-layout="page"] .form-status {
+  order: 1;
+  flex: 1 1 calc(100% - 4rem);
+  padding: 0 0.5rem 0.25rem;
+}
+
+.form-practice[data-layout="page"] .light-toggle {
+  order: 2;
+}
+
+.form-practice[data-layout="page"] .form-top > .form-problem,
+.form-practice[data-layout="page"] .form-top > .form-confirm {
+  margin-inline: 16px;
+}
+
+/* What is not yet written, and what is written wrong: said where it is, after a ringed mark */
 .form-missing {
   color: var(--ink-faint);
   font-style: italic;
 }
 
 .form-problem {
+  display: flex;
+  gap: 0.5rem;
   margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.43;
   color: var(--problem);
 }
 
-.form-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.form-problem::before {
+  content: "!";
+  flex: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid var(--problem);
+  border-radius: 50%;
+  font-family: var(--font-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 15px;
+  text-align: center;
 }
 
-/* Words written in place, where they will be read: no box, the focus ring only when typing */
+/* Words written in place, where they will be read */
 .form-title,
-.form-stage-name,
-.form-prose {
+.form-stage-name {
+  box-sizing: border-box;
   width: 100%;
-  padding: 0;
+  padding: 0 0 0.25rem;
   border: 0;
-  border-radius: 2px;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
   background: none;
   color: var(--ink);
+  font-family: var(--font-text);
 }
 
 .form-title::placeholder,
@@ -78,50 +293,34 @@
   font-style: italic;
 }
 
+.form-title:hover,
+.form-title:focus {
+  border-bottom-color: var(--line-hover);
+}
+
 .form-title:focus-visible,
-.form-stage-name:focus-visible,
-.form-prose:focus-visible {
+.form-stage-name:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 4px;
 }
 
-/* 1. The practice's name, as the library's heading is set, with what there is to do beside it */
-.form-title-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
+/* 2. The reel: the practice's name, the poem it is on, and the contents */
 .form-title {
-  flex: 1;
-  min-width: 12rem;
-  font-family: var(--font-text);
   font-size: 1.5rem;
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
-.form-save:not(:disabled) {
-  border-color: var(--edge-selected);
+.form-on {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ink-muted);
 }
 
-.form-head .form-problem,
-.form-head .form-confirm {
-  margin-top: 0.75rem;
-}
-
-/* 2. The reel's contents, as a book's: stages by their numerals, steps under them by their numbers,
-   in the poem's face. On a spread it keeps to its share of the margin, so the card stays in reach */
 .anatomy {
-  font-family: var(--font-text);
-}
-
-.form-practice .margin .anatomy {
-  flex: none;
-  max-height: 45dvh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  margin-top: 1.25rem;
 }
 
 .anatomy ol {
@@ -131,17 +330,17 @@
 }
 
 .anatomy-stage + .anatomy-stage {
-  margin-top: 0.75rem;
+  margin-top: 0.875rem;
 }
 
-.anatomy-entry {
+.anatomy-entry,
+.form-stage-step {
   display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr);
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+  column-gap: 0.5rem;
   align-items: baseline;
   width: 100%;
-  padding: 0.125rem 0.25rem;
   border: 0;
-  border-radius: 2px;
   background: none;
   color: var(--ink);
   font: inherit;
@@ -149,161 +348,228 @@
   cursor: pointer;
 }
 
-.anatomy-entry:hover .anatomy-text {
-  text-decoration: underline;
-  text-decoration-color: var(--line-hover);
-  text-underline-offset: 3px;
+.anatomy-entry {
+  box-sizing: content-box;
+  margin-inline: -0.5rem;
+  padding: 0.3125rem 0.5rem;
+  border-radius: var(--radius-note);
 }
 
-/* The stage or step selected: picked out as a passage is in the poem */
+.anatomy-entry:hover {
+  background: var(--surface);
+}
+
+/* The stage or step selected: on a sunk ground, its number in red */
 .anatomy-entry[aria-current="true"] {
-  background: var(--fill-editor);
+  background: var(--paper-sunk);
 }
 
-.anatomy-entry:focus-visible {
+.anatomy-entry[aria-current="true"] .anatomy-number {
+  color: var(--rubric);
+}
+
+.anatomy-entry:focus-visible,
+.form-stage-step:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
-.anatomy-stage-entry {
-  font-size: 1.05rem;
-}
-
-.anatomy-step-entry {
-  font-size: 0.95rem;
-}
-
 .anatomy-number {
-  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
   font-variant-numeric: tabular-nums;
 }
 
-.anatomy-step-entry .anatomy-number {
-  color: var(--ink-faint);
-}
-
-.anatomy-entry[data-broken="true"] .anatomy-number {
-  color: var(--problem);
+.anatomy-stage-entry .anatomy-number {
+  font-family: var(--font-caps);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
 }
 
 .anatomy-text {
   overflow: hidden;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.43;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.anatomy-stage-entry .anatomy-text {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.375;
+}
+
+.anatomy-part {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* Something written wrong: the number, a mark after it, and the part, in the colour of a problem */
+.anatomy-entry[data-broken="true"] .anatomy-number,
+.anatomy-entry[data-broken="true"] .anatomy-part {
+  color: var(--problem);
+}
+
+.anatomy-mark {
+  margin-left: 2px;
+  font-family: var(--font-text);
+  font-weight: 500;
+  color: var(--problem);
+}
+
+/* When a stage opens: under its name */
+.anatomy-opens {
+  margin: -0.125rem 0 0.125rem 2.25rem;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ink-faint);
+}
+
+.anatomy .anatomy-steps {
+  margin-top: 0.125rem;
 }
 
 /* The next step, and the next stage, not yet written: faint, like a line waiting to be written */
 .anatomy-new .anatomy-number,
 .anatomy-new .anatomy-text {
   color: var(--ink-faint);
+}
+
+.anatomy-new .anatomy-text {
   font-style: italic;
-  opacity: 0.75;
 }
 
-.anatomy-new:hover .anatomy-number,
 .anatomy-new:hover .anatomy-text {
-  opacity: 1;
-}
-
-.anatomy .anatomy-steps {
-  padding-left: 2.25rem;
-}
-
-/* When a stage opens: under its name, as a poet is under a title in the library */
-.anatomy-opens {
-  margin: 0 0 0.125rem 2.5rem;
-  font-family: var(--font-ui);
-  font-size: 0.84rem;
-  letter-spacing: 0.02em;
   color: var(--ink-muted);
 }
 
-/* 3. The card: the praxis bar, as the reader will see it, written in place. Its heading, and in its
-   corner, where an open note has its ×, moving and removing */
-.form-card-head {
+/* On a page, the contents folded under the name */
+.form-fold {
+  margin-top: 1rem;
+  border-block: 1px solid var(--line);
+}
+
+.form-fold summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin: -0.5rem -0.5rem -0.25rem 0;
-}
-
-.form-icons {
-  display: flex;
-  flex: none;
-}
-
-/* Finger-sized, quiet like the open note's × */
-.form-icon {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-note);
-  background: none;
+  min-height: 44px;
+  font-size: 0.9375rem;
   color: var(--ink-muted);
   cursor: pointer;
 }
 
-.form-icon:hover:not(:disabled) {
+.form-fold summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.form-fold .anatomy {
+  margin: 0.25rem 0 1rem;
+}
+
+/* 3. The card: the stage or step, set as the reader will see it, written in place. In its top
+   corner, moving and removing, in words */
+.form-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin: -0.5rem -0.5rem -0.5rem 0;
+}
+
+.form-tool {
+  min-height: 32px;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: var(--radius-note);
+  background: none;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.form-tool:hover:not(:disabled) {
+  background: var(--surface);
   color: var(--ink);
 }
 
-.form-icon:disabled {
-  color: var(--ink-faint);
-  opacity: 0.35;
+.form-tool:disabled {
+  color: var(--line-hover);
   cursor: default;
 }
 
-.form-icon:focus-visible {
+.form-tool:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: -4px;
+  outline-offset: 2px;
 }
 
 @media (pointer: coarse) {
-  .form-icon {
-    width: 44px;
-    height: 44px;
+  .form-tool {
+    min-height: 44px;
   }
 }
 
+.form-label {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.form-hint {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ink-faint);
+}
+
+.form-field-head,
+.form-list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.form-field-head {
+  margin-bottom: 0.375rem;
+}
+
+.form-list-head {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* The step's prose, in a box, at the size the reader reads it */
 .form-prose {
-  min-height: 4.5em;
-  font: inherit;
-  line-height: 1.5;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 6rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  line-height: 1.53;
   resize: none;
   field-sizing: content;
 }
 
-.form-stage-name {
-  font-family: var(--font-text);
-  font-size: 1.2rem;
-  line-height: 1.3;
-}
-
-.form-opens {
-  margin: 0;
-  color: var(--ink-muted);
-}
-
-.form-days {
-  width: 3.5rem;
-  padding: 0.125rem 0.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-note);
-  background: var(--page);
-  color: var(--ink);
-  font: inherit;
-  text-align: center;
-}
-
-.form-days:hover {
+.form-prose:hover {
   border-color: var(--line-hover);
 }
 
-.form-days:focus-visible {
+.form-prose:focus-visible {
+  border-color: var(--line-hover);
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -311,40 +577,31 @@
 /* What the reader does next, as one sentence, its choices written into it */
 .form-then {
   margin: 0;
+  font-size: 1.0625rem;
+  line-height: 30px;
   color: var(--ink-muted);
-  line-height: 2;
 }
 
-/* Folded up, the note's form is one button: Add a note */
-.form-add-note {
-  align-self: flex-start;
-}
-
-.form-remove-note {
-  margin-right: auto;
-}
-
-/* A step's notes with something wrong, which the poem may not show */
-.form-wrong-notes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+/* The step's notes, as the margin prints them */
+.form-notes {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.form-wrong-notes li {
+.form-note {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 0.25rem;
-  padding-left: 0.75rem;
-  border-left: 3px solid var(--problem);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .form-lemma {
   margin: 0;
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 
 .form-lemma q {
@@ -352,22 +609,182 @@
   font-style: italic;
 }
 
+.form-note-body {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  white-space: pre-line;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.form-note-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.form-note-foot .form-tool {
+  margin-right: -0.5rem;
+}
+
+.form-notehead,
+.form-lemma code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  overflow-wrap: anywhere;
+}
+
+/* Folded up, the note's form is one button: Add a note */
+.form-add-note {
+  align-self: flex-start;
+}
+
+/* A note being written: the editor's hand at work, in a panel of its own */
+.form-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--line-hover);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+}
+
+.form-compose-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.form-compose-what {
+  font-size: 0.9375rem;
+  color: var(--rubric);
+}
+
+.form-compose .noting-page {
+  padding: 0;
+  border: 0;
+}
+
+.form-compose .text-box {
+  background: var(--page);
+}
+
+.form-remove-note {
+  margin-right: auto;
+}
+
 /* The note's form docked at the foot of a page: a long box scrolls inside the dock */
+.dock .form-compose {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
 .dock .noting-page .text-box {
   max-height: 20dvh;
 }
 
-/* A question asked in place */
+/* The poem while a note is being written: its passages chosen in the editor's colours, and the
+   step's other notes put back to a hairline, so the new one stands out */
+.form-practice .line-text [data-chosen="true"] {
+  background: var(--fill-editor);
+  box-shadow: inset 0 -1.5px var(--rubric);
+}
+
+.form-practice:has(.form-compose) .line-text mark {
+  background: none;
+  box-shadow: inset 0 -1px var(--line-hover);
+}
+
+/* A stage: its numeral, its name written in place, when it opens, and its steps */
+.form-stage-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-numeral {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--rubric);
+}
+
+.form-stage-name {
+  padding-bottom: 0.375rem;
+  border-bottom-color: var(--line-hover);
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.form-opens {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 30px;
+  color: var(--ink);
+}
+
+.form-days {
+  box-sizing: border-box;
+  width: 3.2em;
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--line-hover);
+  border-radius: var(--radius-note);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.form-days:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.form-stage-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-stage-steps li {
+  border-bottom: 1px solid var(--line);
+}
+
+.form-stage-step {
+  padding: 0.4375rem 0;
+}
+
+.form-stage-step:hover .anatomy-text {
+  text-decoration: underline;
+  text-decoration-color: var(--line-hover);
+  text-underline-offset: 3px;
+}
+
+/* A question asked in place, before something that cannot be undone */
 .form-confirm {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.25rem 0 0.25rem 0.75rem;
-  border-left: 3px solid var(--line-hover);
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--line-hover);
+  border-radius: var(--radius-note);
+  background: var(--paper-sunk);
+  font-family: var(--font-ui);
 }
 
 .form-confirm p {
   margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
 }
 
 .form-confirm-buttons {
@@ -376,5 +793,6 @@
 }
 
 .form-confirm-yes {
-  border-color: var(--problem);
+  border-color: var(--rubric);
+  color: var(--rubric);
 }

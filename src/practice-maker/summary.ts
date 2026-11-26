@@ -105,6 +105,26 @@ export function partLabel(practice: Practice, step: Parts): string | null {
   }
 }
 
+/** The part of a step in a word or two, for the reel's contents, beside its prose: "1 note", "3
+ * notes", "write", "recall"; null for a step that asks nothing more. */
+export function partWord(step: Parts): string | null {
+  const part = partOf(step)
+  switch (part) {
+    case "highlight": {
+      const n = step.highlight.length
+      return `${n} ${n === 1 ? "note" : "notes"}`
+    }
+    case "writing":
+      return "write"
+    case "recall":
+      return "recall"
+    case null:
+      return null
+    default:
+      return assertNever(part)
+  }
+}
+
 /** What a recall names, in the fewest words: "Stage 1", "Stage 1, step 10". */
 function recallShort(practice: Practice, recall: Recall): string {
   switch (recall.from) {

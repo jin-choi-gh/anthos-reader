@@ -1,28 +1,83 @@
 /* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
 
-/* The praxis bar: the frame's heading, the scene's prose, then the frame's Back and Next. Where the
+/* The praxis bar: a column of the margin, under its rule, not a box. The frame's heading and the
+   step's position, the step's part, the scene's prose, then the frame's Back and Next. Where the
    bar sits is the layout's business; this only arranges its inside */
 .praxis-bar {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-note);
-  background: var(--surface);
+  gap: 1rem;
   font-family: var(--font-ui);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.9375rem;
+  line-height: 1.53;
 }
 
-/* The stage's name, or the practice's title in the final stage: a quiet label over the prose */
+/* The stage's name, and where the step is in it */
+.praxis-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .praxis-heading {
   margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-family: var(--font-caps);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
   color: var(--ink-muted);
+}
+
+.praxis-position {
+  flex: none;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+/* The stage's steps as a row of short rules: done, here, ahead */
+.praxis-steps {
+  display: flex;
+  gap: 3px;
+  margin-top: -0.5rem;
+}
+
+.praxis-steps i {
+  flex: 1;
+  height: 2px;
+  background: var(--line);
+}
+
+.praxis-steps i[data-at="done"] {
+  background: var(--ink-muted);
+}
+
+.praxis-steps i[data-at="here"] {
+  height: 3px;
+  margin-top: -0.5px;
+  background: var(--rubric);
+}
+
+/* What the step asks, named after a pilcrow, in the editor's red */
+.praxis-asks {
+  margin: 0;
+  font-family: var(--font-caps);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--rubric);
+}
+
+.praxis-asks span {
+  font-family: var(--font-text);
+}
+
+/* The editor's words: what the reader reads first */
+.praxis-prose {
+  font-size: 1.0625rem;
+  line-height: 1.53;
+  color: var(--ink);
 }
 
 .praxis-prose p {
@@ -33,19 +88,62 @@
   margin-top: 0.5em;
 }
 
+/* At a rest, the book's own section break */
+.praxis-dinkus {
+  margin: 0.5rem 0;
+  font-family: var(--font-text);
+  font-size: 1.375rem;
+  letter-spacing: 0.6em;
+  text-indent: 0.6em;
+  text-align: center;
+  color: var(--rubric);
+}
+
+/* The final stage: a colophon. The practice's title, then its last word */
+.praxis-bar[data-colophon="true"] {
+  align-items: center;
+  text-align: center;
+}
+
+.praxis-bar[data-colophon="true"] .praxis-heading {
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.praxis-bar[data-colophon="true"] .praxis-prose {
+  font-family: var(--font-caps);
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--rubric);
+}
+
+.praxis-bar[data-colophon="true"] > :not(.praxis-head, .praxis-prose) {
+  align-self: stretch;
+  text-align: start;
+}
+
 /* The notebook page: what the reader writes, in the reader's own colour, apart from the editor's */
 .notebook-page {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-left: 0.75rem;
-  border-left: 3px solid var(--edge-reader);
+}
+
+/* What the reader is asked to write: labelled in the reader's own ink */
+.notebook-page .field-label {
+  color: var(--reader-ink);
 }
 
 /* A written note's passages, above its words, as the table of chosen passages quotes them */
 .notebook-lemma {
   margin: 0;
-  color: var(--ink);
+  font-family: var(--font-text);
+  color: var(--ink-muted);
 }
 
 .notebook-lemma q {
@@ -55,7 +153,10 @@
 
 .notebook-written {
   font-family: var(--font-text);
-  font-size: 1rem;
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.53;
+  color: var(--reader-ink);
   overflow-wrap: anywhere;
 }
 
@@ -74,7 +175,8 @@
 }
 
 .notebook-submit:not(:disabled) {
-  border-color: var(--edge-reader);
+  color: var(--reader-ink);
+  border-color: var(--reader-ink);
 }
 
 /* Back at the start, Next at the end, and why Next is refused between them. Each has its own
@@ -85,15 +187,24 @@
   grid-template-areas: "back why next";
   align-items: center;
   gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
 }
 
 .praxis-back {
   grid-area: back;
 }
 
+.praxis-back span,
+.praxis-next span {
+  font-family: var(--font-text);
+}
+
 .praxis-why {
   grid-area: why;
   margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
   text-align: center;
   color: var(--ink-muted);
 }
@@ -103,10 +214,19 @@
 }
 
 .dock .praxis-bar {
-  border: 0;
+  gap: 0.75rem;
+  background: var(--surface);
   border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
   box-shadow: var(--shadow-sheet);
   padding: 1rem 16px calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+.dock .praxis-prose {
+  font-size: 1rem;
+}
+
+.dock .praxis-controls {
+  padding-top: 0.75rem;
 }
 
 /* Long prose scrolls inside the bar, so Back and Next stay in reach */
@@ -121,9 +241,25 @@
   align-self: flex-start;
 }
 
+.noting-toggle::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.5em;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  vertical-align: 1px;
+}
+
 .noting-toggle[aria-pressed="true"] {
-  border-color: var(--accent);
+  color: var(--reader-ink);
+  border-color: var(--reader-ink);
   background: var(--fill-chosen);
+}
+
+.noting-toggle[aria-pressed="true"]::before {
+  background: currentColor;
 }
 
 .noting-targets {
@@ -141,7 +277,9 @@
   gap: 0.75rem;
   padding: 0.375rem 0;
   border-bottom: 1px solid var(--line);
-  color: var(--ink);
+  font-family: var(--font-text);
+  font-style: italic;
+  color: var(--reader-ink);
 }
 
 .noting-lemma q {
@@ -149,22 +287,27 @@
   font-style: italic;
 }
 
-/* − : a round button in the accent colour */
+/* − : a small square on a hairline, in the hand of whoever is writing */
 .noting-remove {
   flex: none;
   display: inline-grid;
   place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-family: var(--font-ui);
+  border: 1px solid var(--line-hover);
+  border-radius: var(--radius-note);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-text);
+  font-style: normal;
   font-size: 1.125rem;
   line-height: 1;
   cursor: pointer;
+}
+
+.noting-remove:hover {
+  border-color: var(--accent);
 }
 
 .noting-remove:focus-visible {
@@ -177,4 +320,23 @@
   max-height: 20dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* The editor's note, in Form Practice: chosen in the editor's red, written in roman */
+.noting-page[data-hand="editor"] .field-label {
+  color: var(--ink-muted);
+}
+
+.noting-page[data-hand="editor"] .noting-toggle[aria-pressed="true"] {
+  color: var(--rubric);
+  border-color: var(--rubric);
+  background: transparent;
+}
+
+.noting-page[data-hand="editor"] .noting-target {
+  color: var(--ink);
+}
+
+.noting-page[data-hand="editor"] .noting-remove {
+  color: var(--rubric);
 }

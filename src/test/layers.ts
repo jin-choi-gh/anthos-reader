@@ -45,9 +45,9 @@ export const LAYERS: Readonly<Record<string, readonly string[]>> = {
     "components",
     "app",
   ],
-  library: ["loom", "app"],
+  library: ["material", "loom", "app"],
   components: [], // what more than one part draws with
-  app: ["library", "reader", "practice-maker"], // App, main, the route
+  app: ["library", "reader", "practice-maker", "storage", "components"], // App, main, the route, the light
 }
 
 /** The layer a source file belongs to, by its path from the root ("/src/runner/gate.ts"): the

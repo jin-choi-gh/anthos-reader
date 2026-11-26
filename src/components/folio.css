@@ -10,9 +10,9 @@
 
 /* C: spread */
 .folio[data-layout="spread"] {
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
   grid-template-areas: "text margin";
-  column-gap: 4rem;
+  column-gap: 2rem;
   max-width: 72rem;
   margin-inline: auto;
   padding-inline: 3rem;
@@ -42,6 +42,12 @@
   margin: -2rem 0 1rem -0.5rem;
 }
 
+/* What is at the right of the top bar, side by side */
+.folio-tools {
+  display: flex;
+  align-items: center;
+}
+
 /* Page layout: what scrolls into view stops above the sheet, not behind it */
 html:has(.folio[data-layout="page"]) {
   scroll-padding-bottom: calc(var(--sheet-handle) + 1rem);
@@ -62,8 +68,8 @@ html {
   max-width: 100%;
   margin-inline: auto;
   font-family: var(--font-text);
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: 1.1875rem;
+  line-height: 1.58;
 }
 
 /* "Loading…" and load errors: in the interface's face and size, not the poem's, like the library's */
@@ -107,4 +113,9 @@ html:has(.folio[data-layout="page"] .dock) {
 
 html:has(.folio[data-layout="page"] .dock):has(.bottom-sheet) {
   scroll-padding-bottom: calc(var(--dock-height, 0px) + var(--sheet-handle, 3rem) + 1rem);
+}
+
+/* The sheet open: what scrolls into view stops above the whole of it, not its handle */
+html:has(.folio[data-layout="page"] .dock):has(.bottom-sheet[data-open="true"]) {
+  scroll-padding-bottom: calc(var(--dock-height, 0px) + var(--sheet-height, 45dvh) + 1rem);
 }

@@ -1,0 +1,130 @@
+/* The Anthos theme: a printed edition read with a pencil. Unbleached paper and ink; the editor's
+   hand in a rubricator's red; the reader's in an iron-gall indigo; the words an open note is about
+   under an ochre gloss. The reader's tokens keep their names, so components need no others; five
+   roles are added. Lamplight, the dark theme, follows the system's preference until the reader
+   chooses. The faces are served with the app (SIL Open Font License, beside them in fonts/). */
+
+@font-face {
+  font-family: "Literata";
+  src: url("./fonts/literata-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Literata";
+  src: url("./fonts/literata-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Literata";
+  src: url("./fonts/literata-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("./fonts/alegreya-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("./fonts/alegreya-sans-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("./fonts/alegreya-sans-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya Sans SC";
+  src: url("./fonts/alegreya-sans-sc-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Each colour is a pair: paper's, then Lamplight's. The system's preference says which, unless the
+   reader has chosen: then the document is marked with the choice. */
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-light="light"] {
+  color-scheme: light;
+}
+
+:root[data-light="dark"] {
+  color-scheme: dark;
+}
+
+:root {
+  /* Grounds */
+  --page: light-dark(#f6f1e7, #1b1815); /* laid paper, behind everything */
+  /* paper laid on paper: docks, sheets, the list a choice opens */
+  --surface: light-dark(#fbf8f1, #24201c);
+  /* a gap in the page: writing boxes, a question asked in place */
+  --paper-sunk: light-dark(#ece5d6, #141210);
+
+  /* Text */
+  --ink: light-dark(#231f1a, #ece4d6); /* the poem and body text: 14.5:1 */
+  --ink-muted: light-dark(#5f574d, #b3a998); /* the poet line, labels: 5.3:1 */
+  --ink-faint: light-dark(#776d60, #8f8676); /* line numbers, counters: 4.5:1, the floor for text */
+
+  /* Lines */
+  --line: light-dark(#d9cfbe, #3a342d); /* hairline rules, never the only edge of a control */
+  --line-hover: light-dark(#8f8473, #7a7062); /* the edge of a control or a field: 3.3:1 */
+
+  /* The editor's hand */
+  /* the pilcrow, the ] after a lemma, the primary action: 9.2:1 */
+  --rubric: light-dark(#a8321e, #e8836b);
+  /* the gloss: the words an open editor's note is about */
+  --fill-editor: light-dark(#ecdba9, #4d4022);
+  --edge-selected: light-dark(#a8321e, #e8836b); /* the open note's underline: the rubric */
+
+  /* The reader's hand */
+  --reader-ink: light-dark(#2f3e6b, #a9b8ec); /* everything the reader writes or chooses: 9.2:1 */
+  --edge-reader: light-dark(#2f3e6b, #a9b8ec);
+  --fill-chosen: light-dark(#dde2f0, #2a3150); /* passages the reader chose */
+  /* the reader's controls, such as − beside a chosen passage */
+  --accent: light-dark(#2f3e6b, #a9b8ec);
+  --on-accent: light-dark(#f6f1e7, #1b1815);
+
+  /* What must be put right, in Form Practice: a dark amber, told from the rubric by lightness too */
+  --problem: light-dark(#8a5a00, #e0b45a);
+  --problem-wash: light-dark(#f3e6c4, #3d3016);
+
+  /* Interaction */
+  --focus: light-dark(#3a4f8f, #b9c6f2); /* the keyboard focus ring: 6.9:1 */
+  --selection: light-dark(#dde2f0, #2a3150);
+  --selection-ink: light-dark(#231f1a, #ece4d6);
+
+  /* Faces */
+  --font-text: "Literata", "Iowan Old Style", Georgia, serif; /* the poem, and the reader's hand */
+  --font-ui:
+    "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif; /* the editor's prose */
+  --font-caps: "Alegreya Sans SC", "Alegreya Sans", system-ui, sans-serif; /* labels and buttons */
+
+  /* Shape and depth */
+  --radius-note: 2px; /* every control and field */
+  --radius-sheet: 10px; /* the top of a dock or sheet on a phone */
+  --shadow-sheet: 0 -1px 0 light-dark(#d9cfbe, #3a342d); /* a hairline above a dock, not a cloud */
+  /* the list a choice opens */
+  --shadow-popup: 0 6px 14px light-dark(rgb(35 31 26 / 0.16), rgb(0 0 0 / 0.55));
+}

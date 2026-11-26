@@ -1,0 +1,26 @@
+/* Colours and radii come from the theme (src/themes/); this file only arranges. */
+
+/* The light toggle: an icon alone, quiet like the pen and the way back */
+.light-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px; /* a finger-sized target */
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-note);
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.light-toggle:hover {
+  color: var(--ink);
+}
+
+.light-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

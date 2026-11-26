@@ -129,9 +129,15 @@ export type ViewerProjection = CommentaryProjection & {
   chosen: readonly Span[]
 }
 
+/** What a subject asks of the reader besides its prose, from its parts: to write; to look back at
+ * the notes it recalls; to look at the editor's notes it picks out; or only to read. With a noting,
+ * as in annotate mode, it asks nothing: null. */
+export type Asks = "read" | "notes" | "write" | "recall" | null
+
 /** What the praxis bar draws between the frame's heading and its buttons: the prose, the writing,
  * and the noting. */
 export interface PraxisBarProjection {
+  asks: Asks
   prose: readonly string[]
   writing: WritingProjection | null
   noting: NotingProjection | null

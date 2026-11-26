@@ -28,6 +28,15 @@ export function daysUntilNext(practice: Practice, stage: number): number {
   return stageAt(practice, stage + 1).days ?? 1
 }
 
+/** Where the reader stands, for moving: the station, or, in the final stage, the last stage's rest,
+ * so that a step back from the final stage is the last stage's last step. A practice with no stages
+ * has no rest to stand at: there, it is the final stage itself. */
+export function standsAt(practice: Practice, station: Station): Station {
+  const final = finalOf(practice)
+  if (station.stage !== final || final === 0) return station
+  return { stage: final - 1, step: restOf(practice, final - 1) }
+}
+
 /** Where the final stage is: one past the last stage. */
 export function finalOf(practice: Practice): number {
   return practice.stages.length

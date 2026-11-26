@@ -10,7 +10,7 @@ import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { finalPartsOf, REST } from "../../practice/parts"
 import { stageIndexOf, stepPlaceOf } from "../../practice/places"
 import type { Parts, Practice, Recall, Writing } from "../../practice/types"
-import { finalOf, gateOf, restOf } from "../../runner/gate"
+import { finalOf, gateOf, restOf, standsAt } from "../../runner/gate"
 import { ruling } from "../../runner/step"
 import type { Standing } from "../../runner/types"
 import type { Commentary, Recalled, Subject, WritingAbout } from "../scenes/types"
@@ -32,6 +32,8 @@ export function frameOf(
 ): Frame {
   const { station } = standing
   const gate = gateOf(practice, station)
+  // The gait steps from where the reader stands: in the final stage, the last stage's rest
+  const here = standsAt(practice, station)
   const parts =
     gate.kind === "step" ? gate.step : gate.kind === "rest" ? REST : finalPartsOf(practice)
   const { text } = practice
@@ -42,8 +44,10 @@ export function frameOf(
   }
   return {
     heading: gate.kind === "final" ? practice.title : gate.stage.name,
-    back: ruling(practice, standing, station.step - 1),
-    next: ruling(practice, standing, station.step + 1),
+    position:
+      gate.kind === "step" ? { step: station.step + 1, of: restOf(practice, station.stage) } : null,
+    back: ruling(practice, standing, here.step - 1),
+    next: ruling(practice, standing, here.step + 1),
     subject: {
       key: `${practice.id}/${station.stage}/${station.step}`,
       text,
@@ -85,7 +89,7 @@ export function annotateFrame(
     writing: null,
     noting: { substrate: material.substrate, tags: [] },
   }
-  return { heading: null, back: null, next: null, subject }
+  return { heading: null, position: null, back: null, next: null, subject }
 }
 
 /** The notes a recall brings back: the reader's notes written in the stage it names, on the step it

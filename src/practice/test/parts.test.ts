@@ -17,7 +17,7 @@ describe("finalPartsOf: the final stage", () => {
   it("says the practice is done, and brings back everything written, when any step asked", () => {
     const asks = practiceOf({ ...REST, writing: { target: "whole", tags: [], count: "one" } })
     expect(finalPartsOf(asks)).toEqual({
-      prose: ["You have finished!"],
+      prose: ["Explicit."],
       highlight: [],
       writing: null,
       recall: { from: "all" },

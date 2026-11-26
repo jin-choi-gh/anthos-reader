@@ -7,7 +7,7 @@ import { REST } from "../../../practice/parts"
 import type { EditorsNote, Parts } from "../../../practice/types"
 import type { Standing } from "../../../runner/types"
 import { annotateFrame, frameOf } from "../../frame/frame"
-import { scene, type SceneState } from "../scene"
+import { asksOf, scene, type SceneState } from "../scene"
 import type { Subject } from "../types"
 import { practiceOf } from "../../../practice/test/build"
 
@@ -111,7 +111,12 @@ describe("scene.start: each part staged", () => {
       choosing: false,
       chosen: [],
     })
-    expect(scene.praxisBar(current)).toEqual({ prose: ["On b."], writing: null, noting: null })
+    expect(scene.praxisBar(current)).toEqual({
+      asks: "notes",
+      prose: ["On b."],
+      writing: null,
+      noting: null,
+    })
   })
 
   it("on a step asking for writing: the poem with nothing picked out; the prose and a blank page", () => {
@@ -126,6 +131,7 @@ describe("scene.start: each part staged", () => {
       chosen: [],
     })
     expect(scene.praxisBar(current)).toEqual({
+      asks: "write",
       prose: ["What does the bird eat?"],
       writing: {
         kind: "writing",
@@ -154,7 +160,8 @@ describe("scene.start: each part staged", () => {
 
   it("in the final stage: the poem, and word that the practice is done", () => {
     expect(scene.praxisBar(started(at(1, 0)))).toEqual({
-      prose: ["You have finished!"],
+      asks: "recall",
+      prose: ["Explicit."],
       writing: null,
       noting: null,
     })
@@ -175,6 +182,7 @@ describe("scene.start: each part staged", () => {
       chosen: [],
     })
     expect(scene.praxisBar(current)).toEqual({
+      asks: null,
       prose: [],
       writing: null,
       noting: { choosing: false, chosen: [], draft: "", canAdd: false },
@@ -288,7 +296,7 @@ describe("scene.fromFrame: cuts and holds", () => {
     expect(scene.praxisBar(current)).toBeNull()
 
     current = scene.fromFrame(current, subject(at(1, 0))).state
-    expect(scene.praxisBar(current)?.prose).toEqual(["You have finished!"])
+    expect(scene.praxisBar(current)?.prose).toEqual(["Explicit."])
   })
 
   it("follows a change of mode, to annotate mode and back to the practice", () => {
@@ -607,6 +615,7 @@ describe("a recall step: the stage before's notes, listed to read", () => {
 
   it("puts nothing of its own in the praxis bar but the prose", () => {
     expect(scene.praxisBar(started(here()))).toEqual({
+      asks: "recall",
       prose: ["Yesterday, you wrote:"],
       writing: null,
       noting: null,
@@ -657,6 +666,7 @@ describe("a step that only says something: the poem, and the editor's prompt", (
       chosen: [],
     })
     expect(scene.praxisBar(current)).toEqual({
+      asks: "read",
       prose: ["Read the poem through."],
       writing: null,
       noting: null,
@@ -671,5 +681,17 @@ describe("a step that only says something: the poem, and the editor's prompt", (
     const typed = scene.fromPraxisBar(current, { kind: "draft", text: "Worms." })
     expect(typed.state).toBe(current)
     expect(scene.fromPraxisBar(current, { kind: "submit" }).effects).toEqual([])
+  })
+})
+
+describe("asksOf: what a subject asks of the reader besides its prose", () => {
+  it("asks for the editor's notes, for writing, and for nothing but reading, by its parts", () => {
+    expect(asksOf(at(0, 0))).toBe("notes")
+    expect(asksOf(at(0, 2))).toBe("write")
+    expect(asksOf(at(0, 3))).toBe("read") // the rest: nothing said, nothing asked
+  })
+
+  it("asks nothing with a noting, as in annotate mode", () => {
+    expect(asksOf(annotating([]))).toBeNull()
   })
 })

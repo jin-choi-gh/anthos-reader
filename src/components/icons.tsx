@@ -55,29 +55,21 @@ export function Pen(props: IconProps) {
   )
 }
 
-/** Move up: an arrow pointing up. */
-export function ArrowUp(props: IconProps) {
+/** Light: a sun. */
+export function Sun(props: IconProps) {
   return (
     <Icon {...props}>
-      <path d="M12 19V5M6 11l6-6 6 6" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" />
     </Icon>
   )
 }
 
-/** Move down: an arrow pointing down. */
-export function ArrowDown(props: IconProps) {
+/** Dark: a crescent moon. */
+export function Moon(props: IconProps) {
   return (
     <Icon {...props}>
-      <path d="M12 5v14M6 13l6 6 6-6" />
-    </Icon>
-  )
-}
-
-/** Remove: a bin, since an × closes. */
-export function Bin(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />
+      <path d="M20 14.2A8.3 8.3 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2z" />
     </Icon>
   )
 }

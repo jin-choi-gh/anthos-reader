@@ -1,7 +1,7 @@
 import { Button } from "../components/controls"
 
-/** A question asked in place, before something that cannot be undone: the question, the button that
- * does it, and Keep, which leaves everything as it was. */
+/** A question asked in place, before something that cannot be undone: the question, then Keep,
+ * which leaves everything as it was, and the button that does it, marked as the one that destroys. */
 export function Confirm({
   question,
   yes,

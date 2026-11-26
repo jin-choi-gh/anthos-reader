@@ -4,8 +4,8 @@ import { BackLink } from "../components/BackLink"
 import { Button } from "../components/controls"
 import { Dock } from "../components/Dock"
 import { Folio, FolioText, Message } from "../components/Folio"
-import { Margin } from "../components/Margin"
 import { usePlatform, type PageOrSpread } from "../components/usePlatform"
+import { useScrolls } from "../components/useScrolls"
 import { loadTextualComplex } from "../loom/load"
 import { toMaterial } from "../loom/toMaterial"
 import type { Material } from "../material/materials"
@@ -14,7 +14,7 @@ import type { TextId } from "../material/types"
 import { loadPractices } from "../practice/load"
 import { stageIndexOf, stepPlaceOf } from "../practice/places"
 import { problemsOf } from "../practice/problems"
-import type { StepId } from "../practice/types"
+import type { Practice, StepId } from "../practice/types"
 import { NotingPage } from "../reader/praxisBar/NotingPage"
 import type { ViewerProtocol } from "../reader/scenes/types"
 import { useScene, type SceneHandle } from "../reader/scenes/useScene"
@@ -25,7 +25,7 @@ import { Anatomy } from "./Anatomy"
 import { Confirm } from "./Confirm"
 import { nextStageId, nextStepId } from "./edits"
 import { editOfNote, makerFrame } from "./makerFrame"
-import { PracticeHead } from "./PracticeHead"
+import { PracticeHead, PracticeName } from "./PracticeHead"
 import {
   firstSelection,
   firstUnfinished,
@@ -35,6 +35,7 @@ import {
 } from "./selection"
 import { StageCard } from "./StageCard"
 import { StepCard } from "./StepCard"
+import { romanOf } from "./summary"
 import { useDraft, type Draft } from "./useDraft"
 import { useMadePractices } from "./useMadePractices"
 import "./formPractice.css"
@@ -47,11 +48,12 @@ async function loadMaterial(file: string): Promise<Material> {
   return toMaterial(await loadTextualComplex(file))
 }
 
-/** Form Practice for one text: the poem in its column, and beside it, on a spread, or under it, on
- * a page, the practice being made: its name, the reel's contents, and the stage or step selected.
- * Opened `fresh`, from the library's New practice, it starts a new practice, and then forgets that
- * it was asked, so that coming back to it does not start another. App gives it a key of its file, so
- * another file is another Form Practice. */
+/** Form Practice for one text, a desk: a bar across the top, and under it, on a spread, three
+ * columns: the reel (the practice's name and its contents), the poem as the reader sees what is
+ * selected, and the card of the stage or step selected; on a page, the same one under another, the
+ * contents folded. Opened `fresh`, at its address for a new practice, it starts a new practice, and
+ * then forgets that it was asked, so that coming back to it does not start another. App gives it a
+ * key of its file, so another file is another Form Practice. */
 export function FormPractice({ file, fresh }: { file: TextId; fresh: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const { layout, input } = usePlatform(ref)
@@ -68,52 +70,42 @@ export function FormPractice({ file, fresh }: { file: TextId; fresh: boolean }) 
   useEffect(() => {
     if (material === null) return
     const previous = document.title
-    document.title = `Form Practice · ${material.poem.title} · Anthos`
+    document.title = `Edit practice · ${material.poem.title} · Anthos`
     return () => {
       document.title = previous
     }
   }, [material])
 
-  const top = (
-    <>
-      <BackLink href={libraryHref}>Library</BackLink>
-      <a className="form-read" href={readerHref(file)}>
-        Read
-      </a>
-    </>
-  )
-
   return (
     <Folio ref={ref} layout={layout} input={input} className="form-practice">
       {material === null ? (
-        <FolioText top={top}>
+        <FolioText top={<BackLink href={libraryHref}>Library</BackLink>}>
           <Message>{error ?? "Loading…"}</Message>
         </FolioText>
       ) : (
-        <Maker file={file} material={material} draft={draft} layout={layout} top={top} />
+        <Maker file={file} material={material} draft={draft} layout={layout} />
       )}
     </Folio>
   )
 }
 
 /** Form Practice once the poem is loaded: what is selected, the scene that shows the poem with the
- * selected step's notes, and the margin: the practice's name, the reel's contents, and the card of
- * the stage or step selected. A step's notes are in the poem: a tap on one takes it up into the
+ * selected step's notes, the top bar, the reel and the card of the stage or step selected. A step's
+ * notes are in the poem and listed on its card: a tap on one, or its Edit, takes it up into the
  * card's form, its passages chosen again and its words in the box, to be saved in its place or
- * removed; Add a note opens the form for a new one. Save, with something unfinished, saves nothing
- * and goes to it instead: the name, or the first stage or step with a problem. */
+ * removed; Add a note opens the form for a new one. Save, with something unfinished, saves nothing,
+ * says how many things there are to put right, and goes to the first: the name, or the first stage
+ * or step with a problem. */
 function Maker({
   file,
   material,
   draft,
   layout,
-  top,
 }: {
   file: TextId
   material: Material
   draft: Draft
   layout: PageOrSpread
-  top: ReactNode
 }) {
   const { practice, edit } = draft
   const { substrate } = material
@@ -125,7 +117,13 @@ function Maker({
   const [removingNote, setRemovingNote] = useState(false)
   // What kept the last save from being kept, until the next
   const [refused, setRefused] = useState<string[]>([])
+  // Whether Save found things to put right, until there are none
+  const [short, setShort] = useState(false)
   const title = useRef<HTMLInputElement>(null)
+  const reel = useRef<HTMLDivElement>(null)
+  const cardColumn = useRef<HTMLDivElement>(null)
+  useScrolls(reel)
+  useScrolls(cardColumn)
   // The way to the scene, for its own effects to speak back to it, kept once the scene is drawn
   const toScene = useRef<SceneHandle["toScene"] | null>(null)
 
@@ -140,6 +138,7 @@ function Maker({
   }
 
   const problems = useMemo(() => problemsOf(practice, substrate), [practice, substrate])
+  if (short && problems.length === 0) setShort(false)
   const stepId = selection?.kind === "step" ? selection.id : null
   const at = stepId === null ? null : stepPlaceOf(practice, stepId)
   const step = at === null ? undefined : practice.stages[at.stage]?.steps[at.step]
@@ -254,20 +253,27 @@ function Maker({
       )
     } else if (composing) {
       form = (
-        <NotingPage
-          page={page}
-          send={scene.toScene.praxisBar}
-          label={held === null ? "New note" : "The note"}
-          submit={held === null ? "Add note" : "Save note"}
-          onCancel={putDown}
-          actions={
-            held === null ? undefined : (
-              <Button className="form-remove-note" onClick={() => setRemovingNote(true)}>
-                Remove
-              </Button>
-            )
-          }
-        />
+        <div className="form-compose">
+          <p className="form-compose-head">
+            <span className="form-compose-what">{held === null ? "new note" : "the note"}</span>
+            <span className="form-hint">Choose its passages in the poem</span>
+          </p>
+          <NotingPage
+            page={page}
+            send={scene.toScene.praxisBar}
+            label="Its words"
+            submit={held === null ? "Add note" : "Save note"}
+            hand="editor"
+            onCancel={putDown}
+            actions={
+              held === null ? undefined : (
+                <Button className="form-remove-note" onClick={() => setRemovingNote(true)}>
+                  Remove
+                </Button>
+              )
+            }
+          />
+        </div>
       )
     } else {
       form = (
@@ -281,19 +287,27 @@ function Maker({
     }
   }
 
-  const save = () => {
+  /** Goes to the first thing to put right: the name, or the first stage or step with a problem. */
+  const toUnfinished = () => {
     const [first] = problems
-    if (first === undefined) {
-      setRefused(draft.save(substrate))
-      return
-    }
-    setRefused([])
+    if (first === undefined) return
     if (first.about === "title") {
       title.current?.focus()
       return
     }
     const where = firstUnfinished(practice, problems)
     if (where !== null) select(where)
+  }
+
+  const save = () => {
+    if (problems.length === 0) {
+      setShort(false)
+      setRefused(draft.save(substrate))
+      return
+    }
+    setRefused([])
+    setShort(true)
+    toUnfinished()
   }
 
   const addStage = () => {
@@ -333,6 +347,7 @@ function Maker({
           problems={problems}
           edit={edit}
           onRemove={remove}
+          onSelect={select}
         />
       )
     }
@@ -357,27 +372,47 @@ function Maker({
     )
   }
 
-  const parts = (
-    <>
-      <PracticeHead draft={draft} titleRef={title} refused={refused} onSave={save} />
-      <Anatomy
-        practice={practice}
-        problems={problems}
-        selection={selection}
-        onSelect={select}
-        onAddStage={addStage}
-        onAddStep={addStep}
-      />
-      {card}
-    </>
+  const steps = practice.stages.reduce((n, stage) => n + stage.steps.length, 0)
+  const contents = (
+    <Anatomy
+      practice={practice}
+      problems={problems}
+      selection={selection}
+      onSelect={select}
+      onAddStage={addStage}
+      onAddStep={addStep}
+    />
   )
 
   return (
     <>
-      <FolioText top={top}>
+      <PracticeHead
+        draft={draft}
+        readHref={readerHref(file)}
+        unfinished={short ? problems.length : 0}
+        refused={refused}
+        onSave={save}
+        onNext={toUnfinished}
+      />
+      <div className="form-reel" ref={reel}>
+        <PracticeName draft={draft} poem={material.poem} titleRef={title} />
+        {layout === "spread" ? (
+          contents
+        ) : (
+          <details className="form-fold">
+            <summary>
+              contents · {steps} {steps === 1 ? "step" : "steps"}
+            </summary>
+            {contents}
+          </details>
+        )}
+      </div>
+      <FolioText top={<p className="form-caption">{captionOf(practice, selection, composing)}</p>}>
         <ViewerPage projection={scene.viewer} materials={materials} send={toViewer} />
       </FolioText>
-      {layout === "spread" ? <Margin>{parts}</Margin> : <div className="form-parts">{parts}</div>}
+      <div className="form-card-column" ref={cardColumn}>
+        {card}
+      </div>
       {docked && (
         <Dock>
           <section className="praxis-bar" aria-label="The note">
@@ -387,6 +422,21 @@ function Maker({
       )}
     </>
   )
+}
+
+/** The line over the poem, saying what it shows: the stage or step selected as the reader sees it,
+ * or, while a note is being written, where its passages are chosen. */
+function captionOf(practice: Practice, selection: Selection | null, composing: boolean): string {
+  if (composing) return "Choose the note's passages in the poem"
+  if (selection === null) return "The poem"
+  if (selection.kind === "stage") {
+    const stage = stageIndexOf(practice, selection.id)
+    return stage === null ? "The poem" : `The poem as stage ${romanOf(stage + 1)} opens`
+  }
+  const at = stepPlaceOf(practice, selection.id)
+  return at === null
+    ? "The poem"
+    : `Step ${at.step + 1} of stage ${romanOf(at.stage + 1)}, as the reader sees it`
 }
 
 /** The texts the viewer can draw: only this one. */

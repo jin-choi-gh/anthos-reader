@@ -3,13 +3,14 @@ import { notesFrom } from "../notebook/notebook"
 import type { ReaderNote } from "../notebook/types"
 import { fingerprintOfPractice } from "../practice/fingerprint"
 import type { Practice } from "../practice/types"
-import { daysUntilNext, finalOf, gateOf, restOf } from "./gate"
+import { daysUntilNext, finalOf, gateOf, restOf, standsAt } from "./gate"
 import type { Event, Ruling, Standing } from "./types"
 
 /** Where the run stands, from the runner's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
  * finished, as the event that finished it fixed it, and which step holds the reader until they have
- * written. */
+ * written. Once the last stage is finished the reader is in the final stage, unless they have since
+ * gone back to a step of the last stage, to look again: then they are there, held nowhere. */
 export function standingOf(
   practice: Practice,
   log: readonly Event[],
@@ -23,12 +24,16 @@ export function standingOf(
   for (let stage = 0; stage < final; stage++) {
     const rest = restOf(practice, stage)
     let step = 0
+    let visitedAt = -1
     let finished: { day: Day; opens: Day; index: number } | null = null
 
     for (const [index, event] of log.entries()) {
       if (index < from || event.stage !== stage) continue
       if (event.kind === "visited") {
-        if (Number.isInteger(event.step) && event.step >= 0 && event.step <= rest) step = event.step
+        if (Number.isInteger(event.step) && event.step >= 0 && event.step <= rest) {
+          step = event.step
+          visitedAt = index
+        }
       } else if (
         finished === null &&
         event.day <= today &&
@@ -42,8 +47,12 @@ export function standingOf(
     if (finished === null) {
       return { station, opensOn: null, heldAt: heldAt(practice, stage, notes) }
     }
-    if (stage === final - 1) break
     const opensOn = finished.opens
+    if (stage === final - 1) {
+      // Gone back after finishing it, and not yet on to its rest, where the final stage stands
+      if (visitedAt > finished.index && step < rest) return { station, opensOn, heldAt: null }
+      break
+    }
     // A finished stage never holds the reader again: what is past is past
     if (today < opensOn) return { station, opensOn, heldAt: null }
     from = finished.index + 1
@@ -67,13 +76,17 @@ function heldAt(practice: Practice, stage: number, notes: readonly ReaderNote[])
   return null
 }
 
-/** Whether the reader may move to a step of the stage they are in, or why not. */
+/** Whether the reader may move to a step of the stage they stand in (standsAt), and whether the
+ * move finishes it, or why not. From the final stage, which stands at the last stage's rest, the
+ * reader may go back into the last stage; past that rest the practice is over. A move finishes a
+ * stage when it reaches the rest of a stage not yet finished. */
 export function ruling(practice: Practice, standing: Standing, target: number): Ruling {
   const { station, opensOn, heldAt } = standing
-  if (station.stage === finalOf(practice)) {
-    return { allowed: false, reason: { kind: "finished" } }
-  }
-  const rest = restOf(practice, station.stage)
+  const final = finalOf(practice)
+  const here = standsAt(practice, station)
+  // A practice with no stages has nowhere to go back to
+  if (here.stage === final) return { allowed: false, reason: { kind: "finished" } }
+  const rest = restOf(practice, here.stage)
   if (!Number.isInteger(target) || target < 0) {
     return { allowed: false, reason: { kind: "noSuchStep" } }
   }
@@ -81,14 +94,17 @@ export function ruling(practice: Practice, standing: Standing, target: number): 
     return { allowed: false, reason: { kind: "unanswered" } }
   }
   if (target > rest) {
+    if (here.stage === final - 1) return { allowed: false, reason: { kind: "finished" } }
     return { allowed: false, reason: { kind: "waiting", opensOn } }
   }
-  return { allowed: true, to: target }
+  const finishes = target === rest && opensOn === null && station.stage !== final
+  return { allowed: true, to: target, finishes }
 }
 
 /** What the runner logs when the reader moves to a step: the visit, and the stage finished
  * the first time its rest is reached, with the day the next stage opens, by the days the practice
- * gives it today. A move the law refuses is a mistake in the caller: it throws. */
+ * gives it today. A move from the final stage is logged in the last stage, where it goes. A move the
+ * law refuses is a mistake in the caller: it throws. */
 export function eventsOfMove(
   practice: Practice,
   standing: Standing,
@@ -96,19 +112,18 @@ export function eventsOfMove(
   at: number,
   today: Day,
 ): Event[] {
-  const { station, opensOn } = standing
-  if (station.stage === finalOf(practice) || target === station.step) return []
+  const here = standsAt(practice, standing.station)
+  if (target === here.step) return []
   const decision = ruling(practice, standing, target)
   if (!decision.allowed) {
     throw new RangeError(
-      `step ${target} is refused in stage ${station.stage}: ${decision.reason.kind}`,
+      `step ${target} is refused in stage ${here.stage}: ${decision.reason.kind}`,
     )
   }
-  const rest = restOf(practice, station.stage)
-  const events: Event[] = [{ kind: "visited", stage: station.stage, step: target, at }]
-  if (target === rest && opensOn === null) {
-    const opens = daysAfter(today, daysUntilNext(practice, station.stage))
-    events.push({ kind: "finished", stage: station.stage, at, day: today, opens })
+  const events: Event[] = [{ kind: "visited", stage: here.stage, step: target, at }]
+  if (decision.finishes) {
+    const opens = daysAfter(today, daysUntilNext(practice, here.stage))
+    events.push({ kind: "finished", stage: here.stage, at, day: today, opens })
   }
   return events
 }
