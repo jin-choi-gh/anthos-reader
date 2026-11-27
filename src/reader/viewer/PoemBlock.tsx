@@ -30,7 +30,8 @@ type Drawn = LineRange &
  * or lines to pick are buttons, one Tab stop for them all, moved between with the arrow keys
  * (onPick). Each line says which line
  * of the substrate it is, and each piece of it where it starts, so that a point on the screen can be
- * found in the poem. */
+ * found in the poem. With `sweep`, as for notes disclosed, the open note's words are swept in as
+ * they are drawn, each piece in turn. */
 export function PoemBlock({
   poem,
   rangesOn,
@@ -45,6 +46,7 @@ export function PoemBlock({
   picking = null,
   picksOn = noPicks,
   onPick,
+  sweep = false,
 }: {
   poem: Poem
   rangesOn: (indexInSubstrate: number) => NoteRange[]
@@ -59,6 +61,7 @@ export function PoemBlock({
   picking?: PickingProjection | null
   picksOn?: (indexInSubstrate: number) => PickRange[]
   onPick?: (unit: number) => void
+  sweep?: boolean
 }) {
   // What is drawn on a line: the marked notes' ranges, the chosen targets', the choice's, the gaps'
   const drawnOn = (line: Line): Drawn[] => [
@@ -96,9 +99,16 @@ export function PoemBlock({
   // The marked notes by their indexes, so a new array with the same notes is no change
   const markedKey = marked.join(" ")
 
-  // When a note opens, bring its first words into view. Closing one moves nothing
+  // When a note opens, bring its first words into view. Closing one moves nothing. Two frames on,
+  // so that what opening it changed around the poem, as the dock's height, is known by then
   useEffect(() => {
-    if (open !== null) bringIntoView(poemRef.current?.querySelector('mark[data-open="true"]'))
+    if (open === null) return
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() =>
+        bringIntoView(poemRef.current?.querySelector('mark[data-open="true"]')),
+      )
+    })
+    return () => cancelAnimationFrame(frame)
   }, [open])
 
   // When other notes are marked, as on a new step, bring the first of their words into view
@@ -112,8 +122,11 @@ export function PoemBlock({
     if (next !== null) bringIntoView(poemRef.current?.querySelector('.gap[data-next="true"]'))
   }, [next])
 
+  // Each piece of the marked words, in the poem's order, for the sweep
+  let swept = 0
+
   return (
-    <div className="poem" ref={poemRef}>
+    <div className="poem" ref={poemRef} data-sweep={sweep}>
       {poem.stanzas.map((stanza, i) => (
         <div className="stanza" key={i}>
           {stanza.lines.map((line) => (
@@ -195,8 +208,10 @@ export function PoemBlock({
                   const isOpen = notes.includes(open ?? -1)
                   return (
                     <mark
-                      key={j}
+                      // By its note, so that another note's words are drawn afresh, and swept in
+                      key={`${note}:${j}`}
                       data-open={isOpen}
+                      style={{ "--sweep-order": swept++ } as CSSProperties}
                       {...drawn}
                       {...(onTapNote && tappable(note, isOpen, onTapNote))}
                     >

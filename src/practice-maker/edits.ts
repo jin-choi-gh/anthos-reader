@@ -29,7 +29,7 @@ export type Edit =
   | {
       readonly kind: "setParts"
       readonly at: StepPlace
-      readonly highlight: readonly EditorsNote[]
+      readonly disclose: readonly EditorsNote[]
       readonly writing: Writing | null
       readonly recall: Recall | null
       readonly restore: Restore | null
@@ -105,29 +105,29 @@ export function edited(draft: Practice, edit: Edit): Practice {
     case "setProse":
       return withStep(draft, edit.at, (step) => ({ ...step, prose: edit.prose }))
     case "setParts": {
-      const { highlight, writing, recall, restore } = edit
-      return withStep(draft, edit.at, (step) => ({ ...step, highlight, writing, recall, restore }))
+      const { disclose, writing, recall, restore } = edit
+      return withStep(draft, edit.at, (step) => ({ ...step, disclose, writing, recall, restore }))
     }
     case "addNote":
       return withStep(draft, edit.at, (step) => ({
         ...step,
-        highlight: [...step.highlight, edit.note],
+        disclose: [...step.disclose, edit.note],
       }))
     case "changeNote":
       return withStep(draft, edit.at, (step) => {
-        if (step.highlight[edit.index] === undefined) return null
-        const highlight = step.highlight.map((note, i) => (i === edit.index ? edit.note : note))
-        return { ...step, highlight }
+        if (step.disclose[edit.index] === undefined) return null
+        const disclose = step.disclose.map((note, i) => (i === edit.index ? edit.note : note))
+        return { ...step, disclose }
       })
     case "moveNote":
       return withStep(draft, edit.at, (step) => {
-        const highlight = moved(step.highlight, edit.from, edit.to)
-        return highlight === null ? null : { ...step, highlight }
+        const disclose = moved(step.disclose, edit.from, edit.to)
+        return disclose === null ? null : { ...step, disclose }
       })
     case "removeNote":
       return withStep(draft, edit.at, (step) => {
-        const highlight = removed(step.highlight, edit.index)
-        return highlight === null ? null : { ...step, highlight }
+        const disclose = removed(step.disclose, edit.index)
+        return disclose === null ? null : { ...step, disclose }
       })
     case "addGap":
       return withStep(draft, edit.at, (step) => {
@@ -151,7 +151,7 @@ export function nextNoteId(draft: Practice): string {
   const steps = draft.stages.flatMap((stage) => stage.steps)
   return firstFree(
     "note",
-    steps.flatMap((step) => step.highlight.map((note) => note.id)),
+    steps.flatMap((step) => step.disclose.map((note) => note.id)),
   )
 }
 

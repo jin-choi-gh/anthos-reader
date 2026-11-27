@@ -625,8 +625,19 @@
   gap: 0.75rem;
 }
 
-.form-note-foot .form-tool {
+.form-note-tools {
+  display: flex;
+  flex-shrink: 0;
   margin-right: -0.5rem;
+}
+
+/* Its place in the order the reader is given the notes */
+.form-note-place {
+  margin-right: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
 }
 
 .form-notehead,

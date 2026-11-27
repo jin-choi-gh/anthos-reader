@@ -39,7 +39,7 @@ const ask: Parts = {
   writing: { target: "whole", tags: [], count: "one" },
 }
 const recalling = (recall: Recall): Parts => ({ ...REST, prose: ["You wrote:"], recall })
-const look = (...notes: EditorsNote[]): Parts => ({ ...REST, prose: ["See."], highlight: notes })
+const look = (...notes: EditorsNote[]): Parts => ({ ...REST, prose: ["See."], disclose: notes })
 const restoring = (of: Restore["of"], ...gaps: string[]): Parts => ({
   ...REST,
   prose: ["Put them back."],
@@ -95,10 +95,10 @@ describe("problemsOf: what keeps a practice from running on its text", () => {
     ])
   })
 
-  it("refuses a step with more than one of highlight, writing, recall and restore", () => {
-    const both = { ...ask, highlight: [note("worm")] }
+  it("refuses a step with more than one of disclose, writing, recall and restore", () => {
+    const both = { ...ask, disclose: [note("worm")] }
     expect(worded(practiceOf(stage("One", both)))).toEqual([
-      'stage 1 "One", step 1: more than one of highlight, writing, recall and restore: a step asks one thing',
+      'stage 1 "One", step 1: more than one of disclose, writing, recall and restore: a step asks one thing',
     ])
     const restores = { ...ask, restore: { of: "words", gaps: ["l1 Angle", "l1 Worm"] } } as const
     expect(problemsOf(practiceOf(stage("One", restores)), text)).toEqual([

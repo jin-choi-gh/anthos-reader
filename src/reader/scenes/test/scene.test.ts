@@ -33,7 +33,7 @@ const material: Material = {
   poem: { title: "Fixture", author: "", stanzas: [] },
 }
 
-/** The editor's notes the practice's steps highlight, by their ids. */
+/** The editor's notes the practice's steps disclose, by their ids. */
 const editorsNotes: Record<string, EditorsNote> = {
   a: { id: "a", notehead: "l1 Bird", tags: [], body: "On the bird." },
   b: { id: "b", notehead: "l2 Worm", tags: [], body: "On the worm." },
@@ -63,11 +63,11 @@ const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderN
 const annotating = (written: readonly ReaderNote[]) =>
   annotateFrame("poem", material, written).subject
 
-/** A step that highlights one of the editor's notes. */
+/** A step that discloses one of the editor's notes. */
 const look = (id: string): Parts => ({
   ...REST,
   prose: [`On ${id}.`],
-  highlight: [editorsNotes[id]!],
+  disclose: [editorsNotes[id]!],
 })
 /** A step that asks for one note on the whole poem. */
 const askWhole: Parts = {
@@ -85,9 +85,14 @@ const practice = practiceOf({
   stages: [{ name: "Only", steps: [look("a"), look("b"), askWhole] }],
 })
 
-/** The subject of a frame of the practice, with what is in the notebook. */
+/** The subject of a frame of the practice, with what is in the notebook: the reader held nowhere,
+ * so its notes are disclosed already, as when the reader comes back to it. */
 const at = (stage: number, step: number, written: readonly ReaderNote[] = []) =>
   frameOf(practice, standing(stage, step), material, written).subject
+
+/** The subject of a step of the practice the reader is held at: its notes still to disclose. */
+const heldAt = (stage: number, step: number) =>
+  frameOf(practice, standing(stage, step, null, step), material, []).subject
 
 const tap = (index: number) => ({ kind: "tapNote", note: index }) as const
 const close = { kind: "closeNote" } as const
@@ -101,13 +106,12 @@ function started(on: Subject): SceneState {
 }
 
 describe("scene.start: each part staged", () => {
-  it("on a step with an editor's note: its note picked out, closed; the prose; no writing", () => {
-    const current = started(at(0, 1))
+  it("on a step with an editor's note still to disclose: none disclosed, none open; the prose", () => {
+    const current = started(heldAt(0, 1))
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf("b"),
-      marked: [0],
       open: null,
       choosing: false,
       chosen: [],
@@ -115,21 +119,33 @@ describe("scene.start: each part staged", () => {
       picking: null,
     })
     expect(scene.praxisBar(current)).toEqual({
-      asks: "notes",
+      asks: "disclose",
       prose: ["On b."],
       writing: null,
       noting: null,
+      disclosure: { key: "test/0/1", notes: [], current: null, more: true, count: 1 },
       restore: null,
+    })
+  })
+
+  it("on a step with an editor's note disclosed already: every note disclosed, the first open", () => {
+    const current = started(at(0, 1))
+    expect(scene.viewer(current)).toMatchObject({ kind: "disclosed", open: 0 })
+    expect(scene.praxisBar(current)?.disclosure).toEqual({
+      key: "test/0/1",
+      notes: [{ index: 0, lemma: [{ kind: "quote", text: "Worm" }], paragraphs: ["On the worm."] }],
+      current: 0,
+      more: false,
+      count: 1,
     })
   })
 
   it("on a step asking for writing: the poem with nothing picked out; the prose and a blank page", () => {
     const current = started(at(0, 2))
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf(),
-      marked: [],
       open: null,
       choosing: false,
       chosen: [],
@@ -147,6 +163,7 @@ describe("scene.start: each part staged", () => {
         passages: null,
       },
       noting: null,
+      disclosure: null,
       restore: null,
     })
   })
@@ -154,10 +171,9 @@ describe("scene.start: each part staged", () => {
   it("at the rest: the poem with nothing picked out, and nothing of its own in the praxis bar", () => {
     const current = started(at(0, 3))
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf(),
-      marked: [],
       open: null,
       choosing: false,
       chosen: [],
@@ -173,6 +189,7 @@ describe("scene.start: each part staged", () => {
       prose: ["Explicit."],
       writing: null,
       noting: null,
+      disclosure: null,
       restore: null,
     })
   })
@@ -198,16 +215,17 @@ describe("scene.start: each part staged", () => {
       prose: [],
       writing: null,
       noting: { choosing: false, chosen: [], draft: "", canAdd: false },
+      disclosure: null,
       restore: null,
     })
   })
 })
 
 describe("scene.fromViewer and fromPraxisBar", () => {
-  it("opens the note by its highlight and closes it by its X", () => {
-    const opened = scene.fromViewer(started(at(0, 1)), tap(0))
-    expect(scene.viewer(opened.state).open).toBe(0)
-    expect(scene.viewer(scene.fromViewer(opened.state, close).state).open).toBeNull()
+  it("takes no tap or X on notes disclosed: only the praxis bar opens them", () => {
+    const current = started(at(0, 1))
+    expect(scene.fromViewer(current, tap(0)).state).toBe(current)
+    expect(scene.fromViewer(current, close).state).toBe(current)
   })
 
   it("gives back the very same state when nothing changed", () => {
@@ -241,10 +259,12 @@ describe("scene.fromFrame: cuts and holds", () => {
   })
 
   it("cuts to a new frame: a new key starts the scene again", () => {
-    const current = scene.fromViewer(started(at(0, 0)), tap(0)).state
-    const answer = scene.fromFrame(current, subject(at(0, 1)))
+    const current = scene.fromPraxisBar(started(heldAt(0, 0)), { kind: "disclose" }).state
+    expect(scene.viewer(current).open).toBe(0)
+    const answer = scene.fromFrame(current, subject(heldAt(0, 1)))
     expect(answer.state.subject.key).toBe("test/0/1")
     expect(scene.viewer(answer.state).open).toBeNull()
+    expect(scene.praxisBar(answer.state)?.disclosure?.notes).toEqual([])
   })
 
   it("holds on the same frame when the notebook changes: the open note and the page carry on", () => {
@@ -281,25 +301,22 @@ describe("scene.fromFrame: cuts and holds", () => {
   it("follows the frame through a practice: two steps, a page, the rest, the final stage", () => {
     let current = started(at(0, 0))
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf("a"),
-      marked: [0],
-      open: null,
+      open: 0,
       choosing: false,
       chosen: [],
       restore: null,
       picking: null,
     })
-    current = scene.fromViewer(current, tap(0)).state
 
     current = scene.fromFrame(current, subject(at(0, 1))).state
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf("b"),
-      marked: [0],
-      open: null,
+      open: 0,
       choosing: false,
       chosen: [],
       restore: null,
@@ -325,11 +342,10 @@ describe("scene.fromFrame: cuts and holds", () => {
 
     current = scene.fromFrame(current, subject(step)).state
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf("b"),
-      marked: [0],
-      open: null,
+      open: 0,
       choosing: false,
       chosen: [],
       restore: null,
@@ -640,6 +656,7 @@ describe("a recall step: the stage before's notes, listed to read", () => {
       prose: ["Yesterday, you wrote:"],
       writing: null,
       noting: null,
+      disclosure: null,
       restore: null,
     })
   })
@@ -679,10 +696,9 @@ describe("a step that only says something: the poem, and the editor's prompt", (
   it("draws the poem with nothing picked out, and only the prompt in the praxis bar", () => {
     const current = started(here())
     expect(scene.viewer(current)).toEqual({
-      kind: "marked",
+      kind: "disclosed",
       text: "poem",
       notes: setOf(),
-      marked: [],
       open: null,
       choosing: false,
       chosen: [],
@@ -694,6 +710,7 @@ describe("a step that only says something: the poem, and the editor's prompt", (
       prose: ["Read the poem through."],
       writing: null,
       noting: null,
+      disclosure: null,
       restore: null,
     })
   })
@@ -710,8 +727,8 @@ describe("a step that only says something: the poem, and the editor's prompt", (
 })
 
 describe("asksOf: what a subject asks of the reader besides its prose", () => {
-  it("asks for the editor's notes, for writing, and for nothing but reading, by its parts", () => {
-    expect(asksOf(at(0, 0))).toBe("notes")
+  it("asks to disclose the editor's notes, to write, or only to read, by its parts", () => {
+    expect(asksOf(at(0, 0))).toBe("disclose")
     expect(asksOf(at(0, 2))).toBe("write")
     expect(asksOf(at(0, 3))).toBe("read") // the rest: nothing said, nothing asked
   })
@@ -746,6 +763,7 @@ describe("the scene on a step that restores", () => {
       prose: ["Put them back."],
       writing: null,
       noting: null,
+      disclosure: null,
       restore: {
         of: "words",
         slips: [
@@ -868,5 +886,105 @@ describe("the scene with a picking, as Form Practice has one", () => {
   it("sends nothing out for a pick where there is no picking", () => {
     const current = started(at(0, 0))
     expect(scene.fromViewer(current, { kind: "pick", unit: 0 }).effects).toEqual([])
+  })
+})
+
+describe("the scene on a step that discloses", () => {
+  const two: Parts = {
+    ...REST,
+    prose: ["Read them."],
+    disclose: [editorsNotes.b!, editorsNotes.a!],
+  }
+  const disclosing = practiceOf({
+    id: "disclosing",
+    title: "Disclosing",
+    text: "poem",
+    stages: [{ name: "Only", steps: [two] }],
+  })
+  /** The step's subject: held at it, its notes still to disclose; or not held, disclosed. */
+  const reading = frameOf(disclosing, standing(0, 0, null, 0), material, []).subject
+  const read = frameOf(disclosing, standing(0, 0), material, []).subject
+  const disclose = { kind: "disclose" } as const
+  const turn = (note: number) => ({ kind: "turn", note }) as const
+
+  it("discloses the notes in the step's order, each opened, and sends out the last, once", () => {
+    let current = started(reading)
+    const first = scene.fromPraxisBar(current, disclose)
+    expect(first.effects).toEqual([])
+    current = first.state
+    expect(scene.viewer(current).open).toBe(0)
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 0, more: true, count: 2 })
+    expect(scene.praxisBar(current)?.disclosure?.notes.map((note) => note.index)).toEqual([0])
+
+    const last = scene.fromPraxisBar(current, disclose)
+    expect(last.effects).toEqual([{ kind: "disclosed" }])
+    current = last.state
+    expect(scene.viewer(current).open).toBe(1)
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 1, more: false })
+
+    const again = scene.fromPraxisBar(current, disclose)
+    expect(again.state).toBe(current)
+    expect(again.effects).toEqual([])
+  })
+
+  it("draws only the open note's words, the one being read, in the poem", () => {
+    const current = scene.fromPraxisBar(started(reading), disclose).state
+    expect(scene.viewer(current)).toEqual({
+      kind: "disclosed",
+      text: "poem",
+      notes: expect.objectContaining({ notes: expect.any(Array) }),
+      open: 0,
+      choosing: false,
+      chosen: [],
+      restore: null,
+      picking: null,
+    })
+  })
+
+  it("turns to a note disclosed, but not to one still to come, nor the one open", () => {
+    let current = scene.fromPraxisBar(started(reading), disclose).state
+    expect(scene.fromPraxisBar(current, turn(1)).state).toBe(current)
+    expect(scene.fromPraxisBar(current, turn(0)).state).toBe(current)
+    current = scene.fromPraxisBar(current, disclose).state
+    const back = scene.fromPraxisBar(current, turn(0))
+    expect(back.effects).toEqual([])
+    expect(scene.viewer(back.state).open).toBe(0)
+    expect(scene.praxisBar(back.state)?.disclosure).toMatchObject({ current: 0, more: false })
+  })
+
+  it("comes back to a step disclosed already with every note disclosed, the first open, and sends out nothing more", () => {
+    const current = started(read)
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 0, more: false })
+    expect(scene.praxisBar(current)?.disclosure?.notes).toHaveLength(2)
+    expect(scene.fromPraxisBar(current, disclose).state).toBe(current)
+  })
+
+  it("keeps what is disclosed when the frame hands over a fresh subject for the step", () => {
+    let current = scene.fromPraxisBar(started(reading), disclose).state
+    const fresh = frameOf(disclosing, standing(0, 0, null, 0), material, []).subject
+    current = scene.fromFrame(current, subject(fresh)).state
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 0, more: true })
+  })
+
+  it("keeps the open note once the step is disclosed, as after its own last note is logged", () => {
+    let current = started(reading)
+    current = scene.fromPraxisBar(current, disclose).state
+    current = scene.fromPraxisBar(current, disclose).state
+    current = scene.fromPraxisBar(current, turn(0)).state
+    current = scene.fromFrame(current, subject(read)).state
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 0, more: false })
+  })
+
+  it("discloses every note when another tab has the step disclosed partway through", () => {
+    let current = scene.fromPraxisBar(started(reading), disclose).state
+    current = scene.fromFrame(current, subject(read)).state
+    expect(scene.praxisBar(current)?.disclosure?.notes).toHaveLength(2)
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ current: 0, more: false })
+  })
+
+  it("starts afresh when the step is no longer disclosed, as when its run is forgotten", () => {
+    let current = started(read)
+    current = scene.fromFrame(current, subject(reading)).state
+    expect(scene.praxisBar(current)?.disclosure).toMatchObject({ notes: [], current: null })
   })
 })

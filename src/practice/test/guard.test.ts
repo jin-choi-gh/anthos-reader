@@ -14,7 +14,7 @@ const practice = practiceOf({
         {
           ...REST,
           prose: ["Look."],
-          highlight: [{ id: "worm", notehead: "l3 Worm", tags: ["gloss"], body: "The worm." }],
+          disclose: [{ id: "worm", notehead: "l3 Worm", tags: ["gloss"], body: "The worm." }],
         },
         { ...REST, writing: { target: "chosen", tags: [], count: "one" } },
       ],
@@ -83,12 +83,12 @@ describe("isPractice and practiceProblem: a value read from a file or from stora
     expect(practiceProblem(withFirstStep({ id: 4 }))).toBe("stage 1, step 1: its id must be text")
     expect(
       practiceProblem(
-        withFirstStep({ highlight: [{ id: "worm", notehead: 3, tags: [], body: "" }] }),
+        withFirstStep({ disclose: [{ id: "worm", notehead: 3, tags: [], body: "" }] }),
       ),
     ).toBe("stage 1, step 1, note 1: its notehead must be text")
     expect(
       practiceProblem(
-        withFirstStep({ highlight: [{ id: "worm", notehead: "l3", tags: [1], body: "" }] }),
+        withFirstStep({ disclose: [{ id: "worm", notehead: "l3", tags: [1], body: "" }] }),
       ),
     ).toBe("stage 1, step 1, note 1: its tags, tag 1 must be text")
   })

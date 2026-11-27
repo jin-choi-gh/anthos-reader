@@ -27,7 +27,7 @@ const practiceOn = (...notes: EditorsNote[]): Practice =>
     title: "Test",
     text: "dickinson",
     stages: [
-      { name: "The meal", steps: notes.map((n) => ({ ...REST, prose: ["See."], highlight: [n] })) },
+      { name: "The meal", steps: notes.map((n) => ({ ...REST, prose: ["See."], disclose: [n] })) },
     ],
   })
 

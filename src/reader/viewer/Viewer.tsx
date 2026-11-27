@@ -1,3 +1,4 @@
+import { assertNever } from "../../assertNever"
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import { Message } from "../../components/Folio"
 import { Close } from "../../components/icons"
@@ -23,7 +24,8 @@ interface ViewerProps {
 }
 
 /** The viewer's page: the projection's text, its title and its poem. Marked, its highlights can be
- * tapped; listed, the open note's words are marked, and the poem is only read. Either way the
+ * tapped; listed, the open note's words are marked, and the poem is only read; disclosed, the
+ * open note's words, the note being read, are marked and swept in, and the poem is only read. Either way the
  * chosen targets are drawn, and while choosing is on the reader chooses passages of the poem here,
  * each sent to the scene once chosen; a restore's gaps are drawn, a filled one tapped sending
  * its slip back; and, in Form Practice, the words or lines to pick are buttons, each picked sent to
@@ -86,6 +88,7 @@ export function ViewerPage({ projection, materials, send }: ViewerProps) {
             rangesOn={rangesOn}
             marked={projection.open === null ? [] : [projection.open]}
             open={projection.open}
+            sweep={projection.kind === "disclosed"}
             {...drawn}
           />
         )}
@@ -112,7 +115,7 @@ function noPicks() {
 /** The viewer's notes, for the margin or the sheet, from the projection's set. Marked: the note the
  * reader opened, if any, with an X. Listed: the shown notes, each one tapped to open or close it,
  * recalled notes with the prompts they answered, and, when they can be deleted, Delete on the open
- * one. */
+ * one. Disclosed: nothing, for the praxis bar has them. */
 export function ViewerNotes({ projection, send }: ViewerProps) {
   const { notes } = projection.notes
 
@@ -135,6 +138,10 @@ export function ViewerNotes({ projection, send }: ViewerProps) {
             : {})}
         />
       )
+    case "disclosed":
+      return null
+    default:
+      return assertNever(projection)
   }
 }
 

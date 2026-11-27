@@ -20,8 +20,16 @@ const highlight: Commentary = {
   shown: "marked",
   written: null,
   recalled: null,
+  disclosed: null,
 }
-const none: Commentary = { set, notes: [], shown: "marked", written: null, recalled: null }
+const none: Commentary = {
+  set,
+  notes: [],
+  shown: "marked",
+  written: null,
+  recalled: null,
+  disclosed: null,
+}
 
 /** One of the reader's own notes, written in annotate mode. */
 const mine = (id: string): ReaderNote => ({
@@ -44,6 +52,7 @@ function listOf(ids: string[]): Commentary {
     shown: "listed",
     written: ids.map(mine),
     recalled: null,
+    disclosed: null,
   }
 }
 const list = listOf(["a", "b", "c"])

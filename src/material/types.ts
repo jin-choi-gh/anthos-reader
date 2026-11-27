@@ -51,7 +51,8 @@ export interface Poem {
   stanzas: Stanza[]
 }
 
-/** One target's part of a lemma: the poem's own words, or a citation such as "lines 1–4". */
+/** One target's part of a lemma: the poem's own words, or, for the whole poem, the citation "the
+ * whole poem". */
 export interface LemmaPart {
   kind: "quote" | "citation"
   text: string

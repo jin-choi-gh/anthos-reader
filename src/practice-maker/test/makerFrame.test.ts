@@ -30,7 +30,7 @@ const draft = practiceOf({
         {
           ...REST,
           prose: ["Look at the worm."],
-          highlight: [{ id: "worm", notehead: "l2 Worm", tags: ["gloss"], body: "The worm." }],
+          disclose: [{ id: "worm", notehead: "l2 Worm", tags: ["gloss"], body: "The worm." }],
         },
         { ...REST, prose: ["Why?"], writing: { target: "whole", tags: [], count: "one" } },
       ],
@@ -80,7 +80,7 @@ describe("makerFrame: the subject of the step being made", () => {
     expect(subject.key).toBe("form/step-1")
   })
 
-  it("has no noting unless the step highlights, so the scene lets go of choosing", () => {
+  it("has no noting unless the step discloses, so the scene lets go of choosing", () => {
     expect(makerFrame(draft, "step-1", material, { noting: false }).noting).toBeNull()
   })
 

@@ -8,7 +8,7 @@ const note = (id: string): EditorsNote => ({ id, notehead: "l1", tags: [], body:
 const say = (words: string, ...notes: EditorsNote[]): Parts => ({
   ...REST,
   prose: [words],
-  highlight: notes,
+  disclose: notes,
 })
 
 const draft: Practice = practiceOf({
@@ -107,7 +107,7 @@ describe("edited: one change to a draft", () => {
     const recalled = edited(draft, {
       kind: "setParts",
       at: { stage: 1, step: 0 },
-      highlight: [],
+      disclose: [],
       writing: null,
       recall: { from: "step", id: "step-1" },
       restore: null,
@@ -124,7 +124,7 @@ describe("edited: one change to a draft", () => {
     changed = edited(changed, {
       kind: "setParts",
       at,
-      highlight: [],
+      disclose: [],
       writing,
       recall: null,
       restore: null,
@@ -132,7 +132,7 @@ describe("edited: one change to a draft", () => {
     expect(changed.stages[0]!.steps[0]).toEqual({
       id: "step-1",
       prose: ["Look.", "Again."],
-      highlight: [],
+      disclose: [],
       writing,
       recall: null,
       restore: null,
@@ -142,7 +142,7 @@ describe("edited: one change to a draft", () => {
   it("sets a restore as one of the parts, so that setting another takes the restore away", () => {
     const at = { stage: 0, step: 0 }
     const restore = { of: "words", gaps: ["l1 Bird", "l1 Walk"] } as const
-    const parts = { kind: "setParts", at, highlight: [], writing: null, recall: null } as const
+    const parts = { kind: "setParts", at, disclose: [], writing: null, recall: null } as const
     const restoring = edited(draft, { ...parts, restore })
     expect(restoring.stages[0]!.steps[0]!.restore).toEqual(restore)
     const writing = { target: "whole", tags: [], count: "one" } as const
@@ -152,7 +152,7 @@ describe("edited: one change to a draft", () => {
 
   it("adds, changes, moves and removes a step's editor's notes", () => {
     const at = { stage: 0, step: 0 }
-    const ids = (practice: Practice) => practice.stages[0]!.steps[0]!.highlight.map((n) => n.id)
+    const ids = (practice: Practice) => practice.stages[0]!.steps[0]!.disclose.map((n) => n.id)
     expect(ids(edited(draft, { kind: "addNote", at, note: note("n3") }))).toEqual([
       "n1",
       "n2",
@@ -165,7 +165,7 @@ describe("edited: one change to a draft", () => {
   })
 
   it("changes nothing, giving back the very same draft, for a place the draft does not have", () => {
-    const none = { highlight: [], writing: null, recall: null, restore: null }
+    const none = { disclose: [], writing: null, recall: null, restore: null }
     const nowhere: Edit[] = [
       { kind: "addStage", at: 3, id: "stage-3", name: "Far" },
       { kind: "addStage", at: -1, id: "stage-3", name: "Before" },
@@ -248,7 +248,7 @@ describe("nextStageId and nextStepId: the ids for a new stage and a new step", (
       edited(draft, {
         kind: "setParts",
         at: { stage: 1, step: 0 },
-        highlight: [],
+        disclose: [],
         writing: null,
         recall,
         restore: null,
@@ -269,7 +269,7 @@ describe("edited: a restore's gaps", () => {
   const restoring = edited(draft, {
     kind: "setParts",
     at,
-    highlight: [],
+    disclose: [],
     writing: null,
     recall: null,
     restore: { of: "words", gaps: ["l1 Bird", "l3 Worm"] },

@@ -46,10 +46,21 @@ describe("notesFor: lemmas", () => {
     expect(notes[0]!.lemma).toEqual([{ kind: "citation", text: "the whole poem" }])
   })
 
-  it("cites whole lines by number", () => {
+  it("quotes whole lines as any other passage, not by number", () => {
     const { notes } = notesOn([span(1, 0, 1, 23)], [span(0, 0, 1, 23)])
-    expect(notes[0]!.lemma).toEqual([{ kind: "citation", text: "line 2" }])
-    expect(notes[1]!.lemma).toEqual([{ kind: "citation", text: "lines 1–2" }])
+    expect(notes[0]!.lemma).toEqual([{ kind: "quote", text: "He did not know I saw -" }])
+    expect(notes[1]!.lemma).toEqual([
+      { kind: "quote", text: "A Bird, came down the Walk - / He did not know I saw -" },
+    ])
+  })
+
+  it("quotes more than two whole lines by their first and last, short of the whole poem", () => {
+    const longer = {
+      lines: withIds([...substrate.lines.map((line) => line.text), "And ate the fellow, raw,"]),
+    }
+    expect(lemmaOf(longer, [span(0, 0, 2, 30)])).toEqual([
+      { kind: "quote", text: "A Bird, came down the Walk - / … / He bit an Angle Worm in halves" },
+    ])
   })
 
   it("quotes a passage, with / at line breaks and … for the lines between", () => {
@@ -66,7 +77,7 @@ describe("notesFor: lemmas", () => {
     const { notes } = notesOn([span(2, 10, 2, 15), span(1, 0, 1, 23)])
     expect(notes[0]!.lemma).toEqual([
       { kind: "quote", text: "Angle" },
-      { kind: "citation", text: "line 2" },
+      { kind: "quote", text: "He did not know I saw -" },
     ])
   })
 

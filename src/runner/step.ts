@@ -9,7 +9,7 @@ import type { Event, Ruling, Standing, Station } from "./types"
 /** Where the run stands, from the runner's log, the reader's notebook and the day:
  * the step last visited in the stage that is open, when the next stage opens once this one is
  * finished, as the event that finished it fixed it, and which step holds the reader until they have
- * answered it: written, or restored. Once the last stage is finished the reader is in the final stage, unless they have since
+ * answered it: written, restored or disclosed. Once the last stage is finished the reader is in the final stage, unless they have since
  * gone back to a step of the last stage, to look again: then they are there, held nowhere. */
 export function standingOf(
   practice: Practice,
@@ -35,7 +35,7 @@ export function standingOf(
           visitedAt = index
         }
       } else if (
-        // A step restored moves no one: it only lifts its hold (heldAt)
+        // A step restored or disclosed moves no one: it only lifts its hold (heldAt)
         event.kind === "finished" &&
         finished === null &&
         event.day <= today &&
@@ -65,7 +65,8 @@ export function standingOf(
 }
 
 /** The first step of a stage that asks for writing and has none in the notebook, written on this
- * version of the practice, or that restores and is not restored in the log; or null. */
+ * version of the practice, that restores and is not restored in the log, or that discloses and is
+ * not disclosed in the log; or null. */
 function heldAt(
   practice: Practice,
   stage: number,
@@ -76,7 +77,8 @@ function heldAt(
   for (let step = 0; step < restOf(practice, stage); step++) {
     const gate = gateOf(practice, { stage, step })
     if (gate.kind !== "step") continue
-    if (gate.step.restore !== null && !isRestored(log, { stage, step })) return step
+    if (gate.step.restore !== null && !isLogged(log, "restored", { stage, step })) return step
+    if (gate.step.disclose.length > 0 && !isLogged(log, "disclosed", { stage, step })) return step
     if (gate.step.writing === null) continue
     if (notesFrom(notes, { practice: practice.id, fingerprint, stage, step }).length === 0) {
       return step
@@ -85,11 +87,14 @@ function heldAt(
   return null
 }
 
-/** Whether the log has the step at a station restored. */
-function isRestored(log: readonly Event[], station: Station): boolean {
+/** Whether the log has the step at a station restored, or disclosed. */
+function isLogged(
+  log: readonly Event[],
+  kind: "restored" | "disclosed",
+  station: Station,
+): boolean {
   return log.some(
-    (event) =>
-      event.kind === "restored" && event.stage === station.stage && event.step === station.step,
+    (event) => event.kind === kind && event.stage === station.stage && event.step === station.step,
   )
 }
 
@@ -97,6 +102,12 @@ function isRestored(log: readonly Event[], station: Station): boolean {
 function restores(practice: Practice, station: Station): boolean {
   const gate = gateOf(practice, station)
   return gate.kind === "step" && gate.step.restore !== null
+}
+
+/** Whether the step at a station discloses: it has notes to disclose. */
+function discloses(practice: Practice, station: Station): boolean {
+  const gate = gateOf(practice, station)
+  return gate.kind === "step" && gate.step.disclose.length > 0
 }
 
 /** Whether the reader may move to a step of the stage they stand in (standsAt), and whether the
@@ -168,8 +179,24 @@ export function eventOfRestoring(
   if (!restores(practice, station)) {
     throw new RangeError(`stage ${station.stage}, step ${station.step} does not restore`)
   }
-  if (isRestored(log, station)) return null
+  if (isLogged(log, "restored", station)) return null
   return { kind: "restored", stage: station.stage, step: station.step, at }
+}
+
+/** What the runner logs when the reader has disclosed every note of the step they are at: that it
+ * is disclosed, once; null when the log has it disclosed already. A station that is not a step that
+ * discloses is a mistake in the caller: it throws. */
+export function eventOfDisclosing(
+  practice: Practice,
+  log: readonly Event[],
+  station: Station,
+  at: number,
+): Event | null {
+  if (!discloses(practice, station)) {
+    throw new RangeError(`stage ${station.stage}, step ${station.step} does not disclose`)
+  }
+  if (isLogged(log, "disclosed", station)) return null
+  return { kind: "disclosed", stage: station.stage, step: station.step, at }
 }
 
 /** Whether the reader is at a step that restores and is not restored, in a stage not yet finished:
@@ -178,5 +205,5 @@ export function eventOfRestoring(
 export function isRestoring(practice: Practice, log: readonly Event[], today: Day): boolean {
   const { station, opensOn } = standingOf(practice, log, [], today)
   if (opensOn !== null) return false
-  return restores(practice, station) && !isRestored(log, station)
+  return restores(practice, station) && !isLogged(log, "restored", station)
 }

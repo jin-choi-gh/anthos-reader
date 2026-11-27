@@ -50,20 +50,24 @@ export interface Gap {
   readonly text: string
 }
 
-/** The notes a subject shows, from one set (the editor's, or the reader's): highlighted in the poem,
- * one opened by a tap ("marked"), or listed beside it ("listed"). */
+/** The notes a subject shows, from one set (the editor's, or the reader's): picked out in the poem,
+ * one opened by a tap ("marked"); listed beside it ("listed"); or disclosed one by one, in the set's
+ * order, by the praxis bar, the one being read picked out in the poem ("disclosed"). */
 export interface Commentary {
   /** The set the notes come from, with what each line's notes cover. */
   readonly set: Notes
   /** The notes shown: always notes of the set. */
   readonly notes: readonly Note[]
-  readonly shown: "marked" | "listed"
+  readonly shown: "marked" | "listed" | "disclosed"
   /** The reader's own notes the set shows, in its order, so that one can be withdrawn; null when
    * none may be, as for the editor's notes and for notes recalled. */
   readonly written: readonly ReaderNote[] | null
   /** For notes recalled, one for each note of the set, in its order: what each answered, and
    * whether it is on the whole poem; null for other notes. */
   readonly recalled: readonly Recalled[] | null
+  /** For notes disclosed, whether every one is disclosed already, as when the reader comes back to
+   * the step: then all are disclosed from the start, and the first is open; null for other notes. */
+  readonly disclosed: boolean | null
 }
 
 /** A note recalled: the words of the step it answered (its prompt); whether it is on the whole
@@ -138,28 +142,36 @@ export type PassageMessage =
   | { kind: "choosing"; on: boolean } // the toggle for choosing passages
   | { kind: "unchoose"; index: number } // −: the chosen target at that place in the table
 
+/** What the praxis bar tells the commentary, of notes disclosed. */
+export type DisclosureMessage =
+  | { kind: "disclose" } // the next note, disclosed and opened
+  | { kind: "turn"; note: number } // a note already disclosed, by its place in the set, opened
+
 /** What the praxis bar tells the restore. */
 export type RestoreMessage =
   | { kind: "take"; slip: number } // the slip at that place in the tray, into the first empty gap
   | { kind: "check" } // Check: every gap filled
 
 export interface PraxisBarProtocol {
-  toScene: WritingMessage | NotingMessage | PassageMessage | RestoreMessage
+  toScene: WritingMessage | NotingMessage | PassageMessage | DisclosureMessage | RestoreMessage
 }
 
 /** What the scene sends out for the mode to keep: for the notebook, what the reader has written, a
  * new annotation, a revision, or a withdrawal; for the run's log, that every gap of the step is
- * restored; for Form Practice, a word or line picked, by its span. For a new note, the mode adds the fingerprint and where it was written; the notebook
- * makes the id and the time. */
+ * restored, or that every note of it is disclosed; for Form Practice, a word or line picked, by its
+ * span. For a new note, the mode adds the fingerprint and where it was written; the notebook makes
+ * the id and the time. */
 export type Effect =
   | { kind: "note"; targets: readonly Span[]; tags: readonly string[]; body: string }
   | { kind: "revise"; id: NoteId; targets: readonly Span[]; body: string }
   | { kind: "withdraw"; id: NoteId }
   | { kind: "restored" }
+  | { kind: "disclosed" }
   | { kind: "pick"; span: Span }
 
-/** The commentary's share of what the viewer draws: the notes it shows, picked out ("marked") or
- * listed beside the poem ("listed"), and the open one. */
+/** The commentary's share of what the viewer draws: the notes it shows, picked out ("marked"),
+ * listed beside the poem ("listed"), or disclosed, of which only the open one, the one being read,
+ * is picked out ("disclosed"); and the open one. */
 export type CommentaryProjection =
   | { kind: "marked"; text: TextId; notes: Notes; marked: number[]; open: number | null }
   | {
@@ -171,6 +183,7 @@ export type CommentaryProjection =
       deletable: boolean // the reader's own notes, which can be deleted
       recalled: readonly Recalled[] | null // for notes recalled, by their place in the set
     }
+  | { kind: "disclosed"; text: TextId; notes: Notes; open: number | null }
 
 /** What the viewer draws: the commentary's share, whether choosing is on, the chosen targets, the
  * restore's gaps, and, in Form Practice, the words or lines to pick. */
@@ -203,18 +216,39 @@ export type GapProjection =
   | { state: "restored"; span: Span; text: string }
 
 /** What a subject asks of the reader besides its prose, from its parts: to write; to look back at
- * the notes it recalls; to restore the poem; to look at the editor's notes it picks out; or only to
- * read. With a noting, as in annotate mode, it asks nothing: null. */
-export type Asks = "read" | "notes" | "write" | "recall" | "restore" | null
+ * the notes it recalls; to restore the poem; to read the editor's notes as they are disclosed; or
+ * only to read. With a noting, as in annotate mode, or a picking, it asks nothing: null. */
+export type Asks = "read" | "disclose" | "write" | "recall" | "restore" | null
 
 /** What the praxis bar draws between the frame's heading and its buttons: the prose, the writing,
- * the noting, and the restore's slips. */
+ * the noting, the notes disclosed, and the restore's slips. */
 export interface PraxisBarProjection {
   asks: Asks
   prose: readonly string[]
   writing: WritingProjection | null
   noting: NotingProjection | null
+  disclosure: DisclosureProjection | null
   restore: SlipsProjection | null
+}
+
+/** The notes disclosed, for the praxis bar: the subject's key, so that what it draws starts afresh on
+ * another step; each note disclosed, in the order disclosed, with its place in the set, its lemma and
+ * its paragraphs; which of them is open, the one being read, by its place among them (null before
+ * the first is disclosed); whether more are to come; and how many the step has in all, which decides
+ * only how they are drawn, never what the reader is told. */
+export interface DisclosureProjection {
+  key: string
+  notes: readonly DisclosedNote[]
+  current: number | null
+  more: boolean
+  count: number
+}
+
+/** A note disclosed: its place in the set, its lemma and its paragraphs. */
+export interface DisclosedNote {
+  index: number
+  lemma: readonly LemmaPart[]
+  paragraphs: readonly string[]
 }
 
 /** The restore's slips, for the praxis bar: whether they are words or lines; every slip, in the

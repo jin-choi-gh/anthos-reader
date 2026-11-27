@@ -26,7 +26,8 @@ import type { Frame } from "./types"
 
 /** The frame where the run stands: its heading, the rulings on a step back and a step on, and
  * its subject: the step's editor's notes, placed on the poem by their noteheads, as a set of their
- * own, each picked out; what the reader wrote there, found in the notebook; and the writing's target,
+ * own, in the step's order, to be disclosed, and disclosed already unless the reader is held at the
+ * step; what the reader wrote there, found in the notebook; and the writing's target,
  * resolved against the poem. A note counts as written here only on this version of
  * the practice. A note on passages the reader chooses is found only if it was written on these
  * lines and every target keeps the rule for spans, so that its passages can be shown and chosen
@@ -63,7 +64,7 @@ export function frameOf(
       prose: parts.prose,
       commentary:
         parts.recall === null
-          ? editorsOf(parts.highlight, material)
+          ? editorsOf(parts.disclose, material, standing.heldAt !== station.step)
           : recalledOf(parts.recall, practice, where, material, written),
       writing:
         parts.writing === null
@@ -107,7 +108,14 @@ export function annotateFrame(
     key: "annotate",
     text,
     prose: [],
-    commentary: { set, notes: set.notes, shown: "listed", written: mine, recalled: null },
+    commentary: {
+      set,
+      notes: set.notes,
+      shown: "listed",
+      written: mine,
+      recalled: null,
+      disclosed: null,
+    },
     writing: null,
     noting: { substrate: material.substrate, tags: [] },
     restore: null,
@@ -144,7 +152,7 @@ function recalledOf(
     whole: note.targets.length === 1 && note.targets.every((target) => sameSpan(target, whole)),
     heading: found[i - 1]?.prompt.stage === prompt.stage ? null : prompt.stageName,
   }))
-  return { set, notes: set.notes, shown: "listed", written: null, recalled }
+  return { set, notes: set.notes, shown: "listed", written: null, recalled, disclosed: null }
 }
 
 /** The reader's notes a recall names, on this version of the practice, before they are placed: those
@@ -204,11 +212,14 @@ function placeable(note: ReaderNote, material: Material): boolean {
   )
 }
 
-/** The editor's notes a step highlights, as a set of their own, each placed on the poem by its
- * notehead, and each picked out. */
-function editorsOf(highlight: Parts["highlight"], material: Material): Commentary {
-  const set = notesFor(material.substrate, annotationsOf(material.substrate, highlight))
-  return { set, notes: set.notes, shown: "marked", written: null, recalled: null }
+/** The editor's notes a step discloses, as a set of their own, in the step's order, each placed on
+ * the poem by its notehead, to be disclosed one by one; and whether they are disclosed already, as
+ * they are once the reader is not held at the step (`free`), and always with none to disclose, as
+ * at a step that asks something else, a rest or the final stage. */
+function editorsOf(disclose: Parts["disclose"], material: Material, free: boolean): Commentary {
+  const set = notesFor(material.substrate, annotationsOf(material.substrate, disclose))
+  const disclosed = set.notes.length === 0 || free
+  return { set, notes: set.notes, shown: "disclosed", written: null, recalled: null, disclosed }
 }
 
 /** What the writing is about, in the poem: for "whole", the whole poem; for "chosen", passages the

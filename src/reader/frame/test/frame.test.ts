@@ -29,7 +29,7 @@ const material: Material = {
   poem: { title: "Fixture", author: "", stanzas: [] },
 }
 
-/** The editor's notes the practice's steps highlight, by their ids. "missing" cannot be placed on
+/** The editor's notes the practice's steps disclose, by their ids. "missing" cannot be placed on
  * these lines. */
 const editorsNotes: Record<string, EditorsNote> = {
   a: { id: "a", notehead: "l1 Bird", tags: [], body: "On the bird." },
@@ -56,11 +56,11 @@ const mine = (id: string, body: string, more: Partial<ReaderNote> = {}): ReaderN
   ...more,
 })
 
-/** A step that highlights one of the editor's notes. */
+/** A step that discloses one of the editor's notes. */
 const look = (id: string): Parts => ({
   ...REST,
   prose: [`On ${id}.`],
-  highlight: [editorsNotes[id]!],
+  disclose: [editorsNotes[id]!],
 })
 /** A step that asks for one note on the whole poem. */
 const askWhole: Parts = {
@@ -162,9 +162,10 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
             paragraphs: ["On the worm.", "And its halves."],
           },
         ],
-        shown: "marked",
+        shown: "disclosed",
         written: null,
         recalled: null,
+        disclosed: true,
       },
       writing: null,
       noting: null,
@@ -190,9 +191,10 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
       commentary: {
         set: noNotes,
         notes: [],
-        shown: "marked",
+        shown: "disclosed",
         written: null,
         recalled: null,
+        disclosed: true,
       },
       writing: {
         about: { kind: "fixed", targets: [whole] },
@@ -232,9 +234,10 @@ describe("frameOf: the subject, made of parts, in the practice's text", () => {
         commentary: {
           set: noNotes,
           notes: [],
-          shown: "marked",
+          shown: "disclosed",
           written: null,
           recalled: null,
+          disclosed: true,
         },
         writing: null,
         noting: null,
@@ -386,9 +389,10 @@ describe("frameOf: a step asking for writing on chosen passages, wherever the ed
       commentary: {
         set: noNotes,
         notes: [],
-        shown: "marked",
+        shown: "disclosed",
         written: null,
         recalled: null,
+        disclosed: true,
       },
       writing: {
         about: { kind: "chosen", substrate: material.substrate },
@@ -631,9 +635,10 @@ describe("frameOf: the final stage, bringing back every stage", () => {
     expect(commentary).toEqual({
       set: noNotes,
       notes: [],
-      shown: "marked",
+      shown: "disclosed",
       written: null,
       recalled: null,
+      disclosed: true,
     })
   })
 })
@@ -652,9 +657,10 @@ describe("frameOf: a step that only says something", () => {
       commentary: {
         set: noNotes,
         notes: [],
-        shown: "marked",
+        shown: "disclosed",
         written: null,
         recalled: null,
+        disclosed: true,
       },
       writing: null,
       noting: null,
@@ -734,5 +740,29 @@ describe("frameOf: a step that restores", () => {
     expect(frameOf(practice, standing(0, 2), material, []).subject.restore).toBeNull()
     expect(frameOf(practice, standing(1, 0), material, []).subject.restore).toBeNull()
     expect(annotateFrame("fixture", material, []).subject.restore).toBeNull()
+  })
+})
+
+describe("frameOf: a step that discloses the editor's notes", () => {
+  const two: Parts = { ...REST, prose: ["Two."], disclose: [editorsNotes.b!, editorsNotes.a!] }
+  const disclosing = practiceOf({ ...practice, stages: [{ name: "Only", steps: [two] }] })
+
+  it("gives them in the step's order, not the poem's, to be disclosed", () => {
+    const { commentary } = frameOf(disclosing, standing(0, 0, null, 0), material, []).subject
+    expect(commentary.shown).toBe("disclosed")
+    expect(commentary.notes.map((note) => note.id)).toEqual(["b", "a"])
+    expect(commentary.notes.map((note) => note.index)).toEqual([0, 1])
+  })
+
+  it("has them disclosed already unless the reader is held at the step", () => {
+    const held = frameOf(disclosing, standing(0, 0, null, 0), material, [])
+    expect(held.subject.commentary.disclosed).toBe(false)
+    const free = frameOf(disclosing, standing(0, 0), material, [])
+    expect(free.subject.commentary.disclosed).toBe(true)
+  })
+
+  it("refuses Next while held there, as unanswered, and allows Back", () => {
+    const frame = frameOf(disclosing, standing(0, 0, null, 0), material, [])
+    expect(frame.next).toEqual({ allowed: false, reason: { kind: "unanswered" } })
   })
 })

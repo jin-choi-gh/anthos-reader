@@ -14,7 +14,7 @@ import { nextNoteId, type Edit } from "./edits"
 /** The subject of the step being made, named by its id, for the Scene to play as annotate mode's
  * is played: the step's prose, as the reader will see it; its editor's notes, placed by their
  * noteheads as a set of their own, each picked out; nothing for the editor to write as a reader;
- * and, when `noting` says the step highlights, a noting, with no tags, for a new editor's note on
+ * and, when `noting` says the step discloses, a noting, with no tags, for a new editor's note on
  * passages chosen in the poem; and, when the step restores, a picking, of the poem's words or of its
  * lines, as the restore takes out (pickingOf). The note `inHand`, when given, taken up in the noting to be written
  * again, is left out of the notes picked out, so that it is not drawn twice. Its key is the step's
@@ -29,13 +29,20 @@ export function makerFrame(
 ): Subject {
   const place = id === null ? null : stepPlaceOf(draft, id)
   const step = place === null ? undefined : draft.stages[place.stage]?.steps[place.step]
-  const highlight = (step?.highlight ?? []).filter((note) => note.id !== inHand)
-  const set = notesFor(material.substrate, annotationsOf(material.substrate, highlight))
+  const disclose = (step?.disclose ?? []).filter((note) => note.id !== inHand)
+  const set = notesFor(material.substrate, annotationsOf(material.substrate, disclose))
   return {
     key: step === undefined ? "form" : `form/${step.id}`,
     text: draft.text,
     prose: step?.prose ?? [],
-    commentary: { set, notes: set.notes, shown: "marked", written: null, recalled: null },
+    commentary: {
+      set,
+      notes: set.notes,
+      shown: "marked",
+      written: null,
+      recalled: null,
+      disclosed: null,
+    },
     writing: null,
     noting: step !== undefined && noting ? { substrate: material.substrate, tags: [] } : null,
     restore: null,
@@ -114,8 +121,8 @@ export function editOfNote(
 ): Edit | null {
   const step = draft.stages[at.stage]?.steps[at.step]
   if (step === undefined) return null
-  const index = inHand === null ? -1 : step.highlight.findIndex((note) => note.id === inHand)
-  const old = step.highlight[index]
+  const index = inHand === null ? -1 : step.disclose.findIndex((note) => note.id === inHand)
+  const old = step.disclose[index]
   if (old !== undefined) {
     const note = noteOf(effect, substrate, old.id)
     if (note === null) return null

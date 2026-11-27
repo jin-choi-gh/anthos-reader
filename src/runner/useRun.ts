@@ -4,11 +4,11 @@ import type { ReaderNote } from "../notebook/types"
 import type { Practice } from "../practice/types"
 import { whenChanged } from "../storage/log"
 import { appendLog, logKey, readLog } from "./log"
-import { eventOfRestoring, eventsOfMove, standingOf } from "./step"
+import { eventOfDisclosing, eventOfRestoring, eventsOfMove, standingOf } from "./step"
 import type { Event, Standing } from "./types"
 
 /** A run of a practice, for as long as the component that holds it: where it stands, today, the
- * log, and the two things that can be done with it: a move, and the step the reader is at restored. */
+ * log, and what can be done with it: a move, and the step the reader is at restored, or disclosed. */
 export interface Run {
   standing: Standing
   today: Day
@@ -16,6 +16,8 @@ export interface Run {
   moveTo(target: number): void
   /** Every gap of the step the reader is at is restored: kept once. */
   restored(): void
+  /** Every note of the step the reader is at is disclosed: kept once. */
+  disclosed(): void
 }
 
 /** The run of a practice. `notes` are read, never written: a step that asks for writing holds the
@@ -59,6 +61,11 @@ export function useRun(practice: Practice, notes: readonly ReaderNote[]): Run {
     restored() {
       const here = standingOf(practice, latest.current, notes, today())
       const event = eventOfRestoring(practice, latest.current, here.station, now())
+      if (event !== null) keep([event])
+    },
+    disclosed() {
+      const here = standingOf(practice, latest.current, notes, today())
+      const event = eventOfDisclosing(practice, latest.current, here.station, now())
       if (event !== null) keep([event])
     },
   }

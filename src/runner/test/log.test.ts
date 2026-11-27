@@ -98,9 +98,13 @@ describe("saving and reading a run", () => {
   })
 })
 
-describe("a step restored", () => {
+describe("a step restored, or disclosed", () => {
   it("is read back as it was kept", () => {
-    const kept: Event[] = [...log, { kind: "restored", stage: 0, step: 1, at: 7 }]
+    const kept: Event[] = [
+      ...log,
+      { kind: "restored", stage: 0, step: 1, at: 7 },
+      { kind: "disclosed", stage: 0, step: 0, at: 8 },
+    ]
     appendLog(practice, kept)
     expect(readLog(practice)).toEqual(kept)
   })
@@ -128,6 +132,7 @@ describe("a damaged log", () => {
       { kind: "responded", stage: 0, step: 0, text: "A bird.", at: 0 }, // an older kind, now kept in the notebook
       { kind: "restored", stage: 0, at: 0 }, // no step
       { kind: "restored", stage: 0, step: 0.5, at: 0 }, // half a step
+      { kind: "disclosed", stage: 0, at: 0 }, // no step
     ]
     stored.set(logKey(practice), JSON.stringify([log[0], ...strays, log[1]]))
     expect(readLog(practice)).toEqual(log)

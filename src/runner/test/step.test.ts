@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest"
-import { eventOfRestoring, eventsOfMove, isRestoring, ruling, standingOf } from "../step"
+import {
+  eventOfDisclosing,
+  eventOfRestoring,
+  eventsOfMove,
+  isRestoring,
+  ruling,
+  standingOf,
+} from "../step"
 import { fingerprintOfPractice } from "../../practice/fingerprint"
 import { REST } from "../../practice/parts"
 import type { Practice, Parts } from "../../practice/types"
@@ -714,6 +721,105 @@ describe("the law: a step that restores holds the reader there until every gap i
     it("is false in a finished stage, even at a game the log does not have restored", () => {
       const log = [visited(0, 1), visited(0, 3), finished(0, today, nextDay(today)), visited(0, 1)]
       expect(isRestoring(restoring, log, today)).toBe(false)
+    })
+  })
+})
+
+describe("the law: a step that discloses holds the reader there until every note is disclosed", () => {
+  const note = { id: "bird", notehead: "l1 Bird", tags: [], body: "The bird." }
+  const notes: Parts = { ...REST, prose: ["Read them."], disclose: [note, { ...note, id: "walk" }] }
+  /** Stage 1: a, the notes, c, its rest at 3; stage 2: d, its rest at 1. */
+  const disclosing = practiceOf({
+    id: "disclosing",
+    title: "Disclosing",
+    text: "fixture",
+    stages: [
+      { name: "First", steps: [say("a"), notes, say("c")] },
+      { name: "Second", steps: [say("d")] },
+    ],
+  })
+  const disclosed = (stage: number, step: number): Event => ({
+    kind: "disclosed",
+    stage,
+    step,
+    at: 0,
+  })
+  const restored = (stage: number, step: number): Event => ({
+    kind: "restored",
+    stage,
+    step,
+    at: 0,
+  })
+  const today = "2026-11-10"
+  const at = 1_000
+
+  it("holds the reader at the notes until the log has them disclosed", () => {
+    expect(replay(disclosing, [], today)).toEqual(standing(0, 0, null, 1))
+    expect(replay(disclosing, [visited(0, 1)], today)).toEqual(standing(0, 1, null, 1))
+    expect(replay(disclosing, [visited(0, 1), disclosed(0, 1)], today)).toEqual(standing(0, 1))
+  })
+
+  it("counts only the step's own disclosing, not another step's, nor its restoring", () => {
+    const log = [visited(0, 1), disclosed(0, 0), disclosed(1, 1), restored(0, 1)]
+    expect(replay(disclosing, log, today).heldAt).toBe(1)
+  })
+
+  it("at the notes, lets the reader go back, but not on: they are not locked there", () => {
+    const here = standing(0, 1, null, 1)
+    expect(ruling(disclosing, here, 0)).toEqual({ allowed: true, to: 0, finishes: false })
+    for (const target of [2, 3]) {
+      expect(ruling(disclosing, here, target)).toEqual({
+        allowed: false,
+        reason: { kind: "unanswered" },
+      })
+    }
+  })
+
+  it("once disclosed, lets the reader on", () => {
+    const here = replay(disclosing, [visited(0, 1), disclosed(0, 1)], today)
+    expect(ruling(disclosing, here, 2)).toEqual({ allowed: true, to: 2, finishes: false })
+  })
+
+  it("walks: to the notes, back before they are disclosed, to them again, disclosed, and on", () => {
+    const log: Event[] = []
+    const walk = (target: number) => {
+      log.push(...eventsOfMove(disclosing, replay(disclosing, log, today), target, at, today))
+      return replay(disclosing, log, today)
+    }
+    expect(walk(1)).toEqual(standing(0, 1, null, 1))
+    expect(walk(0)).toEqual(standing(0, 0, null, 1))
+    expect(walk(1)).toEqual(standing(0, 1, null, 1))
+    const event = eventOfDisclosing(disclosing, log, { stage: 0, step: 1 }, at)
+    expect(event).toEqual({ kind: "disclosed", stage: 0, step: 1, at })
+    log.push(event!)
+    expect(walk(2)).toEqual(standing(0, 2))
+    expect(walk(3)).toEqual(standing(0, 3, nextDay(today)))
+  })
+
+  it("does not keep the reader in practice mode: only a step that restores does", () => {
+    expect(isRestoring(disclosing, [visited(0, 1)], today)).toBe(false)
+  })
+
+  describe("eventOfDisclosing", () => {
+    it("gives the step disclosed, once: nothing when the log has it already", () => {
+      const station = { stage: 0, step: 1 }
+      expect(eventOfDisclosing(disclosing, [], station, at)).toEqual({
+        kind: "disclosed",
+        stage: 0,
+        step: 1,
+        at,
+      })
+      expect(eventOfDisclosing(disclosing, [disclosed(0, 1)], station, at)).toBeNull()
+    })
+
+    it("throws at a station that is not a step that discloses: a step, a rest, the final stage", () => {
+      for (const station of [
+        { stage: 0, step: 0 },
+        { stage: 0, step: 3 },
+        { stage: 2, step: 0 },
+      ]) {
+        expect(() => eventOfDisclosing(disclosing, [], station, at)).toThrow(/does not disclose/)
+      }
     })
   })
 })

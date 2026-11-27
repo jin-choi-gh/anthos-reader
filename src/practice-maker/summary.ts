@@ -4,13 +4,13 @@ import type { Problem, ProblemAbout } from "../practice/problems"
 import type { Parts, Practice, Recall, Restore } from "../practice/types"
 
 /** A part a step may ask besides its prose. */
-export type PartName = "highlight" | "writing" | "recall" | "restore"
+export type PartName = "disclose" | "writing" | "recall" | "restore"
 
-/** The part a step asks besides its prose: the first it has of highlight, writing, recall and
+/** The part a step asks besides its prose: the first it has of disclose, writing, recall and
  * restore, or
  * null for none. A step with more than one, which problemsOf refuses, is taken by its first. */
 export function partOf(step: Parts): PartName | null {
-  if (step.highlight.length > 0) return "highlight"
+  if (step.disclose.length > 0) return "disclose"
   if (step.writing !== null) return "writing"
   if (step.recall !== null) return "recall"
   if (step.restore !== null) return "restore"
@@ -87,14 +87,14 @@ export function recallTargets(
   return targets
 }
 
-/** The part of a step, in a few words, for the reel's anatomy: "Highlighting · 2 notes", "Reader
+/** The part of a step, in a few words, for the reel's anatomy: "Disclosing · 2 notes", "Reader
  * response · whole poem", "Reader recall · Stage 1"; null for a step that asks nothing more. */
 export function partLabel(practice: Practice, step: Parts): string | null {
   const part = partOf(step)
   switch (part) {
-    case "highlight": {
-      const n = step.highlight.length
-      return `Highlighting · ${n} ${n === 1 ? "note" : "notes"}`
+    case "disclose": {
+      const n = step.disclose.length
+      return `Disclosing · ${n} ${n === 1 ? "note" : "notes"}`
     }
     case "writing":
       return `Reader response · ${step.writing?.target === "chosen" ? "chosen passages" : "whole poem"}`
@@ -114,8 +114,8 @@ export function partLabel(practice: Practice, step: Parts): string | null {
 export function partWord(step: Parts): string | null {
   const part = partOf(step)
   switch (part) {
-    case "highlight": {
-      const n = step.highlight.length
+    case "disclose": {
+      const n = step.disclose.length
       return `${n} ${n === 1 ? "note" : "notes"}`
     }
     case "writing":

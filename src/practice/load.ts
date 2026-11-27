@@ -2,8 +2,9 @@ import { practiceProblem } from "./guard"
 import type { Practice } from "./types"
 
 // The version of practice files this reader reads: 2 gave stages and steps ids, stages their days,
-// and recalls the stage or step they name; 3 gave steps their restore
-const FORMAT_VERSION = 3
+// and recalls the stage or step they name; 3 gave steps their restore; 4 renamed their highlight
+// disclose
+const FORMAT_VERSION = 4
 
 // Every practice file in anthos-reader/practice-data/, read by Vite when it builds the app: file path
 // → the file's JSON. Practices are small, so all are read at once.
@@ -29,7 +30,7 @@ export function loadPractices(): { practices: Practice[]; problems: string[] } {
 }
 
 /** Parsed JSON checked to be a practice file this reader understands: marked "anthos-practice",
- * format version 3, and, without those two marks, a practice. Throws, naming `origin` and saying
+ * format version 4, and, without those two marks, a practice. Throws, naming `origin` and saying
  * what is wrong, when it is not. */
 export function parsePractice(data: unknown, origin: string): Practice {
   if (!isRecord(data) || data.format !== "anthos-practice") {
@@ -64,10 +65,10 @@ export function practiceFileOf(practice: Practice): string {
       id,
       name,
       days,
-      steps: steps.map(({ id, prose, highlight, writing, recall, restore }) => ({
+      steps: steps.map(({ id, prose, disclose, writing, recall, restore }) => ({
         id,
         prose,
-        highlight: highlight.map(({ id, notehead, tags, body }) => ({ id, notehead, tags, body })),
+        disclose: disclose.map(({ id, notehead, tags, body }) => ({ id, notehead, tags, body })),
         writing,
         recall,
         restore,

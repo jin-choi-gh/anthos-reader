@@ -77,7 +77,7 @@ describe("passagesOf: what the praxis bar draws", () => {
       choosing: true,
       chosen: [
         { kind: "quote", text: "Bird" },
-        { kind: "citation", text: "line 3" },
+        { kind: "quote", text: "He bit an Angle Worm in halves" },
       ],
     })
   })

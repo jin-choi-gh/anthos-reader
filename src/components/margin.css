@@ -1,7 +1,9 @@
 /* Colours, faces, radii and shadows come from the theme (src/themes/); this file only arranges. */
 
 /* Spread: the margin stays in view, level with the title, and scrolls on its own, never the poem.
-   7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window. */
+   7rem is the reader's padding above (3rem) and below (4rem), so the margin always fits the window.
+   It is always as tall as that, however little it holds, so that its rule divides the poem from the
+   margin the whole height of the window */
 .margin {
   grid-area: margin;
   padding-left: 2rem;
@@ -12,8 +14,14 @@
   align-self: start;
   position: sticky;
   top: 3rem;
-  max-height: calc(100dvh - 7rem);
+  height: calc(100dvh - 7rem);
   overflow-y: auto;
+  /* No scrollbar: the edges say there is more */
+  scrollbar-width: none;
+}
+
+.margin::-webkit-scrollbar {
+  display: none;
 }
 
 /* With nothing to scroll, it would hold the scrolls over it and do nothing with them */
@@ -22,8 +30,47 @@
 }
 
 /* Practice mode on a spread: the praxis bar, then the open note, stacked in the margin */
-.margin {
+.margin-content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+/* While more lies above or below what the margin shows, that edge fades into the page, as a page
+   turns under: the fades stay at the edges as the margin scrolls, over what it holds but not its
+   rule, and take no taps */
+.margin::before,
+.margin::after {
+  content: "";
+  position: sticky;
+  z-index: 1;
+  display: block;
+  height: 2.5rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.margin::before {
+  top: 0;
+  margin-bottom: -2.5rem;
+  background: linear-gradient(var(--page), transparent);
+}
+
+.margin::after {
+  bottom: 0;
+  margin-top: -2.5rem;
+  background: linear-gradient(transparent, var(--page));
+}
+
+.margin[data-above="true"]::before,
+.margin[data-below="true"]::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .margin::before,
+  .margin::after {
+    transition: none;
+  }
 }

@@ -2,8 +2,8 @@ import type { Day } from "../clock/clock"
 import type { Stage, Step } from "../practice/types"
 
 /** What the runner logs: the reader came to a step; reached a stage's rest, which finishes the
- * stage, on a day, and fixes the day the next stage opens; or restored every gap of a step that
- * restores. */
+ * stage, on a day, and fixes the day the next stage opens; restored every gap of a step that
+ * restores; or disclosed every note of a step that discloses. */
 export type Event =
   | { readonly kind: "visited"; readonly stage: number; readonly step: number; readonly at: number }
   | {
@@ -15,6 +15,12 @@ export type Event =
     }
   | {
       readonly kind: "restored"
+      readonly stage: number
+      readonly step: number
+      readonly at: number
+    }
+  | {
+      readonly kind: "disclosed"
       readonly stage: number
       readonly step: number
       readonly at: number
@@ -43,7 +49,8 @@ export type Gate =
   | { readonly kind: "final" }
 
 /** Why the law refuses a move: there is no such step; the next stage is not open; a step on
- * the way asks for writing the reader has not done, or restores and is not restored; the reader is
+ * the way asks for writing the reader has not done, restores and is not restored, or discloses and
+ * is not disclosed; the reader is
  * at a step that restores and is not restored, which they may not leave; or, past the final stage,
  * the practice is over. */
 export type Reason =

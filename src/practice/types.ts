@@ -40,7 +40,7 @@ export interface Step extends Parts {
 /** What a step is made of. */
 export interface Parts {
   readonly prose: readonly string[]
-  readonly highlight: readonly EditorsNote[]
+  readonly disclose: readonly EditorsNote[]
   readonly writing: Writing | null
   readonly recall: Recall | null
   readonly restore: Restore | null

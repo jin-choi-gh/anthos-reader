@@ -65,6 +65,9 @@ export function PracticeMode({
       case "restored":
         // Kept in the run's log, not the notebook: the reader is held at the step no longer
         return run.restored()
+      case "disclosed":
+        // Kept in the run's log too: the reader may go on, and coming back finds every note
+        return run.disclosed()
       case "pick":
         // Only Form Practice picks: the scene never sends this out here
         return
@@ -74,6 +77,8 @@ export function PracticeMode({
   })
   const viewer = { projection: scene.viewer, materials, send: scene.toScene.viewer }
   const listed = scene.viewer.kind === "listed"
+  // A note opened from the poem; notes disclosed are read in the praxis bar, never here
+  const picked = scene.viewer.kind === "marked" && scene.viewer.open !== null
   const count = scene.viewer.kind === "listed" ? scene.viewer.shown.length : 0
   // The final stage brings back the reader's responses to the whole practice; a recall step, to
   // the stage or step it names
@@ -86,7 +91,7 @@ export function PracticeMode({
       topBar={topBar(locked)}
       dev={import.meta.env.DEV && <DevPanel practice={practice} run={run} notes={notebook.notes} />}
       page={<ViewerPage {...viewer} />}
-      notes={listed || scene.viewer.open !== null ? <ViewerNotes {...viewer} /> : null}
+      notes={listed || picked ? <ViewerNotes {...viewer} /> : null}
       notesAs={listed ? "list" : "open"}
       notesLabel={count === 0 ? label : `${label} · ${count}`}
       notesOpen={listed}
@@ -97,6 +102,7 @@ export function PracticeMode({
           send={scene.toScene.praxisBar}
           today={run.today}
           label="Practice"
+          layout={layout}
         />
       }
     />

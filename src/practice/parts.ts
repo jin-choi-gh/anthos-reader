@@ -3,7 +3,7 @@ import type { Parts, Practice } from "./types"
 /** A stage's rest: nothing said, nothing asked. It has no id: only the runner adds it. */
 export const REST: Parts = {
   prose: [],
-  highlight: [],
+  disclose: [],
   writing: null,
   recall: null,
   restore: null,
@@ -17,7 +17,7 @@ export function finalPartsOf(practice: Practice): Parts {
   const asks = practice.stages.some((stage) => stage.steps.some((step) => step.writing !== null))
   return {
     prose: ["Explicit."],
-    highlight: [],
+    disclose: [],
     writing: null,
     recall: asks ? { from: "all" } : null,
     restore: null,

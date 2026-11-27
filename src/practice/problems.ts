@@ -38,15 +38,16 @@ export type ProblemAbout =
 // An id, as loom allows one: letters, digits, - and _
 const ID = /^[A-Za-z0-9_-]+$/
 
-/** Everything that keeps a practice from running on its text, whose lines and words are given, in the
- * practice's order: no title; no stages; a stage with no name or no steps; an id that is malformed,
- * or that a stage, step or note before it, of the same kind, has already; days on the first stage,
- * or days on a later one that are not a whole number of at least 1; a step with no prose, or with
- * more than one of highlight, writing and recall, since a step asks one thing of the reader and a
- * subject has one commentary; a note with no body, or a notehead that cannot be placed on the lines;
- * and a recall of the whole practice, which only the final stage makes, or one naming a stage or step
- * that is not there, that does not come before it, or that asks for nothing to be written; and a restore with fewer than two gaps, a gap that cannot be placed
- * or that is not what the restore takes out, or gaps that overlap. None means the practice can run. */
+/** Everything that keeps a practice from running on its text, whose lines and words are given, in
+ * the practice's order: no title; no stages; a stage with no name or no steps; an id that is
+ * malformed, or that a stage, step or note before it, of the same kind, has already; days on the
+ * first stage, or days on a later one that are not a whole number of at least 1; a step with no
+ * prose, or with more than one of disclose, writing, recall and restore, since a step asks one thing
+ * of the reader and a subject has one commentary; a note with no body, or a notehead that cannot be
+ * placed on the lines; a recall of the whole practice, which only the final stage makes, or one
+ * naming a stage or step that is not there, that does not come before it, or that asks for nothing
+ * to be written; and a restore with fewer than two gaps, a gap that cannot be placed or that is not
+ * what the restore takes out, or gaps that overlap. None means the practice can run. */
 export function problemsOf(
   practice: Practice,
   text: Pick<Material, "substrate" | "words">,
@@ -99,7 +100,7 @@ export function problemsOf(
       idOf(at, step.id, stepIds)
       if (!step.prose.some((paragraph) => paragraph.trim() !== "")) add(at, "prose", "no prose")
       const parts = [
-        step.highlight.length > 0,
+        step.disclose.length > 0,
         step.writing !== null,
         step.recall !== null,
         step.restore !== null,
@@ -108,10 +109,10 @@ export function problemsOf(
         add(
           at,
           "parts",
-          "more than one of highlight, writing, recall and restore: a step asks one thing",
+          "more than one of disclose, writing, recall and restore: a step asks one thing",
         )
       }
-      step.highlight.forEach((note, n) => {
+      step.disclose.forEach((note, n) => {
         const on = { ...at, note: n }
         idOf(on, note.id, noteIds)
         if (note.body.trim() === "") add(on, "body", "no body")

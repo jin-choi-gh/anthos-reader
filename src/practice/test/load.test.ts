@@ -40,7 +40,7 @@ describe("practice-data/first-reading.json", () => {
 
   it("holds the editor's notes on the poem, each with the head written in loom's notes file", () => {
     const notes = firstReading.stages.flatMap((stage) =>
-      stage.steps.flatMap((step) => step.highlight),
+      stage.steps.flatMap((step) => step.disclose),
     )
     expect(notes.map((note) => [note.id, note.notehead])).toEqual(
       DICKINSON_NOTES.map((note) => [note.id, note.head]),
@@ -50,7 +50,7 @@ describe("practice-data/first-reading.json", () => {
 
 describe("parsePractice", () => {
   const practice = { id: "test", title: "Test", text: "dickinson", stages: [] }
-  const file = { format: "anthos-practice", format_version: 3, ...practice }
+  const file = { format: "anthos-practice", format_version: 4, ...practice }
 
   it("gives the practice in a practice file, without the file's marks", () => {
     expect(parsePractice(file, "test.json")).toEqual(practice)
@@ -60,7 +60,7 @@ describe("parsePractice", () => {
     expect(() => parsePractice(practice, "test.json")).toThrow("test.json: not an anthos practice")
     expect(() => parsePractice(null, "test.json")).toThrow("test.json: not an anthos practice")
     expect(() => parsePractice({ ...file, format_version: 2 }, "test.json")).toThrow(
-      "test.json: format version 2, but this reader reads version 3",
+      "test.json: format version 2, but this reader reads version 4",
     )
   })
 

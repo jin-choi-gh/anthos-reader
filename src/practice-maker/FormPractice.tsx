@@ -110,8 +110,8 @@ function Maker({
   const { practice, edit } = draft
   const { substrate } = material
   const [chosen, setChosen] = useState<Selection | null>(() => firstSelection(practice))
-  // The step for which Highlighting was chosen while it has no note, while it stays selected
-  const [highlighting, setHighlighting] = useState<StepId | null>(null)
+  // The step for which Disclosing was chosen while it has no note, while it stays selected
+  const [disclosing, setDisclosing] = useState<StepId | null>(null)
   // The editor's note taken up in the noting, on the step selected, and whether removing it is asked
   const [inHand, setInHand] = useState<{ step: StepId; id: string } | null>(null)
   const [removingNote, setRemovingNote] = useState(false)
@@ -132,7 +132,7 @@ function Maker({
     chosen !== null && isInDraft(practice, chosen) ? chosen : firstSelection(practice)
   const select = (next: Selection | null) => {
     setChosen(next)
-    setHighlighting(null)
+    setDisclosing(null)
     setInHand(null)
     setRemovingNote(false)
   }
@@ -142,8 +142,8 @@ function Maker({
   const stepId = selection?.kind === "step" ? selection.id : null
   const at = stepId === null ? null : stepPlaceOf(practice, stepId)
   const step = at === null ? undefined : practice.stages[at.stage]?.steps[at.step]
-  // The step highlights, or is about to: it has notes, or Highlighting was chosen for it
-  const noting = step !== undefined && (step.highlight.length > 0 || highlighting === step.id)
+  // The step discloses, or is about to: it has notes, or Disclosing was chosen for it
+  const noting = step !== undefined && (step.disclose.length > 0 || disclosing === step.id)
   const held = noting && inHand !== null && inHand.step === stepId ? inHand.id : null
   const subject = useMemo(
     () => makerFrame(practice, stepId, material, { noting, inHand: held }),
@@ -173,6 +173,7 @@ function Maker({
       case "revise":
       case "withdraw":
       case "restored":
+      case "disclosed":
         // The editor's notes are not the reader's, and the step being made is not played: the
         // scene never sends these out here
         return
@@ -194,7 +195,7 @@ function Maker({
   /** Takes a note of the step up in the noting, to edit it: its passages, as its notehead places
    * them (none, if it cannot be placed), chosen again, and its words in the box. */
   const takeUp = (index: number) => {
-    const note = step?.highlight[index]
+    const note = step?.disclose[index]
     if (step === undefined || note === undefined) return
     const placed = spansOfNotehead(substrate, note.notehead)
     setInHand({ step: step.id, id: note.id })
@@ -215,12 +216,12 @@ function Maker({
     scene.toScene.praxisBar({ kind: "choosing", on: false })
   }
 
-  /** Removes the note in hand. A step whose only note it was stays on Highlighting, for another. */
+  /** Removes the note in hand. A step whose only note it was stays on Disclosing, for another. */
   const removeInHand = () => {
     if (at === null || step === undefined || held === null) return
-    const index = step.highlight.findIndex((note) => note.id === held)
+    const index = step.disclose.findIndex((note) => note.id === held)
     if (index !== -1) edit({ kind: "removeNote", at, index })
-    if (step.highlight.length === 1) setHighlighting(step.id)
+    if (step.disclose.length === 1) setDisclosing(step.id)
     putDown()
   }
 
@@ -231,7 +232,7 @@ function Maker({
       case "tapNote": {
         if (composing) return
         const id = subject.commentary.notes.find((note) => note.index === message.note)?.id
-        const index = step?.highlight.findIndex((note) => note.id === id) ?? -1
+        const index = step?.disclose.findIndex((note) => note.id === id) ?? -1
         if (index !== -1) takeUp(index)
         return
       }
@@ -382,9 +383,9 @@ function Maker({
         at={at}
         problems={problems}
         substrate={substrate}
-        highlighting={highlighting === selection.id}
-        onHighlighting={(on) => {
-          setHighlighting(on ? selection.id : null)
+        disclosing={disclosing === selection.id}
+        onDisclosing={(on) => {
+          setDisclosing(on ? selection.id : null)
           setInHand(null)
           setRemovingNote(false)
         }}

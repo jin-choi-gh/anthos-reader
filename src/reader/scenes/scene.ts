@@ -1,6 +1,16 @@
 import { assertNever } from "../../assertNever"
 import type { Span } from "../../material/types"
-import { keepOpen, onViewer, viewerOf, type OpenNote } from "./parts/commentary"
+import {
+  disclosureOf,
+  keepDisclosure,
+  keepOpen,
+  onDisclosure,
+  onViewer,
+  startDisclosure,
+  viewerOf,
+  type Disclosure,
+  type OpenNote,
+} from "./parts/commentary"
 import * as noting from "./parts/noting"
 import * as picking from "./parts/picking"
 import type { NotingState } from "./parts/noting"
@@ -26,8 +36,10 @@ import type {
 
 export interface SceneState {
   readonly subject: Subject
-  /** The note the reader has opened, if any. */
+  /** The note the reader has opened, if any: of notes disclosed, the one being read. */
   readonly open: OpenNote | null
+  /** Of notes disclosed one by one, how many are disclosed; otherwise 0. */
+  readonly disclosed: number
   /** The writing, when the subject asks for it. */
   readonly writing: WritingState | null
   /** The new note, when the subject has noting. */
@@ -42,7 +54,8 @@ export const scene = {
     const page = subject.writing === null ? null : writing.startWriting(subject.writing)
     const note = subject.noting === null ? null : noting.startNoting()
     const game = subject.restore === null ? null : restoring.startRestoring(subject.restore)
-    return reply({ subject, open: null, writing: page, noting: note, restore: game })
+    const { disclosed, open } = startDisclosure(subject.commentary)
+    return reply({ subject, open, disclosed, writing: page, noting: note, restore: game })
   },
 
   /** The frame's new subject. The very same subject changes nothing. A new key starts the scene
@@ -66,9 +79,14 @@ export const scene = {
         : was === null || current.restore === null
           ? restoring.startRestoring(subject.restore)
           : restoring.keepRestoring(was, subject.restore, current.restore)
+    const { disclosed, open } = keepDisclosure(current.subject.commentary, subject.commentary, {
+      disclosed: current.disclosed,
+      open: keepOpen(subject.commentary, current.open),
+    })
     return reply({
       subject,
-      open: keepOpen(subject.commentary, current.open),
+      open,
+      disclosed,
       writing: page,
       noting: note,
       restore: game,
@@ -95,8 +113,9 @@ export const scene = {
   },
 
   /** The praxis bar speaks to the writing, to the noting, about passages to the part that chooses
-   * them, or to the restore; the writing and the noting may write in the notebook, and the restore
-   * send out that the step is restored. Speaking to the noting also closes the open note. */
+   * them, to the commentary of notes disclosed, or to the restore; the writing and the noting may
+   * write in the notebook, and the commentary send out that the step is disclosed, and the restore
+   * that it is restored. Speaking to the noting also closes the open note. */
   fromPraxisBar(current: SceneState, message: PraxisBarProtocol["toScene"]): Reply<SceneState> {
     switch (message.kind) {
       case "draft":
@@ -119,6 +138,11 @@ export const scene = {
       case "choosing":
       case "unchoose":
         return reply(passagesAfter(current, message))
+      case "disclose":
+      case "turn": {
+        const answer = onDisclosure(current.subject.commentary, disclosureIn(current), message)
+        return reply(withDisclosure(current, answer.disclosure), answer.effects)
+      }
       case "take":
       case "check": {
         const subject = current.subject.restore
@@ -147,8 +171,8 @@ export const scene = {
     }
   },
 
-  /** The prose, the writing, the noting and the restore's slips; nothing at all when there is none,
-   * as at the rest. */
+  /** The prose, the writing, the noting, the notes disclosed and the restore's slips; nothing at all
+   * when there is none, as at the rest. */
   praxisBar(current: SceneState): PraxisBarProjection | null {
     const { prose } = current.subject
     const page =
@@ -163,20 +187,39 @@ export const scene = {
       current.subject.restore === null || current.restore === null
         ? null
         : restoring.trayOf(current.subject.restore, current.restore)
-    if (prose.length === 0 && page === null && note === null && game === null) return null
-    return { asks: asksOf(current.subject), prose, writing: page, noting: note, restore: game }
+    const { key, commentary } = current.subject
+    const disclosure = disclosureOf(key, commentary, disclosureIn(current))
+    if (
+      prose.length === 0 &&
+      page === null &&
+      note === null &&
+      disclosure === null &&
+      game === null
+    ) {
+      return null
+    }
+    return {
+      asks: asksOf(current.subject),
+      prose,
+      writing: page,
+      noting: note,
+      disclosure,
+      restore: game,
+    }
   },
 }
 
 /** What a subject asks of the reader besides its prose, from its parts: writing first, then a
- * recall, then restoring, then the editor's notes picked out; nothing with a noting or a picking;
+ * recall, then restoring, then the editor's notes to disclose; nothing with a noting or a picking;
  * otherwise only reading. */
 export function asksOf(subject: Subject): Asks {
   if (subject.noting !== null || subject.picking !== null) return null
   if (subject.writing !== null) return "write"
   if (subject.commentary.recalled !== null) return "recall"
   if (subject.restore !== null) return "restore"
-  if (subject.commentary.shown === "marked" && subject.commentary.notes.length > 0) return "notes"
+  if (subject.commentary.shown === "disclosed" && subject.commentary.notes.length > 0) {
+    return "disclose"
+  }
   return "read"
 }
 
@@ -243,6 +286,18 @@ function choosingOf(current: SceneState): Passages | null {
 /** The scene once the writing has answered. Nothing changed gives back the very same scene. */
 function withWriting(current: SceneState, page: WritingState): SceneState {
   return page === current.writing ? current : { ...current, writing: page }
+}
+
+/** The disclosure as the scene keeps it: how many notes are disclosed, and the open note. */
+function disclosureIn(current: SceneState): Disclosure {
+  return { disclosed: current.disclosed, open: current.open }
+}
+
+/** The scene once the commentary of notes disclosed has answered. Nothing changed gives back the
+ * very same scene. */
+function withDisclosure(current: SceneState, disclosure: Disclosure): SceneState {
+  if (disclosure.disclosed === current.disclosed && disclosure.open === current.open) return current
+  return { ...current, ...disclosure }
 }
 
 /** The scene once the restore has answered. Nothing changed gives back the very same scene. */

@@ -235,6 +235,30 @@
   -webkit-box-decoration-break: clone;
 }
 
+/* Notes disclosed: the words of the note being read are swept in from the left, as by a
+   highlighter, each piece of them in turn; another note's words are drawn afresh, and swept in */
+.poem[data-sweep="true"] .line-text mark {
+  background-color: transparent;
+  background-image: linear-gradient(var(--fill-editor), var(--fill-editor));
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: 100% 100%;
+  animation: sweep 550ms cubic-bezier(0.3, 0.6, 0.3, 1) both;
+  animation-delay: calc(var(--sweep-order, 0) * 90ms);
+}
+
+@keyframes sweep {
+  from {
+    background-size: 0% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poem[data-sweep="true"] .line-text mark {
+    animation: none;
+  }
+}
+
 /* Practice mode: a highlight the reader can tap to open its note */
 .line-text mark[role="button"] {
   cursor: pointer;

@@ -111,14 +111,14 @@ describe("removing and writing", () => {
 })
 
 describe("notingOf: each chosen target's lemma, as the notes give it", () => {
-  it("quotes a passage, and cites whole lines and the whole poem", () => {
+  it("quotes a passage and whole lines alike, and cites the whole poem", () => {
     const state: NotingState = {
       ...choosing,
       targets: [span(0, 22, 1, 6), span(2, 0, 2, 30)],
     }
     expect(notingOf(noting, state).chosen).toEqual([
       { kind: "quote", text: "Walk - / He did" },
-      { kind: "citation", text: "line 3" },
+      { kind: "quote", text: "He bit an Angle Worm in halves" },
     ])
     const whole: NotingState = { ...choosing, targets: [span(0, 0, 2, 30)] }
     expect(notingOf(noting, whole).chosen).toEqual([{ kind: "citation", text: "the whole poem" }])

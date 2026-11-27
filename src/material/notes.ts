@@ -1,8 +1,5 @@
-import { lineLength, lineRangesOf, sameSpan, textOf, wholePoem } from "./spans"
+import { lineRangesOf, sameSpan, textOf, wholePoem } from "./spans"
 import type { Annotation, LemmaPart, Note, NoteRange, Notes, Span, Substrate } from "./types"
-
-/** What a target covers: the whole poem, whole lines, or a passage starting or ending inside a line. */
-type TargetKind = "poem" | "lines" | "passage"
 
 /** The notes as they are shown, for any annotations, the editor's or the reader's: every annotation,
  * in the order given, with its index (its place in that order, from 0), its id, its lemma and its
@@ -28,36 +25,15 @@ export function lemmaOf(substrate: Substrate, targets: readonly Span[]): LemmaPa
   return targets.map((target) => targetLemma(substrate, target))
 }
 
-/** One target's part of the lemma: a citation ("the whole poem", or its line numbers for whole
- * lines), or a quote of its words, with " / " at line breaks and " / … / " for the lines between a
- * long passage's first and last. */
+/** One target's part of the lemma: for the whole poem, the citation "the whole poem"; for anything
+ * else, whole lines as any other passage, a quote of its words, with " / " at line breaks and
+ * " / … / " for the lines between a long passage's first and last. */
 function targetLemma(substrate: Substrate, target: Span): LemmaPart {
-  const first = target.start.line + 1
-  const last = target.end.line + 1
-  switch (kindOf(substrate, target)) {
-    case "poem":
-      return { kind: "citation", text: "the whole poem" }
-    case "lines":
-      return {
-        kind: "citation",
-        text: first === last ? `line ${first}` : `lines ${first}–${last}`,
-      }
-    case "passage": {
-      const lines = textOf(substrate, target).split("\n")
-      const text =
-        lines.length <= 2 ? lines.join(" / ") : `${lines[0]} / … / ${lines[lines.length - 1]}`
-      return { kind: "quote", text }
-    }
-  }
-}
-
-/** A target's kind. By loom's rule a span never starts at a line's end nor ends at a line's start,
- * so a target starting at offset 0 and ending at its last line's length covers whole lines. */
-function kindOf(substrate: Substrate, target: Span): TargetKind {
-  if (sameSpan(target, wholePoem(substrate))) return "poem"
-  const wholeLines =
-    target.start.offset === 0 && target.end.offset === lineLength(substrate, target.end.line)
-  return wholeLines ? "lines" : "passage"
+  if (sameSpan(target, wholePoem(substrate))) return { kind: "citation", text: "the whole poem" }
+  const lines = textOf(substrate, target).split("\n")
+  const text =
+    lines.length <= 2 ? lines.join(" / ") : `${lines[0]} / … / ${lines[lines.length - 1]}`
+  return { kind: "quote", text }
 }
 
 /** A note's body as its paragraphs: split at blank lines, each paragraph's wrapped lines joined
@@ -75,7 +51,7 @@ function rangesByLine(substrate: Substrate, annotations: readonly Annotation[]):
   const ranges: NoteRange[][] = substrate.lines.map(() => [])
   for (const [index, annotation] of annotations.entries()) {
     for (const target of annotation.targets) {
-      if (kindOf(substrate, target) === "poem") continue
+      if (sameSpan(target, wholePoem(substrate))) continue
       for (const { line, start, end } of lineRangesOf(substrate, target)) {
         const onLine = ranges[line]
         if (onLine === undefined) {

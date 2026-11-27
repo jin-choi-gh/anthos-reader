@@ -39,14 +39,14 @@ function stageProblem(value: unknown, at: string): string | null {
 }
 
 function stepProblem(value: unknown, at: string): string | null {
-  const fields = ["id", "prose", "highlight", "writing", "recall", "restore"]
+  const fields = ["id", "prose", "disclose", "writing", "recall", "restore"]
   return fieldsProblem(value, at, fields, (step) =>
     first(
       stringProblem(step.id, `${at}: its id`),
       listProblem(step.prose, `${at}: prose`, (paragraph, p) =>
         stringProblem(paragraph, `${at}: prose paragraph ${p + 1}`),
       ),
-      listProblem(step.highlight, `${at}: highlight`, (note, n) =>
+      listProblem(step.disclose, `${at}: disclose`, (note, n) =>
         noteProblem(note, `${at}, note ${n + 1}`),
       ),
       step.writing === null ? null : writingProblem(step.writing, `${at}: writing`),

@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from "react"
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from "react"
 import { assertNever } from "../assertNever"
 import { Choice } from "../components/Choice"
 import { Lemma } from "../components/Lemma"
@@ -20,13 +20,13 @@ import { isBroken, partOf, recallLabel, recallTargets, romanOf, type PartName } 
 /** What the reader does after the prose, for each part a step may ask, as one sentence says it. */
 const THEN: readonly { part: PartName | "none"; words: string }[] = [
   { part: "none", words: "goes on" },
-  { part: "highlight", words: "looks at notes in the poem" },
+  { part: "disclose", words: "discloses notes one by one" },
   { part: "writing", words: "writes a response" },
   { part: "recall", words: "reads back what they wrote" },
   { part: "restore", words: "puts back" },
 ]
 
-/** What the card needs of the desk for a highlighting step: the form for its note, new or taken
+/** What the card needs of the desk for a disclosing step: the form for its note, new or taken
  * up (none while it is docked at the foot of a page); the note in hand, if any; and the way to take
  * a note up, from the card's list or by a tap on it in the poem. */
 export interface NotesHandle {
@@ -38,21 +38,21 @@ export interface NotesHandle {
 /** The card for a step, set as the reader will see it in the praxis bar: its stage's name, where
  * it is in the stage, and its prose, written in a box at the size it is read; then one sentence for
  * what the reader does next, which is the part the step asks besides its prose, and what that part
- * is about. A highlighting step lists its notes, each with what is wrong with it, to be taken up and
+ * is about. A disclosing step lists its notes, each with what is wrong with it, to be taken up and
  * edited, and then the form for a note. A step that restores says whether it takes out words or
  * lines, and shows its slips as the reader will be given them, each of which can be put back;
  * changing words to lines, or leaving the part, while it has gaps, asks first, as they go. In its
  * corner, moving it and removing it, asked first.
- * Highlighting chosen before any note is written is held by the desk (`highlighting`), since a step
- * with no notes does not highlight; leaving it while the step has notes asks first, as the notes
+ * Disclosing chosen before any note is written is held by the desk (`disclosing`), since a step
+ * with no notes does not disclose; leaving it while the step has notes asks first, as the notes
  * go. */
 export function StepCard({
   practice,
   at,
   problems,
   substrate,
-  highlighting,
-  onHighlighting,
+  disclosing,
+  onDisclosing,
   edit,
   onRemove,
   notes,
@@ -61,8 +61,8 @@ export function StepCard({
   at: StepPlace
   problems: readonly Problem[]
   substrate: Substrate
-  highlighting: boolean
-  onHighlighting: (on: boolean) => void
+  disclosing: boolean
+  onDisclosing: (on: boolean) => void
   edit: (edit: Edit) => void
   onRemove: () => void
   notes: NotesHandle
@@ -77,7 +77,7 @@ export function StepCard({
   const step = stage?.steps[at.step]
   if (stage === undefined || step === undefined) return null
 
-  const part = partOf(step) ?? (highlighting ? "highlight" : null)
+  const part = partOf(step) ?? (disclosing ? "disclose" : null)
   const targets = recallTargets(practice, at)
   const here = problems.filter((p) => p.stage === at.stage && p.step === at.step && isBroken(p))
   const recallProblem = here.find((p) => p.about === "recall")?.text ?? null
@@ -85,7 +85,7 @@ export function StepCard({
   const below = placeBelow(practice, at)
 
   const setParts = (parts: {
-    highlight?: readonly EditorsNote[]
+    disclose?: readonly EditorsNote[]
     writing?: Writing | null
     recall?: Recall | null
     restore?: Restore | null
@@ -93,7 +93,7 @@ export function StepCard({
     edit({
       kind: "setParts",
       at,
-      highlight: parts.highlight ?? [],
+      disclose: parts.disclose ?? [],
       writing: parts.writing ?? null,
       recall: parts.recall ?? null,
       restore: parts.restore ?? null,
@@ -101,10 +101,10 @@ export function StepCard({
 
   /** Switches the step to another part, keeping what it asked if it asked it already. */
   const switchTo = (next: PartName | null) => {
-    onHighlighting(next === "highlight")
+    onDisclosing(next === "disclose")
     switch (next) {
-      case "highlight":
-        return setParts({ highlight: step.highlight })
+      case "disclose":
+        return setParts({ disclose: step.disclose })
       case "writing":
         return setParts({ writing: step.writing ?? { target: "whole", tags: [], count: "one" } })
       case "recall": {
@@ -124,7 +124,7 @@ export function StepCard({
   const choose = (next: PartName | null) => {
     if (next === part) return
     const losing =
-      (step.highlight.length > 0 && next !== "highlight") || (gaps > 0 && next !== "restore")
+      (step.disclose.length > 0 && next !== "disclose") || (gaps > 0 && next !== "restore")
     if (losing) setLeaving(next ?? "none")
     else switchTo(next)
   }
@@ -243,7 +243,7 @@ export function StepCard({
           question={
             part === "restore"
               ? "Remove this step's gaps?"
-              : `Remove this step's ${step.highlight.length} ${step.highlight.length === 1 ? "note" : "notes"}?`
+              : `Remove this step's ${step.disclose.length} ${step.disclose.length === 1 ? "note" : "notes"}?`
           }
           yes={part === "restore" ? "Remove gaps" : "Remove notes"}
           onYes={() => {
@@ -274,16 +274,19 @@ export function StepCard({
         />
       )}
 
-      {part === "highlight" && (
+      {part === "disclose" && (
         <>
           <StepNotes
-            notes={step.highlight}
+            notes={step.disclose}
             inHand={notes.inHand}
             substrate={substrate}
             problems={problems.filter(
               (p) => p.stage === at.stage && p.step === at.step && p.note !== null,
             )}
             onTakeUp={notes.onTakeUp}
+            onMove={
+              notes.inHand === null ? (from, to) => edit({ kind: "moveNote", at, from, to }) : null
+            }
           />
           {notes.form}
         </>
@@ -465,24 +468,47 @@ function RecallFrom({
   )
 }
 
-/** The step's notes, as the margin prints them: each by its lemma, or its notehead when it cannot
- * be placed, then its words, cut at three lines, its notehead, Edit, which takes it up to be put
- * right, and what is wrong with it, if anything. The note in hand is being written in the form
- * under the list, and is left out. Nothing, when the step has no notes but the one in hand. */
+/** The step's notes, as the margin prints them, in the order the reader is given them, each
+ * numbered: by its lemma, or its notehead when it cannot be placed, then its words, cut at three
+ * lines, its notehead, Earlier and Later, which move it in that order, Edit, which takes it up to be
+ * put right, and what is wrong with it, if anything. The note in hand is being written in the form
+ * under the list, and is left out; while it is, no note moves (onMove is null), since the list does
+ * not show where it stands. A note moved keeps the keyboard's focus, on the other way when it can go
+ * no further. Nothing, when the step has no notes but the one in hand. */
 function StepNotes({
   notes,
   inHand,
   substrate,
   problems,
   onTakeUp,
+  onMove,
 }: {
   notes: readonly EditorsNote[]
   inHand: string | null
   substrate: Substrate
   problems: readonly Problem[]
   onTakeUp: (index: number) => void
+  onMove: ((from: number, to: number) => void) | null
 }) {
   const heading = useId()
+  const list = useRef<HTMLUListElement>(null)
+  // The note just moved, by its key, and which way: its button keeps the focus
+  const moved = useRef<{ key: string; way: "earlier" | "later" } | null>(null)
+  useLayoutEffect(() => {
+    const wanted = moved.current
+    if (wanted === null) return
+    moved.current = null
+    const item = [...(list.current?.children ?? [])].find(
+      (each) => each instanceof HTMLElement && each.dataset.key === wanted.key,
+    )
+    const ways = { earlier: "[data-way=earlier]", later: "[data-way=later]" }
+    const other = wanted.way === "earlier" ? "later" : "earlier"
+    const button =
+      item?.querySelector<HTMLButtonElement>(`${ways[wanted.way]}:not(:disabled)`) ??
+      item?.querySelector<HTMLButtonElement>(ways[other])
+    button?.focus()
+  })
+  const keys = keysOf(notes)
   const listed = notes
     .map((note, n) => ({ note, n, problems: problems.filter((p) => p.note === n) }))
     .filter(({ note }) => note.id !== inHand)
@@ -496,13 +522,19 @@ function StepNotes({
         </h3>
         <span className="form-hint">Or tap a note in the poem</span>
       </div>
-      <ul className="form-notes" aria-labelledby={heading}>
+      <ul className="form-notes" aria-labelledby={heading} ref={list}>
         {listed.map(({ note, n, problems: found }) => {
           const lemma = placed.find((each) => each.id === note.id)
           const words = lemma?.lemma.map((part) => part.text).join(" · ") ?? note.notehead
+          const key = keys[n] ?? String(n)
+          const move = (way: "earlier" | "later") => {
+            moved.current = { key, way }
+            onMove?.(n, way === "earlier" ? n - 1 : n + 1)
+          }
           return (
-            <li key={`${n}:${note.id}`} className="form-note">
+            <li key={key} data-key={key} className="form-note">
               <p className="form-lemma">
+                <span className="form-note-place">{n + 1}</span>
                 {lemma === undefined ? <code>{note.notehead}</code> : <Lemma lemma={lemma.lemma} />}
                 <span className="note-close-mark" aria-hidden="true">
                   {" ]"}
@@ -511,14 +543,36 @@ function StepNotes({
               {note.body.trim() !== "" && <p className="form-note-body">{note.body}</p>}
               <div className="form-note-foot">
                 <code className="form-notehead">{note.notehead}</code>
-                <button
-                  type="button"
-                  className="form-tool"
-                  aria-label={`Edit the note on ${words}`}
-                  onClick={() => onTakeUp(n)}
-                >
-                  edit
-                </button>
+                <span className="form-note-tools">
+                  <button
+                    type="button"
+                    className="form-tool"
+                    data-way="earlier"
+                    aria-label={`Move the note on ${words} earlier`}
+                    disabled={onMove === null || n === 0}
+                    onClick={() => move("earlier")}
+                  >
+                    earlier
+                  </button>
+                  <button
+                    type="button"
+                    className="form-tool"
+                    data-way="later"
+                    aria-label={`Move the note on ${words} later`}
+                    disabled={onMove === null || n === notes.length - 1}
+                    onClick={() => move("later")}
+                  >
+                    later
+                  </button>
+                  <button
+                    type="button"
+                    className="form-tool"
+                    aria-label={`Edit the note on ${words}`}
+                    onClick={() => onTakeUp(n)}
+                  >
+                    edit
+                  </button>
+                </span>
               </div>
               {found.map((problem, i) => (
                 <p key={i} className="form-problem">
@@ -531,4 +585,15 @@ function StepNotes({
       </ul>
     </div>
   )
+}
+
+/** A key for each note, by its id, so that a note moved is the same element, and keeps the focus;
+ * a second note with the same id, which problemsOf refuses, is told apart by how many came before. */
+function keysOf(notes: readonly EditorsNote[]): string[] {
+  const seen = new Map<string, number>()
+  return notes.map((note) => {
+    const times = seen.get(note.id) ?? 0
+    seen.set(note.id, times + 1)
+    return times === 0 ? note.id : `${note.id}#${times}`
+  })
 }

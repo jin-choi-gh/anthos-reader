@@ -10,7 +10,7 @@ const wormNote: EditorsNote = {
   tags: [],
   body: "The worm.",
 }
-const look: Step = { id: "look", ...REST, prose: ["Look."], highlight: [wormNote] }
+const look: Step = { id: "look", ...REST, prose: ["Look."], disclose: [wormNote] }
 const ask: Step = {
   id: "ask",
   ...REST,
@@ -49,7 +49,7 @@ describe("fingerprintOfPractice: the practice's version", () => {
       restore: null,
       recall: null,
       writing: null,
-      highlight: [{ body: "The worm.", tags: [], notehead: "l3 Angle Worm", id: "angle-worm" }],
+      disclose: [{ body: "The worm.", tags: [], notehead: "l3 Angle Worm", id: "angle-worm" }],
       prose: ["Look."],
       id: "look",
     }
@@ -62,11 +62,11 @@ describe("fingerprintOfPractice: the practice's version", () => {
       withSteps({ ...look, id: "looking" }, ask),
       withSteps({ ...look, prose: ["Look again."] }, ask),
       withSteps({ ...look, prose: [""] }, ask),
-      withSteps({ ...look, highlight: [] }, ask),
-      withSteps({ ...look, highlight: [{ ...wormNote, id: "worm" }] }, ask),
-      withSteps({ ...look, highlight: [{ ...wormNote, notehead: "l3 Worm" }] }, ask),
-      withSteps({ ...look, highlight: [{ ...wormNote, tags: ["gloss"] }] }, ask),
-      withSteps({ ...look, highlight: [{ ...wormNote, body: "The angle worm." }] }, ask),
+      withSteps({ ...look, disclose: [] }, ask),
+      withSteps({ ...look, disclose: [{ ...wormNote, id: "worm" }] }, ask),
+      withSteps({ ...look, disclose: [{ ...wormNote, notehead: "l3 Worm" }] }, ask),
+      withSteps({ ...look, disclose: [{ ...wormNote, tags: ["gloss"] }] }, ask),
+      withSteps({ ...look, disclose: [{ ...wormNote, body: "The angle worm." }] }, ask),
       withSteps(look, { ...ask, writing: { target: "chosen", tags: [], count: "one" } }),
       withSteps(look, { ...ask, writing: { target: "whole", tags: ["gloss"], count: "one" } }),
       withSteps(look, { ...ask, writing: null }),

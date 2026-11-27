@@ -48,8 +48,10 @@ export function AnnotateMode({
       case "withdraw":
         return notebook.withdraw(effect.id)
       case "restored":
+      case "disclosed":
       case "pick":
-        // No step in annotate mode restores, and nothing is picked: the scene never sends these out
+        // No step in annotate mode restores or discloses, and nothing is picked: the scene never
+        // sends these out
         return
       default:
         return assertNever(effect)

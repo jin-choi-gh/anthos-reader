@@ -39,16 +39,16 @@ const practice: Practice = practiceOf({
 })
 
 describe("partOf: the part a step asks besides its prose", () => {
-  it("is its highlight, writing, recall or restore, or none", () => {
+  it("is its disclose, writing, recall or restore, or none", () => {
     expect(partOf(say("a"))).toBeNull()
-    expect(partOf({ ...REST, highlight: [note] })).toBe("highlight")
+    expect(partOf({ ...REST, disclose: [note] })).toBe("disclose")
     expect(partOf(ask("a"))).toBe("writing")
     expect(partOf({ ...REST, recall: { from: "stage", id: "stage-1" } })).toBe("recall")
     expect(partOf({ ...REST, restore: { of: "words", gaps: [] } })).toBe("restore")
   })
 
   it("takes a step with more than one by its first", () => {
-    expect(partOf({ ...ask("a"), highlight: [note] })).toBe("highlight")
+    expect(partOf({ ...ask("a"), disclose: [note] })).toBe("disclose")
   })
 })
 
@@ -84,7 +84,7 @@ describe("labels: stages, steps and recalls in words", () => {
 
   it("name a step's part for the anatomy", () => {
     expect(partLabel(practice, say("a"))).toBeNull()
-    expect(partLabel(practice, { ...REST, highlight: [note] })).toBe("Highlighting · 1 note")
+    expect(partLabel(practice, { ...REST, disclose: [note] })).toBe("Disclosing · 1 note")
     expect(partLabel(practice, ask("a"))).toBe("Reader response · whole poem")
     expect(partLabel(practice, ask("a", "chosen"))).toBe("Reader response · chosen passages")
     expect(partLabel(practice, { ...REST, recall: { from: "step", id: "step-2" } })).toBe(
@@ -102,8 +102,8 @@ describe("labels: stages, steps and recalls in words", () => {
 
   it("name a step's part in a word or two for the reel's contents", () => {
     expect(partWord(say("a"))).toBeNull()
-    expect(partWord({ ...REST, highlight: [note] })).toBe("1 note")
-    expect(partWord({ ...REST, highlight: [note, { ...note, id: "bird" }] })).toBe("2 notes")
+    expect(partWord({ ...REST, disclose: [note] })).toBe("1 note")
+    expect(partWord({ ...REST, disclose: [note, { ...note, id: "bird" }] })).toBe("2 notes")
     expect(partWord(ask("a", "chosen"))).toBe("write")
     expect(partWord({ ...REST, recall: { from: "stage", id: "gone" } })).toBe("recall")
     expect(partWord({ ...REST, restore: { of: "words", gaps: ["l1 Bird", "l1 Walk"] } })).toBe(
